@@ -1,0 +1,749 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="NRCAPPS.Site" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html> 
+<head runat="server">
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title></title>
+  <link rel='shortcut icon' href='favicon.ico' />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+  <!-- Bootstrap 3.3.6 -->
+  <!--link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"-->
+  <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" />  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" />
+  <!-- DataTables -->
+  <link href="~/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" />
+  <!-- iCheck --> 
+  <link href="~/plugins/select2/select2.min.css" rel="stylesheet" />
+  <!-- Morris chart --> 
+  <link href="~/plugins/morris/morris.css" rel="stylesheet" />
+  <!-- jvectormap --> 
+  <link href="~/plugins/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" />
+  <!-- Date Picker --> 
+  <link href="~/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+  <!-- Daterange picker --> 
+   <!-- DataTables -->
+  <link href="~/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" />
+  <link href="~/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+  <link href="~/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet" />
+  <link href="~/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" />
+  <!-- bootstrap wysihtml5 - text editor --> 
+  <link href="~/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link href="~/plugins/iCheck/all.css" rel="stylesheet" /> 
+  <link href="~/plugins/pace/pace.min.css" rel="stylesheet" />
+  
+    <!-- Theme style --> 
+  <link href="~/dist/css/AdminLTE.min.css" rel="stylesheet" />
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. --> 
+  <link href="~/dist/css/skins/_all-skins.css" rel="stylesheet" /> 
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <script src="plugins/Highcharts-6.0.7/code/highcharts.js" type="text/javascript"></script>
+  <script src="plugins/Highcharts-6.0.7/code/highcharts.src.js" type="text/javascript"></script>
+  <script src="plugins/Highcharts-6.0.7/code/modules/data.src.js" type="text/javascript"></script>
+  <script src="plugins/Highcharts-6.0.7/code/modules/exporting.js" type="text/javascript"></script>
+     
+ <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+   </asp:ContentPlaceHolder>
+</head>
+ 
+<body class="hold-transition skin-green-light sidebar-mini"> 
+<form id="Form1" runat="server" class="form-horizontal"> 
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="<%= ResolveUrl("~/Dashboard.aspx") %>" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b></b>NRC</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><img src="../../image/logo_top.png" /><b>NRC</b>Apps</span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+           
+          
+          <!-- Notifications: style can be found in dropdown.less -->
+          <!--li class="dropdown notifications-menu">
+            <a href="#" style="padding-top:18px; padding-bottom:18px " class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning">10</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">You have 10 notifications</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <!--ul class="menu">
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
+                      page and may cause design problems
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-users text-red"></i> 5 new members joined
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="fa fa-user text-red"></i> You changed your username
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="footer"><a href="#">View all</a></li>
+            </ul>
+          </li>
+          <!-- Tasks: style can be found in dropdown.less -->
+          <!--li class="dropdown tasks-menu">
+            <a href="#" style="padding-top:18px; padding-bottom:18px "  class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-flag-o"></i>
+              <span class="label label-danger">9</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">You have 9 tasks</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <!--ul class="menu">
+                  <li><!-- Task item -->
+                    <!--a href="#">
+                      <h3>
+                        Design some buttons
+                        <small class="pull-right">20%</small>
+                      </h3>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                          <span class="sr-only">20% Complete</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- end task item -->
+                  <!--li><!-- Task item -->
+                    <!--a href="#">
+                      <h3>
+                        Create a nice theme
+                        <small class="pull-right">40%</small>
+                      </h3>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                          <span class="sr-only">40% Complete</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- end task item -->
+                  <!--li><!-- Task item -->
+                    <!--a href="#">
+                      <h3>
+                        Some task I need to do
+                        <small class="pull-right">60%</small>
+                      </h3>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                          <span class="sr-only">60% Complete</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- end task item -->
+                  <!--li><!-- Task item -->
+                    <!--a href="#">
+                      <h3>
+                        Make beautiful transitions
+                        <small class="pull-right">80%</small>
+                      </h3>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                          <span class="sr-only">80% Complete</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- end task item -->
+                <!--/ul>
+              </li>
+              <li class="footer">
+                <a href="#">View all tasks</a>
+              </li>
+            </ul>
+          </li>
+          <!-- User Account: style can be found in dropdown.less -->
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <asp:Image class="user-image" alt="User Image" ID="ImageProfile" Runat="server" />    
+              <span class="hidden-xs"><%=Session["USER_NAME"]%></span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- User image -->
+              <li class="user-header"> 
+              <asp:Image  class="img-circle" alt="User Image" ID="ImageProfile1" Runat="server" /> 
+                <p>
+                  <%=Session["EMP_NAME_TWO"]%> - <%=Session["NRC_USER_ROLE_NAME"]%>
+                  <small>Member since <%=Session["NRC_USER_C_DATE"]%></small>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              <!--li class="user-body">
+                <div class="row">
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Followers</a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Sales</a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Friends</a>
+                  </div>
+                </div> </li-->
+                <!-- /.row -->
+             
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-left">
+                  <a href="<%= ResolveUrl("~/NRC/NrcUserProfile.aspx?") %>UserID=<%=Session["USER_ID"]%>"  class="btn btn-default btn-flat">Profile</a> 
+                      </div>
+                <div class="pull-right">  
+                  <asp:LinkButton ID="Button1" class="btn btn-default btn-flat" runat="server" onclick="ButtonLogOut_Click" Text="Logout" CausesValidation="False"/> 
+                </div>
+              </li>
+            </ul>
+          </li>
+          <!-- Control Sidebar Toggle Button -->
+          <li>
+            <a href="<%= ResolveUrl("~/NRC/NrcVat.aspx") %>" style="padding-top:18px; padding-bottom:18px " ><i class="fa fa-gears"></i></a> 
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image"> 
+        <asp:Image  class="img-circle" alt="User Image" ID="ImageProfile2" Runat="server"  />
+        </div>
+        <div class="pull-left info">
+          <p><%=Session["EMP_NAME_TWO"]%></p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group sidebar-form">
+         <script type = "text/javascript">
+             $(function () {
+                 alert("sami..");
+                 $(".Validators").Float();
+             });
+       </script>
+          <asp:TextBox type="text" ID="textSearch"  runat="server" class="form-control" placeholder="Search..."></asp:TextBox>
+           <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server"  ControlToValidate="textSearch" Display="Dynamic" CssClass="Validators"
+                          ErrorMessage="" SetFocusOnError="True"  ValidationGroup='valGroupSearch'></asp:RequiredFieldValidator> 
+              <span class="input-group-btn">
+                <asp:LinkButton type="submit" name="search" ID="searchbtn" runat="server" ValidationGroup='valGroupSearch' class="btn btn-flat"><i class="fa fa-search"></i></asp:LinkButton>
+              </span>
+        </div>
+         
+      </form>
+      <!-- /.search form -->
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li class="header">MAIN NAVIGATION</li>
+
+        <li class="treeview" id="Dashboard" runat="server">
+          <a href="<%= ResolveUrl("~/Dashboard.aspx") %>">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span> 
+          </a> 
+        </li>  
+         <li class="treeview" id="wastepaper" runat="server">
+          <a href="#">
+            <i class="fa fa-sticky-note-o"></i> <span>Waste Paper</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          </li>
+         <li class="treeview" id="plastic" runat="server">
+          <a href="#">
+            <i class="fa fa-pied-piper"></i> <span>Plastic Factory</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu"> 
+            <li id="pf_business_target" runat="server"><a href="<%= ResolveUrl("~/PF/PfBusinessTargetMat.aspx") %>"><i class="fa fa-circle-o"></i> Business Target (Monthly)</a></li> 
+            <li id="pf_supervisor" runat="server"><a href="<%= ResolveUrl("~/PF/PfSupervisor.aspx") %>"><i class="fa fa-circle-o"></i> Procurement Supervisor</a></li> 
+            <li id="pf_item" runat="server"><a href="<%= ResolveUrl("~/PF/PfItem.aspx") %>"><i class="fa fa-circle-o"></i> Item</a></li> 
+            <li id="pf_sub_item" runat="server"><a href="<%= ResolveUrl("~/PF/PfSubItem.aspx") %>"><i class="fa fa-circle-o"></i> Sub Item</a></li> 
+             
+            <li id="pf_purchase_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Purchase
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li id="pf_supplier" runat="server"><a href="<%= ResolveUrl("~/PF/PfSupplier.aspx") %>"><i class="fa fa-circle-o"></i> Supplier</a></li>
+                <li id="pf_purchase_type" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchaseType.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Type</a></li>
+                <li id="pf_purchase" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchase.aspx") %>"><i class="fa fa-circle-o"></i> Purchase</a></li>    
+                <li id="pf_purchase_claim" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchaseClaim.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim</a></li>   
+                <li id="pf_purchase_claim_check" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchaseClaimCheck.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim Approve</a></li>               
+                </ul>
+            </li>  
+
+             <li id="pf_production_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Production
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li id="pf_prod_shift" runat="server"><a href="<%= ResolveUrl("~/PF/PfProductionShift.aspx") %>"><i class="fa fa-circle-o"></i> Production Shift</a></li>
+                <li id="pf_prod_machine" runat="server"><a href="<%= ResolveUrl("~/PF/PfMachine.aspx") %>"><i class="fa fa-circle-o"></i> Production Machine</a></li> 
+                <li id="pf_garbage_est" runat="server"><a href="<%= ResolveUrl("~/PF/PfGaEstProd.aspx") %>"><i class="fa fa-circle-o"></i> Garbage Est. of Prod.</a></li>
+                <li id="pf_actual_garbage" runat="server"><a href="<%= ResolveUrl("~/PF/PfActualGarbage.aspx") %>"><i class="fa fa-circle-o"></i> Actual Garbage</a></li>  
+                <li id="pf_processing_cost" runat="server"><a href="<%= ResolveUrl("~/PF/PfProcessingCost.aspx") %>"><i class="fa fa-circle-o"></i> Processing Cost</a></li> 
+                <li id="pf_production" runat="server"><a href="<%= ResolveUrl("~/PF/PfProduction.aspx") %>"><i class="fa fa-circle-o"></i> Production</a></li>              
+                </ul>
+            </li>  
+             <li id="pf_inventory_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Inventory
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">
+                    <li id="pf_daily_pur_prod" runat="server"><a href="<%= ResolveUrl("~/PF/PfDailyPurProd.aspx") %>"><i class="fa fa-circle-o"></i> Daily Pur. Prod. & Sales</a></li>
+                    <li id="pf_inventory_rm" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryRm.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for RM</a></li>  
+                    <li id="pf_inventory_fg" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryFg.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for FG</a></li>        
+                    <li id="pf_inventory_monthly_state" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryMonthlyStatement.aspx") %>"><i class="fa fa-circle-o"></i> Inven. Monthly Statement</a></li>        
+                </ul>
+            </li>  
+            
+             <li id="pf_sales_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Sales
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">
+                       <li id="pf_customer" runat="server"><a href="<%= ResolveUrl("~/PF/PfCustomer.aspx") %>"><i class="fa fa-circle-o"></i> Customer</a></li>
+                       <li id="pf_sales" runat="server"><a href="<%= ResolveUrl("~/PF/PfSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales</a></li> 
+                       <li id="pf_sales_check" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesCheck.aspx") %>"><i class="fa fa-circle-o"></i> Sales Approve CMO</a></li>      
+                       <li id="pf_sales_return" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesReturn.aspx") %>"><i class="fa fa-circle-o"></i> Sales Return</a></li> 
+                </ul>
+            </li>    
+                  
+            <li id="pf_rm_statement" runat="server"><a href="<%= ResolveUrl("~/PF/PfRmStatement.aspx") %>"><i class="fa fa-circle-o"></i> Raw Material Statement</a></li>  
+            <li id="pf_fg_statement" runat="server"><a href="<%= ResolveUrl("~/PF/PfFgStatement.aspx") %>"><i class="fa fa-circle-o"></i> Finished Goods Statement</a></li>  
+          </ul>
+        </li>
+        <li class="treeview" id="metal_scrap" runat="server">
+          <a href="#">
+            <i class="fa fa-legal"></i> <span>Metal Scrap</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          </li>
+          <li class="treeview" id="metal_factory" runat="server">
+          <a href="#">
+            <i class="fa fa-tty"></i> <span>Metal Factory</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          </li>
+ 
+
+         <li class="treeview" id="it" runat="server">
+          <a href="#">
+            <i class="fa fa-laptop"></i> <span>IT </span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+           <ul class="treeview-menu"> 
+           <li id="it_asset" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> IT Asset Tracking
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">
+                    <li id="it_asset_category" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetCategory.aspx") %>"><i class="fa fa-circle-o"></i> Category</a></li>
+                    <li id="it_asset_items" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItems.aspx") %>"><i class="fa fa-circle-o"></i> Items</a></li>
+                    <li id="it_asset_items_emp" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsEmp.aspx") %>"><i class="fa fa-circle-o"></i> Items & Employee</a></li>
+                    <li id="it_asset_items_dept" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsDept.aspx") %>"><i class="fa fa-circle-o"></i> Items & Department</a></li>
+                    <li id="it_asset_items_expires" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsExpires.aspx") %>"><i class="fa fa-circle-o"></i> Item Expires (Anti-Virus)</a></li> 
+                    <li id="it_asset_items_expires_emp" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsExpiresEmp.aspx") %>"><i class="fa fa-circle-o"></i> Item Expires Emp. & Dept. </a></li> 
+                </ul>
+            </li>  
+             </ul> 
+        </li>
+         
+   <% if (Session["NRC_USER_SROLE"].ToString() == "SAD" || Session["NRC_USER_SROLE"].ToString() == "ADM")
+      { %>
+          <li class="treeview" id="emp_setting" runat="server">
+          <a href="#">
+            <i class="fa fa-user-plus"></i> <span> Human Resource</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li id="hr_emp_location" runat="server"><a href="<%= ResolveUrl("~/HR/HrEmpLocation.aspx") %>"><i class="fa fa-circle-o"></i> Location</a></li>
+            <li id="hr_emp_division" runat="server"><a href="<%= ResolveUrl("~/HR/HrEmpDivision.aspx") %>"><i class="fa fa-circle-o"></i> Division</a></li>
+            <li id="hr_emp_department" runat="server"><a href="<%= ResolveUrl("~/HR/HrEmpDepartment.aspx") %>"><i class="fa fa-circle-o"></i> Department</a></li>
+            <li id="hr_employee" runat="server"><a href="<%= ResolveUrl("~/HR/HrEmployee.aspx") %>"><i class="fa fa-circle-o"></i> Employee</a></li>
+          </ul>
+        </li>
+        <li class="treeview" id="user_setting" runat="server">
+          <a href="#">
+            <i class="fa fa-gear"></i> <span>User & Page Setting</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" >
+            <li id="nrc_user_role" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcUserRole.aspx") %>"><i class="fa fa-circle-o"></i> User Role</a></li> 
+            <li id="nrc_user" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcUser.aspx") %>"><i class="fa fa-circle-o"></i> User</a></li> 
+            <li id="nrc_user_profile" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcUserProfile.aspx") %>"><i class="fa fa-circle-o"></i> User Profile</a></li> 
+            <li id="nrc_user_pages" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcUserPages.aspx") %>"><i class="fa fa-circle-o"></i> User Pages</a></li> 
+            <li id="nrc_user_role_pages" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcUserRolePage.aspx") %>"><i class="fa fa-circle-o"></i> User Role & Pages</a></li> 
+            <li id="nrc_user_pages_permission" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcUserPagePermission.aspx") %>"><i class="fa fa-circle-o"></i> User Pages & Permission</a></li> 
+            <li id="nrc_main_menu" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcMainMenu.aspx") %>"><i class="fa fa-circle-o"></i> Apps Main Menu</a></li>             
+          </ul>
+        </li>
+        <li class="treeview" id="nrc_dashboard_setting" runat="server">
+          <a href="#">
+            <i class="fa fa-wrench"></i> <span>Dashboard Setting</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" >
+            <li id="nrc_dashboard_items" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcDashboardItem.aspx") %>"><i class="fa fa-circle-o"></i>Dashboard Items</a></li> 
+            <li id="nrc_dashboard_items_user" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcDashboardItemUser.aspx") %>"><i class="fa fa-circle-o"></i>Dashboard Items & User</a></li>  
+            <li id="nrc_dashboard_items_order" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcDashboardItemOrder.aspx") %>"><i class="fa fa-circle-o"></i>Dashboard Items Order</a></li>  
+         </ul>
+        </li>
+         <li class="treeview" id="nrc_apps_setting" runat="server">
+          <a href="#">
+            <i class="fa fa-cogs"></i> <span>Apps & Data Setting</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" >
+            <li id="nrc_apps_vat" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcVat.aspx") %>"><i class="fa fa-circle-o"></i> Vale Add Tax (VAT)</a></li>
+            <li id="nrc_apps_peyment_type" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcPaymentType.aspx") %>"><i class="fa fa-circle-o"></i> Payment Type</a></li> 
+            <li id="nrc_data_process" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcDataProcess.aspx") %>"><i class="fa fa-circle-o"></i> Data Process</a></li>
+         </ul>
+        </li>
+<% } %>
+
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  
+   <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"/>
+ 
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 1.0.1
+    </div>
+    <strong>Copyright &copy; 2017-2018 <a href="http://nesmarecycling.com" target="_blank">NESMA Recycling Co. Ltd.</a></strong> All rights
+    reserved.
+  </footer>
+ 
+ 
+ 
+</div>
+<!-- ./wrapper -->
+  </form>
+  
+<!-- PACE -->
+<script src="<%= ResolveUrl("~/plugins/pace/pace.min.js") %>"></script>
+<script  type="text/javascript">
+
+    // To make Pace works on Ajax calls
+    $(document).ajaxStart(function () { Pace.restart(); });
+    $('.ajax').click(function () {
+        $.ajax({ url: '#', success: function (result) {
+            $('.ajax-content').html('<hr>Ajax Request Completed !');
+        }
+        });
+    }); 
+</script> 
+
+
+<!-- jQuery 2.2.3 --> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/jQuery/jquery-3.1.1.min.js") %>'></script>
+<!-- jQuery UI 1.11.4 -->
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/jQuery/jquery-ui.min.js") %>'></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.6 -->
+<script type="text/javascript" src='<%= ResolveUrl("~/bootstrap/js/bootstrap.min.js") %>'></script> 
+<!-- InputMask -->
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/input-mask/jquery.inputmask.js") %>'></script>
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/input-mask/jquery.inputmask.date.extensions.js") %>'></script>
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/input-mask/jquery.inputmask.extensions.js") %>'></script>
+<!-- daterangepicker -->
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/jQuery/moment.min.js") %>'></script> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/daterangepicker/daterangepicker.js") %>'></script> 
+<!-- datepicker --> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/datepicker/bootstrap-datepicker.js") %>'></script> 
+<!-- Select2 -->
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/select2/select2.full.min.js") %>'></script>
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/colorpicker/bootstrap-colorpicker.min.js") %>'></script>
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/timepicker/bootstrap-timepicker.min.js") %>'></script>
+<!-- date-range-picker -->
+<!-- Bootstrap WYSIHTML5 --> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js") %>'></script> 
+<!-- DataTables -->
+<script type="text/javascript"  src='<%= ResolveUrl("~/plugins/datatables/jquery.dataTables.min.js") %>'></script>
+<script type="text/javascript"  src='<%= ResolveUrl("~/plugins/datatables/dataTables.bootstrap.min.js") %>'></script>
+ 
+<!-- Slimscroll --> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/slimScroll/jquery.slimscroll.min.js") %>'></script> 
+<!-- FastClick --> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/fastclick/fastclick.js") %>'></script> 
+<!-- AdminLTE App --> 
+<script type="text/javascript" src='<%= ResolveUrl("~/dist/js/app.min.js") %>'></script> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/iCheck/icheck.min.js") %>'></script>
+
+
+ <script type="text/javascript">
+     $(document).ready(function () {
+         // Fix up GridView to support THEAD tags            
+         $("#ctl00_ContentPlaceHolder1_GridView4 tbody").before("<thead><tr></tr></thead>");
+         $("#ctl00_ContentPlaceHolder1_GridView4 thead tr").append($("#ctl00_ContentPlaceHolder1_GridView4 th"));
+         $("#ctl00_ContentPlaceHolder1_GridView4 tbody tr:first").remove();
+
+         $("#ctl00_ContentPlaceHolder1_GridView4").tablesorter({ sortList: [[1, 0]] });
+          
+     });
+</script> 
+ <script type="text/javascript">
+    $(function () {
+      //  $("#ctl00_ContentPlaceHolder1_TextSlipNo").focus();
+        //  $('input[type=checkbox]').each(function () {
+       //     $(this).attr('class', 'flat-red');
+       //    });
+
+     //   $("span").find('input[type=checkbox]').each(function () {
+     //    $(this).attr('class', 'flat-red'); 
+   //    });;
+
+        //Initialize Select2 Elements
+        $(".select2").select2();
+
+        $("#ctl00_ContentPlaceHolder1_TextExpiredDays").click(function () {
+            var StartExpiryDate = $("#ctl00_ContentPlaceHolder1_TextStartExpiryDate").val().split(' - ');
+            var StartDate       = StartExpiryDate[0].split(' ');
+            var ExpiryDate      = StartExpiryDate[1].split(' '); 
+            var date1           = StartDate[0].trim();
+            var date2           = ExpiryDate[0].trim();
+           
+            var oneDay          = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+            var firstDate       = new Date(2008, 01, 12);
+            var secondDate      = new Date(2008, 01, 22);
+
+            var diffDays = Math.round(Math.abs((parseDate(date1).getTime() - parseDate(date2).getTime()) / (oneDay)));
+
+            $('#ctl00_ContentPlaceHolder1_TextExpiredDays').val(diffDays);
+
+            function parseDate(str) {
+                var mdy = str.split('/');
+                return new Date(mdy[2], mdy[1]-1, mdy[0]);
+            }
+             
+        });
+
+
+        // data table
+      //   $("#example1").DataTable();
+       //  $("#ctl00_ContentPlaceHolder1_GridView2").DataTable();     
+          $('#ctl00_ContentPlaceHolder1_GridView3').DataTable({
+              "paging": true,
+              "lengthChange": false,
+              "searching": false,
+              "ordering": true,
+              "info": true,
+              "autoWidth": false
+            });
+        
+        //Colorpicker
+        $(".my-colorpicker1").colorpicker();
+        //color picker with addon
+        $(".my-colorpicker2").colorpicker();
+
+
+        //Timepicker
+        $(".timepicker").timepicker({
+            showInputs: false
+        });
+        //   alert("Your book is overdue.");
+
+        $("#ctl00_ContentPlaceHolder1_alert_box").alert();
+        $("#ctl00_ContentPlaceHolder1_alert_box").fadeTo(1500, 500).slideUp(100, function () {
+            $("#ctl00_ContentPlaceHolder1_alert_box").slideUp(500);
+
+        });
+
+        $("#ctl00_ContentPlaceHolder1_alert_box_right").alert();
+        $("#ctl00_ContentPlaceHolder1_alert_box_right").fadeTo(1500, 500).slideUp(100, function () {
+            $("#ctl00_ContentPlaceHolder1_alert_box_right").slideUp(500);
+
+        });
+
+        $("#ctl00_ContentPlaceHolder1_alert_box_right2").alert();
+        $("#ctl00_ContentPlaceHolder1_alert_box_right2").fadeTo(1500, 500).slideUp(100, function () {
+            $("#ctl00_ContentPlaceHolder1_alert_box_right2").slideUp(500);
+
+        });
+        //  alert("Your book is overdue.");
+        //Datemask dd/mm/yyyy
+        $("#datemask").inputmask("dd/mm/yyyy", { "placeholder": "dd/mm/yyyy" });
+        //Datemask2 mm/dd/yyyy
+        $("#datemask2").inputmask("mm/dd/yyyy", { "placeholder": "mm/dd/yyyy" });
+        //Money Euro
+        $("[data-mask]").inputmask();
+
+        //Date range picker
+        $('#reservation').daterangepicker();
+        //Date range picker with time picker
+        $('#ctl00_ContentPlaceHolder1_TextStartExpiryDate').daterangepicker({ autoUpdateInput: false, timePicker: true, timePickerIncrement: 30, locale: {
+            format: 'DD/MM/YYYY hh:mm:ss A'
+        }
+        });
+
+        $('#ctl00_ContentPlaceHolder1_TextStartExpiryDate').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY hh:mm:ss A') + ' - ' + picker.endDate.format('DD/MM/YYYY hh:mm:ss A'));
+        });
+
+        $('#ctl00_ContentPlaceHolder1_TextStartExpiryDate').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+        //Date range as a button
+        $('#daterange-btn').daterangepicker(
+        {
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment()
+        },
+        function (start, end) {
+            $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+    );
+
+        //Date picker
+        $('#ctl00_ContentPlaceHolder1_EntryDate').datepicker({ 
+             format: 'dd/mm/yyyy',
+        }); 
+
+    //    $('#ctl00_ContentPlaceHolder1_EntryDate').datepicker({ 
+     //        format: 'dd/mm/yyyy',
+     //   }).datepicker("setDate",'now'); 
+
+        $('#ctl00_ContentPlaceHolder1_AsOnDate').datepicker({ 
+             format: 'dd/mm/yyyy',
+        }); 
+      /*  $('#ctl00_ContentPlaceHolder1_TextMonthYear0').datepicker({ 
+             format: 'mm/yyyy',
+        }).datepicker("setDate",'now');  */
+        
+         $('#ctl00_ContentPlaceHolder1_TextMonthYear0').datepicker( {
+            format: "mm/yyyy",
+            viewMode: "months", 
+            minViewMode: "months"
+        });
+
+         $('#ctl00_ContentPlaceHolder1_TextMonthYear1').datepicker( {
+            format: "mm/yyyy",
+            viewMode: "months", 
+            minViewMode: "months"
+        });
+         $('#ctl00_ContentPlaceHolder1_TextMonthYear2').datepicker( {
+            format: "mm/yyyy",
+            viewMode: "months", 
+            minViewMode: "months"
+        });
+         $('#ctl00_ContentPlaceHolder1_TextMonthYear3').datepicker( {
+            format: "mm/yyyy",
+            viewMode: "months", 
+            minViewMode: "months"
+        });
+
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        }).Val();
+
+
+
+    });
+</script>
+  
+</body>
+</html>

@@ -1,0 +1,5 @@
+D:\Documents and Settings\Pintu\My Documents\Visual Studio 2008\Projects\LoginPage using Oracle Db\LoginPage using Oracle Db\obj\Debug\ResolveAssemblyReference.cache
+D:\Documents and Settings\Pintu\My Documents\Visual Studio 2008\Projects\LoginPage using Oracle Db\LoginPage using Oracle Db\bin\LoginPage using Oracle Db.dll
+D:\Documents and Settings\Pintu\My Documents\Visual Studio 2008\Projects\LoginPage using Oracle Db\LoginPage using Oracle Db\bin\LoginPage using Oracle Db.pdb
+D:\Documents and Settings\Pintu\My Documents\Visual Studio 2008\Projects\LoginPage using Oracle Db\LoginPage using Oracle Db\obj\Debug\LoginPage using Oracle Db.dll
+D:\Documents and Settings\Pintu\My Documents\Visual Studio 2008\Projects\LoginPage using Oracle Db\LoginPage using Oracle Db\obj\Debug\LoginPage using Oracle Db.pdb
