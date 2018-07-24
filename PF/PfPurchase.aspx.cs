@@ -147,7 +147,7 @@ namespace NRCAPPS.PF
 
                         TextSlipNo.Focus();
                         
-
+                        // display list
                         Display();
 
                         alert_box.Visible = false;
