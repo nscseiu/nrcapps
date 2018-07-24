@@ -562,12 +562,11 @@
          $("#ctl00_ContentPlaceHolder1_GridView4 tbody tr:first").remove();
 
          $("#ctl00_ContentPlaceHolder1_GridView4").tablesorter({ sortList: [[1, 0]] });
-          
      });
 </script> 
  <script type="text/javascript">
     $(function () {
-      //  $("#ctl00_ContentPlaceHolder1_TextSlipNo").focus();
+       
         //  $('input[type=checkbox]').each(function () {
        //     $(this).attr('class', 'flat-red');
        //    });

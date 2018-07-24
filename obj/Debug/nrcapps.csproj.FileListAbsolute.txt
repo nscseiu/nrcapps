@@ -2,6 +2,8 @@ D:\Shamim\nrcapps\LoginPage using Oracle Db\bin\nrcapps.dll
 D:\Shamim\nrcapps\LoginPage using Oracle Db\bin\nrcapps.pdb
 D:\Shamim\nrcapps\LoginPage using Oracle Db\obj\Debug\nrcapps.dll
 D:\Shamim\nrcapps\LoginPage using Oracle Db\obj\Debug\nrcapps.pdb
+D:\Shamim\nrcapps\nrcapps\bin\ASSET\ASSET_Reports\Asset_Items_Employee_Report.rpt
+D:\Shamim\nrcapps\nrcapps\bin\ASSET\ASSET_Reports\Asset_Items_Employee_Report.cs
 D:\Shamim\nrcapps\nrcapps\bin\nrcapps.dll
 D:\Shamim\nrcapps\nrcapps\bin\nrcapps.pdb
 D:\Shamim\nrcapps\nrcapps\obj\Debug\nrcapps.dll
@@ -33,32 +35,3 @@ C:\inetpub\nrcapps\obj\Debug\nrcapps.dll
 C:\inetpub\nrcapps\obj\Debug\nrcapps.pdb
 C:\inetpub\nrcapps\bin\IT\IT_ASSET\ASSET_Reports\Asset_Items_Department_Report.rpt
 C:\inetpub\nrcapps\bin\IT\IT_ASSET\ASSET_Reports\Asset_Items_Department_Report.cs
-D:\Shamim\nrcapps\nrcapps\bin\IT\IT_ASSET\ASSET_Reports\Asset_Items_Employee_Report.rpt
-D:\Shamim\nrcapps\nrcapps\bin\PF\PF_Reports\Pf_Purchase_Supplier_Wise_Report.rpt
-D:\Shamim\nrcapps\nrcapps\bin\PF\PF_Reports\Pf_Purchase_Supervisor_Report.rpt
-D:\Shamim\nrcapps\nrcapps\bin\IT\IT_ASSET\ASSET_Reports\Asset_Items_Department_Report.rpt
-D:\Shamim\nrcapps\nrcapps\bin\IT\IT_ASSET\ASSET_Reports\Asset_Items_Employee_Report.cs
-D:\Shamim\nrcapps\nrcapps\bin\IT\IT_ASSET\ASSET_Reports\Asset_Items_Department_Report.cs
-D:\Shamim\nrcapps\nrcapps\bin\PF\PF_Reports\Pf_Purchase_Supervisor_Report.cs
-D:\Shamim\nrcapps\nrcapps\bin\PF\PF_Reports\Pf_Purchase_Supplier_Wise_Report.cs
-D:\Shamim\nrcapps\nrcapps\bin\nrcapps.dll.config
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.CrystalReports.Design.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.CrystalReports.Engine.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportSource.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.Shared.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.Web.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.DataDefModel.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.ClientDoc.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.ReportDefModel.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.Controllers.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.CommLayer.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.DataSetConversion.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.Prompting.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.XmlSerialize.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.CubeDefModel.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.CommonObjectModel.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.ObjectFactory.dll
-D:\Shamim\nrcapps\nrcapps\bin\CrystalDecisions.ReportAppServer.CommonControls.dll
-D:\Shamim\nrcapps\nrcapps\bin\stdole.dll
-D:\Shamim\nrcapps\nrcapps\obj\Debug\nrcapps.csproj.CoreCompileInputs.cache
-D:\Shamim\nrcapps\nrcapps\obj\Debug\nrcapps.csproj.CopyComplete

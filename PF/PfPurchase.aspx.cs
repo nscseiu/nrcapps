@@ -37,7 +37,7 @@ namespace NRCAPPS.PF
 
         public bool IsLoad { get; set; }  public bool IsLoad2 { get; set; } public bool IsLoad3 { get; set; } public bool IsLoad4 { get; set; } 
         protected void Page_Load(object sender, EventArgs e)
-        {  TextSlipNo.Focus();
+        {
             if (Session["USER_NAME"] != null)
             {
                 string requestedFile = Path.GetFileName(Request.Path);
@@ -62,31 +62,28 @@ namespace NRCAPPS.PF
 
                 if (IS_PAGE_ACTIVE == "Enable")
                 {
-                     
-                    // SetFocus(TextSlipNo); 
-
-                    if (!IsPostBack)
+                     if (!IsPostBack)
                     {
                         DataTable dtSupplierID = new DataTable();
                         DataSet ds = new DataSet();
-                        string makeSupplierSQL = " SELECT SUPPLIER_ID, SUPPLIER_ID || ' - ' || SUPPLIER_NAME AS SUPPLIER_NAME_FULL FROM PF_SUPPLIER WHERE IS_ACTIVE = 'Enable' ORDER BY SUPPLIER_NAME ASC";
+                        string makeSupplierSQL = " SELECT * FROM PF_SUPPLIER WHERE IS_ACTIVE = 'Enable' ORDER BY SUPPLIER_NAME ASC";
                         ds = ExecuteBySqlStringEmpType(makeSupplierSQL);
                         dtSupplierID = (DataTable)ds.Tables[0];
                         DropDownSupplierID.DataSource = dtSupplierID;
                         DropDownSupplierID.DataValueField = "SUPPLIER_ID";
-                        DropDownSupplierID.DataTextField = "SUPPLIER_NAME_FULL";
+                        DropDownSupplierID.DataTextField = "SUPPLIER_NAME";
                         DropDownSupplierID.DataBind();
                         DropDownSupplierID.Items.Insert(0, new ListItem("Select  Supplier", "0"));
 
                         DropDownSupplierID2.DataSource = dtSupplierID;
                         DropDownSupplierID2.DataValueField = "SUPPLIER_ID";
-                        DropDownSupplierID2.DataTextField = "SUPPLIER_NAME_FULL";
+                        DropDownSupplierID2.DataTextField = "SUPPLIER_NAME";
                         DropDownSupplierID2.DataBind();
                         DropDownSupplierID2.Items.Insert(0, new ListItem("Select  Supplier", "0"));
 
                         DropDownSupplierID3.DataSource = dtSupplierID;
                         DropDownSupplierID3.DataValueField = "SUPPLIER_ID";
-                        DropDownSupplierID3.DataTextField = "SUPPLIER_NAME_FULL";
+                        DropDownSupplierID3.DataTextField = "SUPPLIER_NAME";
                         DropDownSupplierID3.DataBind();
                         DropDownSupplierID3.Items.Insert(0, new ListItem("Select  Supplier", "0"));
 
@@ -116,13 +113,13 @@ namespace NRCAPPS.PF
                         DropDownPurchaseTypeID.DataValueField = "PUR_TYPE_ID";
                         DropDownPurchaseTypeID.DataTextField = "PUR_TYPE_NAME";
                         DropDownPurchaseTypeID.DataBind();
-                      //  DropDownPurchaseTypeID.Items.Insert(0, new ListItem("Select  Purchase Type", "0"));
+                     //   DropDownPurchaseTypeID.Items.Insert(0, new ListItem("Select  Purchase Type", "0"));
 
                         DropDownPurchaseTypeID2.DataSource = dtPurchaseTypeID;
                         DropDownPurchaseTypeID2.DataValueField = "PUR_TYPE_ID";
                         DropDownPurchaseTypeID2.DataTextField = "PUR_TYPE_NAME";
                         DropDownPurchaseTypeID2.DataBind();
-                     //  DropDownPurchaseTypeID2.Items.Insert(0, new ListItem("Select  Purchase Type", "0"));
+                     //   DropDownPurchaseTypeID2.Items.Insert(0, new ListItem("Select  Purchase Type", "0"));
 
 
                         DataTable dtItemID = new DataTable();
@@ -147,7 +144,10 @@ namespace NRCAPPS.PF
                         DropDownSubItemID.DataBind();
                         DropDownSubItemID.Items.Insert(0, new ListItem("Select Sub Item", "0"));
 
-                         
+
+                        TextSlipNo.Focus();
+                        
+
                         Display();
 
                         alert_box.Visible = false;

@@ -43,8 +43,8 @@
                 <div class="form-group">   
                     <label class="col-sm-2 control-label">Slip No</label> 
                    <div class="col-sm-2">   
-                    <asp:TextBox ID="TextSlipNo" class="form-control input-sm"  runat="server" AutoPostBack="True"  ontextchanged="TextSlipNo_TextChanged" ></asp:TextBox>  
-                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                    <asp:TextBox ID="TextSlipNo" class="form-control input-sm"  runat="server" AutoPostBack="True"  ontextchanged="TextSlipNo_TextChanged"></asp:TextBox>  
+                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
                           ControlToValidate="TextSlipNo" ErrorMessage="Insert Slip No." 
                           Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
                  </div>
@@ -65,7 +65,7 @@
                   <div class="col-sm-3">   
                     <asp:DropDownList ID="DropDownSupervisorID" class="form-control input-sm" runat="server"> 
                     </asp:DropDownList>  
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                           ControlToValidate="DropDownSupervisorID" Display="Dynamic" 
                           ErrorMessage="Select Supervisor" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div>
@@ -77,7 +77,7 @@
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" 
                           ControlToValidate="DropDownPurchaseTypeID" Display="Dynamic" 
-                          ErrorMessage="Select Purchase Type" InitialValue="2" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                          ErrorMessage="Select Purchase Type" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div>
                 </div> 
                 <div class="form-group">
@@ -507,6 +507,5 @@
     </section>
     <!-- /.content -->
 
-</div> 
-  
+</div>
 </asp:Content> 
