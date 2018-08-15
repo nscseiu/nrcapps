@@ -92,14 +92,14 @@ namespace NRCAPPS.PF
 
                     int userID = Convert.ToInt32(Session["USER_ID"]);
 
-                    string get_customer_id = "select PF_SUPPLIER_ID_SEQ.nextval from dual";
-                    cmdu = new OracleCommand(get_customer_id, conn);
+                    string get_supplier_id = "select PF_PARTY_ID_SEQ.nextval from dual";
+                    cmdu = new OracleCommand(get_supplier_id, conn);
                     int newSupplierID = Int16.Parse(cmdu.ExecuteScalar().ToString());
 
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into PF_SUPPLIER (SUPPLIER_ID, SUPPLIER_NAME, SUP_ADD_1, SUP_ADD_2, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoSupplierID, :TextSupplierName, :TextSup_Add_1, :TextSup_Add_2, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into PF_PARTY (PARTY_ID, PARTY_NAME, PARTY_ADD_1, PARTY_ADD_2, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoSupplierID, :TextSupplierName, :TextSup_Add_1, :TextSup_Add_2, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
                     OracleParameter[] objPrm = new OracleParameter[7];
@@ -118,7 +118,7 @@ namespace NRCAPPS.PF
                     cmdi.Dispose();
                     conn.Close();
                     alert_box.Visible = true;
-                    alert_box.Controls.Add(new LiteralControl("Insert New Supplier successfully"));
+                    alert_box.Controls.Add(new LiteralControl("Insert New Party Data Successfully"));
                     alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
                     clearText();
                     Display();
@@ -135,13 +135,14 @@ namespace NRCAPPS.PF
 
         protected void linkSelectClick(object sender, EventArgs e) 
         { 
+            try{
              OracleConnection conn = new OracleConnection(strConnString);
              conn.Open();
              LinkButton btn = (LinkButton)sender;
              Session["user_page_data_id"] = btn.CommandArgument;
              int USER_DATA_ID = Convert.ToInt32(Session["user_page_data_id"]); 
               
-             string makeSQL = " select *  from PF_SUPPLIER where SUPPLIER_ID = '" + USER_DATA_ID + "'";
+             string makeSQL = " select *  from PF_PARTY where PARTY_ID = '" + USER_DATA_ID + "'";
              
              cmdl = new OracleCommand(makeSQL);
              oradata = new OracleDataAdapter(cmdl.CommandText, conn); 
@@ -151,10 +152,10 @@ namespace NRCAPPS.PF
 
              for (int i = 0; i < RowCount; i++)
              {
-                 TextSupplierID.Text = dt.Rows[i]["SUPPLIER_ID"].ToString();
-                 TextSupplierName.Text = dt.Rows[i]["SUPPLIER_NAME"].ToString();
-                 TextSup_Add_1.Text = dt.Rows[i]["SUP_ADD_1"].ToString();
-                 TextSup_Add_2.Text = dt.Rows[i]["SUP_ADD_2"].ToString(); 
+                 TextSupplierID.Text = dt.Rows[i]["PARTY_ID"].ToString();
+                 TextSupplierName.Text = dt.Rows[i]["PARTY_NAME"].ToString();
+                 TextSup_Add_1.Text = dt.Rows[i]["PARTY_ADD_1"].ToString();
+                 TextSup_Add_2.Text = dt.Rows[i]["PARTY_ADD_2"].ToString(); 
                  CheckIsActive.Checked   = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
                          
              } 
@@ -164,8 +165,12 @@ namespace NRCAPPS.PF
              CheckSupplierName.Text = "";
              alert_box.Visible = false;
              BtnAdd.Attributes.Add("aria-disabled", "false");
-             BtnAdd.Attributes.Add("class", "btn btn-primary disabled"); 
-
+             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
+            }
+            catch
+            {
+                Response.Redirect("~/ParameterError.aspx");
+            }
         }
 
         public void Display()
@@ -181,11 +186,11 @@ namespace NRCAPPS.PF
                 string makeSQL = "";
                 if (txtSearchUserRole.Text == "")
                 {
-                    makeSQL = " select  * from PF_SUPPLIER ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
+                    makeSQL = " select  * from PF_PARTY ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
                 }
                 else
                 {
-                    makeSQL = " select  * from PF_SUPPLIER where SUPPLIER_ID like '" + txtSearchUserRole.Text + "%' or SUPPLIER_NAME like '" + txtSearchUserRole.Text + "%'  or IS_ACTIVE like '" + txtSearchUserRole.Text + "%' ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
+                    makeSQL = " select  * from PF_PARTY where PARTY_ID like '" + txtSearchUserRole.Text + "%' or PARTY_NAME like '" + txtSearchUserRole.Text + "%'  or IS_ACTIVE like '" + txtSearchUserRole.Text + "%' ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
 
                     alert_box.Visible = false;
                 }
@@ -195,7 +200,7 @@ namespace NRCAPPS.PF
                 dt = new DataTable();
                 oradata.Fill(dt);
                 GridView1.DataSource = dt;
-                GridView1.DataKeyNames = new string[] { "SUPPLIER_ID" };
+                GridView1.DataKeyNames = new string[] { "PARTY_ID" };
 
                 GridView1.DataBind();
                 conn.Close();
@@ -230,8 +235,8 @@ namespace NRCAPPS.PF
                 int USER_DATA_ID = Convert.ToInt32(TextSupplierID.Text);   
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
-                 
-                string update_user = "update  PF_SUPPLIER  set SUPPLIER_NAME = :TextSupplierName, SUP_ADD_1 = :TextSup_Add_1, SUP_ADD_2 = :TextSup_Add_2, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where SUPPLIER_ID = :NoSupplierID ";
+
+                string update_user = "update  PF_PARTY  set PARTY_NAME = :TextSupplierName, PARTY_ADD_1 = :TextSup_Add_1, PARTY_ADD_2 = :TextSup_Add_2, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where PARTY_ID = :NoSupplierID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
                 OracleParameter[] objPrm = new OracleParameter[7];
@@ -249,7 +254,7 @@ namespace NRCAPPS.PF
                 conn.Close();  
 
                 alert_box.Visible = true;
-                alert_box.Controls.Add(new LiteralControl("Supplier Update successfully"));
+                alert_box.Controls.Add(new LiteralControl("Party Data Update Successfully"));
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
                 clearText();
                 Display();
@@ -272,7 +277,7 @@ namespace NRCAPPS.PF
                 conn.Open();
 
                 int USER_DATA_ID = Convert.ToInt32(TextSupplierID.Text);
-                string delete_user_page = " delete from PF_SUPPLIER where SUPPLIER_ID  = '" + USER_DATA_ID + "'";
+                string delete_user_page = " delete from PF_PARTY where PARTY_ID  = '" + USER_DATA_ID + "'";
 
                 cmdi = new OracleCommand(delete_user_page, conn);
             
@@ -281,7 +286,7 @@ namespace NRCAPPS.PF
                 cmdi.Dispose();
                 conn.Close();
                 alert_box.Visible = true;
-                alert_box.Controls.Add(new LiteralControl("Supplier Delete successfully"));
+                alert_box.Controls.Add(new LiteralControl("Party Delete Successfully"));
                 alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
                 clearText(); 
                 Display();
@@ -364,13 +369,13 @@ namespace NRCAPPS.PF
                 conn.Open();
                 OracleCommand cmd = new OracleCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "select * from PF_SUPPLIER where SUPPLIER_NAME = '" + TextSupplierName.Text + "'";
+                cmd.CommandText = "select * from PF_PARTY where PARTY_NAME = '" + TextSupplierName.Text + "'";
                 cmd.CommandType = CommandType.Text;
 
                 OracleDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {
-                    CheckSupplierName.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> Supplier name is already entry</label>";
+                    CheckSupplierName.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> Party name is already entry</label>";
                     CheckSupplierName.ForeColor = System.Drawing.Color.Red;
                     TextSupplierName.Focus();
                     BtnAdd.Attributes.Add("aria-disabled", "false");
@@ -378,7 +383,7 @@ namespace NRCAPPS.PF
                 }
                 else
                 {
-                    CheckSupplierName.Text = "<label class='control-label'><i class='fa fa fa-check'></i> Supplier name is available</label>";
+                    CheckSupplierName.Text = "<label class='control-label'><i class='fa fa fa-check'></i> Party name is available</label>";
                     CheckSupplierName.ForeColor = System.Drawing.Color.Green;
                     CheckIsActive.Focus();
                     BtnAdd.Attributes.Add("aria-disabled", "true");
@@ -387,7 +392,7 @@ namespace NRCAPPS.PF
                 }
             }
             else {
-                    CheckSupplierName.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> Supplier name is not blank</label>";
+                CheckSupplierName.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> Party name is not blank</label>";
                     CheckSupplierName.ForeColor = System.Drawing.Color.Red;
                     TextSupplierName.Focus();
             }

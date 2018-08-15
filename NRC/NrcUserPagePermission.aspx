@@ -56,7 +56,16 @@
             <!-- form start -->
             
               <div class="box-body">
-                    
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Select Main Menu</label> 
+                  <div class="col-sm-3">   
+                    <asp:DropDownList ID="DropDownMainMenu" class="form-control" runat="server"   AutoPostBack="True"  ontextchanged="DisplayUserPagePer"> 
+                    </asp:DropDownList>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                          ControlToValidate="DropDownMainMenu" Display="Dynamic" 
+                          ErrorMessage="Select Main Menu" SetFocusOnError="True" ValidationGroup='valGroup1' ></asp:RequiredFieldValidator> 
+                  </div>
+                </div>      
                <div class="form-group">
                   <label  class="col-sm-2 control-label">Select User</label> 
                   <div class="col-sm-3">   
@@ -64,7 +73,7 @@
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="errorUserID" runat="server" 
                           ControlToValidate="DropDownUserID" Display="Dynamic" 
-                          ErrorMessage="select User" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup1' ></asp:RequiredFieldValidator> 
+                          ErrorMessage="Select User" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup1' ></asp:RequiredFieldValidator> 
                   </div>
                 </div> 
                    

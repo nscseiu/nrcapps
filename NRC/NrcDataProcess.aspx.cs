@@ -89,7 +89,7 @@ namespace NRCAPPS.PF
 
         public void BtnDataProcPf_Click(object sender, EventArgs e)
         {
-
+          try {
             if (IS_ADD_ACTIVE == "Enable")
             {
                 OracleConnection conn = new OracleConnection(strConnString);
@@ -128,11 +128,16 @@ namespace NRCAPPS.PF
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
 
                 clearText();
-            }
+            } 
             else
             {
                 Response.Redirect("~/PagePermissionError.aspx");
             }
+          }
+          catch
+          {
+              Response.Redirect("~/ParameterError.aspx");
+          } 
         }
 
         public void clearTextField(object sender, EventArgs e)

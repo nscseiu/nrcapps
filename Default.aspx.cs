@@ -62,12 +62,12 @@ namespace NRCAPPS
                     conn.Open();
                     OracleCommand cmd = new OracleCommand();
                     cmd.Connection = conn;
-                    cmd.CommandText = "select NU.USER_ID, NU.PASSWORD,  NUR.USER_ROLE_SHORT_NAME, NUR.USER_ROLE_NAME, NU.CREATE_DATE, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, nvl(NU.IS_PASSWORD_CHANGE,0) from NRC_USER NU left join HR_EMPLOYEES HE ON HE.EMP_ID = NU.EMP_ID left join NRC_USER_ROLE  NUR ON NUR.USER_ROLE_ID = NU.USER_ROLE_ID where  NU.USER_NAME = '" + UserName + "'";
+                    cmd.CommandText = "SELECT NU.USER_ID, NU.PASSWORD,  NUR.USER_ROLE_SHORT_NAME, NUR.USER_ROLE_NAME, NU.CREATE_DATE, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, nvl(NU.IS_PASSWORD_CHANGE,0), HD.DIVISION_NAME, HD.DIV_SHORT_NAME from NRC_USER NU LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = NU.EMP_ID LEFT JOIN HR_EMP_DIVISIONS HD ON HD.DIVISION_ID = HE.DIVISION_ID LEFT JOIN NRC_USER_ROLE  NUR ON NUR.USER_ROLE_ID = NU.USER_ROLE_ID  WHERE  NU.USER_NAME = '" + UserName + "'";
                     cmd.CommandType = CommandType.Text;
 
                     OracleDataReader dr = cmd.ExecuteReader();
                     int userID = 0, NrcIsPasswordChange = 0;
-                    string passDB = "", NrcUserSrole = "", NrcUserRoleName = "", NrcUserName = "";
+                    string passDB = "", NrcUserSrole = "", NrcUserRoleName = "", NrcUserName = "", HrDivisionName = "", HrDivShortName = "";
 
                     DateTime NrcUserCdate = DateTime.Today;
 
@@ -82,6 +82,8 @@ namespace NRCAPPS
                             NrcUserCdate = dr.GetDateTime(4);
                             NrcUserName = dr.GetString(5);
                             NrcIsPasswordChange = dr.GetInt32(6);
+                            HrDivisionName = dr.GetString(7);
+                            HrDivShortName = dr.GetString(8);
                         }
                     }
 
@@ -110,6 +112,8 @@ namespace NRCAPPS
                         Session["EMP_NAME"] = NrcUserName;
                         Session["NRC_USER_SROLE"] = NrcUserSrole;
                         Session["NRC_USER_C_DATE"] = NrcUserCdate.ToLongDateString();
+                        Session["NRC_DIVISION_NAME"] = HrDivisionName;
+                        Session["NRC_DIV_SHORT_NAME"] = HrDivShortName;
 
                         string Emp_name_temp = Convert.ToString(Session["EMP_NAME"]);
                         string[] EmpName = Emp_name_temp.Split(' ');

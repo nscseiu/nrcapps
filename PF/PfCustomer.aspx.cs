@@ -135,6 +135,8 @@ namespace NRCAPPS.PF
 
         protected void linkSelectClick(object sender, EventArgs e) 
         { 
+            try
+            {
              OracleConnection conn = new OracleConnection(strConnString);
              conn.Open();
              LinkButton btn = (LinkButton)sender;
@@ -164,7 +166,12 @@ namespace NRCAPPS.PF
              CheckCustomerName.Text = "";
              alert_box.Visible = false;
              BtnAdd.Attributes.Add("aria-disabled", "false");
-             BtnAdd.Attributes.Add("class", "btn btn-primary disabled"); 
+             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
+            }
+            catch
+            {
+                Response.Redirect("~/ParameterError.aspx");
+            }
 
         }
 

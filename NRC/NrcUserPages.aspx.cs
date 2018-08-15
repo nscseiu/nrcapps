@@ -100,8 +100,7 @@ namespace NRCAPPS.NRC
                     OracleConnection conn = new OracleConnection(strConnString);
                     conn.Open();
 
-                    int userID = Convert.ToInt32(Session["USER_ID"]);
-
+                    int userID = Convert.ToInt32(Session["USER_ID"]);   
                     string get_user_page_id = "select NRC_USER_PAGESID_SEQ.nextval from dual";
                     cmdu = new OracleCommand(get_user_page_id, conn);
                     int newUserPageID = Int16.Parse(cmdu.ExecuteScalar().ToString());
@@ -109,16 +108,17 @@ namespace NRCAPPS.NRC
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into NRC_USER_PAGES (USER_PAGE_ID, PAGE_NAME, PAGE_URL, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoUserPageID, :TextUserPageName, :TextUserPageUrl,  :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into NRC_USER_PAGES (USER_PAGE_ID, PAGE_NAME, PAGE_URL, MENU_ID, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoUserPageID, :TextUserPageName, :TextUserPageUrl, :NoMenuID, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
-                    OracleParameter[] objPrm = new OracleParameter[6];
+                    OracleParameter[] objPrm = new OracleParameter[7];
                     objPrm[0] = cmdi.Parameters.Add("NoUserPageID", newUserPageID);
                     objPrm[1] = cmdi.Parameters.Add("TextUserPageName", TextUserPageName.Text);
                     objPrm[2] = cmdi.Parameters.Add("TextUserPageUrl", TextUserPageUrl.Text);
-                    objPrm[3] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPrm[4] = cmdi.Parameters.Add("u_date", u_date);
-                    objPrm[5] = cmdi.Parameters.Add("NoCuserID", userID);
+                    objPrm[3] = cmdi.Parameters.Add("NoMenuID", DropDownMainMenuID.Text);
+                    objPrm[4] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPrm[5] = cmdi.Parameters.Add("u_date", u_date);
+                    objPrm[6] = cmdi.Parameters.Add("NoCuserID", userID);
 
 
                     cmdi.ExecuteNonQuery();
@@ -156,14 +156,14 @@ namespace NRCAPPS.NRC
                 string update_user = "update  NRC_USER_PAGES  set PAGE_NAME = :TextUserPageName, PAGE_URL = :TextUserPageUrl, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive, MENU_ID = :TextMainMenuID where USER_PAGE_ID = :NoUserPageID ";
                 cmdi = new OracleCommand(update_user, conn);
 
-                OracleParameter[] objPrm = new OracleParameter[8];
+                OracleParameter[] objPrm = new OracleParameter[7];
                 objPrm[0] = cmdi.Parameters.Add("TextUserPageName", TextUserPageName.Text);
-                objPrm[1] = cmdi.Parameters.Add("TextUserPageUrl", TextUserPageUrl.Text);
-                objPrm[3] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[4] = cmdi.Parameters.Add("NoUserPageID", USER_DATA_ID);
-                objPrm[5] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[6] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                objPrm[7] = cmdi.Parameters.Add("TextMainMenuID", DropDownMainMenuID.Text);
+                objPrm[1] = cmdi.Parameters.Add("TextUserPageUrl", TextUserPageUrl.Text); 
+                objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[3] = cmdi.Parameters.Add("NoUserPageID", USER_DATA_ID);
+                objPrm[4] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[5] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                objPrm[6] = cmdi.Parameters.Add("TextMainMenuID", DropDownMainMenuID.Text);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -238,7 +238,7 @@ namespace NRCAPPS.NRC
                 }
                 else
                 {
-                    makeSQL = " select  * from NRC_USER_PAGES where USER_PAGE_ID like '" + txtSearchUserRole.Text + "%' or PAGE_NAME like '" + txtSearchUserRole.Text + "%' or PAGE_URL like '" + txtSearchUserRole.Text + "%' or IS_ACTIVE like '" + txtSearchUserRole.Text + "%' ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
+                    makeSQL = "  select  NUP.*, NMM.MENU_NAME from NRC_USER_PAGES NUP left join NRC_MAIN_MENU NMM on NMM.MENU_ID = NUP.MENU_ID where NUP.USER_PAGE_ID like '" + txtSearchUserRole.Text + "%' or NUP.PAGE_NAME like '" + txtSearchUserRole.Text + "%' or NUP.PAGE_URL like '" + txtSearchUserRole.Text + "%' or NMM.MENU_NAME like '" + txtSearchUserRole.Text + "%' or NUP.IS_ACTIVE like '" + txtSearchUserRole.Text + "%' ORDER BY NUP.MENU_ID, NUP.UPDATE_DATE desc, NUP.CREATE_DATE desc";
 
                     alert_box.Visible = false;
                 }

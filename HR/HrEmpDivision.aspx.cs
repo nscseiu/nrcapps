@@ -99,26 +99,25 @@ namespace NRCAPPS.HR
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into HR_EMP_DIVISIONS (DIVISION_ID, DIVISION_NAME, DIVISION_ADD, DIV_BG_COLOR, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoDivisionID, :TextDivisionName, :TextDivisionAdd, :TextDivBgColor, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into HR_EMP_DIVISIONS (DIVISION_ID, DIVISION_NAME, DIV_SHROT_NAME, DIVISION_ADD, DIV_BG_COLOR, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoDivisionID, :TextDivisionName, :TextDivShortName, :TextDivisionAdd, :TextDivBgColor, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
-                    OracleParameter[] objPrm = new OracleParameter[7];
+                    OracleParameter[] objPrm = new OracleParameter[8];
                     objPrm[0] = cmdi.Parameters.Add("NoDivisionID", newDivisionID);
                     objPrm[1] = cmdi.Parameters.Add("TextDivisionName", TextDivisionName.Text);
-                    objPrm[2] = cmdi.Parameters.Add("TextDivisionAdd", TextDivisionAdd.Text);
-                    objPrm[3] = cmdi.Parameters.Add("TextDivBgColor", TextDivBgColor.Text);
-                    objPrm[4] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPrm[5] = cmdi.Parameters.Add("u_date", u_date);
-                    objPrm[6] = cmdi.Parameters.Add("NoCuserID", userID);
-
-
-                    cmdi.ExecuteNonQuery();
-
+                    objPrm[2] = cmdi.Parameters.Add("TextDivShortName", TextDivShortName.Text);
+                    objPrm[3] = cmdi.Parameters.Add("TextDivisionAdd", TextDivisionAdd.Text);
+                    objPrm[4] = cmdi.Parameters.Add("TextDivBgColor", TextDivBgColor.Text);
+                    objPrm[5] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPrm[6] = cmdi.Parameters.Add("u_date", u_date);
+                    objPrm[7] = cmdi.Parameters.Add("NoCuserID", userID);
+                     
+                    cmdi.ExecuteNonQuery(); 
                     cmdi.Parameters.Clear();
                     cmdi.Dispose();
                     conn.Close();
                     alert_box.Visible = true;
-                    alert_box.Controls.Add(new LiteralControl("Insert New Division successfully"));
+                    alert_box.Controls.Add(new LiteralControl("Insert New Division Successfully"));
                     alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
                     clearText();
                     Display();
@@ -156,6 +155,7 @@ namespace NRCAPPS.HR
              {
                  TextDivisionID.Text   = dt.Rows[i]["DIVISION_ID"].ToString();
                  TextDivisionName.Text = dt.Rows[i]["DIVISION_NAME"].ToString();
+                 TextDivShortName.Text = dt.Rows[i]["DIV_SHORT_NAME"].ToString();
                  TextDivisionAdd.Text  = dt.Rows[i]["DIVISION_ADD"].ToString();
                  TextDivBgColor.Text   = dt.Rows[i]["DIV_BG_COLOR"].ToString(); 
                  CheckIsActive.Checked   = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
@@ -165,6 +165,7 @@ namespace NRCAPPS.HR
              conn.Close();
              Display();
              CheckUserDivisionName.Text = "";
+             CheckDivisionShortName.Text = "";
              alert_box.Visible = false;
              BtnAdd.Attributes.Add("aria-disabled", "false");
              BtnAdd.Attributes.Add("class", "btn btn-primary disabled"); 
@@ -234,20 +235,19 @@ namespace NRCAPPS.HR
                 int USER_DATA_ID = Convert.ToInt32(TextDivisionID.Text);   
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
-
-
-
-                string update_user = "update  HR_EMP_DIVISIONS  set DIVISION_NAME = :TextDivisionName, DIVISION_ADD = :TextDivisionAdd, DIV_BG_COLOR = :TextDivBgColor, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where DIVISION_ID = :NoDivisionID ";
+                 
+                string update_user = "update  HR_EMP_DIVISIONS  set DIVISION_NAME = :TextDivisionName, DIV_SHORT_NAME = :TextDivShortName,  DIVISION_ADD = :TextDivisionAdd, DIV_BG_COLOR = :TextDivBgColor, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where DIVISION_ID = :NoDivisionID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[7];
+                OracleParameter[] objPrm = new OracleParameter[8];
                 objPrm[0] = cmdi.Parameters.Add("TextDivisionName", TextDivisionName.Text);
-                objPrm[1] = cmdi.Parameters.Add("TextDivisionAdd", TextDivisionAdd.Text);
-                objPrm[2] = cmdi.Parameters.Add("TextDivBgColor", TextDivBgColor.Text); 
-                objPrm[3] = cmdi.Parameters.Add("u_date", u_date); 
-                objPrm[4] = cmdi.Parameters.Add("NoDivisionID", USER_DATA_ID);
-                objPrm[5] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[6] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                objPrm[1] = cmdi.Parameters.Add("TextDivShortName", TextDivShortName.Text);
+                objPrm[2] = cmdi.Parameters.Add("TextDivisionAdd", TextDivisionAdd.Text);
+                objPrm[3] = cmdi.Parameters.Add("TextDivBgColor", TextDivBgColor.Text); 
+                objPrm[4] = cmdi.Parameters.Add("u_date", u_date); 
+                objPrm[5] = cmdi.Parameters.Add("NoDivisionID", USER_DATA_ID);
+                objPrm[6] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[7] = cmdi.Parameters.Add("TextIsActive", ISActive);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -255,19 +255,16 @@ namespace NRCAPPS.HR
                 conn.Close();  
 
                 alert_box.Visible = true;
-                alert_box.Controls.Add(new LiteralControl("Division Update successfully"));
+                alert_box.Controls.Add(new LiteralControl("Division Data Update Successfully"));
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
                 clearText();
                 Display();
             }
                 else { 
                     Response.Redirect("~/PagePermissionError.aspx");
-                }
+           }
         }
-
-        
-
-
+         
         protected void BtnDelete_Click(object sender, EventArgs e)
         {
           try
@@ -280,18 +277,16 @@ namespace NRCAPPS.HR
                 int USER_DATA_ID = Convert.ToInt32(TextDivisionID.Text);
                 string delete_user_page = " delete from HR_EMP_DIVISIONS where DIVISION_ID  = '" + USER_DATA_ID + "'";
 
-                cmdi = new OracleCommand(delete_user_page, conn);
-            
+                cmdi = new OracleCommand(delete_user_page, conn); 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
                 cmdi.Dispose();
                 conn.Close();
                 alert_box.Visible = true;
-                alert_box.Controls.Add(new LiteralControl("Division Delete successfully"));
+                alert_box.Controls.Add(new LiteralControl("Division Data Delete Successfully"));
                 alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
                 clearText(); 
-                Display();
-
+                Display(); 
             }
             else
             {
@@ -309,9 +304,11 @@ namespace NRCAPPS.HR
         {
             TextDivisionID.Text = "";
             TextDivisionName.Text = "";
+            TextDivShortName.Text = "";
             TextDivisionAdd.Text = "";
             TextDivBgColor.Text = "";
-            CheckUserDivisionName.Text = ""; 
+            CheckUserDivisionName.Text = "";
+            CheckDivisionShortName.Text = "";
             BtnAdd.Attributes.Add("aria-disabled", "true");
             BtnAdd.Attributes.Add("class", "btn btn-primary active"); 
             
@@ -321,9 +318,11 @@ namespace NRCAPPS.HR
         {
             TextDivisionID.Text = "";
             TextDivisionName.Text = "";
+            TextDivShortName.Text = "";
             TextDivisionAdd.Text = "";
             TextDivBgColor.Text = "";
-            CheckUserDivisionName.Text = ""; 
+            CheckUserDivisionName.Text = "";
+            CheckDivisionShortName.Text = "";
             BtnAdd.Attributes.Add("aria-disabled", "false");
             BtnAdd.Attributes.Add("class", "btn btn-primary disabled"); 
 
@@ -400,5 +399,46 @@ namespace NRCAPPS.HR
             }
             
         } 
+
+        public void TextDivisionShortName_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextDivShortName.Text))
+            {
+                alert_box.Visible = false;
+
+                OracleConnection conn = new OracleConnection(strConnString);
+                conn.Open();
+                OracleCommand cmd = new OracleCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "select * from HR_EMP_DIVISIONS where DIV_SHORT_NAME = '" + TextDivShortName.Text + "'";
+                cmd.CommandType = CommandType.Text;
+
+                OracleDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    CheckDivisionShortName.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> Division Short name is already entry</label>";
+                    CheckDivisionShortName.ForeColor = System.Drawing.Color.Red;
+                    TextDivShortName.Focus();
+                    BtnAdd.Attributes.Add("aria-disabled", "false");
+                    BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
+                }
+                else
+                {
+                    CheckDivisionShortName.Text = "<label class='control-label'><i class='fa fa fa-check'></i> Division Short name is available</label>";
+                    CheckDivisionShortName.ForeColor = System.Drawing.Color.Green;
+                    CheckIsActive.Focus();
+                    BtnAdd.Attributes.Add("aria-disabled", "true");
+                    BtnAdd.Attributes.Add("class", "btn btn-primary active");
+
+                }
+            }
+            else {
+                    CheckDivisionShortName.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> Division Short name is not blank</label>";
+                    CheckDivisionShortName.ForeColor = System.Drawing.Color.Red;
+                    TextDivisionName.Focus();
+            }
+            
+        } 
+
    }
 }

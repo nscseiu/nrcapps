@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Supplier Form & List - Plastic Factory" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfSupplier.aspx.cs" Inherits="NRCAPPS.PF.PfSupplier" %>
+﻿<%@ Page Title="Party (Supplier & Customer) Form & List - Plastic Factory" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfSupplier.aspx.cs" Inherits="NRCAPPS.PF.PfSupplier" %>
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="ContentPlaceHolder1"> 
@@ -9,8 +9,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Supplier Form & List
-        <small>Supplier: - Add - Update - Delete - View</small>
+        Party (Supplier & Customer) Form & List
+        <small>Party (Supplier & Customer): - Add - Update - Delete - View</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="../Dashboard.aspx"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -34,32 +34,32 @@
           <!-- Horizontal Form -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Supplier Form</h3>
+              <h3 class="box-title">Party (Supplier & Customer) Form</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start --> 
               <div class="box-body">
                 <div class="form-group">  
-                   <label for="User_Name" class="col-sm-2 control-label">Supplier Name</label>
+                   <label for="User_Name" class="col-sm-2 control-label">Party Name</label>
                  <div class="col-sm-3">  
                     <asp:TextBox ID="TextSupplierID" style="display:none" runat="server"></asp:TextBox>
                     <asp:TextBox ID="TextSupplierName" class="form-control input-sm"  runat="server" AutoPostBack="True" ontextchanged="TextSupplierName_TextChanged"></asp:TextBox>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-                         ControlToValidate="TextSupplierName" ErrorMessage="Insert Supplier Name" 
+                         ControlToValidate="TextSupplierName" ErrorMessage="Insert Party Name" 
                          SetFocusOnError="True" Display="Dynamic"></asp:RequiredFieldValidator> 
                   </div> 
                     <div class="col-sm-3"><asp:Label ID="CheckSupplierName" runat="server"></asp:Label> 
                     </div>
                 </div>
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Supplier Address Line 1</label> 
+                  <label  class="col-sm-2 control-label">Party Address Line 1</label> 
                   <div class="col-sm-3">  
                     <asp:TextBox ID="TextSup_Add_1" class="form-control input-sm"  runat="server"></asp:TextBox>   
                       
                   </div> 
                 </div> 
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Supplier Address Line 2</label> 
+                  <label  class="col-sm-2 control-label">Party Address Line 2</label> 
                   <div class="col-sm-3">  
                     <asp:TextBox ID="TextSup_Add_2" class="form-control input-sm"  runat="server"></asp:TextBox>   
                        
@@ -92,7 +92,7 @@
         </div>   
         <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title">Supplier List</h3>
+              <h3 class="box-title">Party (Supplier & Customer) List</h3>
               <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 200px;">
                 <asp:TextBox ID="txtSearchUserRole" Class="form-control input-sm" runat="server" />
@@ -113,10 +113,10 @@
     PageSize = "8" 
     OnPageIndexChanging="GridViewUser_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
                      <Columns>
-                     <asp:BoundField DataField="SUPPLIER_ID" HeaderText="Supplier ID" />  
-                     <asp:BoundField DataField="SUPPLIER_NAME"  HeaderText="Supplier Name" />   
-                     <asp:BoundField DataField="SUP_ADD_1"  HeaderText="Supplier Add. Line 1" /> 
-                     <asp:BoundField DataField="SUP_ADD_2"  HeaderText="Supplier Add. Line 2" /> 
+                     <asp:BoundField DataField="PARTY_ID" HeaderText="Party ID" />  
+                     <asp:BoundField DataField="PARTY_NAME"  HeaderText="Party Name" />   
+                     <asp:BoundField DataField="PARTY_ADD_1"  HeaderText="Party Add. Line 1" /> 
+                     <asp:BoundField DataField="PARTY_ADD_2"  HeaderText="Party Add. Line 2" /> 
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 
                              <asp:Label ID="IsActiveGV" CssClass="label" Text='<%# Eval("IS_ACTIVE").ToString() == "Enable" ? "<span Class=label-success style=Padding:2px >Enable<span>" : "<span Class=label-danger style=Padding:2px>Disable<span>" %>'  runat="server" /> 
@@ -126,7 +126,7 @@
                      <asp:BoundField DataField="UPDATE_DATE"  HeaderText="Update Date" DataFormatString="{0:dd/MM/yyyy h:mm:ss tt}"  />   
                      <asp:TemplateField>
                        <ItemTemplate>
-                        <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-xs" runat="server" CommandArgument='<%# Eval("SUPPLIER_ID") %>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
+                        <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-xs" runat="server" CommandArgument='<%# Eval("PARTY_ID") %>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
                         </ItemTemplate>
                        </asp:TemplateField> 
                      </Columns>

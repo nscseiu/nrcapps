@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections;
+﻿using System; 
 using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-using System.Data.OracleClient;
+using System.Data; 
+using System.Web.UI.HtmlControls; 
+//using System.Data.OracleClient;
 using System.IO; 
 using System.Collections.Generic; 
-using System.Data.SqlClient;
-using System.Globalization;
-
+//using System.Data.SqlClient;
+using Oracle.ManagedDataAccess.Client;
+  //  using OnChangeEventHandler = Oracle.ManagedDataAccess.Client.OnChangeEventHandler;
 namespace NRCAPPS
 {
+ 
+
     public partial class Site : System.Web.UI.MasterPage
     {
        
         string strConnString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;  
         public DataTable TableData = new DataTable();  
         private Dictionary<string, HtmlGenericControl> ctrls = new Dictionary<string, HtmlGenericControl>();
- 
+        OracleCommand cmdi;
 
-          protected void Page_Load(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
            {
              
             setSelectedMenuItemClass();    
@@ -40,87 +34,168 @@ namespace NRCAPPS
                  
             }
 
-          /*     
-           *     protected DataTable GetDataMainMenu()
-             {
-                 int userID = Convert.ToInt32(Session["USER_ID"]);
-                 using (var conn = new OracleConnection(strConnString))
-                 {
-                     string query = " SELECT * FROM NRC_MAIN_MENU WHERE IS_ACTIVE = 'Enable' ORDER BY MENU_ORDER ASC "; //'" + Session["USER_ID"] + "'
-                     using (var cmd = new OracleCommand(query, conn))
-                     {
-                         //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
-                         //  cmd.Parameters["NoUserID"].Value = userID;
-                         using (var sda = new OracleDataAdapter())
-                         {
-                             cmd.Connection = conn;
-                             sda.SelectCommand = cmd;
+       
+        private void Set_dep(object sender, EventArgs e)
+        {
 
-                             using (TableData)
-                             {
-                                 TableData.Clear();
-                                 sda.Fill(TableData);
-                                 return TableData;
-                             }
-                         }
-                     }
-                 }
-             }
 
-             protected DataTable GetDataSubMenu(int PageID)
-             {
-                 int userID = Convert.ToInt32(Session["USER_ID"]);
-                 using (var conn = new OracleConnection(strConnString))
-                 {
-                     string query = " SELECT NUP.MENU_ID, NUPP.USER_PAGE_ID, NUPP.IS_PAGE_ACTIVE, NUP.PAGE_NAME, NUP.PAGE_URL, MENU_PAGE_ID_NAME FROM NRC_USER_PAGE_PERMISSION NUPP LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID = NUPP.USER_PAGE_ID WHERE IS_PAGE_ACTIVE = 'Enable' AND USER_ID = 1 ORDER BY NUP.MENU_ID, NUPP.USER_PAGE_ID ASC "; //'" + Session["USER_ID"] + "'
-                     using (var cmd = new OracleCommand(query, conn))
-                     {
-                         //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
-                         //  cmd.Parameters["NoUserID"].Value = userID;
-                         using (var sda = new OracleDataAdapter())
-                         {
-                             cmd.Connection = conn;
-                             sda.SelectCommand = cmd;
+            //initiate connetion
+            //get connection paramters from web.config
+          //  OracleConnection con = new OracleConnection(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["DBString"]].ConnectionString);
+            
+            OracleConnection conn = new OracleConnection(strConnString);
+            OracleCommand cmd = new OracleCommand();
+          //  conn.Open();
 
-                             using (TableData)
-                             {
-                                 TableData.Clear();
-                                 sda.Fill(TableData);
-                                 return TableData;
-                             }
-                         }
-                     }
-                 }
-             }
-           * 
-             protected void GetAllData() //Get all the data and bind it in HTLM Table       
-             {
-                 int userID = Convert.ToInt32(Session["USER_ID"]);
-                 using (var conn = new OracleConnection(strConnString))
-                 {
-                     string query = " SELECT  NUP.PAGE_URL, NUPP.IS_PAGE_ACTIVE FROM NRC_USER_PAGE_PERMISSION NUPP LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID = NUPP.USER_PAGE_ID WHERE NUPP.USER_ID = '" + Session["USER_ID"] + "' AND NUP.IS_ACTIVE = 'Enable'  ";
+            //create the slect parameters
+            cmd.CommandText = "select CUSTOMER_NAME from PF_CUSTOMER";
 
-                     using (var cmd = new OracleCommand(query, conn))
-                     {
-                         cmd.Parameters.Add("NoUserID", SqlDbType.Int);
-                         cmd.Parameters["NoUserID"].Value = userID;
-                         using (var sda = new OracleDataAdapter())
-                         {
-                             cmd.Connection = conn;
-                             sda.SelectCommand = cmd;
 
-                             using (TableData)
-                             {
-                                 TableData.Clear();
-                                 sda.Fill(TableData);
-                             }
-                         }
-                     }
-                 }
-             }
-           * */
+            cmd.Connection = conn;
+            conn.Open();
+            OracleDependency.Port = 3048;
+            //initiate 
+            OracleDependency dependency = new OracleDependency(cmd);
 
-          protected override void OnInit(EventArgs e)
+            dependency.QueryBasedNotification = true;
+            cmd.Notification.IsNotifiedOnce = false;
+
+            //on change call the action method or function.. our case alert user
+            dependency.OnChange += new OnChangeEventHandler(AlertUser);
+            //register the current state
+            cmd.ExecuteReader();
+             
+        /*    OracleDependency.Port = 3048;
+            conn = new OracleConnection(strConnString);
+            conn.Open();
+            cmdi = conn.CreateCommand();
+            cmdi.CommandText = "SELECT wpa_codeparam FROM USR_DEV_TRUNK.WPARAM";
+            dependency = new OracleDependency();
+            dependency.AddCommandDependency(cmdi);
+            cmdi.Notification.IsNotifiedOnce = false;
+            cmdi.ExecuteNonQuery();
+            dependency.OnChange += new OnChangeEventHandler(on_my_event);
+            TB_dependency.Text =   "Yay ! It worked !" + msg;
+            conn.Close(); */
+        }
+
+
+        private void AlertUser(Object sender, OracleNotificationEventArgs args)
+        {
+            DataTable dt = args.Details;
+            string msg = "";
+            msg = "The following database objects were changed: ";
+            foreach (string resource in args.ResourceNames)
+                msg += resource;
+
+            msg += "\n\n Details: ";
+
+            for (int rows = 1; rows < dt.Rows.Count; rows++)
+            {
+                msg += "Resource name: " + dt.Rows[rows].ItemArray[0];
+
+                string type = Enum.GetName(typeof(OracleNotificationInfo), dt.Rows[rows].ItemArray[1]);
+                msg += "\n\nChange type: " + type;
+                msg += " ";
+            }
+              Notify("Oracle", msg);
+         //   TB_dependency.Text = "Yay ! It worked !" + msg;
+        }
+
+        private void Notify(string name, string msg)
+        {
+            //var statsContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            //statsContext.Clients.All.addNewMessageToPage(name, msg);
+            TB_dependency.Text = "Yay ! It worked !" + msg;
+        }
+        /* public void on_my_event(object obj, OracleNotificationEventArgs arg)
+         {
+             TB_dependency.Text = "Yay ! It worked !" + msg;
+         }
+     */
+
+
+        /*     
+         *     protected DataTable GetDataMainMenu()
+           {
+               int userID = Convert.ToInt32(Session["USER_ID"]);
+               using (var conn = new OracleConnection(strConnString))
+               {
+                   string query = " SELECT * FROM NRC_MAIN_MENU WHERE IS_ACTIVE = 'Enable' ORDER BY MENU_ORDER ASC "; //'" + Session["USER_ID"] + "'
+                   using (var cmd = new OracleCommand(query, conn))
+                   {
+                       //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
+                       //  cmd.Parameters["NoUserID"].Value = userID;
+                       using (var sda = new OracleDataAdapter())
+                       {
+                           cmd.Connection = conn;
+                           sda.SelectCommand = cmd;
+
+                           using (TableData)
+                           {
+                               TableData.Clear();
+                               sda.Fill(TableData);
+                               return TableData;
+                           }
+                       }
+                   }
+               }
+           }
+
+           protected DataTable GetDataSubMenu(int PageID)
+           {
+               int userID = Convert.ToInt32(Session["USER_ID"]);
+               using (var conn = new OracleConnection(strConnString))
+               {
+                   string query = " SELECT NUP.MENU_ID, NUPP.USER_PAGE_ID, NUPP.IS_PAGE_ACTIVE, NUP.PAGE_NAME, NUP.PAGE_URL, MENU_PAGE_ID_NAME FROM NRC_USER_PAGE_PERMISSION NUPP LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID = NUPP.USER_PAGE_ID WHERE IS_PAGE_ACTIVE = 'Enable' AND USER_ID = 1 ORDER BY NUP.MENU_ID, NUPP.USER_PAGE_ID ASC "; //'" + Session["USER_ID"] + "'
+                   using (var cmd = new OracleCommand(query, conn))
+                   {
+                       //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
+                       //  cmd.Parameters["NoUserID"].Value = userID;
+                       using (var sda = new OracleDataAdapter())
+                       {
+                           cmd.Connection = conn;
+                           sda.SelectCommand = cmd;
+
+                           using (TableData)
+                           {
+                               TableData.Clear();
+                               sda.Fill(TableData);
+                               return TableData;
+                           }
+                       }
+                   }
+               }
+           }
+         * 
+           protected void GetAllData() //Get all the data and bind it in HTLM Table       
+           {
+               int userID = Convert.ToInt32(Session["USER_ID"]);
+               using (var conn = new OracleConnection(strConnString))
+               {
+                   string query = " SELECT  NUP.PAGE_URL, NUPP.IS_PAGE_ACTIVE FROM NRC_USER_PAGE_PERMISSION NUPP LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID = NUPP.USER_PAGE_ID WHERE NUPP.USER_ID = '" + Session["USER_ID"] + "' AND NUP.IS_ACTIVE = 'Enable'  ";
+
+                   using (var cmd = new OracleCommand(query, conn))
+                   {
+                       cmd.Parameters.Add("NoUserID", SqlDbType.Int);
+                       cmd.Parameters["NoUserID"].Value = userID;
+                       using (var sda = new OracleDataAdapter())
+                       {
+                           cmd.Connection = conn;
+                           sda.SelectCommand = cmd;
+
+                           using (TableData)
+                           {
+                               TableData.Clear();
+                               sda.Fill(TableData);
+                           }
+                       }
+                   }
+               }
+           }
+         * */
+
+        protected override void OnInit(EventArgs e)
         {
               ctrls.Add("Dashboard.aspx", Dashboard);
 
@@ -136,17 +211,19 @@ namespace NRCAPPS
 
               ctrls.Add("", pf_purchase_menu);
               ctrls.Add("PfPurchase.aspx", pf_purchase);
+              ctrls.Add("PfPurchaseJw.aspx", pf_purchase_jw);
               ctrls.Add("PfPurchaseClaim.aspx", pf_purchase_claim);
               ctrls.Add("PfPurchaseClaimCheck.aspx", pf_purchase_claim_check);
               ctrls.Add("PfInventoryRm.aspx", pf_inventory_rm);
               ctrls.Add("PfProduction.aspx", pf_production);
+              ctrls.Add("PfProductionJw.aspx", pf_production_jw);
               ctrls.Add("PfDailyPurProd.aspx", pf_daily_pur_prod);
               ctrls.Add("PfActualGarbage.aspx", pf_actual_garbage);
               ctrls.Add("PfInventoryFg.aspx", pf_inventory_fg);
               ctrls.Add("PfInventoryMonthlyStatement.aspx", pf_inventory_monthly_state);
-              ctrls.Add("PfProcessingCost.aspx", pf_processing_cost);
-              ctrls.Add("PfCustomer.aspx", pf_customer);
+              ctrls.Add("PfProcessingCost.aspx", pf_processing_cost);  
               ctrls.Add("PfSales.aspx", pf_sales);
+              ctrls.Add("PfSalesJw.aspx", pf_sales_jw);
               ctrls.Add("PfSalesReturn.aspx", pf_sales_return);
               ctrls.Add("PfSalesCheck.aspx", pf_sales_check);
               ctrls.Add("PfRmStatement.aspx", pf_rm_statement);
@@ -211,15 +288,15 @@ namespace NRCAPPS
                     Dashboard.Attributes.Add("class", "active");
                     }
                      // pf menu
-                    else if (requestedFile == "PfBusinessTargetMat.aspx" || requestedFile == "PfSupplier.aspx" || requestedFile == "PfSupervisor.aspx" || requestedFile == "PfPurchaseType.aspx" || requestedFile == "PfItem.aspx" || requestedFile == "PfSubItem.aspx" || requestedFile == "PfProductionShift.aspx" || requestedFile == "PfMachine.aspx" || requestedFile == "PfGaEstProd.aspx" || requestedFile == "PfPurchase.aspx" || requestedFile == "PfDailyPurProd.aspx" || requestedFile == "PfPurchaseClaim.aspx" || requestedFile == "PfPurchaseClaimCheck.aspx" || requestedFile == "PfInventoryRm.aspx" || requestedFile == "PfInventoryMonthlyStatement.aspx" || requestedFile == "PfProduction.aspx" || requestedFile == "PfActualGarbage.aspx" || requestedFile == "PfInventoryFg.aspx" || requestedFile == "PfProcessingCost.aspx" || requestedFile == "PfCustomer.aspx" || requestedFile == "PfSales.aspx" || requestedFile == "PfSalesCheck.aspx" || requestedFile == "PfSalesReturn.aspx" || requestedFile == "PfRmStatement.aspx" || requestedFile == "PfFgStatement.aspx")
+                    else if (requestedFile == "PfBusinessTargetMat.aspx" || requestedFile == "PfSupplier.aspx" || requestedFile == "PfSupervisor.aspx" || requestedFile == "PfPurchaseType.aspx" || requestedFile == "PfItem.aspx" || requestedFile == "PfSubItem.aspx" || requestedFile == "PfProductionShift.aspx" || requestedFile == "PfMachine.aspx" || requestedFile == "PfGaEstProd.aspx" || requestedFile == "PfPurchase.aspx" || requestedFile == "PfPurchaseJw.aspx" || requestedFile == "PfDailyPurProd.aspx" || requestedFile == "PfPurchaseClaim.aspx" || requestedFile == "PfPurchaseClaimCheck.aspx" || requestedFile == "PfInventoryRm.aspx" || requestedFile == "PfInventoryMonthlyStatement.aspx" || requestedFile == "PfProduction.aspx" || requestedFile == "PfProductionJw.aspx" || requestedFile == "PfActualGarbage.aspx" || requestedFile == "PfInventoryFg.aspx" || requestedFile == "PfProcessingCost.aspx" || requestedFile == "PfSales.aspx" || requestedFile == "PfSalesJw.aspx" || requestedFile == "PfSalesCheck.aspx" || requestedFile == "PfSalesReturn.aspx" || requestedFile == "PfRmStatement.aspx" || requestedFile == "PfFgStatement.aspx")
                      {
                       plastic.Attributes.Add("class", "active");
 
-                      if (requestedFile == "PfSupplier.aspx" || requestedFile == "PfPurchaseType.aspx" || requestedFile == "PfPurchase.aspx" || requestedFile == "PfPurchaseClaim.aspx" || requestedFile == "PfPurchaseClaimCheck.aspx")
+                      if (requestedFile == "PfPurchaseType.aspx" || requestedFile == "PfPurchase.aspx" || requestedFile == "PfPurchaseJw.aspx" || requestedFile == "PfPurchaseClaim.aspx" || requestedFile == "PfPurchaseClaimCheck.aspx")
                       {
                           pf_purchase_menu.Attributes.Add("class", "active");
                       }
-                      else if (requestedFile == "PfProductionShift.aspx" || requestedFile == "PfMachine.aspx" || requestedFile == "PfGaEstProd.aspx" || requestedFile == "PfProduction.aspx" || requestedFile == "PfActualGarbage.aspx" || requestedFile == "PfProcessingCost.aspx")
+                      else if (requestedFile == "PfProductionShift.aspx" || requestedFile == "PfMachine.aspx" || requestedFile == "PfGaEstProd.aspx" || requestedFile == "PfProduction.aspx" || requestedFile == "PfProductionJw.aspx" || requestedFile == "PfActualGarbage.aspx" || requestedFile == "PfProcessingCost.aspx")
                       {
                           pf_production_menu.Attributes.Add("class", "active");
                       }
@@ -227,7 +304,7 @@ namespace NRCAPPS
                       {
                           pf_inventory_menu.Attributes.Add("class", "active");
                       }
-                      else if (requestedFile == "PfCustomer.aspx" || requestedFile == "PfSales.aspx" || requestedFile == "PfSalesCheck.aspx" || requestedFile == "PfSalesReturn.aspx")
+                      else if (requestedFile == "PfSales.aspx" || requestedFile == "PfSalesJw.aspx" || requestedFile == "PfSalesCheck.aspx" || requestedFile == "PfSalesReturn.aspx")
                       {
                           pf_sales_menu.Attributes.Add("class", "active");
                       }
@@ -263,8 +340,16 @@ namespace NRCAPPS
             }  
         }
 
+     /*   private class OracleDependency
+        {
+            internal static int Port;
+            internal bool QueryBasedNotification;
 
-         
-      }
+            internal void AddCommandDependency(OracleCommand cmdi)
+            {
+                throw new NotImplementedException();
+            }
+        } */
+    }
     }
  

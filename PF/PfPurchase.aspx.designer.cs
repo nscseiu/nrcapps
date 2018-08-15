@@ -22,6 +22,15 @@ namespace NRCAPPS.PF {
         protected global::System.Web.UI.WebControls.Panel alert_box;
         
         /// <summary>
+        /// TextPurchaseID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextPurchaseID;
+        
+        /// <summary>
         /// TextSlipNo control.
         /// </summary>
         /// <remarks>
@@ -130,24 +139,6 @@ namespace NRCAPPS.PF {
         protected global::System.Web.UI.WebControls.DropDownList DropDownSubItemID;
         
         /// <summary>
-        /// TextItemRate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextItemRate;
-        
-        /// <summary>
-        /// RequiredFieldValidator11 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator11;
-        
-        /// <summary>
         /// TextItemWeight control.
         /// </summary>
         /// <remarks>
@@ -164,6 +155,24 @@ namespace NRCAPPS.PF {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator12;
+        
+        /// <summary>
+        /// TextItemRate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextItemRate;
+        
+        /// <summary>
+        /// RequiredFieldValidator11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator11;
         
         /// <summary>
         /// TextItemAmount control.
@@ -245,6 +254,15 @@ namespace NRCAPPS.PF {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton BtnDelete;
+        
+        /// <summary>
+        /// DropDownItemID1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownItemID1;
         
         /// <summary>
         /// txtSearchEmp control.

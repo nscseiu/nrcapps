@@ -110,6 +110,12 @@ namespace NRCAPPS.PF
                         DropDownItemID.DataBind();
                         DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
 
+                        DropDownItemID1.DataSource = dtItemID;
+                        DropDownItemID1.DataValueField = "ITEM_ID";
+                        DropDownItemID1.DataTextField = "ITEM_NAME";
+                        DropDownItemID1.DataBind();
+                        DropDownItemID1.Items.Insert(0, new ListItem("All Item", "0"));
+                          
                         DataTable dtSubItemID = new DataTable();
                         DataSet dss = new DataSet();
                         string makeDropDownSubItemSQL = " SELECT * FROM PF_SUB_ITEM WHERE IS_ACTIVE = 'Enable' ORDER BY SUB_ITEM_ID ASC";
@@ -133,7 +139,7 @@ namespace NRCAPPS.PF
                         DropDownPgeID.Items.Insert(0, new ListItem("Select Garbage Est. of Prod.", "0"));
 
                         Display();
-
+                        DropDownShiftID.Focus();
                         alert_box.Visible = false;
 
                     } IsLoad = false;
@@ -250,7 +256,7 @@ namespace NRCAPPS.PF
                         FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
                     }
 
-                    StockInWetNew = StockInWet + ItemWeightInFg;
+                    StockInWetNew = StockInWet + ItemWeight;
                     FinalStockNew = InitialStock + StockInWetNew - StockOutWet;
 
                     if (0 < RowCount)
@@ -274,7 +280,7 @@ namespace NRCAPPS.PF
                     else
                     {
                         // insert inventory FG
-                        FinalStockNew = InitialStock + ItemWeightInFg - StockOutWet;
+                        FinalStockNew = InitialStock + ItemWeight - StockOutWet;
 
                         string get_inven_mas_id = "select PF_FG_STOCK_INVEN_MASID_SEQ.nextval from dual";
                         cmdsp = new OracleCommand(get_inven_mas_id, conn);
@@ -328,7 +334,7 @@ namespace NRCAPPS.PF
                     cmdi.Dispose();
 
                     // check inventory RM master
-                    string makeRmInSQL = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  AND SUB_ITEM_ID  = '" + SubItemID + "' ";
+                    string makeRmInSQL = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "' ";
                     cmdl = new OracleCommand(makeRmInSQL);
                     oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                     dt = new DataTable();
@@ -346,7 +352,7 @@ namespace NRCAPPS.PF
                         FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
                     }
 
-                    StockOutWetNew = StockOutWet + ItemWeight;
+                    StockOutWetNew = StockOutWet + ItemWeight + ItemPgeWet;
                     FinalStockNew = InitialStock + StockInWet - StockOutWetNew;
 
                     if (0 < RowCount)
@@ -473,6 +479,7 @@ namespace NRCAPPS.PF
             
         protected void linkSelectClick(object sender, EventArgs e)
         {
+           try{
             OracleConnection conn = new OracleConnection(strConnString);
             conn.Open();
             LinkButton btn = (LinkButton)sender;
@@ -512,7 +519,11 @@ namespace NRCAPPS.PF
             alert_box.Visible = false;
             BtnAdd.Attributes.Add("aria-disabled", "false");
             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
-
+           }
+           catch
+           {
+               Response.Redirect("~/ParameterError.aspx");
+           } 
         }
 
      
@@ -530,11 +541,19 @@ namespace NRCAPPS.PF
                 string makeSQL = "";
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID ORDER BY PPRM.CREATE_DATE DESC";
+                    makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER,  SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID ORDER BY PPRM.CREATE_DATE DESC";
                 }
                 else
                 {
-                    makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PPRM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' ORDER BY PPRM.CREATE_DATE DESC";
+                    if (DropDownItemID1.Text == "0")
+                    {
+                        makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PPRM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY PPRM.CREATE_DATE DESC";
+                    }
+                    else
+                    {
+                        makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where PI.ITEM_ID like '" + DropDownItemID1.Text + "%' AND (PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%'  or PPRM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%') ORDER BY PPRM.CREATE_DATE DESC";
+                    }
+                    alert_box.Visible = false; 
                 }
 
                 cmdl = new OracleCommand(makeSQL);
@@ -578,14 +597,7 @@ namespace NRCAPPS.PF
                 string ItemName = DropDownItemID.SelectedItem.Text;
                 string SubItemName = "";
                 if (SubItemID == 0)
-                {
-                    SubItemID = 0;
-                    SubItemName = "";
-                }
-                else
-                {
-                    SubItemID = Convert.ToInt32(DropDownSubItemID.Text);
-                    SubItemName = DropDownSubItemID.SelectedItem.Text;
+                { SubItemID = 0; SubItemName = "";  }  else  {  SubItemID = Convert.ToInt32(DropDownSubItemID.Text);  SubItemName = DropDownSubItemID.SelectedItem.Text;
                 }
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
@@ -604,8 +616,8 @@ namespace NRCAPPS.PF
 
 
                 // check production data
-                int ItemIdOld = 0, SubItemIdOld = 0; double ItemWeightOld = 0.00, ItemWeightOldFg = 0.00;
-                string makeSQLPro = " select ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT, ITEM_WEIGHT_IN_FG from PF_PRODUCTION_MASTER where PRODUCTION_ID  = '" + Production_ID + "'  ";
+                int ItemIdOld = 0, SubItemIdOld = 0; double ItemWeightOld = 0.00, ItemWeightOldFg = 0.00, ItemPgeWetOld = 0.00;
+                string makeSQLPro = " select ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT, PGE_WEIGHT, ITEM_WEIGHT_IN_FG from PF_PRODUCTION_MASTER where PRODUCTION_ID  = '" + Production_ID + "'  ";
                 cmdl = new OracleCommand(makeSQLPro);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
@@ -618,6 +630,7 @@ namespace NRCAPPS.PF
                     SubItemIdOld = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
                     ItemWeightOld = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString());
                     ItemWeightOldFg = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_IN_FG"].ToString());
+                    ItemPgeWetOld = Convert.ToDouble(dt.Rows[i]["PGE_WEIGHT"].ToString());
                 }
 
 
@@ -726,7 +739,7 @@ namespace NRCAPPS.PF
                     FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
                 }
 
-                StockOutWetNew = StockOutWet - ItemWeightOld;
+                StockOutWetNew = StockOutWet - (ItemWeightOld + ItemPgeWetOld);
                 FinalStockNew = InitialStock + StockInWet - StockOutWetNew;
 
                 if (0 < RowCount)
@@ -749,7 +762,7 @@ namespace NRCAPPS.PF
                 }
                 // update inventory RM (plus new data)
 
-                StockOutWetDe = StockOutWetNew + ItemWeight;
+                StockOutWetDe = StockOutWetNew + ItemWeight + ItemPgeWet;
                 FinalStockNew = InitialStock + StockInWet - StockOutWetDe;
 
                 // update inventory RM
@@ -785,9 +798,7 @@ namespace NRCAPPS.PF
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
                 cmdi.Dispose();
-               
-
-
+                
                 // update production master
                 string update_production = "update  PF_PRODUCTION_MASTER  set SHIFT_ID = :NoShiftID, MACHINE_ID = :NoMachineID, SUPERVISOR_ID = :NoSupervisorID, ITEM_ID = :NoItemID, SUB_ITEM_ID = :NoSubItemID, ITEM_WEIGHT = :TextItemWeight, ITEM_WEIGHT_IN_FG = :TextItemWeightInFg, PGE_ID = :NoPageID, PGE_PERCENT = :TextPgePercent, PGE_WEIGHT = :TextItemPgeWet, ENTRY_DATE = TO_DATE(:TextEntryDate, 'DD-MM-YYYY'), UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID, IS_ACTIVE = :TextIsActive where PRODUCTION_ID = :NoProductionID ";
                 cmdu = new OracleCommand(update_production, conn);
@@ -832,9 +843,8 @@ namespace NRCAPPS.PF
 
                 cmdu.ExecuteNonQuery();
                 cmdu.Parameters.Clear();
-                cmdu.Dispose();
+                cmdu.Dispose(); 
 
-                 
                 conn.Close();
 
                 alert_box.Visible = true;
@@ -851,7 +861,8 @@ namespace NRCAPPS.PF
 
  
         protected void BtnDelete_Click(object sender, EventArgs e)
-        {
+        { 
+         try{ 
             if (IS_DELETE_ACTIVE == "Enable")
             {
                 OracleConnection conn = new OracleConnection(strConnString);
@@ -864,8 +875,8 @@ namespace NRCAPPS.PF
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
              
                 // check production data
-                int ItemIdOld = 0, SubItemIdOld = 0; double ItemWeightOld = 0.00, ItemWeightOldFg = 0.00;
-                string makeSQLPro = " select ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT, ITEM_WEIGHT_IN_FG from PF_PRODUCTION_MASTER where PRODUCTION_ID  = '" + Production_ID + "'  ";
+                int ItemIdOld = 0, SubItemIdOld = 0; double ItemWeightOld = 0.00, ItemWeightOldFg = 0.00, ItemPgeWetOld = 0.00;
+                string makeSQLPro = " select ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT, ITEM_WEIGHT_IN_FG, PGE_WEIGHT from PF_PRODUCTION_MASTER where PRODUCTION_ID  = '" + Production_ID + "'  ";
                 cmdl = new OracleCommand(makeSQLPro);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
@@ -878,6 +889,7 @@ namespace NRCAPPS.PF
                     SubItemIdOld = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
                     ItemWeightOld = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString());
                     ItemWeightOldFg = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_IN_FG"].ToString());
+                    ItemPgeWetOld = Convert.ToDouble(dt.Rows[i]["PGE_WEIGHT"].ToString());
                 }
                  
                 //inventory calculation
@@ -951,7 +963,7 @@ namespace NRCAPPS.PF
                     FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
                 }
 
-                StockOutWetNew = StockOutWet - ItemWeightOld;
+                StockOutWetNew = StockOutWet - ItemWeightOld - ItemPgeWetOld;
                 FinalStockNew = InitialStock + StockInWet - StockOutWetNew;
 
                 if (0 < RowCount)
@@ -1005,7 +1017,11 @@ namespace NRCAPPS.PF
             {
                 Response.Redirect("~/PagePermissionError.aspx");
             }
-
+            }
+            catch
+            {
+                Response.Redirect("~/ParameterError.aspx");
+            } 
         }
 
         public void clearTextField(object sender, EventArgs e)
@@ -1132,7 +1148,7 @@ namespace NRCAPPS.PF
 
         public void TextSubItem_Changed(object sender, EventArgs e)
         {
-
+            TextItemWeight.Focus();
             TextItemWeight.Text = "";
             alert_box.Visible = false;
 
@@ -1146,7 +1162,8 @@ namespace NRCAPPS.PF
                 int PgePercent = Convert.ToInt32(DropDownPgeID.SelectedItem.Text);
                 double ItemWeight = Convert.ToDouble(TextItemWeight.Text);
                 double ItemPgeWet = (ItemWeight * PgePercent) / 100;
-                TextPgeWet.Text = ItemPgeWet.ToString("0.000");  
+                TextPgeWet.Text = ItemPgeWet.ToString("0.000");
+                EntryDate.Focus();
             }
                 
         }
@@ -1171,7 +1188,7 @@ namespace NRCAPPS.PF
                     OracleConnection conn = new OracleConnection(strConnString);
                     conn.Open();
 
-                    string makeSQL = " select FINAL_STOCK_WT from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  AND SUB_ITEM_ID  = '" + SubItemID + "' ";
+                    string makeSQL = " select nvl(FINAL_STOCK_WT,0) AS FINAL_STOCK_WT from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  AND SUB_ITEM_ID  = '" + SubItemID + "' ";
                     cmdl = new OracleCommand(makeSQL);
                     oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                     dt = new DataTable();
@@ -1196,7 +1213,7 @@ namespace NRCAPPS.PF
                         }
                         CheckItemWeight.Text = "<label class='control-label'><i class='fa fa fa-check'></i> This Material is available</label>"; 
                         CheckItemWeight.ForeColor = System.Drawing.Color.Green;
-                        TextItemWeight.Focus();
+                        DropDownPgeID.Focus();
                         BtnAdd.Attributes.Add("aria-disabled", "true");
                         BtnAdd.Attributes.Add("class", "btn btn-primary active");  
 

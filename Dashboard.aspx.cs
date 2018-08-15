@@ -96,12 +96,12 @@ namespace NRCAPPS
                             html.Append(dt.Rows[j]["PURCHASE_WTD"].ToString());
                             html.Append(" <sup style='font-size: 20px'> SR</sup>");
                             html.Append("</h3>");
-                            html.Append("<p>Direct Purchase Current Month (WT)</p>");
+                            html.Append("<p>Direct Sales Current Month (WT)</p>");
                             html.Append("</div>");
                             html.Append("<div class='icon' style='padding-top:14px;'>");
                             html.Append("<i class='ion ion-pie-graph'></i>");
                             html.Append("</div>");
-                            html.Append("<a href='PF/PfPurchase.aspx' class='small-box-footer'>");
+                            html.Append("<a href='PF/PfSales.aspx' class='small-box-footer'>");
                             html.Append(IS_ITEM_NAME);
                             html.Append(" <i class='fa fa-arrow-circle-right'></i></a>");
                             html.Append("</div>");
@@ -386,7 +386,7 @@ namespace NRCAPPS
             int userID = Convert.ToInt32(Session["USER_ID"]);
             using (var conn = new OracleConnection(strConnString))
             {
-                string query = " SELECT TO_CHAR(sum(nvl(PPM.ITEM_WEIGHT,0)),'999,999.999') AS PURCHASE_WT, TO_CHAR(sum(nvl(PPM.ITEM_AMOUNT,0)),'9,999,999,999.99' )  AS PURCHASE_AMT, TO_CHAR(sum(nvl(PPMD.ITEM_WEIGHT,0)),'999,999.999') AS PURCHASE_WTD, TO_CHAR(sum(nvl(PPMAS.ITEM_WEIGHT_IN_FG,0)),'999,999.999') AS PRODUCTION_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_WEIGHT,0)),'999,999.999') AS SALES_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_AMOUNT,0)),'9,999,999,999.99' ) AS SALES_AMT FROM PF_ITEM PI LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_PURCHASE_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY') GROUP BY ITEM_ID) PPM ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT FROM PF_PURCHASE_MASTER  WHERE PUR_TYPE_ID = 1  AND TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')  GROUP BY ITEM_ID) PPMD ON PI.ITEM_ID = PPMD.ITEM_ID  LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_IN_FG FROM PF_PRODUCTION_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PPMAS ON PI.ITEM_ID = PPMAS.ITEM_ID LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_SALES_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PSMAS ON PI.ITEM_ID = PSMAS.ITEM_ID ";
+                string query = " SELECT TO_CHAR(sum(nvl(PPM.ITEM_WEIGHT,0)),'999,999.999') AS PURCHASE_WT, TO_CHAR(sum(nvl(PPM.ITEM_AMOUNT,0)),'9,999,999,999.99' )  AS PURCHASE_AMT, TO_CHAR(sum(nvl(PPMD.ITEM_WEIGHT,0)),'999,999.999') AS PURCHASE_WTD, TO_CHAR(sum(nvl(PPMAS.ITEM_WEIGHT_IN_FG,0)),'999,999.999') AS PRODUCTION_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_WEIGHT,0)),'999,999.999') AS SALES_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_AMOUNT,0)),'9,999,999,999.99' ) AS SALES_AMT FROM PF_ITEM PI LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_PURCHASE_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY') GROUP BY ITEM_ID) PPM ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT FROM PF_SALES_MASTER  WHERE PUR_TYPE_ID = 1  AND TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')  GROUP BY ITEM_ID) PPMD ON PI.ITEM_ID = PPMD.ITEM_ID  LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_IN_FG FROM PF_PRODUCTION_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PPMAS ON PI.ITEM_ID = PPMAS.ITEM_ID LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_SALES_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PSMAS ON PI.ITEM_ID = PSMAS.ITEM_ID ";
                 using (var cmd = new OracleCommand(query, conn))
                 {
                     //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
@@ -456,7 +456,7 @@ namespace NRCAPPS
             int userID = Convert.ToInt32(Session["USER_ID"]);
             using (var conn = new OracleConnection(strConnString))
             {
-                string query = " SELECT  PI.ITEM_NAME,  nvl(PRSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_RM, nvl(PFSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_FG FROM PF_ITEM PI LEFT JOIN PF_RM_STOCK_INVENTORY_MASTER PRSIM ON PRSIM.ITEM_ID = PI.ITEM_ID LEFT JOIN PF_FG_STOCK_INVENTORY_MASTER PFSIM ON PFSIM.ITEM_ID = PI.ITEM_ID ORDER BY PI.ITEM_ID asc";
+                string query = " SELECT  PI.ITEM_NAME,  nvl(PRSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_RM, nvl(PFSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_FG FROM PF_ITEM PI LEFT JOIN PF_RM_STOCK_INVENTORY_MASTER PRSIM ON PRSIM.ITEM_ID = PI.ITEM_ID LEFT JOIN PF_FG_STOCK_INVENTORY_MASTER PFSIM ON PFSIM.ITEM_ID = PI.ITEM_ID WHERE nvl(PRSIM.FINAL_STOCK_WT,0)>0 OR nvl(PFSIM.FINAL_STOCK_WT,0)>0 ORDER BY PI.ITEM_ID asc";
                 using (var cmd = new OracleCommand(query, conn))
                 {
                     //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);

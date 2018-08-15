@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Sales Form & List" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfSales.aspx.cs" Inherits="NRCAPPS.PF.PfSales" %>
+﻿<%@ Page Title="Sales Form & List - Plastic Factory" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfSales.aspx.cs" Inherits="NRCAPPS.PF.PfSales" %>
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="ContentPlaceHolder1"> 
@@ -39,17 +39,40 @@
             <!-- /.box-header -->
             <!-- form start -->
             
-              <div class="box-body">
-                 
-              <div class="form-group">   
-                    <label class="col-sm-2 control-label">Invoice No.</label> 
-                   <div class="col-sm-2">   
-                    <asp:TextBox ID="TextInvoiceNo" class="form-control input-sm"  runat="server" AutoPostBack="True"  ontextchanged="TextInvoiceNo_TextChanged"></asp:TextBox>  
-                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-                          ControlToValidate="TextInvoiceNo" ErrorMessage="Insert Invoice No." 
-                          Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
-                 </div>
-                  <div class="col-sm-3"><asp:Label ID="CheckInvoiceNo" runat="server"></asp:Label></div>  
+              <div class="box-body"> 
+                 <div class="form-group">
+                  <label  class="col-sm-2 control-label"> Sales Mode</label> 
+                  <div class="col-sm-3">
+                        <asp:TextBox ID="TextInventoryType" style="display:none" runat="server"></asp:TextBox> 
+                    <asp:RadioButtonList ID="radSalesMode" runat="server" AutoPostBack = "true"  onselectedindexchanged="Redio_CheckedChanged" RepeatDirection="Horizontal">
+                         <asp:ListItem Value="Local" Selected="True">Local &nbsp;</asp:ListItem>
+                         <asp:ListItem Value="Export">Export </asp:ListItem> 
+                    </asp:RadioButtonList>     
+                  </div>
+                 </div>  
+                <div id="ChangeLocal" runat="server" >  
+                  <div class="form-group">   
+                        <label class="col-sm-2 control-label">Invoice No.</label> 
+                       <div class="col-sm-2">   
+                        <asp:TextBox ID="TextInvoiceNo" class="form-control input-sm"  runat="server" AutoPostBack="True"  ontextchanged="TextInvoiceNo_TextChanged"></asp:TextBox>  
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                              ControlToValidate="TextInvoiceNo" ErrorMessage="Insert Invoice No." 
+                              Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
+                     </div>
+                      <div class="col-sm-3"><asp:Label ID="CheckInvoiceNo" runat="server"></asp:Label></div>  
+                   </div>
+               </div>
+                <div id="ChangeExport" runat="server" >  
+                  <div class="form-group">   
+                        <label class="col-sm-2 control-label">Invoice No.</label> 
+                       <div class="col-sm-2">    
+                        <asp:TextBox ID="TextInvoiceNoEx" class="form-control input-sm"  runat="server" AutoPostBack="True"  ontextchanged="TextInvoiceNoEx_TextChanged"></asp:TextBox>  
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" 
+                              ControlToValidate="TextInvoiceNoEx" ErrorMessage="Insert Invoice No." 
+                              Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
+                     </div>
+                      <div class="col-sm-3"><asp:Label ID="CheckInvoiceNoEx" runat="server"></asp:Label></div>  
+                   </div>
                </div>
                <div class="form-group">
                   <label  class="col-sm-2 control-label">Customer Name</label> 
@@ -84,11 +107,23 @@
                  <div class="form-group">
                   <label  class="col-sm-2 control-label">Sub Item</label> 
                   <div class="col-sm-2">   
-                    <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server"  AutoPostBack="True"  ontextchanged="TextSubItem_Changed"> 
-                    </asp:DropDownList>  
-                       
+                    <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server" >  </asp:DropDownList>  <!-- AutoPostBack="True"  ontextchanged="TextSubItem_Changed" -->
+                    
                   </div>
-                </div> 
+                </div>
+                 <div class="form-group">
+                  <label  class="col-sm-2 control-label">Item Weight</label> 
+                  <div class="col-sm-2"> 
+                  <div class="input-group"> 
+                    <asp:TextBox ID="TextItemWeight" class="form-control input-sm"  runat="server"  ></asp:TextBox> <!-- AutoPostBack="True"  ontextchanged="TextItemWeight_TextChanged" -->
+                    <span class="input-group-addon">MT</span>      
+                    </div> 
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                          ControlToValidate="TextItemWeight" ErrorMessage="Insert Material Weight" 
+                          Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
+                  </div>
+                   <div class="col-sm-5"><asp:Label ID="CheckItemWeight" runat="server"></asp:Label></div>  
+                </div>  
                  <div class="form-group">
                   <label  class="col-sm-2 control-label">Item Rate</label> 
                   <div class="col-sm-2">  
@@ -100,21 +135,7 @@
                           ControlToValidate="TextItemRate" ErrorMessage="insert Item Rate" 
                           Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
                   </div>
-                </div>
-              <div class="form-group">
-                  <label  class="col-sm-2 control-label">Item Weight</label> 
-                  <div class="col-sm-2"> 
-                  <div class="input-group"> 
-                    <asp:TextBox ID="TextItemWeight" class="form-control input-sm"  runat="server"  AutoPostBack="True"  ontextchanged="TextItemWeight_TextChanged"></asp:TextBox> 
-                    <span class="input-group-addon">MT</span>      
-                    </div> 
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
-                          ControlToValidate="TextItemWeight" ErrorMessage="Insert Material Weight" 
-                          Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
-                  </div>
-                   <div class="col-sm-5"><asp:Label ID="CheckItemWeight" runat="server"></asp:Label></div>  
                 </div> 
-
                 <div class="form-group">
                   <label  class="col-sm-2 control-label">Item Amount</label> 
                   <div class="col-sm-2">  
@@ -160,7 +181,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>  
-                       <asp:TextBox  class="form-control input-sm pull-right" ID="EntryDate"  runat="server"   AutoPostBack="True"  ontextchanged="TextCheckDataProcess"></asp:TextBox>  
+                       <asp:TextBox  class="form-control input-sm pull-right" ID="EntryDate"  runat="server"   ></asp:TextBox>  <!-- AutoPostBack="True"  ontextchanged="TextCheckDataProcess" -->
                     </div>
                       </div> 
                       <div class="col-sm-3"><asp:Label ID="CheckEntryDate" runat="server"></asp:Label></div>
@@ -199,6 +220,10 @@
             <div class="box-header with-border">
               <h3 class="box-title">Sales List</h3>
               <div class="box-tools">
+               <div class="col-sm-5">   
+                    <asp:DropDownList ID="DropDownItemID1" class="form-control input-sm" runat="server"> 
+                    </asp:DropDownList>
+               </div> 
               <div class="input-group input-group-sm" style="width: 200px;">
                 <asp:TextBox ID="txtSearchEmp" Class="form-control input-sm" runat="server" />
                  <div class="input-group-btn">
@@ -222,11 +247,11 @@
                      <Columns>
                      <asp:BoundField DataField="INVOICE_NO" HeaderText="Invoice No." />
                      <asp:BoundField DataField="PUR_TYPE_NAME" HeaderText="Sales Type" />
-                     <asp:BoundField DataField="CUSTOMER_NAME"  HeaderText="Customer Name" />
+                     <asp:BoundField DataField="PARTY_NAME"  HeaderText="Customer Name" /> 
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />   
-                     <asp:BoundField DataField="SUB_ITEM_NAME"  HeaderText="Sub Item" /> 
-                     <asp:BoundField DataField="ITEM_RATE"  HeaderText="Rate" DataFormatString="{0:0.00}" />  
-                     <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Wet-MT"  DataFormatString="{0:0.000}" />    
+                     <asp:BoundField DataField="SUB_ITEM_NAME"  HeaderText="Sub Item" />
+                     <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Wet-MT"  DataFormatString="{0:0.000}" />   
+                     <asp:BoundField DataField="ITEM_RATE"  HeaderText="Rate" DataFormatString="{0:0.00}" />   
                      <asp:BoundField DataField="ITEM_AMOUNT"  HeaderText="Amount"  DataFormatString="{0:0.00}" />    
                      <asp:BoundField DataField="VAT_PERCENT"  HeaderText="Vat %" />
                      <asp:BoundField DataField="VAT_AMOUNT"  HeaderText="Vat Amount"  DataFormatString="{0:0.00}" /> 

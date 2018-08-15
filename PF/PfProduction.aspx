@@ -85,9 +85,8 @@
                  <div class="form-group">
                   <label  class="col-sm-2 control-label">Sub Item</label> 
                   <div class="col-sm-3">   
-                    <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server"  AutoPostBack="True"  ontextchanged="TextSubItem_Changed"> 
-                    </asp:DropDownList>  
-                       
+                    <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server"  > </asp:DropDownList> <!-- AutoPostBack="True"  ontextchanged="TextSubItem_Changed" -->
+                    
                   </div>
                 </div> 
                 <div class="form-group">
@@ -97,7 +96,7 @@
                     <asp:TextBox ID="TextItemWeight" class="form-control input-sm"  runat="server"  AutoPostBack="True"  ontextchanged="TextItemWeight_TextChanged"></asp:TextBox> 
                     <span class="input-group-addon">MT</span>      
                     </div> 
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server"  Type="Double"
                           ControlToValidate="TextItemWeight" ErrorMessage="Insert Material Weight" 
                           Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
                   </div>
@@ -131,7 +130,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>  
-                       <asp:TextBox  class="form-control input-sm pull-right" ID="EntryDate"  runat="server" AutoPostBack="True"  ontextchanged="TextCheckDataProcess"></asp:TextBox>  
+                       <asp:TextBox  class="form-control input-sm pull-right" ID="EntryDate"  runat="server" ></asp:TextBox>  <!-- AutoPostBack="True"  ontextchanged="TextCheckDataProcess" -->
                     </div>
                       </div> 
                       <div class="col-sm-3"><asp:Label ID="CheckEntryDate" runat="server"></asp:Label></div>  
@@ -170,6 +169,10 @@
             <div class="box-header with-border">
               <h3 class="box-title">Production List</h3>
               <div class="box-tools">
+              <div class="col-sm-5">   
+                    <asp:DropDownList ID="DropDownItemID1" class="form-control input-sm" runat="server"> 
+                    </asp:DropDownList>
+               </div> 
               <div class="input-group input-group-sm" style="width: 200px;">
                 <asp:TextBox ID="txtSearchEmp" Class="form-control input-sm" runat="server" />
                  <div class="input-group-btn">
@@ -194,14 +197,13 @@
                      <asp:BoundField DataField="PRODUCTION_ID" HeaderText="Prod. ID" />
                      <asp:BoundField DataField="SHIFT_NAME" HeaderText="Shift Name" />
                      <asp:BoundField DataField="MACHINE_NUMBER"  HeaderText="Machine No." />
+                     <asp:BoundField DataField="SHIFT_MACHINE"  HeaderText="Shift Machine" />  
                      <asp:BoundField DataField="SUPERVISOR_NAME"  HeaderText="Supervisor" />   
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" /> 
                      <asp:BoundField DataField="SUB_ITEM_NAME"  HeaderText="Sub Item" />  
                      <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Wet-MT"  DataFormatString="{0:0.000}" />    
-                     <asp:BoundField DataField="ITEM_WEIGHT_IN_FG"  HeaderText="Wet Inven. FG"  DataFormatString="{0:0.000}" />    
                      <asp:BoundField DataField="PGE_PERCENT"  HeaderText="GEP %" />
                      <asp:BoundField DataField="PGE_WEIGHT"  HeaderText="GPE Wet."  DataFormatString="{0:0.000}" />
-
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 
                              <asp:Label ID="IsActiveGV" CssClass="label" Text='<%# Eval("IS_ACTIVE").ToString() == "Enable" ? "<span Class=label-success style=Padding:2px >Enable<span>" : "<span Class=label-danger style=Padding:2px>Disable<span>" %>'  runat="server" /> 
@@ -210,7 +212,6 @@
                      <asp:BoundField DataField="ENTRY_DATE"  HeaderText="Entry Date" DataFormatString="{0:dd/MM/yyyy}"  />
                      <asp:BoundField DataField="CREATE_DATE"  HeaderText="Create Date" DataFormatString="{0:dd/MM/yyyy h:mm:ss tt}"  />  
                      <asp:BoundField DataField="UPDATE_DATE"  HeaderText="Update Date" DataFormatString="{0:dd/MM/yyyy h:mm:ss tt}"  />  
-                       
                      <asp:TemplateField>
                        <ItemTemplate>
                         <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-xs" runat="server" CommandArgument='<%# Eval("PRODUCTION_ID") %>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
@@ -220,7 +221,6 @@
                         <PagerStyle CssClass="pagination-ys" />
                         <SelectedRowStyle BackColor="Yellow"></SelectedRowStyle>
                     </asp:GridView> 
-                 
         </div>
        </div>
   

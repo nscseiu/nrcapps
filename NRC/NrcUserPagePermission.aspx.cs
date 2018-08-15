@@ -72,8 +72,17 @@ namespace NRCAPPS.NRC
                         DropDownUserID.DataTextField = "EMP_NAME";
                         DropDownUserID.DataBind();
                         DropDownUserID.Items.Insert(0, new ListItem("Select User", "0"));
-                           
-                       
+
+                        DataTable dtMenuID = new DataTable();
+                        DataSet dsm = new DataSet();
+                        string makeUserSQL2 = " SELECT * FROM NRC_MAIN_MENU WHERE IS_ACTIVE = 'Enable' ORDER BY  MENU_ORDER ASC";
+                        dsm = ExecuteBySqlStringUser(makeUserSQL2);
+                        dtMenuID = (DataTable)dsm.Tables[0];
+                        DropDownMainMenu.DataSource = dtMenuID;
+                        DropDownMainMenu.DataValueField = "MENU_ID";
+                        DropDownMainMenu.DataTextField = "MENU_NAME";
+                        DropDownMainMenu.DataBind();
+                     //   DropDownUserID.Items.Insert(0, new ListItem("Select User", "0"));
 
                         alert_box.Visible = false;
                         alert_box_right.Visible = false;
@@ -99,8 +108,8 @@ namespace NRCAPPS.NRC
             OracleConnection conn = new OracleConnection(strConnString);
             conn.Open();
 
-            int USER_DATA_ID = 0;
-            USER_DATA_ID = Convert.ToInt32(DropDownUserID.SelectedValue);
+            int USER_DATA_ID  = Convert.ToInt32(DropDownUserID.SelectedValue);
+            int USER_DATA_ID2 = Convert.ToInt32(DropDownMainMenu.SelectedValue);
              
             DataTable dtUserTypeID = new DataTable();
             DataSet ds = new DataSet();
@@ -108,7 +117,7 @@ namespace NRCAPPS.NRC
             string makeSQL = "";
             if (txtSearchUser.Text == "")
             {
-                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "' ORDER BY NUPP.USER_PAGE_ID desc, NUP.PAGE_NAME  asc";
+                makeSQL = " SELECT NU.USER_ID, NMM.MENU_ID,NMM.MENU_NAME, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_MAIN_MENU NMM ON NMM.MENU_ID = NUP.MENU_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "' WHERE NU.USER_ID = '" + USER_DATA_ID + "' AND NMM.MENU_ID = '" + USER_DATA_ID2 + "'  ORDER BY NUPP.USER_PAGE_ID desc, NUP.PAGE_NAME  asc ";
             }
             else
             {
@@ -136,17 +145,16 @@ namespace NRCAPPS.NRC
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
                 int userID = Convert.ToInt32(Session["USER_ID"]);
-                int  USER_DATA_ID = Convert.ToInt32(DropDownUserID.SelectedValue); 
-
+                int USER_DATA_ID  = Convert.ToInt32(DropDownUserID.SelectedValue);
+                int USER_DATA_ID2 = Convert.ToInt32(DropDownMainMenu.SelectedValue);  
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                string delete_user = " delete from NRC_USER_PAGE_PERMISSION where USER_ID  = '" + USER_DATA_ID + "'";
+                string delete_user = " DELETE FROM NRC_USER_PAGE_PERMISSION WHERE EXISTS ( SELECT NRC_USER_PAGES.USER_PAGE_ID FROM NRC_USER_PAGES WHERE NRC_USER_PAGES.USER_PAGE_ID = NRC_USER_PAGE_PERMISSION.USER_PAGE_ID AND NRC_USER_PAGE_PERMISSION.USER_ID  =  '" + USER_DATA_ID + "' AND NRC_USER_PAGES.MENU_ID = '" + USER_DATA_ID2 + "') ";
 
-                 cmdl = new OracleCommand(delete_user, conn);
-
-                 cmdl.ExecuteNonQuery();
-                 cmdl.Parameters.Clear();
-                 cmdl.Dispose();
+                cmdl = new OracleCommand(delete_user, conn);
+                cmdl.ExecuteNonQuery();
+                cmdl.Parameters.Clear();
+                cmdl.Dispose();
 
                 foreach (GridViewRow gridRow in GridView2.Rows)
                 {
@@ -163,9 +171,8 @@ namespace NRCAPPS.NRC
                        string IsViewActive = chkRowIsViewActive.Checked ? "Enable" : "Disable";
                        CheckBox chkRowIsReportActive = (gridRow.Cells[8].FindControl("IsReportActive") as CheckBox);
                        string IsReportActive = chkRowIsReportActive.Checked ? "Enable" : "Disable";
-
-
-                       string insert_user = "insert into  NRC_USER_PAGE_PERMISSION (USER_ID, USER_PAGE_ID, IS_PAGE_ACTIVE, IS_ADD_ACTIVE, IS_EDIT_ACTIVE, IS_DELETE_ACTIVE, IS_VIEW_ACTIVE, IS_REPORT_ACTIVE) values ( :NoUserID, :NoUserPageID, :NoIsPageActive, :NoIsAddActive, :NoIsEditActive , :NoIsDelActive, :NoIsViewActive, :NoIsReportActive)";
+                     
+                        string insert_user = "insert into  NRC_USER_PAGE_PERMISSION (USER_ID, USER_PAGE_ID, IS_PAGE_ACTIVE, IS_ADD_ACTIVE, IS_EDIT_ACTIVE, IS_DELETE_ACTIVE, IS_VIEW_ACTIVE, IS_REPORT_ACTIVE) values ( :NoUserID, :NoUserPageID, :NoIsPageActive, :NoIsAddActive, :NoIsEditActive , :NoIsDelActive, :NoIsViewActive, :NoIsReportActive)";
                         cmdi = new OracleCommand(insert_user, conn);
 
                         OracleParameter[] objPrm = new OracleParameter[8];
@@ -184,9 +191,7 @@ namespace NRCAPPS.NRC
                     cmdi.Parameters.Clear();
                     cmdi.Dispose();
                     conn.Close();
-
-     
-
+                 
                 alert_box_right.Visible = true;
                 alert_box_right.Controls.Add(new LiteralControl("User Data Update successfully"));
                 alert_box_right.Attributes.Add("class", "alert alert-success alert-dismissible");
@@ -211,9 +216,7 @@ namespace NRCAPPS.NRC
           //  DisplayUserPagePer();
             alert_box.Visible = false;
         }
-
-      
-
+         
         public void clearTextField(object sender, EventArgs e)
         {
             
@@ -223,8 +226,7 @@ namespace NRCAPPS.NRC
 
         public void clearText()
         {
-              
-             
+               
           //  DropDownUserID.SelectedIndex = -1;
 
         }

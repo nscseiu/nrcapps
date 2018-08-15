@@ -66,24 +66,24 @@ namespace NRCAPPS.PF
                     {
                         DataTable dtSupplierID = new DataTable();
                         DataSet ds = new DataSet();
-                        string makeSupplierSQL = " SELECT * FROM PF_SUPPLIER WHERE IS_ACTIVE = 'Enable' ORDER BY SUPPLIER_NAME ASC";
+                        string makeSupplierSQL = " SELECT * FROM PF_PARTY WHERE IS_ACTIVE = 'Enable' ORDER BY PARTY_NAME ASC";
                         ds = ExecuteBySqlStringEmpType(makeSupplierSQL);
                         dtSupplierID = (DataTable)ds.Tables[0];
                         DropDownSupplierID.DataSource = dtSupplierID;
-                        DropDownSupplierID.DataValueField = "SUPPLIER_ID";
-                        DropDownSupplierID.DataTextField = "SUPPLIER_NAME";
+                        DropDownSupplierID.DataValueField = "PARTY_ID";
+                        DropDownSupplierID.DataTextField = "PARTY_NAME";
                         DropDownSupplierID.DataBind();
                         DropDownSupplierID.Items.Insert(0, new ListItem("Select  Supplier", "0"));
 
                         DropDownSupplierID2.DataSource = dtSupplierID;
-                        DropDownSupplierID2.DataValueField = "SUPPLIER_ID";
-                        DropDownSupplierID2.DataTextField = "SUPPLIER_NAME";
+                        DropDownSupplierID2.DataValueField = "PARTY_ID";
+                        DropDownSupplierID2.DataTextField = "PARTY_NAME";
                         DropDownSupplierID2.DataBind();
                         DropDownSupplierID2.Items.Insert(0, new ListItem("Select  Supplier", "0"));
 
                         DropDownSupplierID3.DataSource = dtSupplierID;
-                        DropDownSupplierID3.DataValueField = "SUPPLIER_ID";
-                        DropDownSupplierID3.DataTextField = "SUPPLIER_NAME";
+                        DropDownSupplierID3.DataValueField = "PARTY_ID";
+                        DropDownSupplierID3.DataTextField = "PARTY_NAME";
                         DropDownSupplierID3.DataBind();
                         DropDownSupplierID3.Items.Insert(0, new ListItem("Select  Supplier", "0"));
 
@@ -133,6 +133,12 @@ namespace NRCAPPS.PF
                         DropDownItemID.DataBind();
                         DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
 
+                        DropDownItemID1.DataSource = dtItemID;
+                        DropDownItemID1.DataValueField = "ITEM_ID";
+                        DropDownItemID1.DataTextField = "ITEM_NAME";
+                        DropDownItemID1.DataBind();
+                        DropDownItemID1.Items.Insert(0, new ListItem("All Item", "0"));
+
                         DataTable dtSubItemID = new DataTable();
                         DataSet dss = new DataSet();
                         string makeDropDownSubItemSQL = " SELECT * FROM PF_SUB_ITEM WHERE IS_ACTIVE = 'Enable' ORDER BY SUB_ITEM_ID ASC";
@@ -143,11 +149,9 @@ namespace NRCAPPS.PF
                         DropDownSubItemID.DataTextField = "SUB_ITEM_NAME";
                         DropDownSubItemID.DataBind();
                         DropDownSubItemID.Items.Insert(0, new ListItem("Select Sub Item", "0"));
-
-
+                          
                         TextSlipNo.Focus();
-                        
-                        // display list
+                         
                         Display();
 
                         alert_box.Visible = false;
@@ -203,19 +207,18 @@ namespace NRCAPPS.PF
                     DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                     string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
                      
-                    string c_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
-
-                    string get_user_purchase_id = "select PF_PURCHASE_MASTERID_SEQ.nextval from dual";
-                    cmdsp = new OracleCommand(get_user_purchase_id, conn);
-                    int newPurchaseID = Int16.Parse(cmdsp.ExecuteScalar().ToString());
+                    string c_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt"); 
                     double ItemRate = Convert.ToDouble(TextItemRate.Text); 
                     double ItemWeight = Convert.ToDouble(TextItemWeight.Text);  
                     double ItemAmount = ItemRate * ItemWeight;
                      
-                    string ItemAmountNew = Math.Round(decimal.Parse(ItemAmount.ToString()), 0).ToString();
+                    string ItemAmountNew = Math.Round(decimal.Parse(ItemAmount.ToString()), 2).ToString();
                     double ItemAmountNewD = Convert.ToDouble(ItemAmountNew);
 
-                    string insert_purchase = "insert into  PF_PURCHASE_MASTER (PURCHASE_ID, SLIP_NO, SUPPLIER_ID, PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, SUPERVISOR_ID, ITEM_WEIGHT, ITEM_RATE, ITEM_AMOUNT, ENTRY_DATE, CREATE_DATE, C_USER_ID, IS_ACTIVE, DIVISION_ID) values  ( :NoPurchaseID, :NoSlipID, :NoSupplierID, :NoPurchaseTypeID, :NoItemID, :NoSubItemID, :NoSupervisorID, :TextItemWeight, :TextItemRate, :TextItemAmount, TO_DATE(:EntryDate, 'DD/MM/YYYY'), TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID, :TextIsActive, 3)";
+                    string get_user_purchase_id = "select PF_PURCHASE_MASTERID_SEQ.nextval from dual";
+                    cmdsp = new OracleCommand(get_user_purchase_id, conn);
+                    int newPurchaseID = Int16.Parse(cmdsp.ExecuteScalar().ToString());
+                    string insert_purchase = "insert into  PF_PURCHASE_MASTER (PURCHASE_ID, SLIP_NO, PARTY_ID, PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, SUPERVISOR_ID, ITEM_WEIGHT, ITEM_RATE, ITEM_AMOUNT, ENTRY_DATE, CREATE_DATE, C_USER_ID, IS_ACTIVE, DIVISION_ID) values  ( :NoPurchaseID, :NoSlipID, :NoSupplierID, :NoPurchaseTypeID, :NoItemID, :NoSubItemID, :NoSupervisorID, :TextItemWeight, :TextItemRate, :TextItemAmount, TO_DATE(:EntryDate, 'DD/MM/YYYY'), TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID, :TextIsActive, 3)";
                     cmdi = new OracleCommand(insert_purchase, conn);
                       
                     OracleParameter[] objPrm = new OracleParameter[14];
@@ -413,15 +416,15 @@ namespace NRCAPPS.PF
                             cmdi.Parameters.Clear();
                             cmdi.Dispose(); 
                         }
-
+                        string PurchaseIdString = newPurchaseID.ToString();
                         string InventoryFor = "Raw Material Received";
                         string get_inven_mas_des_id = "select PF_RM_STOCK_INVEN_MASDESID_SEQ.nextval from dual";
                         cmdsp = new OracleCommand(get_inven_mas_des_id, conn);
                         int newInvenMasDesRmID = Int16.Parse(cmdsp.ExecuteScalar().ToString());
-                        string insert_inven_rm_des = "insert into  PF_RM_STOCK_INVENTORY_MAS_DE (RM_INVEN_DE_ID, REF_ID, ITEM_ID, ITEM_NAME, SUB_ITEM_ID, SUB_ITEM_NAME, INVENTORY_FOR, STOCK_IN_WT, STOCK_OUT_WT, CREATE_DATE, C_USER_ID) values ( :NoInvenMasRmID, :NoRefID, :NoItemID, :TextItemName, :NoSubItemID, :TextSubItemName, :TextInventoryFor, :NoStockIn, :NoStockOut, TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                        string insert_inven_rm_des = "insert into  PF_RM_STOCK_INVENTORY_MAS_DE (RM_INVEN_DE_ID, REF_ID, ITEM_ID, ITEM_NAME, SUB_ITEM_ID, SUB_ITEM_NAME, INVENTORY_FOR, STOCK_IN_WT, STOCK_OUT_WT, CREATE_DATE, C_USER_ID, PURCHASE_ID) values ( :NoInvenMasRmID, :NoRefID, :NoItemID, :TextItemName, :NoSubItemID, :TextSubItemName, :TextInventoryFor, :NoStockIn, :NoStockOut, TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID, :NoPurchaseID)";
                         cmdi = new OracleCommand(insert_inven_rm_des, conn);
 
-                        OracleParameter[] objPrmIrmd = new OracleParameter[11];
+                        OracleParameter[] objPrmIrmd = new OracleParameter[12];
                         objPrmIrmd[0] = cmdi.Parameters.Add("NoInvenMasRmID", newInvenMasDesRmID);
                         objPrmIrmd[1] = cmdi.Parameters.Add("NoRefID", TextSlipNo.Text);
                         objPrmIrmd[2] = cmdi.Parameters.Add("NoItemID", ItemID);
@@ -433,7 +436,7 @@ namespace NRCAPPS.PF
                         objPrmIrmd[8] = cmdi.Parameters.Add("NoStockOut", StockOutWetDe); 
                         objPrmIrmd[9] = cmdi.Parameters.Add("c_date", c_date);
                         objPrmIrmd[10] = cmdi.Parameters.Add("NoCuserID", userID);
-
+                        objPrmIrmd[11] = cmdi.Parameters.Add("NoPurchaseID", PurchaseIdString);
                         cmdi.ExecuteNonQuery(); 
                         cmdi.Parameters.Clear();
                         cmdi.Dispose(); 
@@ -448,6 +451,7 @@ namespace NRCAPPS.PF
 
                     
                     clearText();
+                    TextSlipNo.Focus();
                     Display();
                 }
                 else
@@ -466,6 +470,7 @@ namespace NRCAPPS.PF
 
         protected void linkSelectClick(object sender, EventArgs e)
         {
+          try{
             OracleConnection conn = new OracleConnection(strConnString);
             conn.Open();
             LinkButton btn = (LinkButton)sender;
@@ -475,7 +480,7 @@ namespace NRCAPPS.PF
 
             DataTable dtUserTypeID = new DataTable();
             DataSet ds = new DataSet();
-            string makeSQL = " select PURCHASE_ID, SLIP_NO,  SUPPLIER_ID, PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, SUPERVISOR_ID, ITEM_WEIGHT, ITEM_RATE, ROUND(ITEM_AMOUNT,2) AS ITEM_AMOUNT,  TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, CREATE_DATE,  UPDATE_DATE,  C_USER_ID, U_USER_ID, IS_ACTIVE from PF_PURCHASE_MASTER where SLIP_NO  = '" + USER_DATA_ID + "'";
+            string makeSQL = " select PURCHASE_ID, SLIP_NO,  PARTY_ID, PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, SUPERVISOR_ID, ITEM_WEIGHT, ITEM_RATE, ROUND(ITEM_AMOUNT,2) AS ITEM_AMOUNT,  TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, CREATE_DATE,  UPDATE_DATE,  C_USER_ID, U_USER_ID, IS_ACTIVE from PF_PURCHASE_MASTER where PURCHASE_ID  = '" + USER_DATA_ID + "'";
 
             cmdl = new OracleCommand(makeSQL);
             oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -485,8 +490,9 @@ namespace NRCAPPS.PF
 
             for (int i = 0; i < RowCount; i++)
             {
+                TextPurchaseID.Text = dt.Rows[i]["PURCHASE_ID"].ToString();              
                 TextSlipNo.Text = dt.Rows[i]["SLIP_NO"].ToString();
-                DropDownSupplierID.Text = dt.Rows[i]["SUPPLIER_ID"].ToString();
+                DropDownSupplierID.Text = dt.Rows[i]["PARTY_ID"].ToString();
                 DropDownSupervisorID.Text = dt.Rows[i]["SUPERVISOR_ID"].ToString();
                 DropDownPurchaseTypeID.Text = dt.Rows[i]["PUR_TYPE_ID"].ToString();
                 DropDownItemID.Text = dt.Rows[i]["ITEM_ID"].ToString();
@@ -506,29 +512,36 @@ namespace NRCAPPS.PF
             alert_box.Visible = false;
             BtnAdd.Attributes.Add("aria-disabled", "false");
             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
-
+          }
+          catch
+          {
+              Response.Redirect("~/ParameterError.aspx");
+          } 
         }
 
      
-
         public void Display()
         {
             if (IS_VIEW_ACTIVE == "Enable")
             {
                 OracleConnection conn = new OracleConnection(strConnString);
-                conn.Open();
-
-                DataTable dtEmpTypeID = new DataTable();
-                DataSet ds = new DataSet();
-
+                conn.Open(); 
                 string makeSQL = "";
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT PPM.PURCHASE_ID, PPM.SLIP_NO, PPM.SUPPLIER_ID, PC.SUPPLIER_NAME, PPM.PUR_TYPE_ID, PPT.PUR_TYPE_NAME, PPM.ITEM_ID, PI.ITEM_NAME, PPM.SUB_ITEM_ID, PSI.SUB_ITEM_NAME, PPM.SUPERVISOR_ID, PS.SUPERVISOR_NAME, PPM.ITEM_WEIGHT, PPM.ITEM_RATE, PPM.ITEM_AMOUNT, PPM.ENTRY_DATE, PPM.CREATE_DATE, PPM.UPDATE_DATE, PPM.IS_ACTIVE , PPC.IS_CHECK FROM PF_PURCHASE_MASTER PPM LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID LEFT JOIN PF_PURCHASE_TYPE PPT ON PPT.PUR_TYPE_ID = PPM.PUR_TYPE_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPM.SUB_ITEM_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPM.SUPERVISOR_ID  LEFT JOIN PF_PURCHASE_CLAIM PPC ON  PPC.CLAIM_NO = PPM.CLAIM_NO ORDER BY PPM.CREATE_DATE DESC ";
+                    makeSQL = " SELECT PPM.PURCHASE_ID, PPM.SLIP_NO, PPM.PARTY_ID, PP.PARTY_NAME, PPM.PUR_TYPE_ID, PPT.PUR_TYPE_NAME, PPM.ITEM_ID, PI.ITEM_NAME, PPM.SUB_ITEM_ID, PSI.SUB_ITEM_NAME, PPM.SUPERVISOR_ID, PS.SUPERVISOR_NAME, PPM.ITEM_WEIGHT, PPM.ITEM_RATE, PPM.ITEM_AMOUNT, PPM.ENTRY_DATE, PPM.CREATE_DATE, PPM.UPDATE_DATE, PPM.IS_ACTIVE , PPC.IS_CHECK FROM PF_PURCHASE_MASTER PPM LEFT JOIN PF_PARTY PP ON PP.PARTY_ID = PPM.PARTY_ID LEFT JOIN PF_PURCHASE_TYPE PPT ON PPT.PUR_TYPE_ID = PPM.PUR_TYPE_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPM.SUB_ITEM_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPM.SUPERVISOR_ID  LEFT JOIN PF_PURCHASE_CLAIM PPC ON  PPC.CLAIM_NO = PPM.CLAIM_NO ORDER BY PPM.CREATE_DATE DESC ";
                 }
                 else
                 {
-                    makeSQL = "  SELECT PPM.PURCHASE_ID, PPM.SLIP_NO, PPM.SUPPLIER_ID, PC.SUPPLIER_NAME, PPM.PUR_TYPE_ID, PPT.PUR_TYPE_NAME, PPM.ITEM_ID, PI.ITEM_NAME, PPM.SUB_ITEM_ID, PSI.SUB_ITEM_NAME, PPM.SUPERVISOR_ID, PS.SUPERVISOR_NAME, PPM.ITEM_WEIGHT, PPM.ITEM_RATE, PPM.ITEM_AMOUNT, PPM.ENTRY_DATE, PPM.CREATE_DATE, PPM.UPDATE_DATE, PPM.IS_ACTIVE , PPC.IS_CHECK FROM PF_PURCHASE_MASTER PPM LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID LEFT JOIN PF_PURCHASE_TYPE PPT ON PPT.PUR_TYPE_ID = PPM.PUR_TYPE_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPM.SUB_ITEM_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPM.SUPERVISOR_ID  LEFT JOIN PF_PURCHASE_CLAIM PPC ON  PPC.CLAIM_NO = PPM.CLAIM_NO where PPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or PPM.SUPPLIER_ID like '" + txtSearchEmp.Text + "%' or PC.SUPPLIER_NAME like '" + txtSearchEmp.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME like '" + txtSearchEmp.Text + "%' or PPM.ITEM_RATE like '" + txtSearchEmp.Text + "%' or PPM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' or PPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' or PPC.IS_CHECK like '" + txtSearchEmp.Text + "%' ORDER BY PPM.CREATE_DATE desc, PPM.UPDATE_DATE desc";
+                    if (DropDownItemID1.Text == "0")
+                    {
+                        makeSQL = " SELECT PPM.PURCHASE_ID, PPM.SLIP_NO, PPM.PARTY_ID, PP.PARTY_NAME, PPM.PUR_TYPE_ID, PPT.PUR_TYPE_NAME, PPM.ITEM_ID, PI.ITEM_NAME, PPM.SUB_ITEM_ID, PSI.SUB_ITEM_NAME, PPM.SUPERVISOR_ID, PS.SUPERVISOR_NAME, PPM.ITEM_WEIGHT, PPM.ITEM_RATE, PPM.ITEM_AMOUNT, PPM.ENTRY_DATE, PPM.CREATE_DATE, PPM.UPDATE_DATE, PPM.IS_ACTIVE , PPC.IS_CHECK FROM PF_PURCHASE_MASTER PPM LEFT JOIN PF_PARTY PP ON PP.PARTY_ID = PPM.PARTY_ID LEFT JOIN PF_PURCHASE_TYPE PPT ON PPT.PUR_TYPE_ID = PPM.PUR_TYPE_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPM.SUB_ITEM_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPM.SUPERVISOR_ID  LEFT JOIN PF_PURCHASE_CLAIM PPC ON  PPC.CLAIM_NO = PPM.CLAIM_NO where PPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or PPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME like '" + txtSearchEmp.Text + "%' or PPM.ITEM_RATE like '" + txtSearchEmp.Text + "%' or PPM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' or PPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' or PPC.IS_CHECK like '" + txtSearchEmp.Text + "%' ORDER BY PPM.SLIP_NO asc";  // PPM.CREATE_DATE desc, PPM.UPDATE_DATE desc
+                    }
+                    else
+                    {
+                        makeSQL = " SELECT PPM.PURCHASE_ID, PPM.SLIP_NO, PPM.PARTY_ID, PP.PARTY_NAME, PPM.PUR_TYPE_ID, PPT.PUR_TYPE_NAME, PPM.ITEM_ID, PI.ITEM_NAME, PPM.SUB_ITEM_ID, PSI.SUB_ITEM_NAME, PPM.SUPERVISOR_ID, PS.SUPERVISOR_NAME, PPM.ITEM_WEIGHT, PPM.ITEM_RATE, PPM.ITEM_AMOUNT, PPM.ENTRY_DATE, PPM.CREATE_DATE, PPM.UPDATE_DATE, PPM.IS_ACTIVE , PPC.IS_CHECK FROM PF_PURCHASE_MASTER PPM LEFT JOIN PF_PARTY PP ON PP.PARTY_ID = PPM.PARTY_ID LEFT JOIN PF_PURCHASE_TYPE PPT ON PPT.PUR_TYPE_ID = PPM.PUR_TYPE_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPM.SUB_ITEM_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPM.SUPERVISOR_ID  LEFT JOIN PF_PURCHASE_CLAIM PPC ON  PPC.CLAIM_NO = PPM.CLAIM_NO where  PI.ITEM_ID like '" + DropDownItemID1.Text + "%' AND (PPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or PPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchEmp.Text + "%'  or PS.SUPERVISOR_NAME like '" + txtSearchEmp.Text + "%' or PPM.ITEM_RATE like '" + txtSearchEmp.Text + "%' or PPM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' or PPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' or PPC.IS_CHECK like '" + txtSearchEmp.Text + "%') ORDER BY PPM.SLIP_NO asc";  // PPM.CREATE_DATE desc, PPM.UPDATE_DATE desc
+                    }
+
                     alert_box.Visible = false;
                 }
 
@@ -578,8 +591,8 @@ namespace NRCAPPS.PF
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
                 int userID = Convert.ToInt32(Session["USER_ID"]);
+                int PurchaseID = Convert.ToInt32(TextPurchaseID.Text);
                 int SlipNo = Convert.ToInt32(TextSlipNo.Text);
-
                 int SupplierID = Convert.ToInt32(DropDownSupplierID.Text);
                 int SupervisorID = Convert.ToInt32(DropDownSupervisorID.Text);
                 int PurchaseTypeID = Convert.ToInt32(DropDownPurchaseTypeID.Text);
@@ -606,15 +619,12 @@ namespace NRCAPPS.PF
                 String EntryDateTemp = MakeEntryDateSplit[0].Replace("/", "-");
                 DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                 string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
-
-                string get_user_purchase_id = "select PF_PURCHASE_MASTERID_SEQ.nextval from dual";
-                cmdsp = new OracleCommand(get_user_purchase_id, conn);
-                int newPurchaseID = Int16.Parse(cmdsp.ExecuteScalar().ToString());
+                 
                 double ItemRate = Convert.ToDouble(TextItemRate.Text);
                 double ItemWeight = Convert.ToDouble(TextItemWeight.Text);
                 double ItemAmount = ItemRate * ItemWeight;
 
-                string ItemAmountNew = Math.Round(decimal.Parse(ItemAmount.ToString()), 0).ToString();
+                string ItemAmountNew = Math.Round(decimal.Parse(ItemAmount.ToString()), 2).ToString();
                 double ItemAmountNewD = Convert.ToDouble(ItemAmountNew); 
 
                 string c_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");  
@@ -622,7 +632,7 @@ namespace NRCAPPS.PF
 
                 // purchase check data
                 int PurchaseTypeIdOld = 0, ItemIdOld=0, SubItemIdOld=0; double ItemWeightOld = 0.00;
-                string makeSQL = " select PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT from PF_PURCHASE_MASTER where SLIP_NO  = '" + SlipNo + "'  ";
+                string makeSQL = " select PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT from PF_PURCHASE_MASTER where PURCHASE_ID  = '" + PurchaseID + "'  ";
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
@@ -885,6 +895,7 @@ namespace NRCAPPS.PF
                         objPrmIrmd[6] = cmdi.Parameters.Add("c_date", c_date);
                         objPrmIrmd[7] = cmdi.Parameters.Add("NoCuserID", userID);
                         objPrmIrmd[8] = cmdi.Parameters.Add("NoRefID", TextSlipNo.Text);
+
                         cmdi.ExecuteNonQuery();
                         cmdi.Parameters.Clear();
                         cmdi.Dispose();
@@ -893,7 +904,7 @@ namespace NRCAPPS.PF
                     }
                     else {
                         // Update inventoey RM details
-                        string insert_inven_fg_des = "update  PF_RM_STOCK_INVENTORY_MAS_DE  set ITEM_ID = :NoItemID, ITEM_NAME = :TextItemName, SUB_ITEM_ID = :NoSubItemID, SUB_ITEM_NAME = :TextSubItemName, STOCK_IN_WT = :NoStockIn, UPDATE_DATE = TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where REF_ID = :NoRefID ";
+                        string insert_inven_fg_des = "update  PF_RM_STOCK_INVENTORY_MAS_DE  set ITEM_ID = :NoItemID, ITEM_NAME = :TextItemName, SUB_ITEM_ID = :NoSubItemID, SUB_ITEM_NAME = :TextSubItemName, STOCK_IN_WT = :NoStockIn, UPDATE_DATE = TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where PURCHASE_ID = :NoPurchaseID ";
                         cmdi = new OracleCommand(insert_inven_fg_des, conn);
 
                         OracleParameter[] objPrmIrmd = new OracleParameter[9];
@@ -904,7 +915,7 @@ namespace NRCAPPS.PF
                         objPrmIrmd[5] = cmdi.Parameters.Add("NoStockIn", ItemWeight);
                         objPrmIrmd[6] = cmdi.Parameters.Add("c_date", c_date);
                         objPrmIrmd[7] = cmdi.Parameters.Add("NoCuserID", userID);
-                        objPrmIrmd[8] = cmdi.Parameters.Add("NoRefID", TextSlipNo.Text);
+                        objPrmIrmd[8] = cmdi.Parameters.Add("NoPurchaseID", PurchaseID.ToString()); 
                         cmdi.ExecuteNonQuery();
                         cmdi.Parameters.Clear();
                         cmdi.Dispose();
@@ -988,7 +999,7 @@ namespace NRCAPPS.PF
 
                 // purchase master update
 
-                string update_user = "update  PF_PURCHASE_MASTER  set SUPPLIER_ID = :NoSupplierID, PUR_TYPE_ID = :NoPurchaseTypeID, ITEM_ID = :NoItemID, SUB_ITEM_ID = :NoSubItemID, SUPERVISOR_ID = :NoSupervisorID, ITEM_WEIGHT = :NoItemWeight, ITEM_RATE = :NoItemRate, ITEM_AMOUNT = :NoItemAmount, ENTRY_DATE = TO_DATE(:EntryDate, 'DD/MM/YYYY'), UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID, IS_ACTIVE = :TextIsActive where SLIP_NO = :NoSlipNo ";
+                string update_user = "update  PF_PURCHASE_MASTER  set PARTY_ID = :NoSupplierID, PUR_TYPE_ID = :NoPurchaseTypeID, ITEM_ID = :NoItemID, SUB_ITEM_ID = :NoSubItemID, SUPERVISOR_ID = :NoSupervisorID, ITEM_WEIGHT = :NoItemWeight, ITEM_RATE = :NoItemRate, ITEM_AMOUNT = :NoItemAmount, ENTRY_DATE = TO_DATE(:EntryDate, 'DD/MM/YYYY'), UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID, IS_ACTIVE = :TextIsActive where PURCHASE_ID = :NoPurchaseID ";
                 cmdi = new OracleCommand(update_user, conn);
 
                 OracleParameter[] objPrm = new OracleParameter[14];
@@ -1004,7 +1015,7 @@ namespace NRCAPPS.PF
                 objPrm[10] = cmdi.Parameters.Add("u_date", u_date);
                 objPrm[11] = cmdi.Parameters.Add("NoCuserID", userID);
                 objPrm[12] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                objPrm[13] = cmdi.Parameters.Add("NoSlipNo", SlipNo);
+                objPrm[13] = cmdi.Parameters.Add("NoPurchaseID", PurchaseID);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -1015,6 +1026,7 @@ namespace NRCAPPS.PF
                 alert_box.Controls.Add(new LiteralControl("Purchase Data Update successfully"));
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
                 clearText();
+                TextSlipNo.Focus();
                 Display();
             }
             else
@@ -1037,16 +1049,17 @@ namespace NRCAPPS.PF
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open(); 
-                int userID = Convert.ToInt32(Session["USER_ID"]);                
+                int userID = Convert.ToInt32(Session["USER_ID"]); 
+                int PurchaseID = Convert.ToInt32(TextPurchaseID.Text);              
                 int SlipNo = Convert.ToInt32(TextSlipNo.Text);
                 // purchase check data
                 int PurchaseTypeIdOld = 0, ItemIdOld=0, SubItemIdOld=0; double ItemWeightOld = 0.00;
                 int InvenItemID = 0;
                 int InvenSubItemID = 0;
                 double InitialStock = 0.00, StockInWet = 0.00, StockInWetCurrent = 0.00, StockInWetNew = 0.00, StockOutWet = 0.00, FinalStock = 0.00, FinalStockNew = 0.00;
-                string c_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");  
+                string c_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                string makeSQL = " select PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT from PF_PURCHASE_MASTER where SLIP_NO  = '" + SlipNo + "'  ";
+                string makeSQL = " select PUR_TYPE_ID, ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT from PF_PURCHASE_MASTER where PURCHASE_ID  = '" + PurchaseID + "'  ";
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
@@ -1154,7 +1167,7 @@ namespace NRCAPPS.PF
                     }
 
                     // Delete inventoey RM details 
-                    string delete_inven_rm_mas_des = " delete from PF_RM_STOCK_INVENTORY_MAS_DE where REF_ID  = '" + TextSlipNo.Text + "'";
+                    string delete_inven_rm_mas_des = " delete from PF_RM_STOCK_INVENTORY_MAS_DE where PURCHASE_ID  = '" + PurchaseID.ToString() + "'";
 
                     cmdi = new OracleCommand(delete_inven_rm_mas_des, conn);
                     cmdi.ExecuteNonQuery();
@@ -1162,8 +1175,8 @@ namespace NRCAPPS.PF
                     cmdi.Dispose();
 
                 }
-                 
-                string delete_user = " delete from PF_PURCHASE_MASTER where SLIP_NO  = '" + SlipNo + "'"; 
+
+                string delete_user = " delete from PF_PURCHASE_MASTER where PURCHASE_ID  = '" + PurchaseID + "'"; 
                 cmdi = new OracleCommand(delete_user, conn); 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -1265,6 +1278,7 @@ namespace NRCAPPS.PF
             string ItemAmountNew = Math.Round(decimal.Parse(ItemAmount.ToString()), 0).ToString();
             double ItemAmountNewD = Convert.ToDouble(ItemAmountNew);
             TextItemAmount.Text = ItemAmountNewD.ToString("0.00");
+            TextItemWeight.Focus();
             } 
         }
 

@@ -52,6 +52,17 @@
                     <div class="col-sm-3"><asp:Label ID="CheckUserDivisionName" runat="server"></asp:Label> 
                     </div>
                 </div>
+                <div class="form-group">  
+                   <label for="User_Name" class="col-sm-2 control-label">Division Short Name</label>
+                 <div class="col-sm-3">   
+                    <asp:TextBox ID="TextDivShortName" class="form-control input-sm"  runat="server" AutoPostBack="True" ontextchanged="TextDivisionShortName_TextChanged"></asp:TextBox>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
+                         ControlToValidate="TextDivShortName" ErrorMessage="Insert Division Short Name" 
+                         SetFocusOnError="True" Display="Dynamic"></asp:RequiredFieldValidator> 
+                  </div> 
+                    <div class="col-sm-3"><asp:Label ID="CheckDivisionShortName" runat="server"></asp:Label> 
+                    </div>
+                </div>
                 <div class="form-group">
                   <label  class="col-sm-2 control-label">Division Address</label> 
                   <div class="col-sm-3">  
@@ -131,6 +142,7 @@
                              <asp:Label ID="UroleBGColor"  style='<%# "background-color:" +  Eval("DIV_BG_COLOR").ToString() + "; color:white;padding:3px 6px 3px 6px;font-size: 14px;" %>'  Text='<%# Eval("DIVISION_NAME").ToString()%>'   runat="server" />
                           </ItemTemplate>
                      </asp:TemplateField>      
+                     <asp:BoundField DataField="DIV_SHORT_NAME"  HeaderText="Division Short Name" /> 
                      <asp:BoundField DataField="DIVISION_ADD"  HeaderText="Division Address" /> 
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Purchase Form & List" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfPurchase.aspx.cs" Inherits="NRCAPPS.PF.PfPurchase" %>
+﻿<%@ Page Title="Purchase Form & List - Plastic Factory" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfPurchase.aspx.cs" Inherits="NRCAPPS.PF.PfPurchase" %>
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="ContentPlaceHolder1"> 
@@ -42,7 +42,8 @@
               <div class="box-body">
                 <div class="form-group">   
                     <label class="col-sm-2 control-label">Slip No</label> 
-                   <div class="col-sm-2">   
+                   <div class="col-sm-2">  
+                    <asp:TextBox ID="TextPurchaseID" class="form-control input-sm" style="display:none"  runat="server"></asp:TextBox>    
                     <asp:TextBox ID="TextSlipNo" class="form-control input-sm"  runat="server" AutoPostBack="True"  ontextchanged="TextSlipNo_TextChanged"></asp:TextBox>  
                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
                           ControlToValidate="TextSlipNo" ErrorMessage="Insert Slip No." 
@@ -97,12 +98,22 @@
                     </asp:DropDownList>  
                        
                   </div>
+                </div> 
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Item Weight</label> 
+                  <div class="col-sm-2">  
+                  <div class="input-group"> 
+                    <asp:TextBox ID="TextItemWeight" class="form-control input-sm"  runat="server" ></asp:TextBox> <!--  AutoPostBack="True"  ontextchanged="TextItemRate_Changed" -->   
+                    <span class="input-group-addon">MT</span>      
+                    </div>
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server"   ControlToValidate="TextItemWeight" ErrorMessage="insert Item Weight" Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label  class="col-sm-2 control-label">Item Rate</label> 
                   <div class="col-sm-2">  
                    <div class="input-group"> 
-                    <asp:TextBox ID="TextItemRate" class="form-control input-sm"  runat="server"  AutoPostBack="True"  ontextchanged="TextItemRate_Changed"></asp:TextBox>   
+                    <asp:TextBox ID="TextItemRate" class="form-control input-sm"  runat="server" ></asp:TextBox> <!--  AutoPostBack="True"  ontextchanged="TextItemRate_Changed" --> 
                     <span class="input-group-addon">.00</span>      
                     </div> 
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" 
@@ -111,20 +122,10 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Item Weight</label> 
-                  <div class="col-sm-2">  
-                  <div class="input-group"> 
-                    <asp:TextBox ID="TextItemWeight" class="form-control input-sm"  runat="server"  AutoPostBack="True"  ontextchanged="TextItemRate_Changed"></asp:TextBox>   
-                    <span class="input-group-addon">MT</span>      
-                    </div>
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server"   ControlToValidate="TextItemWeight" ErrorMessage="insert Item Weight" Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
-                  </div>
-                </div>
-                <div class="form-group">
                   <label  class="col-sm-2 control-label">Item Amount</label> 
                   <div class="col-sm-2">  
                   <div class="input-group"> 
-                    <asp:TextBox ID="TextItemAmount" class="form-control input-sm"  runat="server" disabled="disabled"></asp:TextBox>    
+                    <asp:TextBox ID="TextItemAmount" class="form-control input-sm"  runat="server" disabled="disabled" ></asp:TextBox>    
                        <span class="input-group-addon">SR</span>      
                     </div>
                   </div>
@@ -136,12 +137,12 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>  
-                       <asp:TextBox  class="form-control  input-sm pull-right" ID="EntryDate"  runat="server"  AutoPostBack="True"  ontextchanged="TextCheckDataProcess" ></asp:TextBox>  
-                    </div>
-                      </div> 
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
+                       <asp:TextBox  class="form-control  input-sm pull-right" ID="EntryDate"  runat="server"   ></asp:TextBox> <!-- AutoPostBack="True"  ontextchanged="TextCheckDataProcess" -->
+                    </div>  <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
                           ControlToValidate="EntryDate" ErrorMessage="insert Entry Date" 
                           Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
+                      </div> 
+                      
                     <!-- /.input group -->
                     <div class="col-sm-3"><asp:Label ID="CheckEntryDate" runat="server"></asp:Label></div>
                   </div>
@@ -178,6 +179,10 @@
             <div class="box-header with-border">
               <h3 class="box-title">Purchase List</h3>
               <div class="box-tools">
+              <div class="col-sm-5">   
+                    <asp:DropDownList ID="DropDownItemID1" class="form-control input-sm" runat="server"> 
+                    </asp:DropDownList>
+               </div> 
               <div class="input-group input-group-sm" style="width: 200px;">
                 <asp:TextBox ID="txtSearchEmp" Class="form-control" runat="server" />
                  <div class="input-group-btn">
@@ -200,13 +205,13 @@
     OnPageIndexChanging="GridViewEmp_PageIndexChanging" AutoGenerateColumns="false" CssClass="table table-hover table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="SLIP_NO" HeaderText="Slip No" />
-                     <asp:BoundField DataField="SUPPLIER_NAME" HeaderText="Supplier Name" />
+                     <asp:BoundField DataField="PARTY_NAME" HeaderText="Supplier Name" />
                      <asp:BoundField DataField="PUR_TYPE_NAME"  HeaderText="Type" />
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" /> 
                      <asp:BoundField DataField="SUB_ITEM_NAME"  HeaderText="Sub Item" />
-                     <asp:BoundField DataField="SUPERVISOR_NAME"  HeaderText="Supervisor" /> 
-                     <asp:BoundField DataField="ITEM_RATE"  HeaderText="Rate" /> 
-                     <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Weight" DataFormatString="{0:0.000}" />  
+                     <asp:BoundField DataField="SUPERVISOR_NAME"  HeaderText="Supervisor" />  
+                     <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Weight" DataFormatString="{0:0.000}" />
+                     <asp:BoundField DataField="ITEM_RATE"  HeaderText="Rate" />   
                      <asp:BoundField DataField="ITEM_AMOUNT"  HeaderText="Amount" DataFormatString="{0:0,0.00}" />     
 
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
@@ -225,7 +230,7 @@
                      </asp:TemplateField> 
                      <asp:TemplateField>
                        <ItemTemplate>
-                        <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-xs" runat="server" CommandArgument='<%# Eval("SLIP_NO") %>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
+                        <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-xs" runat="server" CommandArgument='<%# Eval("PURCHASE_ID") %>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
                         </ItemTemplate>
                        </asp:TemplateField> 
                      </Columns>

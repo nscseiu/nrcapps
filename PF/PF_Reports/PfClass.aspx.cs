@@ -283,11 +283,18 @@ namespace NRCAPPS.PF.PF_Reports
             set { Avail_Sale_Avg_Rate = value; }
         }
         private float Sale_Wt;
-        public float SLAE_WT
+        public float SALE_WT
         {
             get { return Sale_Wt; }
             set { Sale_Wt = value; }
         }
+        private float Sale_Local_Wt;
+        public float SALE_LOCAL_WT
+        {
+            get { return Sale_Local_Wt; }
+            set { Sale_Local_Wt = value; }
+        }
+
         private float Sale_Return_Wt;
         public float SALE_RETURN_WET
         {
@@ -313,7 +320,24 @@ namespace NRCAPPS.PF.PF_Reports
             get { return End_Avg_Rate; }
             set { End_Avg_Rate = value; }
         }
-
+        private float Purchase_Jw_Wt;
+        public float PURCHASE_JW_WT
+        {
+            get { return Purchase_Jw_Wt; }
+            set { Purchase_Jw_Wt = value; }
+        }
+        private float Production_Jw_Wt;
+        public float PRODUCTION_JW_WT
+        {
+            get { return Production_Jw_Wt; }
+            set { Production_Jw_Wt = value; }
+        }
+        private float Sales_Jw_Wt;
+        public float SALES_JW_WT
+        {
+            get { return Sales_Jw_Wt; }
+            set { Sales_Jw_Wt = value; }
+        }
         private DateTime Entry_Date;
         public DateTime ENTRY_DATE
         {
@@ -321,7 +345,7 @@ namespace NRCAPPS.PF.PF_Reports
             set { Entry_Date = value; }
         }
 
-        public PfClass(int ITEM_ID, string ITEM_NAME, string ITEM_NAME_FULL, int ITEM_CODE, string SUB_ITEM_NAME, float ITEM_WEIGHT, float ITEM_RATE, float ITEM_AMOUNT, int VAT_PERCENT, float VAT_AMOUNT, float ITEM_WEIGHT_IN_FG, int SUPPLIER_ID, string SUPPLIER_NAME, int CUSTOMER_ID, string CUSTOMER_NAME, int SUPERVISOR_ID, string SUPERVISOR_NAME, int SLIP_NO, int INVOICE_NO, int MACHINE_NUMBER, string SHIFT_NAME, float BEG_FSTOCK_WT, float BEG_FSTOCK_WT1, float BEG_AVG_RATE, float BEG_AMT, float PURCHASE_WT, float PURCHASE_AMT, float PURCHASE_WTD, float PURCHASE_AMTD, float MAT_AVAIL_PROD_WT, float MAT_AVAIL_PROD_AMT, float MAT_AVAIL_PROD_RATE, float PRODUCTION_WT, float PRODUCTION_AMT, float PRO_COST_AMT, float PROD_PRO_COST_AMT, float PROD_TOTAL_COST_AMT, float GAR_EST_OF_PROD, float ACTUAL_GAR_WEIGHT, float AVAIL_SALE_WT, float AVAIL_SALE_AMT, float AVAIL_SALE_AVG_RATE, float SLAE_WT, float SALE_RETURN_WET, float END_FSTOCK_WT, float END_AMT, float END_AVG_RATE, DateTime ENTRY_DATE)
+        public PfClass(int ITEM_ID, string ITEM_NAME, string ITEM_NAME_FULL, int ITEM_CODE, string SUB_ITEM_NAME, float ITEM_WEIGHT, float ITEM_RATE, float ITEM_AMOUNT, int VAT_PERCENT, float VAT_AMOUNT, float ITEM_WEIGHT_IN_FG, int SUPPLIER_ID, string SUPPLIER_NAME, int CUSTOMER_ID, string CUSTOMER_NAME, int SUPERVISOR_ID, string SUPERVISOR_NAME, int SLIP_NO, int INVOICE_NO, int MACHINE_NUMBER, string SHIFT_NAME, float BEG_FSTOCK_WT, float BEG_FSTOCK_WT1, float BEG_AVG_RATE, float BEG_AMT, float PURCHASE_WT, float PURCHASE_AMT, float PURCHASE_WTD, float PURCHASE_AMTD, float MAT_AVAIL_PROD_WT, float MAT_AVAIL_PROD_AMT, float MAT_AVAIL_PROD_RATE, float PRODUCTION_WT, float PRODUCTION_AMT, float PRO_COST_AMT, float PROD_PRO_COST_AMT, float PROD_TOTAL_COST_AMT, float GAR_EST_OF_PROD, float ACTUAL_GAR_WEIGHT, float AVAIL_SALE_WT, float AVAIL_SALE_AMT, float AVAIL_SALE_AVG_RATE, float SALE_WT, float SALE_LOCAL_WT, float SALE_RETURN_WET, float END_FSTOCK_WT, float END_AMT, float END_AVG_RATE, float PURCHASE_JW_WT, float PRODUCTION_JW_WT, float SALES_JW_WT, DateTime ENTRY_DATE)
         {
 
             this.Item_Id             = ITEM_ID;
@@ -366,12 +390,15 @@ namespace NRCAPPS.PF.PF_Reports
             this.Avail_Sale_Wt       = AVAIL_SALE_WT;
             this.Avail_Sale_Amt      = AVAIL_SALE_AMT;
             this.Avail_Sale_Avg_Rate = AVAIL_SALE_AVG_RATE;
-            this.Sale_Wt             = SLAE_WT;
+            this.Sale_Wt             = SALE_WT;
+            this.Sale_Local_Wt       = SALE_LOCAL_WT;
             this.Sale_Return_Wt      = SALE_RETURN_WET;
             this.End_Fstock_Wt       = END_FSTOCK_WT;
             this.End_Amt             = END_AMT;
-            this.End_Avg_Rate        = END_AVG_RATE; 
-
+            this.End_Avg_Rate        = END_AVG_RATE;
+            this.Purchase_Jw_Wt      = PURCHASE_JW_WT;
+            this.Production_Jw_Wt    = PRODUCTION_JW_WT; 
+            this.Sales_Jw_Wt         = SALES_JW_WT; 
             this.Entry_Date          = ENTRY_DATE;
              
         }

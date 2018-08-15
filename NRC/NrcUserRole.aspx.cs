@@ -360,7 +360,7 @@ namespace NRCAPPS.NRC
 
         public void TextUserRoleSName_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(TextUserRoleName.Text))
+            if (!string.IsNullOrEmpty(TextUserRoleSname.Text))
             {
                 alert_box.Visible = false;
 
@@ -391,7 +391,7 @@ namespace NRCAPPS.NRC
                 }
             }
             else {
-                CheckUserRoleSname.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> User Role Short Name is not blank</label>";
+                    CheckUserRoleSname.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> User Role Short Name is not blank</label>";
                     CheckUserRoleSname.ForeColor = System.Drawing.Color.Red;
                     TextUserRoleName.Focus();
             }
