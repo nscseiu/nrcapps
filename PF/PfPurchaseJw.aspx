@@ -85,7 +85,9 @@
                   <div class="col-sm-3">   
                     <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server"> 
                     </asp:DropDownList>  
-                       
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" 
+                          ControlToValidate="DropDownSubItemID" Display="Dynamic" 
+                          ErrorMessage="Select Sub Item" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>  
                   </div>
                 </div> 
                 <div class="form-group">
@@ -206,7 +208,7 @@
        </div>
 
         
-          <div class="box box-info">
+          <div class="box box-info"  style="display:none;">
             <div class="box-header with-border">
               <h3 class="box-title"> Job Work Purchase Statement (Month Wise) Parameter</h3>
             </div>
@@ -252,71 +254,7 @@
               <!-- /.box-footer -->
          <!-- /.box -->
         </div>   
-        
-            <asp:Panel ID="Panel1" runat="server">  
-            <%if (IsLoad)
-                {%> 
-            <div class="box box-success">
-            <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Statement (Supplier - Month Wise) Report View</h3>
-            </div> 
-            <!-- /.box-header -->
-                    <div class="box-body">       
-                           <iframe src="PF_Reports/PfPurchaseSupplierWiseReportView.aspx?MonthYear=<%=TextMonthYear0.Text %>&SupplierID=<%=DropDownSupplierID2.Text %>" width="950px" id="iframe1"
-                        marginheight="0" frameborder="0" scrolling="auto" height="1250px">   </iframe>  
-                         </div>
-                       </div> 
-                    
-                     <%} %>   
-            </asp:Panel>  
-
-             <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title"> Summary of Purchases (Month Wise) Parameter</h3>
-            </div>
-            <!-- /.box-header -->
-
-              <div class="box-body">
-            <!-- form start -->   
-              <div class="form-group">
-                  <label  class="col-sm-2 control-label">Purchase Type</label> 
-                  <div class="col-sm-2">   
-                    <asp:DropDownList ID="DropDownPurchaseTypeID2" class="form-control input-sm" runat="server"> 
-                    </asp:DropDownList>  
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" 
-                          ControlToValidate="DropDownPurchaseTypeID2" Display="Dynamic" 
-                          ErrorMessage="Select Supplier" InitialValue="0" SetFocusOnError="True"  ValidationGroup='valGroup3'></asp:RequiredFieldValidator>
-                  </div>
-                </div>
-                   <div class="form-group">
-                    <label class="col-sm-2 control-label">Select Month </label>
-                     <div class="col-sm-2">   
-                    <div class="input-group date">
-                      <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                      </div>  
-                       <asp:TextBox  class="form-control  input-sm pull-right" ID="TextMonthYear1"  runat="server" ></asp:TextBox>  
-                    </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" 
-                         ControlToValidate="TextMonthYear1" ErrorMessage="Insert Date" 
-                         SetFocusOnError="True" Display="Dynamic" ValidationGroup='valGroup3'></asp:RequiredFieldValidator> 
-                  </div>
-                  </div>
-                </div> 
-              <!-- /.box-body -->
-              <div class="box-footer">
-               <div class="form-group">
-                  <div  class="col-sm-2" style="text-align:right;"> 
-                      <asp:LinkButton ID="LinkButton2" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
-                   <div class="col-sm-6">     
-                    <asp:LinkButton ID="LinkButton3" class="btn btn-info" runat="server" Text="View Report"  onclick="BtnReport2_Click"  ValidationGroup='valGroup3' ClientIDMode="Static"><span class="fa fa-fax"></span> View Report</asp:LinkButton> 
-                   </div>
-                </div>
-              </div>
-              <!-- /.box-footer -->
-         <!-- /.box -->
-        </div>    
-        
+         
           <!-- /.box --> 
         <!--/.col (right) -->
       </div>

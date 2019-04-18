@@ -47,8 +47,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>  
-                       <asp:TextBox  class="form-control input-sm pull-right" ID="AsOnDate"  
-                            runat="server"  ></asp:TextBox>  
+                       <asp:TextBox  class="form-control input-sm pull-right" ID="AsOnDate" runat="server"></asp:TextBox>  
                              
                     </div> <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                          ControlToValidate="AsOnDate" ErrorMessage="Insert Date" 
@@ -79,8 +78,8 @@
             </div> 
             <!-- /.box-header -->
                     <div class="box-body">       
-                           <iframe src="PF_Reports/PfRmStatementReportView.aspx?AsOnDate=<%=AsOnDate.Text %>" width="1350px" id="iframe1"
-                        marginheight="0" frameborder="0" scrolling="auto" height="950px">   </iframe>  
+                           <iframe src="PF_Reports/PfRmStatementReportView.aspx?AsOnDate=<%=AsOnDate.Text %>" width="1350px" height="950px" id="iframe1"
+                        marginheight="0" frameborder="0" scrolling="auto" >   </iframe>  
                          </div>
                        </div> 
                     </div> 

@@ -46,11 +46,30 @@ namespace NRCAPPS.PF.PF_Reports
             get { return Sub_Item_Name; }
             set { Sub_Item_Name = value; }
         }
+        private string Wb_Slip_No;
+        public string WB_SLIP_NO
+        {
+            get { return Wb_Slip_No; }
+            set { Wb_Slip_No = value; }
+        }
         private float Item_Weight;
         public float ITEM_WEIGHT
         {
             get { return Item_Weight; }
             set { Item_Weight = value; }
+        }
+        private float Mat_Issued_Wt;
+        public float MAT_ISSUED_WT
+        {
+            get { return Mat_Issued_Wt; }
+            set { Mat_Issued_Wt = value; }
+        }
+
+        private float Mat_Recevied_Wt;
+        public float MAT_RECEVIED_WT
+        {
+            get { return Mat_Recevied_Wt; }
+            set { Mat_Recevied_Wt = value; }
         }
         private float Item_Rate;
         public float ITEM_RATE
@@ -83,7 +102,12 @@ namespace NRCAPPS.PF.PF_Reports
             get { return Vat_Amount; }
             set { Vat_Amount = value; }
         } 
-
+        private float Total_Amount;
+        public float TOTAL_AMOUNT
+        {
+            get { return Total_Amount; }
+            set { Total_Amount= value; }
+        } 
 
         private int Supplier_Id;
         public int SUPPLIER_ID
@@ -121,8 +145,24 @@ namespace NRCAPPS.PF.PF_Reports
             get { return Supervisor_Name; }
             set { Supervisor_Name = value; }
         }
-
-
+        private string Container_No;
+        public string CONTAINER_NO
+        {
+            get { return Container_No; }
+            set { Container_No = value; }
+        }
+        private string Seal_No;
+        public string SEAL_NO
+        {
+            get { return Seal_No; }
+            set { Seal_No = value; }
+        }
+        private string Rel_Order_No;
+        public string REL_ORDER_NO
+        {
+            get { return Rel_Order_No; }
+            set { Rel_Order_No = value; }
+        }
         private int Slip_No;
         public int SLIP_NO
         {
@@ -147,7 +187,24 @@ namespace NRCAPPS.PF.PF_Reports
             get { return Shift_Name; }
             set { Shift_Name = value; }
         }
-
+        private string Salesman_Name;
+        public string SALESMAN_NAME
+        {
+            get { return Salesman_Name; }
+            set { Salesman_Name = value; }
+        }
+        private string Pur_Type_Name;
+        public string PUR_TYPE_NAME
+        {
+            get { return Pur_Type_Name; }
+            set { Pur_Type_Name = value; }
+        }
+        private string Is_Inventory_Status;
+        public string IS_INVENTORY_STATUS
+        {
+            get { return Is_Inventory_Status; }
+            set { Is_Inventory_Status = value; }
+        }
         private float Beg_Fstock_Wt;
         public float BEG_FSTOCK_WT
         {
@@ -288,6 +345,12 @@ namespace NRCAPPS.PF.PF_Reports
             get { return Sale_Wt; }
             set { Sale_Wt = value; }
         }
+        private float Sale_Amount;
+        public float SALES_AMOUNT
+        {
+            get { return Sale_Amount; }
+            set { Sale_Amount = value; }
+        }
         private float Sale_Local_Wt;
         public float SALE_LOCAL_WT
         {
@@ -307,6 +370,18 @@ namespace NRCAPPS.PF.PF_Reports
         {
             get { return End_Fstock_Wt; }
             set { End_Fstock_Wt = value; }
+        }
+        private float End_Fstock_As_Book_Wt;
+        public float END_FSTOCK_AS_BOOK_WT
+        {
+            get { return End_Fstock_As_Book_Wt; }
+            set { End_Fstock_As_Book_Wt = value; }
+        }
+        private float Item_Weight_Transit;
+        public float ITEM_WEIGHT_TRANSIT
+        {
+            get { return Item_Weight_Transit; }
+            set { Item_Weight_Transit = value; }
         }
         private float End_Amt;
         public float END_AMT
@@ -338,14 +413,26 @@ namespace NRCAPPS.PF.PF_Reports
             get { return Sales_Jw_Wt; }
             set { Sales_Jw_Wt = value; }
         }
+        private float Item_Weight_Wb;
+        public float ITEM_WEIGHT_WB
+        {
+            get { return Item_Weight_Wb; }
+            set { Item_Weight_Wb = value; }
+        }
+
         private DateTime Entry_Date;
         public DateTime ENTRY_DATE
         {
             get { return Entry_Date; }
             set { Entry_Date = value; }
         }
-
-        public PfClass(int ITEM_ID, string ITEM_NAME, string ITEM_NAME_FULL, int ITEM_CODE, string SUB_ITEM_NAME, float ITEM_WEIGHT, float ITEM_RATE, float ITEM_AMOUNT, int VAT_PERCENT, float VAT_AMOUNT, float ITEM_WEIGHT_IN_FG, int SUPPLIER_ID, string SUPPLIER_NAME, int CUSTOMER_ID, string CUSTOMER_NAME, int SUPERVISOR_ID, string SUPERVISOR_NAME, int SLIP_NO, int INVOICE_NO, int MACHINE_NUMBER, string SHIFT_NAME, float BEG_FSTOCK_WT, float BEG_FSTOCK_WT1, float BEG_AVG_RATE, float BEG_AMT, float PURCHASE_WT, float PURCHASE_AMT, float PURCHASE_WTD, float PURCHASE_AMTD, float MAT_AVAIL_PROD_WT, float MAT_AVAIL_PROD_AMT, float MAT_AVAIL_PROD_RATE, float PRODUCTION_WT, float PRODUCTION_AMT, float PRO_COST_AMT, float PROD_PRO_COST_AMT, float PROD_TOTAL_COST_AMT, float GAR_EST_OF_PROD, float ACTUAL_GAR_WEIGHT, float AVAIL_SALE_WT, float AVAIL_SALE_AMT, float AVAIL_SALE_AVG_RATE, float SALE_WT, float SALE_LOCAL_WT, float SALE_RETURN_WET, float END_FSTOCK_WT, float END_AMT, float END_AVG_RATE, float PURCHASE_JW_WT, float PRODUCTION_JW_WT, float SALES_JW_WT, DateTime ENTRY_DATE)
+        private DateTime Dispatch_Date;
+        public DateTime DISPATCH_DATE
+        {
+            get { return Dispatch_Date; }
+            set { Dispatch_Date = value; }
+        }
+        public PfClass(int ITEM_ID, string ITEM_NAME, string ITEM_NAME_FULL, int ITEM_CODE, string SUB_ITEM_NAME, string CONTAINER_NO, string SEAL_NO, string REL_ORDER_NO, string SALESMAN_NAME, string PUR_TYPE_NAME, string IS_INVENTORY_STATUS, float ITEM_WEIGHT, float ITEM_WEIGHT_WB, float MAT_ISSUED_WT, float MAT_RECEVIED_WT, float ITEM_RATE, float ITEM_AMOUNT, int VAT_PERCENT, float VAT_AMOUNT,  float TOTAL_AMOUNT, float ITEM_WEIGHT_IN_FG, int SUPPLIER_ID, string SUPPLIER_NAME, int CUSTOMER_ID, string CUSTOMER_NAME, int SUPERVISOR_ID, string SUPERVISOR_NAME, int SLIP_NO, string WB_SLIP_NO,  int INVOICE_NO, int MACHINE_NUMBER, string SHIFT_NAME, float BEG_FSTOCK_WT, float BEG_FSTOCK_WT1, float BEG_AVG_RATE, float BEG_AMT, float PURCHASE_WT, float PURCHASE_AMT, float PURCHASE_WTD, float PURCHASE_AMTD, float MAT_AVAIL_PROD_WT, float MAT_AVAIL_PROD_AMT, float MAT_AVAIL_PROD_RATE, float PRODUCTION_WT, float PRODUCTION_AMT, float PRO_COST_AMT, float PROD_PRO_COST_AMT, float PROD_TOTAL_COST_AMT, float GAR_EST_OF_PROD, float ACTUAL_GAR_WEIGHT, float AVAIL_SALE_WT, float AVAIL_SALE_AMT, float AVAIL_SALE_AVG_RATE, float SALE_WT, float SALES_AMOUNT, float SALE_LOCAL_WT, float SALE_RETURN_WET, float END_FSTOCK_WT,  float END_FSTOCK_AS_BOOK_WT, float ITEM_WEIGHT_TRANSIT,  float END_AMT, float END_AVG_RATE, float PURCHASE_JW_WT, float PRODUCTION_JW_WT, float SALES_JW_WT, DateTime ENTRY_DATE, DateTime DISPATCH_DATE)
         {
 
             this.Item_Id             = ITEM_ID;
@@ -354,10 +441,13 @@ namespace NRCAPPS.PF.PF_Reports
             this.Item_Code           = ITEM_CODE;
             this.Sub_Item_Name       = SUB_ITEM_NAME;
             this.Item_Weight         = ITEM_WEIGHT;
+            this.Mat_Issued_Wt       = MAT_ISSUED_WT;
+            this.Mat_Issued_Wt       = MAT_RECEVIED_WT;
             this.Item_Rate           = ITEM_RATE;
             this.Item_Amount         = ITEM_AMOUNT;
             this.Vat_Percent         = VAT_PERCENT;
             this.Vat_Amount          = VAT_AMOUNT;
+            this.Total_Amount        = TOTAL_AMOUNT;
             this.Item_Amount_In_Fg   = ITEM_WEIGHT_IN_FG; 
             this.Supplier_Id         = SUPPLIER_ID;
             this.Supplier_Name       = SUPPLIER_NAME;
@@ -366,9 +456,17 @@ namespace NRCAPPS.PF.PF_Reports
             this.Customer_Id         = CUSTOMER_ID;
             this.Customer_Name       = CUSTOMER_NAME;
             this.Slip_No             = SLIP_NO;
+            this.Wb_Slip_No          = WB_SLIP_NO;
             this.Invoice_No          = INVOICE_NO;
             this.Machine_No          = MACHINE_NUMBER;
             this.Shift_Name          = SHIFT_NAME;
+            this.Container_No        = CONTAINER_NO;
+            this.Seal_No             = SEAL_NO;
+            this.Rel_Order_No        = REL_ORDER_NO;
+            this.Salesman_Name       = SALESMAN_NAME;
+            this.Pur_Type_Name       = PUR_TYPE_NAME;
+            this.Is_Inventory_Status = IS_INVENTORY_STATUS;
+            this.Item_Weight_Wb      = ITEM_WEIGHT_WB;
             this.Beg_Fstock_Wt       = BEG_FSTOCK_WT;
             this.Beg_Fstock_Wt1      = BEG_FSTOCK_WT1;
             this.Beg_Avg_Rate        = BEG_AVG_RATE;
@@ -391,16 +489,19 @@ namespace NRCAPPS.PF.PF_Reports
             this.Avail_Sale_Amt      = AVAIL_SALE_AMT;
             this.Avail_Sale_Avg_Rate = AVAIL_SALE_AVG_RATE;
             this.Sale_Wt             = SALE_WT;
+            this.Sale_Amount         = SALES_AMOUNT;
             this.Sale_Local_Wt       = SALE_LOCAL_WT;
             this.Sale_Return_Wt      = SALE_RETURN_WET;
+            this.Item_Weight_Transit = ITEM_WEIGHT_TRANSIT;
             this.End_Fstock_Wt       = END_FSTOCK_WT;
+            this.End_Fstock_As_Book_Wt = END_FSTOCK_AS_BOOK_WT;
             this.End_Amt             = END_AMT;
             this.End_Avg_Rate        = END_AVG_RATE;
             this.Purchase_Jw_Wt      = PURCHASE_JW_WT;
             this.Production_Jw_Wt    = PRODUCTION_JW_WT; 
             this.Sales_Jw_Wt         = SALES_JW_WT; 
             this.Entry_Date          = ENTRY_DATE;
-             
+            this.Dispatch_Date       = DISPATCH_DATE;             
         }
          
     }

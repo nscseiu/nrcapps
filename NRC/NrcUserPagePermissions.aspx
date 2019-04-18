@@ -139,7 +139,12 @@
                          <ItemTemplate>  
                             <asp:CheckBox type="checkbox"   id="IsReportActive"  class="flat-red" checked='<%# Eval("IS_REPORT_ACTIVE").ToString() == "Enable" ? true : false %>'   runat="server"/>
                          </ItemTemplate>
-                     </asp:TemplateField>   
+                     </asp:TemplateField> 
+                      <asp:TemplateField HeaderText="IS Print" ItemStyle-HorizontalAlign="center" >
+                         <ItemTemplate>  
+                            <asp:CheckBox type="checkbox"   id="IsPrintActive"  class="flat-red" checked='<%# Eval("IS_PRINT_ACTIVE").ToString() == "Enable" ? true : false %>'   runat="server"/>
+                         </ItemTemplate>
+                     </asp:TemplateField>     
                       
                      </Columns>
                         <PagerStyle CssClass="pagination-ys" />

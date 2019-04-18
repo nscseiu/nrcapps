@@ -31,15 +31,6 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlForm Form1;
         
         /// <summary>
-        /// TB_dependency control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label TB_dependency;
-        
-        /// <summary>
         /// ImageProfile control.
         /// </summary>
         /// <remarks>
@@ -112,22 +103,265 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Dashboard;
         
         /// <summary>
-        /// wastepaper control.
+        /// wp_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wastepaper;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_menu;
         
         /// <summary>
-        /// plastic control.
+        /// wp_category control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl plastic;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_category;
+        
+        /// <summary>
+        /// wp_item control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_item;
+        
+        /// <summary>
+        /// wp_item_sales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_item_sales;
+        
+        /// <summary>
+        /// wp_item_sales_ws control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_item_sales_ws;
+        
+        /// <summary>
+        /// wp_driver control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_driver;
+        
+        /// <summary>
+        /// wp_collection_for control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_collection_for;
+        
+        /// <summary>
+        /// wp_supervisor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_supervisor;
+        
+        /// <summary>
+        /// wp_supplier_cat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_supplier_cat;
+        
+        /// <summary>
+        /// wp_party control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_party;
+        
+        /// <summary>
+        /// wp_purchase_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_purchase_menu;
+        
+        /// <summary>
+        /// wp_purchase control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_purchase;
+        
+        /// <summary>
+        /// wp_purchase_vat_adjustment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_purchase_vat_adjustment;
+        
+        /// <summary>
+        /// wp_purchase_claim control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_purchase_claim;
+        
+        /// <summary>
+        /// wp_purchase_claim_approve control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_purchase_claim_approve;
+        
+        /// <summary>
+        /// wp_inventory_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_inventory_menu;
+        
+        /// <summary>
+        /// wp_material_transaction control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_material_transaction;
+        
+        /// <summary>
+        /// wp_daily_purchase_sales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_daily_purchase_sales;
+        
+        /// <summary>
+        /// wp_inventory_rm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_inventory_rm;
+        
+        /// <summary>
+        /// wp_inventory_monthly_state control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_inventory_monthly_state;
+        
+        /// <summary>
+        /// wp_sales_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_sales_menu;
+        
+        /// <summary>
+        /// wp_sales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_sales;
+        
+        /// <summary>
+        /// wp_sales_inter_division control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_sales_inter_division;
+        
+        /// <summary>
+        /// wp_export_container control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_export_container;
+        
+        /// <summary>
+        /// wp_material_pricing control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_material_pricing;
+        
+        /// <summary>
+        /// wp_export_sales_invoice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_export_sales_invoice;
+        
+        /// <summary>
+        /// wp_export_shipment_cmo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_export_shipment_cmo;
+        
+        /// <summary>
+        /// wp_rm_statement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl wp_rm_statement;
+        
+        /// <summary>
+        /// pf_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_menu;
         
         /// <summary>
         /// pf_business_target control.
@@ -164,6 +398,15 @@ namespace NRCAPPS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_sub_item;
+        
+        /// <summary>
+        /// pf_item_sales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_item_sales;
         
         /// <summary>
         /// pf_supplier control.
@@ -310,6 +553,24 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_inventory_menu;
         
         /// <summary>
+        /// pf_material_transaction control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_material_transaction;
+        
+        /// <summary>
+        /// pf_daily_pur_prod_report control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_daily_pur_prod_report;
+        
+        /// <summary>
         /// pf_daily_pur_prod control.
         /// </summary>
         /// <remarks>
@@ -355,6 +616,15 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_sales_menu;
         
         /// <summary>
+        /// pf_salesman control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_salesman;
+        
+        /// <summary>
         /// pf_sales control.
         /// </summary>
         /// <remarks>
@@ -391,6 +661,51 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_sales_return;
         
         /// <summary>
+        /// pf_overseas_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_overseas_menu;
+        
+        /// <summary>
+        /// pf_export_container control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_export_container;
+        
+        /// <summary>
+        /// pf_export_material_pricing control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_export_material_pricing;
+        
+        /// <summary>
+        /// pf_export_sales_invoice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_export_sales_invoice;
+        
+        /// <summary>
+        /// pf_export_shipment_cmo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_export_shipment_cmo;
+        
+        /// <summary>
         /// pf_rm_statement control.
         /// </summary>
         /// <remarks>
@@ -409,193 +724,427 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pf_fg_statement;
         
         /// <summary>
-        /// metal_scrap control.
+        /// ms_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl metal_scrap;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_menu;
         
         /// <summary>
-        /// metal_factory control.
+        /// ms_category control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl metal_factory;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_category;
         
         /// <summary>
-        /// Li1 control.
+        /// ms_item control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_item;
         
         /// <summary>
-        /// Li2 control.
+        /// ms_item_sales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li2;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_item_sales;
         
         /// <summary>
-        /// Li3 control.
+        /// ms_item_sales_ws control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li3;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_item_sales_ws;
         
         /// <summary>
-        /// Li4 control.
+        /// ms_driver control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li4;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_driver;
         
         /// <summary>
-        /// Li5 control.
+        /// ms_collection_for control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li5;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_collection_for;
         
         /// <summary>
-        /// Li6 control.
+        /// ms_supervisor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li6;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_supervisor;
         
         /// <summary>
-        /// Li7 control.
+        /// ms_supplier_cat control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li7;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_supplier_cat;
         
         /// <summary>
-        /// Li8 control.
+        /// ms_party control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li8;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_party;
         
         /// <summary>
-        /// Li9 control.
+        /// ms_purchase_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li9;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_purchase_menu;
         
         /// <summary>
-        /// Li10 control.
+        /// ms_purchase control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li10;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_purchase;
         
         /// <summary>
-        /// Li11 control.
+        /// ms_purchase_vat_adjustment control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li11;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_purchase_vat_adjustment;
         
         /// <summary>
-        /// Li12 control.
+        /// ms_purchase_claim control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li12;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_purchase_claim;
         
         /// <summary>
-        /// Li13 control.
+        /// ms_purchase_claim_approve control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li13;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_purchase_claim_approve;
         
         /// <summary>
-        /// Li14 control.
+        /// ms_inventory_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li14;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_inventory_menu;
         
         /// <summary>
-        /// Li15 control.
+        /// ms_material_transaction control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li15;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_material_transaction;
         
         /// <summary>
-        /// Li16 control.
+        /// ms_material_garbage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li16;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_material_garbage;
         
         /// <summary>
-        /// Li17 control.
+        /// ms_inventory_rm control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li17;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_inventory_rm;
         
         /// <summary>
-        /// Li18 control.
+        /// ms_sales_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li18;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_sales_menu;
         
         /// <summary>
-        /// Li19 control.
+        /// ms_sales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li19;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_sales;
+        
+        /// <summary>
+        /// ms_sales_inter_division control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_sales_inter_division;
+        
+        /// <summary>
+        /// ms_export_container control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_export_container;
+        
+        /// <summary>
+        /// ms_material_pricing control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_material_pricing;
+        
+        /// <summary>
+        /// ms_export_sales_invoice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_export_sales_invoice;
+        
+        /// <summary>
+        /// ms_export_shipment_cmo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_export_shipment_cmo;
+        
+        /// <summary>
+        /// ms_rm_statement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_rm_statement;
+        
+        /// <summary>
+        /// mf_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_menu;
+        
+        /// <summary>
+        /// mf_category control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_category;
+        
+        /// <summary>
+        /// mf_item control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_item;
+        
+        /// <summary>
+        /// mf_item_sales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_item_sales;
+        
+        /// <summary>
+        /// mf_item_bin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_item_bin;
+        
+        /// <summary>
+        /// mf_vehicle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_vehicle;
+        
+        /// <summary>
+        /// mf_party control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_party;
+        
+        /// <summary>
+        /// mf_transfer_purchase_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_transfer_purchase_menu;
+        
+        /// <summary>
+        /// mf_item_transfer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_item_transfer;
+        
+        /// <summary>
+        /// mf_purchase_local control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_purchase_local;
+        
+        /// <summary>
+        /// mf_material_receiving control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_material_receiving;
+        
+        /// <summary>
+        /// mf_rm_coordinator_approve control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_rm_coordinator_approve;
+        
+        /// <summary>
+        /// mf_production_menu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_production_menu;
+        
+        /// <summary>
+        /// mf_furnaces control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_furnaces;
+        
+        /// <summary>
+        /// mf_grade_item control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_grade_item;
+        
+        /// <summary>
+        /// mf_batch_item control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_batch_item;
+        
+        /// <summary>
+        /// mf_batch_rm_check control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_batch_rm_check;
+        
+        /// <summary>
+        /// mf_prod_issue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_prod_issue;
+        
+        /// <summary>
+        /// mf_fg_qa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_fg_qa;
+        
+        /// <summary>
+        /// mf_fg_issue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_fg_issue;
         
         /// <summary>
         /// Li20 control.
@@ -643,76 +1192,76 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li24;
         
         /// <summary>
-        /// Li25 control.
+        /// mf_sales_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li25;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_sales_menu;
         
         /// <summary>
-        /// Li26 control.
+        /// mf_sales control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li26;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_sales;
         
         /// <summary>
-        /// Li27 control.
+        /// mf_sales_inter_division control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li27;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_sales_inter_division;
         
         /// <summary>
-        /// Li28 control.
+        /// mf_export_container control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li28;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_export_container;
         
         /// <summary>
-        /// Li29 control.
+        /// mf_material_pricing control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li29;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_material_pricing;
         
         /// <summary>
-        /// Li30 control.
+        /// mf_export_sales_invoice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li30;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_export_sales_invoice;
         
         /// <summary>
-        /// Li31 control.
+        /// mf_export_shipment_cmo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li31;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_export_shipment_cmo;
         
         /// <summary>
-        /// it control.
+        /// it_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl it;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl it_menu;
         
         /// <summary>
         /// it_asset control.
@@ -740,6 +1289,15 @@ namespace NRCAPPS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl it_asset_items;
+        
+        /// <summary>
+        /// it_asset_items_placement control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl it_asset_items_placement;
         
         /// <summary>
         /// it_asset_items_emp control.
@@ -940,13 +1498,22 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_setting;
         
         /// <summary>
-        /// nrc_apps_vat control.
+        /// nrc_apps_container control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_vat;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_container;
+        
+        /// <summary>
+        /// nrc_apps_currency control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_currency;
         
         /// <summary>
         /// nrc_apps_peyment_type control.
@@ -956,6 +1523,51 @@ namespace NRCAPPS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_peyment_type;
+        
+        /// <summary>
+        /// nrc_apps_peyment_terms control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_peyment_terms;
+        
+        /// <summary>
+        /// nrc_apps_shipping_incoterms control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_shipping_incoterms;
+        
+        /// <summary>
+        /// nrc_apps_shipment_location control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_shipment_location;
+        
+        /// <summary>
+        /// nrc_apps_trading_vessel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_trading_vessel;
+        
+        /// <summary>
+        /// nrc_apps_vat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nrc_apps_vat;
         
         /// <summary>
         /// nrc_data_process control.

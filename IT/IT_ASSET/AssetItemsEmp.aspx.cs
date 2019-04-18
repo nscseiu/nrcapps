@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using QRCoder; 
 using System.Drawing;
-
+using System.Text.RegularExpressions;
 
 
 namespace NRCAPPS.IT.IT_ASSET
@@ -106,7 +106,7 @@ namespace NRCAPPS.IT.IT_ASSET
                          
                         DataTable dtItemID = new DataTable();
                         DataSet di = new DataSet();
-                        string makeItemSQL = " SELECT ITEM_ID, ITEM_NAME || ' - ' || ITEM_TYPE || ' ' || ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_ITEMS WHERE IS_ACTIVE = 'Enable' ORDER BY ITEM_ID ASC";
+                        string makeItemSQL = " SELECT ITEM_ID, ITEM_NAME || ' - ' || ITEM_TYPE || ' ' || ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_ITEMS WHERE IS_ACTIVE = 'Enable' ORDER BY ITEM_NAME ASC";
                         di = ExecuteBySqlString(makeItemSQL);
                         dtItemID = (DataTable)di.Tables[0];
                         DropDownItemID.DataSource = dtItemID;
@@ -139,17 +139,52 @@ namespace NRCAPPS.IT.IT_ASSET
                         DropDownDivisionID.DataBind();
                         DropDownDivisionID.Items.Insert(0, new ListItem("Select  Division", "0"));
 
-                         
+                        DataTable dtLocationID = new DataTable();
+                        DataSet dsl = new DataSet();
+                        string makeLocationSQL = " SELECT * FROM HR_EMP_LOCATIONS WHERE IS_ACTIVE = 'Enable' ORDER BY LOCATION_ID ASC";
+                        dsl = ExecuteBySqlString(makeLocationSQL);
+                        dtLocationID = (DataTable)dsl.Tables[0];
+                        DropDownLocationID.DataSource = dtLocationID;
+                        DropDownLocationID.DataValueField = "LOCATION_ID";
+                        DropDownLocationID.DataTextField = "LOCATION_NAME";
+                        DropDownLocationID.DataBind();
+                        DropDownLocationID.Items.Insert(0, new ListItem("Select  Location", "0"));
+
+                        DropDownLocationChangeFor.DataSource = dtLocationID;
+                        DropDownLocationChangeFor.DataValueField = "LOCATION_ID";
+                        DropDownLocationChangeFor.DataTextField = "LOCATION_NAME";
+                        DropDownLocationChangeFor.DataBind();
+                        DropDownLocationChangeFor.Items.Insert(0, new ListItem("Select  Location", "0"));
+
+                        DropDownChangeDeptLocationID.DataSource = dtLocationID;
+                        DropDownChangeDeptLocationID.DataValueField = "LOCATION_ID";
+                        DropDownChangeDeptLocationID.DataTextField = "LOCATION_NAME";
+                        DropDownChangeDeptLocationID.DataBind();
+                        DropDownChangeDeptLocationID.Items.Insert(0, new ListItem("Select  Location", "0"));
+
+                        DataTable dtPlacementID = new DataTable();
+                        DataSet depl = new DataSet();
+                        string makePlacementSQL = " SELECT * FROM IT_ASSET_ITEMS_PLACEMENT WHERE IS_ACTIVE = 'Enable' ORDER BY PLACEMENT_ID ASC";
+                        depl = ExecuteBySqlString(makePlacementSQL);
+                        dtPlacementID = (DataTable)depl.Tables[0];  
+                        DropDownChangeDeptPlacementID.DataSource = dtPlacementID;
+                        DropDownChangeDeptPlacementID.DataValueField = "PLACEMENT_ID";
+                        DropDownChangeDeptPlacementID.DataTextField = "PLACEMENT_NAME";
+                        DropDownChangeDeptPlacementID.DataBind();
+                        DropDownChangeDeptPlacementID.Items.Insert(0, new ListItem("Select Placement", "0"));
+
                         DropDownItemID.Attributes.Add("disabled", "disabled");
                         DropDownItemIDChange.Attributes.Add("disabled", "disabled");
                         DropDownEmployeeIDChangeFor.Attributes.Add("disabled", "disabled");
                         DropDownItemIDChangeDept.Attributes.Add("disabled", "disabled");
-
-                        TextQrImage.Visible = false; 
+                        DropDownChangeDeptPlacementID.Enabled = false;
+                        DropDownLocationChangeFor.Enabled = false;
+                        DropDownLocationID.Enabled = false;
+                        TextQRPreCode.Enabled = false; 
                         alert_box.Visible = false;
                         alert_box_right.Visible = false;
                         alert_box_right2.Visible = false;
-
+                        ImageBox.Visible = true;
 
                         BtnAdd.Attributes.Add("aria-disabled", "false");
                         BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
@@ -185,47 +220,57 @@ namespace NRCAPPS.IT.IT_ASSET
                     conn.Open();
 
                     int userID = Convert.ToInt32(Session["USER_ID"]);
-                    string TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text;
+                   
                     int EmployeeID = Convert.ToInt32(DropDownEmployeeID.Text);
                     int ItemID     = Convert.ToInt32(DropDownItemID.Text); 
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt"); 
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
 
-                    string code = TextQRCodeAll;
-                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                    QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
-                    System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
-                    imgBarCode.Height = 125;
-                    imgBarCode.Width = 125;
-                    using (Bitmap bitMap = qrCode.GetGraphic(20))
+                    string TextQRCodeAll = "",  ImageUrl = "" ;
+                    if (RadioBtnQrCode.SelectedValue == "QrCodeYes")
                     {
-                        using (MemoryStream ms = new MemoryStream())
+                        TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text;
+                        string code = TextQRCodeAll;
+                        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                        QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
+                        System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
+                        imgBarCode.Height = 125;
+                        imgBarCode.Width = 125;
+                        using (Bitmap bitMap = qrCode.GetGraphic(20))
                         {
-                            bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                            byte[] byteImage = ms.ToArray();
-                            imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                                byte[] byteImage = ms.ToArray();
+                                imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
 
 
-                            bitMap.Save(Server.MapPath("~/IT/IT_ASSET/QRCode/" + code + ".png"));
+                                bitMap.Save(Server.MapPath("~/IT/IT_ASSET/QRCode/" + code + ".png"));
+                            }
+                            plBarCode.Controls.Add(imgBarCode);
                         }
-                        plBarCode.Controls.Add(imgBarCode);
+                           ImageUrl = code+"."+"png";
                     }
-                     string ImageUrl = code+"."+"png";
-
-                     string insert_user = "insert into IT_ASSET_EMP_ITEMS (EMP_ITEMS_ID, EMP_ID, ITEM_ID, IMAGE_QR_CODE, CREATE_DATE, U_USER_ID, IS_ACTIVE) VALUES ( :TextEmpItemsID, :NoEmployeeID, :NoItemID, :TextImageQRCode, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoC_USER_ID, :TextIsActive)";
+                    else {  TextQRCodeAll = ""; ImageUrl = ""; }
+                     
+                    string get_user_id = "select IT_ASSET_EMP_ITEMSID_SEQ.nextval from dual";
+                    cmdi = new OracleCommand(get_user_id, conn);
+                    int newAssetItemID = Int16.Parse(cmdi.ExecuteScalar().ToString());
+                    string insert_user = "insert into IT_ASSET_EMP_ITEMS (EMP_ITEMS_ID, EMP_ID, ITEM_ID, IMAGE_QR_CODE, QR_CODE_ID, LOCATION_ID, CREATE_DATE, U_USER_ID, IS_ACTIVE) VALUES ( :TextEmpItemsID, :NoEmployeeID, :NoItemID, :TextImageQRCode, :TextQrCodeID, :NoLocationID, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoC_USER_ID, :TextIsActive)";
                     cmdi = new OracleCommand(insert_user, conn);
 
-                    OracleParameter[] objPrm = new OracleParameter[7];
-                    objPrm[0] = cmdi.Parameters.Add("TextEmpItemsID", TextQRCodeAll);
-                    objPrm[1] = cmdi.Parameters.Add("NoEmployeeID", EmployeeID);
-                    objPrm[2] = cmdi.Parameters.Add("NoItemID", ItemID);
-                    objPrm[3] = cmdi.Parameters.Add("TextImageQRCode", ImageUrl);
-                    objPrm[4] = cmdi.Parameters.Add("u_date", u_date); 
-                    objPrm[5] = cmdi.Parameters.Add("NoC_USER_ID", userID); 
-                    objPrm[6] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    OracleParameter[] objPrm = new OracleParameter[9];
+                    objPrm[0] = cmdi.Parameters.Add("TextEmpItemsID", newAssetItemID);
+                    objPrm[1] = cmdi.Parameters.Add("TextQrCodeID", TextQRCodeAll);
+                    objPrm[2] = cmdi.Parameters.Add("NoEmployeeID", EmployeeID);
+                    objPrm[3] = cmdi.Parameters.Add("NoItemID", ItemID);
+                    objPrm[4] = cmdi.Parameters.Add("TextImageQRCode", ImageUrl);
+                    objPrm[5] = cmdi.Parameters.Add("NoLocationID", DropDownLocationID.Text);
+                    objPrm[6] = cmdi.Parameters.Add("u_date", u_date); 
+                    objPrm[7] = cmdi.Parameters.Add("NoC_USER_ID", userID); 
+                    objPrm[8] = cmdi.Parameters.Add("TextIsActive", ISActive);
                      
-                    cmdi.ExecuteNonQuery();
-
+                    cmdi.ExecuteNonQuery(); 
                     cmdi.Parameters.Clear();
                     cmdi.Dispose();
                     conn.Close();
@@ -243,6 +288,24 @@ namespace NRCAPPS.IT.IT_ASSET
          //   {
          //       Response.Redirect("~/ParameterError.aspx");
          //   }
+        }
+         
+        public void Redio_QrCodeChanged(object sender, EventArgs e)
+        {
+            if (RadioBtnQrCode.SelectedValue == "QrCodeYes")
+            { 
+                QrCodeBox.Visible = true;
+                TextQRCode.Text = "";
+                CheckQRCode.Text = "";
+                DropDownItemID.Text = "0";
+                TextQRPreCode.Text = "";
+            }
+            else
+            {
+                QrCodeBox.Visible = false;
+                BtnAdd.Attributes.Add("aria-disabled", "true");
+                BtnAdd.Attributes.Add("class", "btn btn-primary active");
+            }
         }
 
         protected void linkSelectClick(object sender, EventArgs e) 
@@ -265,18 +328,31 @@ namespace NRCAPPS.IT.IT_ASSET
              
              for (int i = 0; i < RowCount; i++)
              {
-                 string[] TextQRPreCodeAll = dt.Rows[i]["EMP_ITEMS_ID"].ToString().Split('-');
-                 TextQRPreCode.Text        = TextQRPreCodeAll[0];
-                 TextQRCode.Text           = TextQRPreCodeAll[1];
+                 TextEmpItemsID.Text       = dt.Rows[i]["EMP_ITEMS_ID"].ToString();
+               
                  DropDownItemID.Text       = dt.Rows[i]["ITEM_ID"].ToString();
                  DropDownEmployeeID.Text   = dt.Rows[i]["EMP_ID"].ToString();
+                 DropDownLocationID.Text   = dt.Rows[i]["LOCATION_ID"].ToString();
                  TextQrImage.ImageUrl      = "QRCode/"+ dt.Rows[i]["IMAGE_QR_CODE"].ToString();
                  CheckIsActive.Checked     = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
+                string[] TextQRPreCodeAll = dt.Rows[i]["QR_CODE_ID"].ToString().Split('-');
+                if (TextQRPreCodeAll[0].ToString() == "")
+                {
+                    TextQRPreCode.Text = "";
+                    TextQRCode.Text = "";
+                    RadioBtnQrCode.SelectedValue = "QrCodeNo";
+                    QrCodeBox.Visible = false;
+                }
+                else { TextQRPreCode.Text = TextQRPreCodeAll[0];
+                    TextQRCode.Text = TextQRPreCodeAll[1];}
+                 
              } 
              
              conn.Close(); 
              CheckQRCode.Text = "";
+
              alert_box.Visible = false;
+             BtnAdd.Visible = false;
              BtnAdd.Attributes.Add("aria-disabled", "false");
              BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
              
@@ -298,11 +374,11 @@ namespace NRCAPPS.IT.IT_ASSET
 
         OracleConnection conn = new OracleConnection(strConnString);
         conn.Open(); 
-        string USER_DATA_ID = TextEmpItemsID.Text;
+        string USER_DATA_ID = TextQrCodeID.Text;
 
         if (USER_DATA_ID != "")
         {
-            string makeSQL = " select CASE WHEN AEI.EMP_ID IS NOT NULL  THEN HE.EMP_ID || '-' || HE.EMP_FNAME || ' ' || HE.EMP_LNAME WHEN AEI.EMP_ID IS NULL  THEN HEDE.DEPARTMENT_NAME || ' Department' || ' in ' ||HEDI.DIVISION_NAME || ' Division'  END AS ASSET_USER_NAME, AEI.EMP_ITEMS_ID, AEI.IMAGE_QR_CODE, AEI.IS_ACTIVE, AI.ITEM_NAME, AI.ITEM_TYPE, AI.ITEM_BRAND from IT_ASSET_EMP_ITEMS AEI left join IT_ASSET_ITEMS AI ON AI.ITEM_ID = AEI.ITEM_ID left join HR_EMPLOYEES HE ON HE.EMP_ID = AEI.EMP_ID left join HR_EMP_DEPARTMENTS HEDE ON HEDE.DEPARTMENT_ID = AEI.DEPARTMENT_ID left join HR_EMP_DIVISIONS HEDI ON HEDI.DIVISION_ID = AEI.DIVISION_ID where AEI.EMP_ITEMS_ID = '" + USER_DATA_ID + "' order by AEI.EMP_ITEMS_ID";
+            string makeSQL = " select CASE WHEN AEI.EMP_ID IS NOT NULL  THEN HE.EMP_ID || '-' || HE.EMP_FNAME || ' ' || HE.EMP_LNAME WHEN AEI.EMP_ID IS NULL  THEN HEDE.DEPARTMENT_NAME || ' Department' || ' in ' ||HEDI.DIVISION_NAME || ' Division'  END AS ASSET_USER_NAME, AEI.EMP_ITEMS_ID, AEI.IMAGE_QR_CODE, AEI.IS_ACTIVE, AI.ITEM_NAME, AI.ITEM_TYPE, AI.ITEM_BRAND from IT_ASSET_EMP_ITEMS AEI left join IT_ASSET_ITEMS AI ON AI.ITEM_ID = AEI.ITEM_ID left join HR_EMPLOYEES HE ON HE.EMP_ID = AEI.EMP_ID left join HR_EMP_DEPARTMENTS HEDE ON HEDE.DEPARTMENT_ID = AEI.DEPARTMENT_ID left join HR_EMP_DIVISIONS HEDI ON HEDI.DIVISION_ID = AEI.DIVISION_ID where AEI.QR_CODE_ID = '" + USER_DATA_ID + "' order by AEI.EMP_ITEMS_ID";
 
             cmdl = new OracleCommand(makeSQL);
             oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -356,9 +432,7 @@ namespace NRCAPPS.IT.IT_ASSET
              conn.Open();
 
              int USER_DATA_ID = Convert.ToInt32(DropDownItemID.Text); 
-              
-             DataTable dtUserTypeID = new DataTable();
-             DataSet ds = new DataSet();
+           
              string makeSQL = " select AIC.ITEM_CAT_QR_PRI_CODE  from IT_ASSET_ITEMS AI left join IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID  where AI.ITEM_ID = '" + USER_DATA_ID + "'";
              
              cmdl = new OracleCommand(makeSQL);
@@ -402,7 +476,7 @@ namespace NRCAPPS.IT.IT_ASSET
              int USER_DATA_ID = 0;
              USER_DATA_ID = Convert.ToInt32(DropDownEmployeeID.SelectedValue);
               
-             string makeSQL = " select AEI.EMP_ITEMS_ID, AEI.ITEM_ID, AEI.IMAGE_QR_CODE, AEI.IS_ACTIVE, AI.ITEM_NAME, AI.ITEM_TYPE, AI.ITEM_BRAND from IT_ASSET_EMP_ITEMS AEI left join IT_ASSET_ITEMS AI ON AI.ITEM_ID = AEI.ITEM_ID where AEI.EMP_ID = '" + USER_DATA_ID + "' order by AEI.EMP_ITEMS_ID";
+             string makeSQL = " select AEI.EMP_ITEMS_ID, AEI.ITEM_ID, AEI.IMAGE_QR_CODE, AEI.QR_CODE_ID,  HEL.LOCATION_NAME, AEI.IS_ACTIVE, AI.ITEM_NAME, AI.ITEM_TYPE, AI.ITEM_BRAND from IT_ASSET_EMP_ITEMS AEI left join IT_ASSET_ITEMS AI ON AI.ITEM_ID = AEI.ITEM_ID LEFT JOIN HR_EMP_LOCATIONS HEL ON HEL.LOCATION_ID = AEI.LOCATION_ID  where AEI.EMP_ID = '" + USER_DATA_ID + "' order by AEI.EMP_ITEMS_ID";
                
              cmdl = new OracleCommand(makeSQL);
              oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -424,7 +498,23 @@ namespace NRCAPPS.IT.IT_ASSET
                  
              } 
              DropDownItemID.Attributes.Remove("disabled");
-              
+
+            string makeSrSQL = " select LOCATION_ID from HR_EMPLOYEES  where EMP_ID = '" + USER_DATA_ID + "'";
+
+            cmdl = new OracleCommand(makeSrSQL);
+            oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+            dt = new DataTable();
+            oradata.Fill(dt);
+            RowCount = dt.Rows.Count;
+
+            for (int i = 0; i < RowCount; i++)
+            {
+                DropDownLocationID.Text = dt.Rows[i]["LOCATION_ID"].ToString();
+            }
+
+
+            DropDownLocationID.Enabled = true;
+
              TextQrImage.Visible = false; 
              TextQrImage.ImageUrl = null; 
 
@@ -437,11 +527,9 @@ namespace NRCAPPS.IT.IT_ASSET
          }
 
          public void DisplayEmpChangeItem(object sender, EventArgs e)
-         {
-
+         { 
              OracleConnection conn = new OracleConnection(strConnString);
-             conn.Open();
-            
+             conn.Open(); 
              if (EmpStatus == 1)
              {
                  GridViewItem.UseAccessibleHeader = true;
@@ -472,7 +560,8 @@ namespace NRCAPPS.IT.IT_ASSET
              else {   
                 DropDownItemIDChange.Attributes.Remove("disabled");
                 DropDownEmployeeIDChangeFor.Attributes.Remove("disabled");
-             }
+                DropDownLocationChangeFor.Enabled = true;
+            }
               
              DataTable dtEmpChangeForID = new DataTable();
              DataSet ds = new DataSet();
@@ -493,12 +582,26 @@ namespace NRCAPPS.IT.IT_ASSET
 
          public void EmpChangeItemBtn(object sender, EventArgs e)
          {
-             BtnUpdateChangeItemEmp.Attributes.Add("aria-disabled", "true");
-             BtnUpdateChangeItemEmp.Attributes.Add("class", "btn btn-success active");
-              
-             alert_box.Visible = false;
-             alert_box_right.Visible = false;
-             alert_box_right2.Visible = false;
+            OracleConnection conn = new OracleConnection(strConnString);
+            conn.Open();
+            BtnUpdateChangeItemEmp.Attributes.Add("aria-disabled", "true");
+            BtnUpdateChangeItemEmp.Attributes.Add("class", "btn btn-success active");
+             
+            string makeSrSQL = " select LOCATION_ID from HR_EMPLOYEES  where EMP_ID = '" + DropDownEmployeeIDChangeFor.Text + "'";
+
+            cmdl = new OracleCommand(makeSrSQL);
+            oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+            dt = new DataTable();
+            oradata.Fill(dt);
+            RowCount = dt.Rows.Count;
+
+            for (int i = 0; i < RowCount; i++)
+            {
+            DropDownLocationChangeFor.Text = dt.Rows[i]["LOCATION_ID"].ToString();
+            } 
+            alert_box.Visible = false;
+            alert_box_right.Visible = false;
+            alert_box_right2.Visible = false;
          }
 
          public void DisplayEmpDeptChangeItem(object sender, EventArgs e)
@@ -554,7 +657,7 @@ namespace NRCAPPS.IT.IT_ASSET
          {
              BtnUpdateChangeItemDept.Attributes.Add("aria-disabled", "true");
              BtnUpdateChangeItemDept.Attributes.Add("class", "btn btn-success active");
-              
+             DropDownChangeDeptPlacementID.Enabled = true;
              alert_box.Visible = false;
              alert_box_right.Visible = false;
              alert_box_right2.Visible = false;
@@ -567,22 +670,69 @@ namespace NRCAPPS.IT.IT_ASSET
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
                 int userID = Convert.ToInt32(Session["USER_ID"]); 
-                string TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text;
+                string EmpItemsID = TextEmpItemsID.Text;  
                 int EmployeeID = Convert.ToInt32(DropDownEmployeeID.Text);
                 int ItemID = Convert.ToInt32(DropDownItemID.Text);
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
-                  
-                string update_user = "update  IT_ASSET_EMP_ITEMS  set  EMP_ID = :NoEmployeeID, ITEM_ID = :NoItemID,  UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where EMP_ITEMS_ID = :TextEmpItemsID ";
+
+                string makeSrSQL = " select IMAGE_QR_CODE from IT_ASSET_EMP_ITEMS  where EMP_ITEMS_ID = '" + TextEmpItemsID.Text + "'"; 
+                cmdl = new OracleCommand(makeSrSQL);
+                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                dt = new DataTable();
+                oradata.Fill(dt);
+                RowCount = dt.Rows.Count;
+                string ImageOld = "";
+                for (int i = 0; i < RowCount; i++)
+                {
+                   ImageOld = dt.Rows[i]["IMAGE_QR_CODE"].ToString();
+                } 
+                string filePath = Server.MapPath("~/IT/IT_ASSET/QRCode/" + ImageOld);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                string TextQRCodeAll = "", ImageUrl = "";
+                if (RadioBtnQrCode.SelectedValue == "QrCodeYes")
+                {
+                    TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text;
+                    string code = TextQRCodeAll;
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
+                    System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
+                    imgBarCode.Height = 125;
+                    imgBarCode.Width = 125;
+                    using (Bitmap bitMap = qrCode.GetGraphic(20))
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                            byte[] byteImage = ms.ToArray();
+                            imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
+
+
+                            bitMap.Save(Server.MapPath("~/IT/IT_ASSET/QRCode/" + code + ".png"));
+                        }
+                      //  plBarCode.Controls.Add(imgBarCode);
+                    }
+                    ImageUrl = code + "." + "png";
+                }
+                else { TextQRCodeAll = ""; ImageUrl = ""; } 
+
+                string update_user = "update  IT_ASSET_EMP_ITEMS  set  EMP_ID = :NoEmployeeID, ITEM_ID = :NoItemID,  IMAGE_QR_CODE = :NoImageQrCode, QR_CODE_ID =:TextQrCodeID, LOCATION_ID = :NoLocationID,  UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where EMP_ITEMS_ID = :TextEmpItemsID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[6];
+                OracleParameter[] objPrm = new OracleParameter[9];
                 objPrm[0] = cmdi.Parameters.Add("NoEmployeeID", EmployeeID);
                 objPrm[1] = cmdi.Parameters.Add("NoItemID", ItemID); 
-                objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[3] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[4] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                objPrm[5] = cmdi.Parameters.Add("TextEmpItemsID", TextQRCodeAll);
+                objPrm[2] = cmdi.Parameters.Add("NoImageQrCode", ImageUrl);
+                objPrm[3] = cmdi.Parameters.Add("TextQrCodeID", TextQRCodeAll);
+                objPrm[4] = cmdi.Parameters.Add("NoLocationID", DropDownLocationID.Text);
+                objPrm[5] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[6] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[7] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                objPrm[8] = cmdi.Parameters.Add("TextEmpItemsID", EmpItemsID);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -592,7 +742,8 @@ namespace NRCAPPS.IT.IT_ASSET
                 alert_box.Visible = true;
                 alert_box.Controls.Add(new LiteralControl("IT Asset Items Update Successfully"));
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
-                clearText(); 
+                clearText();
+                ImageBox.Visible = false;
             }
                 else { 
                     Response.Redirect("~/PagePermissionError.aspx");
@@ -608,16 +759,16 @@ namespace NRCAPPS.IT.IT_ASSET
                 int userID = Convert.ToInt32(Session["USER_ID"]);  
                 int EmployeeIDChangeFor = Convert.ToInt32(DropDownEmployeeIDChangeFor.Text); 
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
-
-
-                string update_user = "update  IT_ASSET_EMP_ITEMS  set  EMP_ID = :NoEmployeeIDChangeFor, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID where EMP_ITEMS_ID = :TextEmpItemsID ";
+               
+                string update_user = "update  IT_ASSET_EMP_ITEMS  set  EMP_ID = :NoEmployeeIDChangeFor, LOCATION_ID = :NoLocationID, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID where EMP_ITEMS_ID = :TextEmpItemsID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[4];
+                OracleParameter[] objPrm = new OracleParameter[5];
                 objPrm[0] = cmdi.Parameters.Add("NoEmployeeIDChangeFor", EmployeeIDChangeFor); 
                 objPrm[1] = cmdi.Parameters.Add("u_date", u_date);
                 objPrm[2] = cmdi.Parameters.Add("NoC_USER_ID", userID);
                 objPrm[3] = cmdi.Parameters.Add("TextEmpItemsID", DropDownItemIDChange.Text);
+                objPrm[4] = cmdi.Parameters.Add("NoLocationID", DropDownLocationChangeFor.Text);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -652,15 +803,17 @@ namespace NRCAPPS.IT.IT_ASSET
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
 
-                string update_user = "update  IT_ASSET_EMP_ITEMS  set  EMP_ID = NULL, DEPARTMENT_ID = :NoDepartmentID, DIVISION_ID = :NoDivisionID, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID where EMP_ITEMS_ID = :TextEmpItemsID ";
+                string update_user = "update  IT_ASSET_EMP_ITEMS  set  EMP_ID = NULL, DEPARTMENT_ID = :NoDepartmentID, DIVISION_ID = :NoDivisionID, LOCATION_ID = :NoLocationID, PLACEMENT_ID =:NoPlacementID, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID where EMP_ITEMS_ID = :TextEmpItemsID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[5]; 
+                OracleParameter[] objPrm = new OracleParameter[7]; 
                 objPrm[0] = cmdi.Parameters.Add("NoDepartmentID", DropDownDepartmentID.Text);
                 objPrm[1] = cmdi.Parameters.Add("NoDivisionID", DropDownDivisionID.Text); 
-                objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[3] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[4] = cmdi.Parameters.Add("TextEmpItemsID", EmpItemsID);
+                objPrm[2] = cmdi.Parameters.Add("NoLocationID", DropDownChangeDeptLocationID.Text); 
+                objPrm[3] = cmdi.Parameters.Add("NoPlacementID", DropDownChangeDeptPlacementID.Text); 
+                objPrm[4] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[5] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[6] = cmdi.Parameters.Add("TextEmpItemsID", EmpItemsID);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -693,7 +846,7 @@ namespace NRCAPPS.IT.IT_ASSET
                 conn.Open();
 
                 string TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text; 
-                string delete_user_page = " delete from IT_ASSET_EMP_ITEMS where EMP_ITEMS_ID  = '" + TextQRCodeAll + "'";
+                string delete_user_page = " delete from IT_ASSET_EMP_ITEMS where EMP_ITEMS_ID  = '" + TextEmpItemsID.Text + "'";
 
                 cmdi = new OracleCommand(delete_user_page, conn);
             
@@ -778,7 +931,7 @@ namespace NRCAPPS.IT.IT_ASSET
         }
         public void clearTextFieldSearch(object sender, EventArgs e)
         {
-            TextEmpItemsID.Text = "";
+            TextQrCodeID.Text = "";
             CheckItemSearch.Text = "";
         }
         public void clearTextChangeField(object sender, EventArgs e)
@@ -800,7 +953,8 @@ namespace NRCAPPS.IT.IT_ASSET
             TextQRPreCode.Text = "";
             CheckQRCode.Text = "";
             DropDownEmployeeID.Text = "0";
-            DropDownItemID.Text = "0"; 
+            DropDownItemID.Text = "0";
+            DropDownLocationID.Text = "0";
             BtnAdd.Attributes.Add("aria-disabled", "false");
             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
             GridViewItem.DataBind();
@@ -824,7 +978,7 @@ namespace NRCAPPS.IT.IT_ASSET
                 DataTable ds = new DataTable();
                 ds = null;
                 GridViewItem.DataSource = ds;
-                GridViewItem.DataBind();
+           //     GridViewItem.DataBind();
 
              //   GridViewItem.DataBind();
              //   GridViewItem.UseAccessibleHeader = true;
@@ -872,67 +1026,78 @@ namespace NRCAPPS.IT.IT_ASSET
          
         public void TextQRCode_TextChanged(object sender, EventArgs e)
         {
+            string MatchEmpIDPattern = "^([0-9]{6})$";
+
             if (!string.IsNullOrEmpty(TextQRCode.Text))
             {
-                alert_box.Visible = false; 
-                if (EmpStatus == 1) { 
-                    GridViewItem.UseAccessibleHeader = true;
-                    GridViewItem.HeaderRow.TableSection = TableRowSection.TableHeader; 
-                }
-                
-                OracleConnection conn = new OracleConnection(strConnString);
-                conn.Open();
-                OracleCommand cmd = new OracleCommand();
-                cmd.Connection = conn;
-                 
-                string TextQRCodeAll = TextQRPreCode.Text+"-"+TextQRCode.Text;
-
-                cmd.CommandText = "select * from IT_ASSET_EMP_ITEMS where EMP_ITEMS_ID = '" + TextQRCodeAll + "'";
-                cmd.CommandType = CommandType.Text;
-
-                OracleDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                if (Regex.IsMatch(TextQRCode.Text, MatchEmpIDPattern))
                 {
-                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> Item name is already exist</label>";
+                    alert_box.Visible = false;
+                    if (EmpStatus == 1)
+                    {
+                        GridViewItem.UseAccessibleHeader = true;
+                        GridViewItem.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    }
+
+                    OracleConnection conn = new OracleConnection(strConnString);
+                    conn.Open();
+                    OracleCommand cmd = new OracleCommand();
+                    cmd.Connection = conn;
+
+                    string TextQRCodeAll = TextQRPreCode.Text + "-" + TextQRCode.Text;
+
+                    cmd.CommandText = "select * from IT_ASSET_EMP_ITEMS where QR_CODE_ID = '" + TextQRCodeAll + "'";
+                    cmd.CommandType = CommandType.Text;
+
+                    OracleDataReader dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        CheckQRCode.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> QR Code is already exist</label>";
+                        CheckQRCode.ForeColor = System.Drawing.Color.Red;
+                        TextQRCode.Focus();
+                        BtnAdd.Attributes.Add("aria-disabled", "false");
+                        BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
+
+                    }
+                    else
+                    {
+                        CheckQRCode.Text = "<label class='control-label'><i class='fa fa fa-check'></i> QR Code is available</label>";
+                        CheckQRCode.ForeColor = System.Drawing.Color.Green;
+
+                        BtnAdd.Attributes.Add("aria-disabled", "true");
+                        BtnAdd.Attributes.Add("class", "btn btn-primary active");
+
+                        string code = TextQRPreCode.Text + '-' + TextQRCode.Text;
+                        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                        QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
+                        System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
+                        imgBarCode.Height = 125;
+                        imgBarCode.Width = 125;
+                        using (Bitmap bitMap = qrCode.GetGraphic(20))
+                        {
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                                byte[] byteImage = ms.ToArray();
+                                imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
+
+                                //  bitMap.Save(Server.MapPath("~/ASSET/QRCode/" + code + ".png"));
+                            }
+                            plBarCode.Controls.Add(imgBarCode);
+                        }
+                        // PlaceHolder1.Text = code + "." + "png";
+                        TextQrImage.Visible = false;
+                        TextQrImage.ImageUrl = null;
+                    }
+                }
+                else {
+                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> QR Code is must have 6 digit.</label>";
                     CheckQRCode.ForeColor = System.Drawing.Color.Red;
                     TextQRCode.Focus();
-                    BtnAdd.Attributes.Add("aria-disabled", "false");
-                    BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
-   
-                }
-                else
-                {
-                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa fa-check'></i> Item name is available</label>";
-                    CheckQRCode.ForeColor = System.Drawing.Color.Green;
-                   
-                    BtnAdd.Attributes.Add("aria-disabled", "true");
-                    BtnAdd.Attributes.Add("class", "btn btn-primary active");
-
-                    string code = TextQRPreCode.Text + '-' + TextQRCode.Text;
-                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                    QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
-                    System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
-                    imgBarCode.Height = 125;
-                    imgBarCode.Width = 125;
-                    using (Bitmap bitMap = qrCode.GetGraphic(20))
-                    {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                            byte[] byteImage = ms.ToArray();
-                            imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
-                             
-                          //  bitMap.Save(Server.MapPath("~/ASSET/QRCode/" + code + ".png"));
-                        }
-                        plBarCode.Controls.Add(imgBarCode);
-                    }
-                   // PlaceHolder1.Text = code + "." + "png";
-                    TextQrImage.Visible = false;
-                    TextQrImage.ImageUrl = null; 
                 }
             }
             else {
-                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> Item name is not blank</label>";
+                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> QR Code is not blank</label>";
                     CheckQRCode.ForeColor = System.Drawing.Color.Red;
                     TextQRCode.Focus();
             }

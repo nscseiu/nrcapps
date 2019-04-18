@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Configuration;
 using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
 using System.Data.OracleClient;
 using System.IO; 
-using System.Collections.Generic; 
 using System.Data.SqlClient;
-
 
 
 namespace NRCAPPS.NRC
@@ -65,7 +56,7 @@ namespace NRCAPPS.NRC
                         DataTable dtUserID = new DataTable();
                         DataSet dsu = new DataSet();
                         string makeUserSQL = " select NU.USER_ID, NU.EMP_ID || ' - ' || HE.EMP_FNAME || ' ' || HE.EMP_LNAME || ' - ' || NUR.USER_ROLE_NAME AS EMP_NAME, NUR.USER_ROLE_NAME, NUR.UR_BG_COLOR from NRC_USER NU left join HR_EMPLOYEES HE ON HE.EMP_ID = NU.EMP_ID left join NRC_USER_ROLE  NUR ON NUR.USER_ROLE_ID =  NU.USER_ROLE_ID WHERE NU.IS_ACTIVE = 'Enable' ORDER BY  NU.EMP_ID ASC";
-                        dsu = ExecuteBySqlStringUser(makeUserSQL);
+                        dsu = ExecuteBySqlString(makeUserSQL);
                         dtUserID = (DataTable)dsu.Tables[0];
                         DropDownUserID.DataSource = dtUserID;
                         DropDownUserID.DataValueField = "USER_ID";
@@ -76,7 +67,7 @@ namespace NRCAPPS.NRC
                         DataTable dtMenuID = new DataTable();
                         DataSet dsm = new DataSet();
                         string makeUserSQL2 = " SELECT * FROM NRC_MAIN_MENU WHERE IS_ACTIVE = 'Enable' ORDER BY  MENU_ORDER ASC";
-                        dsm = ExecuteBySqlStringUser(makeUserSQL2);
+                        dsm = ExecuteBySqlString(makeUserSQL2);
                         dtMenuID = (DataTable)dsm.Tables[0];
                         DropDownMainMenu.DataSource = dtMenuID;
                         DropDownMainMenu.DataValueField = "MENU_ID";
@@ -117,11 +108,11 @@ namespace NRCAPPS.NRC
             string makeSQL = "";
             if (txtSearchUser.Text == "")
             {
-                makeSQL = " SELECT NU.USER_ID, NMM.MENU_ID,NMM.MENU_NAME, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_MAIN_MENU NMM ON NMM.MENU_ID = NUP.MENU_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "' WHERE NU.USER_ID = '" + USER_DATA_ID + "' AND NMM.MENU_ID = '" + USER_DATA_ID2 + "'  ORDER BY NUPP.USER_PAGE_ID desc, NUP.PAGE_NAME  asc ";
+                makeSQL = " SELECT NU.USER_ID, NMM.MENU_ID,NMM.MENU_NAME, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_MAIN_MENU NMM ON NMM.MENU_ID = NUP.MENU_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "' WHERE NU.USER_ID = '" + USER_DATA_ID + "' AND NMM.MENU_ID = '" + USER_DATA_ID2 + "'  ORDER BY NUPP.USER_PAGE_ID desc, NUP.PAGE_NAME  asc ";
             }
             else
             {
-                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "'    AND NURP.USER_PAGE_ID like '" + txtSearchUser.Text + "%' or NUP.PAGE_NAME like '" + txtSearchUser.Text + "%'  ORDER BY NUPP.USER_PAGE_ID ";
+                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "'    AND NURP.USER_PAGE_ID like '" + txtSearchUser.Text + "%' or NUP.PAGE_NAME like '" + txtSearchUser.Text + "%'  ORDER BY NUPP.USER_PAGE_ID ";
             }
 
             cmdl = new OracleCommand(makeSQL);
@@ -171,11 +162,13 @@ namespace NRCAPPS.NRC
                        string IsViewActive = chkRowIsViewActive.Checked ? "Enable" : "Disable";
                        CheckBox chkRowIsReportActive = (gridRow.Cells[8].FindControl("IsReportActive") as CheckBox);
                        string IsReportActive = chkRowIsReportActive.Checked ? "Enable" : "Disable";
-                     
-                        string insert_user = "insert into  NRC_USER_PAGE_PERMISSION (USER_ID, USER_PAGE_ID, IS_PAGE_ACTIVE, IS_ADD_ACTIVE, IS_EDIT_ACTIVE, IS_DELETE_ACTIVE, IS_VIEW_ACTIVE, IS_REPORT_ACTIVE) values ( :NoUserID, :NoUserPageID, :NoIsPageActive, :NoIsAddActive, :NoIsEditActive , :NoIsDelActive, :NoIsViewActive, :NoIsReportActive)";
+                       CheckBox chkRowIsPrintActive = (gridRow.Cells[8].FindControl("IsPrintActive") as CheckBox);
+                       string IsPrintActive = chkRowIsPrintActive.Checked ? "Enable" : "Disable";
+
+                        string insert_user = "insert into  NRC_USER_PAGE_PERMISSION (USER_ID, USER_PAGE_ID, IS_PAGE_ACTIVE, IS_ADD_ACTIVE, IS_EDIT_ACTIVE, IS_DELETE_ACTIVE, IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE) values ( :NoUserID, :NoUserPageID, :NoIsPageActive, :NoIsAddActive, :NoIsEditActive , :NoIsDelActive, :NoIsViewActive, :NoIsReportActive, :NoIsPrintActive)";
                         cmdi = new OracleCommand(insert_user, conn);
 
-                        OracleParameter[] objPrm = new OracleParameter[8];
+                        OracleParameter[] objPrm = new OracleParameter[9];
                         objPrm[0] = cmdi.Parameters.Add("NoUserID", Convert.ToInt32(gridRow.Cells[0].Text));
                         objPrm[1] = cmdi.Parameters.Add("NoUserPageID", Convert.ToInt32(gridRow.Cells[1].Text));
                         objPrm[2] = cmdi.Parameters.Add("NoIsPageActive", IsPageActive);
@@ -184,7 +177,7 @@ namespace NRCAPPS.NRC
                         objPrm[5] = cmdi.Parameters.Add("NoIsDelActive", IsDelActive);
                         objPrm[6] = cmdi.Parameters.Add("NoIsViewActive", IsViewActive);
                         objPrm[7] = cmdi.Parameters.Add("NoIsReportActive", IsReportActive);
-
+                        objPrm[8] = cmdi.Parameters.Add("NoIsPrintActive", IsPrintActive);
                         cmdi.ExecuteNonQuery();  
                      
                   }
@@ -231,7 +224,7 @@ namespace NRCAPPS.NRC
 
         }
 
-        public DataSet ExecuteBySqlStringUserType(string sqlString)
+        public DataSet ExecuteBySqlString(string sqlString)
         {
             string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             DataSet ds = new DataSet();
@@ -264,68 +257,8 @@ namespace NRCAPPS.NRC
         }
 
 
-        public DataSet ExecuteBySqlStringPages(string sqlString)
-        {
-            string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            DataSet ds = new DataSet();
-            OracleConnection conn = new OracleConnection(connStr);
-            try
-            {
-                conn.Open();
-                OracleCommand cmd = new OracleCommand(sqlString, conn);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = sqlString;
-                bool mustCloseConnection = false;
-                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
-                {
-                    da.Fill(ds);
-                    cmd.Parameters.Clear();
-                    if (mustCloseConnection)
-                    {
-                        conn.Close();
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return ds;
-        }
+       
 
-        public DataSet ExecuteBySqlStringUser(string sqlString)
-        {
-            string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            DataSet ds = new DataSet();
-            OracleConnection conn = new OracleConnection(connStr);
-            try
-            {
-                conn.Open();
-                OracleCommand cmd = new OracleCommand(sqlString, conn);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = sqlString;
-                bool mustCloseConnection = false;
-                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
-                {
-                    da.Fill(ds);
-                    cmd.Parameters.Clear();
-                    if (mustCloseConnection)
-                    {
-                        conn.Close();
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return ds;
-        } 
+      
    }
 }

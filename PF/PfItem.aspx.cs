@@ -83,8 +83,8 @@ namespace NRCAPPS.PF
 
         public void BtnAdd_Click(object sender, EventArgs e)
         {
-          //  try
-         //   {
+            try
+             {
                 if (IS_ADD_ACTIVE == "Enable")
                 {
                     OracleConnection conn = new OracleConnection(strConnString);
@@ -99,16 +99,18 @@ namespace NRCAPPS.PF
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into PF_ITEM (ITEM_ID, ITEM_NAME, ITEM_CODE,  IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoItemID, :TextItemName, :TextItemCode,  :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into PF_ITEM (ITEM_ID, ITEM_NAME, ITEM_ARABIC_NAME, ITEM_DESCRIPTION, ITEM_CODE,  IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoItemID, :TextItemName, :TextItemArabicName, :TextItemDescription, :TextItemCode,  :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
-                    OracleParameter[] objPrm = new OracleParameter[6];
+                    OracleParameter[] objPrm = new OracleParameter[8];
                     objPrm[0] = cmdi.Parameters.Add("NoItemID", newItemID);
                     objPrm[1] = cmdi.Parameters.Add("TextItemName", TextItemName.Text);
-                    objPrm[2] = cmdi.Parameters.Add("TextItemCode", ItemCode); 
-                    objPrm[3] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPrm[4] = cmdi.Parameters.Add("u_date", u_date);
-                    objPrm[5] = cmdi.Parameters.Add("NoCuserID", userID);
+                    objPrm[2] = cmdi.Parameters.Add("TextItemArabicName", TextItemArabicName.Text);
+                    objPrm[3] = cmdi.Parameters.Add("TextItemDescription", TextItemDescription.Text);
+                    objPrm[4] = cmdi.Parameters.Add("TextItemCode", ItemCode); 
+                    objPrm[5] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPrm[6] = cmdi.Parameters.Add("u_date", u_date);
+                    objPrm[7] = cmdi.Parameters.Add("NoCuserID", userID);
 
 
                     cmdi.ExecuteNonQuery();
@@ -125,11 +127,11 @@ namespace NRCAPPS.PF
                 else { 
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
-        //    }
-        //    catch
-         //   {
-         //       Response.Redirect("~/ParameterError.aspx");
-          //  }
+             }
+             catch
+             {
+               Response.Redirect("~/ParameterError.aspx");
+            }
         }
 
         protected void linkSelectClick(object sender, EventArgs e) 
@@ -155,6 +157,8 @@ namespace NRCAPPS.PF
              {
                  TextItemID.Text = dt.Rows[i]["ITEM_ID"].ToString();
                  TextItemName.Text = dt.Rows[i]["ITEM_NAME"].ToString();
+                 TextItemArabicName.Text = dt.Rows[i]["ITEM_ARABIC_NAME"].ToString();
+                 TextItemDescription.Text = dt.Rows[i]["ITEM_DESCRIPTION"].ToString();
                  TextItemCode.Text = dt.Rows[i]["ITEM_CODE"].ToString(); 
                  CheckIsActive.Checked   = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
                          
@@ -175,9 +179,7 @@ namespace NRCAPPS.PF
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-
-                DataTable dtUserTypeID = new DataTable();
-                DataSet ds = new DataSet();
+                 
 
                 string makeSQL = "";
                 if (txtSearchUserRole.Text == "")
@@ -232,16 +234,18 @@ namespace NRCAPPS.PF
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                string update_user = "update  PF_ITEM  set ITEM_NAME = :TextItemName, ITEM_CODE = :TextItemCode,  UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where ITEM_ID = :NoItemID ";
+                string update_user = "update  PF_ITEM  set ITEM_NAME = :TextItemName,  ITEM_ARABIC_NAME = :TextItemArabicName, ITEM_DESCRIPTION = :TextItemDescription, ITEM_CODE = :TextItemCode,  UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where ITEM_ID = :NoItemID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[6];
+                OracleParameter[] objPrm = new OracleParameter[8];
                 objPrm[0] = cmdi.Parameters.Add("TextItemName", TextItemName.Text);
-                objPrm[1] = cmdi.Parameters.Add("TextItemCode", TextItemCode.Text); 
-                objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[3] = cmdi.Parameters.Add("NoItemID", USER_DATA_ID);
-                objPrm[4] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[5] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                objPrm[1] = cmdi.Parameters.Add("TextItemArabicName", TextItemArabicName.Text);
+                objPrm[2] = cmdi.Parameters.Add("TextItemDescription", TextItemDescription.Text);
+                objPrm[3] = cmdi.Parameters.Add("TextItemCode", TextItemCode.Text); 
+                objPrm[4] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[5] = cmdi.Parameters.Add("NoItemID", USER_DATA_ID);
+                objPrm[6] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[7] = cmdi.Parameters.Add("TextIsActive", ISActive);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -302,6 +306,8 @@ namespace NRCAPPS.PF
         {
             TextItemID.Text = "";
             TextItemName.Text = "";
+            TextItemArabicName.Text = "";
+            TextItemDescription.Text = "";
             TextItemCode.Text = ""; 
             CheckItemName.Text = ""; 
             CheckItemCode.Text = ""; 
@@ -314,6 +320,8 @@ namespace NRCAPPS.PF
         {
             TextItemID.Text = "";
             TextItemName.Text = "";
+            TextItemArabicName.Text = "";
+            TextItemDescription.Text = "";
             TextItemCode.Text = ""; 
             CheckItemName.Text = "";
             CheckItemCode.Text = ""; 
@@ -322,37 +330,7 @@ namespace NRCAPPS.PF
 
         }
 
-        public DataSet ExecuteBySqlStringUserType(string sqlString)
-        {
-            string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            DataSet ds = new DataSet();
-            OracleConnection conn = new OracleConnection(connStr);
-            try
-            {
-                conn.Open();
-                OracleCommand cmd = new OracleCommand(sqlString, conn);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = sqlString;
-                bool mustCloseConnection = false;
-                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
-                {
-                    da.Fill(ds);
-                    cmd.Parameters.Clear();
-                    if (mustCloseConnection)
-                    {
-                        conn.Close();
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return ds;
-        }
+      
 
         public void TextItemName_TextChanged(object sender, EventArgs e)
         {
@@ -433,9 +411,39 @@ namespace NRCAPPS.PF
                     TextItemCode.Focus();
             }
             
-        } 
+        }
 
+        public DataSet ExecuteBySqlString(string sqlString)
+        {
+            string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            DataSet ds = new DataSet();
+            OracleConnection conn = new OracleConnection(connStr);
+            try
+            {
+                conn.Open();
+                OracleCommand cmd = new OracleCommand(sqlString, conn);
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = sqlString;
+                bool mustCloseConnection = false;
+                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+                {
+                    da.Fill(ds);
+                    cmd.Parameters.Clear();
+                    if (mustCloseConnection)
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return ds;
+        }
 
-
-   }
+    }
 }

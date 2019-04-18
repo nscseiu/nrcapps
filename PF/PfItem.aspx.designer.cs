@@ -58,6 +58,24 @@ namespace NRCAPPS.PF {
         protected global::System.Web.UI.WebControls.Label CheckItemName;
         
         /// <summary>
+        /// TextItemArabicName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextItemArabicName;
+        
+        /// <summary>
+        /// TextItemDescription control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextItemDescription;
+        
+        /// <summary>
         /// TextItemCode control.
         /// </summary>
         /// <remarks>

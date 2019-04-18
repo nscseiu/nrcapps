@@ -48,11 +48,21 @@
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-  <script src="plugins/Highcharts-6.0.7/code/highcharts.js" type="text/javascript"></script>
-  <script src="plugins/Highcharts-6.0.7/code/highcharts.src.js" type="text/javascript"></script>
-  <script src="plugins/Highcharts-6.0.7/code/modules/data.src.js" type="text/javascript"></script>
-  <script src="plugins/Highcharts-6.0.7/code/modules/exporting.js" type="text/javascript"></script>
+  <![endif]--> 
+  <script src='<%= ResolveUrl("~/plugins/Highcharts-6.0.7/code/highcharts.js")%>' type="text/javascript"></script> 
+  <script src='<%= ResolveUrl("~/plugins/Highcharts-6.0.7/code/modules/data.src.js") %>' type="text/javascript"></script>
+  <script src='<%= ResolveUrl("~/plugins/Highcharts-6.0.7/code/modules/exporting.js") %>' type="text/javascript"></script>
+
+<!-- jQuery 2.2.3 --> 
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/jQuery/jquery-3.1.1.min.js") %>'></script>
+<!-- jQuery UI 1.11.4 -->
+<script type="text/javascript" src='<%= ResolveUrl("~/plugins/jQuery/jquery-ui.min.js") %>'></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.6 -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
      
  <asp:ContentPlaceHolder ID="HeadContent" runat="server">
    </asp:ContentPlaceHolder>
@@ -82,16 +92,16 @@
            
           
           <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
+          <!--li class="dropdown notifications-menu">
             <a href="#" style="padding-top:18px; padding-bottom:18px " class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning"><asp:Label ID="TB_dependency" runat="server"></asp:Label></span>
+              <span class="label label-warning">10</span>
             </a>
             <ul class="dropdown-menu">
               <li class="header">You have 10 notifications</li>
               <li>
                 <!-- inner menu: contains the actual data -->
-                <ul class="menu">
+                <!--ul class="menu">
                   <li>
                     <a href="#">
                       <i class="fa fa-users text-aqua"></i> 5 new members joined today
@@ -263,12 +273,7 @@
       <!-- search form -->
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group sidebar-form">
-         <script type = "text/javascript">
-             $(function () {
-                // alert("sami..");
-                 $(".Validators").Float();
-             });
-       </script>
+         
           <asp:TextBox type="text" ID="textSearch"  runat="server" class="form-control" placeholder="Search..."></asp:TextBox>
            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server"  ControlToValidate="textSearch" Display="Dynamic" CssClass="Validators"
                           ErrorMessage="" SetFocusOnError="True"  ValidationGroup='valGroupSearch'></asp:RequiredFieldValidator> 
@@ -290,18 +295,71 @@
         </li> 
           <% if (Session["NRC_DIV_SHORT_NAME"].ToString() == "CO" || Session["NRC_DIV_SHORT_NAME"].ToString() == "WP")
              { %>   
-         <li class="treeview" id="wastepaper" runat="server">
+         <li class="treeview" id="wp_menu" runat="server">
           <a href="#">
             <i class="fa fa-sticky-note-o"></i> <span>Waste Paper</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+            <ul class="treeview-menu">  
+            <li id="wp_category" runat="server"><a href="<%= ResolveUrl("~/WP/WpCategory.aspx") %>"><i class="fa fa-circle-o"></i> Category</a></li>     
+            <li id="wp_item" runat="server"><a href="<%= ResolveUrl("~/WP/WpItem.aspx") %>"><i class="fa fa-circle-o"></i> Item</a></li>   
+            <li id="wp_item_sales" runat="server"><a href="<%= ResolveUrl("~/WP/WpItemSales.aspx") %>"><i class="fa fa-circle-o"></i> Item (Sales Overseas)</a></li> 
+            <li id="wp_item_sales_ws" runat="server"><a href="<%= ResolveUrl("~/WP/WpItemSalesWs.aspx") %>"><i class="fa fa-circle-o"></i> Item (Weight Slip)</a></li> 
+            <li id="wp_driver" runat="server"><a href="<%= ResolveUrl("~/WP/WpDriver.aspx") %>"><i class="fa fa-circle-o"></i> Driver</a></li>  
+            <li id="wp_collection_for" runat="server"><a href="<%= ResolveUrl("~/WP/WpCollectionFor.aspx") %>"><i class="fa fa-circle-o"></i> Collection For</a></li> 
+            <li id="wp_supervisor" runat="server"><a href="<%= ResolveUrl("~/WP/WpSupervisor.aspx") %>"><i class="fa fa-circle-o"></i> Procurement Supervisor</a></li> 
+            <li id="wp_supplier_cat" runat="server"><a href="<%= ResolveUrl("~/WP/WpSupplierCat.aspx") %>"><i class="fa fa-circle-o"></i> Supplier Category</a></li> 
+            <li id="wp_party" runat="server"><a href="<%= ResolveUrl("~/WP/WpParty.aspx") %>"><i class="fa fa-circle-o"></i> Party (Supplier & Customer)</a></li> 
+            <li id="wp_purchase_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Purchase
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">  
+                <li id="wp_purchase" runat="server"><a href="<%= ResolveUrl("~/WP/WpPurchase.aspx") %>"><i class="fa fa-circle-o"></i> Purchase</a></li>  
+                <li id="wp_purchase_vat_adjustment" runat="server"><a href="<%= ResolveUrl("~/WP/WpPurchaseVatAdjustment.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Vat Adjustment</a></li>                  
+                <li id="wp_purchase_claim" runat="server"><a href="<%= ResolveUrl("~/WP/WpPurchaseClaim.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim</a></li>   
+                <li id="wp_purchase_claim_approve" runat="server"><a href="<%= ResolveUrl("~/WP/WpPurchaseClaimApprove.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim Approve</a></li>               
+                </ul>
+            </li>   
+             <li id="wp_inventory_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Inventory
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">
+                    <li id="wp_material_transaction" runat="server"><a href="<%= ResolveUrl("~/WP/WpMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i> Material Transaction</a></li>
+                    <li id="wp_daily_purchase_sales" runat="server"><a href="<%= ResolveUrl("~/WP/PfDailyPurSales.aspx") %>"><i class="fa fa-circle-o"></i> Daily Purchase & Sales</a></li>
+                    <li id="wp_inventory_rm" runat="server"><a href="<%= ResolveUrl("~/WP/WpInventoryRm.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for RM</a></li>          
+                    <li id="wp_inventory_monthly_state" runat="server"><a href="<%= ResolveUrl("~/WP/PfInventoryMonthlyStatement.aspx") %>"><i class="fa fa-circle-o"></i> Inven. Monthly Statement</a></li>        
+                </ul>
+            </li>   
+             <li id="wp_sales_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Sales (Overseas & Local)
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">  
+                       <li id="wp_sales" runat="server"><a href="<%= ResolveUrl("~/WP/WpSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Local)</a></li>  
+                       <li id="wp_sales_inter_division" runat="server"><a href="<%= ResolveUrl("~/WP/WpSalesInterDivision.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Inter Division)</a></li>  
+                       <li id="wp_export_container" runat="server"><a href="<%= ResolveUrl("~/WP/WpExpContainer.aspx") %>"><i class="fa fa-circle-o"></i> Weight Slip & Container</a></li>  
+                       <li id="wp_material_pricing" runat="server"><a href="<%= ResolveUrl("~/WP/WpExpMaterialPricing.aspx") %>"><i class="fa fa-circle-o"></i> Material Pricing</a></li>
+                       <li id="wp_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/WP/WpExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i> Sales Invoice</a></li> 
+                       <li id="wp_export_shipment_cmo" runat="server"><a href="<%= ResolveUrl("~/WP/WpExpShipmentCmo.aspx") %>"><i class="fa fa-circle-o"></i> Shipment (CMO)</a></li> 
+                 </ul>
+            </li>      
+            <li id="wp_rm_statement" runat="server"><a href="<%= ResolveUrl("~/WP/WpRmStatement.aspx") %>"><i class="fa fa-circle-o"></i> Inventory & Value. Statement</a></li>   
+          </ul>
           </li>
           <%} %>
          <% if (Session["NRC_DIV_SHORT_NAME"].ToString() == "CO" || Session["NRC_DIV_SHORT_NAME"].ToString() == "PF")
             { %>  
-         <li class="treeview" id="plastic" runat="server">
+         <li class="treeview" id="pf_menu" runat="server">
           <a href="#">
             <i class="fa fa-pied-piper"></i> <span>Plastic Factory</span>
             <span class="pull-right-container">
@@ -313,6 +371,7 @@
             <li id="pf_supervisor" runat="server"><a href="<%= ResolveUrl("~/PF/PfSupervisor.aspx") %>"><i class="fa fa-circle-o"></i> Procurement Supervisor</a></li> 
             <li id="pf_item" runat="server"><a href="<%= ResolveUrl("~/PF/PfItem.aspx") %>"><i class="fa fa-circle-o"></i> Item</a></li> 
             <li id="pf_sub_item" runat="server"><a href="<%= ResolveUrl("~/PF/PfSubItem.aspx") %>"><i class="fa fa-circle-o"></i> Sub Item</a></li> 
+            <li id="pf_item_sales" runat="server"><a href="<%= ResolveUrl("~/PF/PfItemSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales Item (Overseas)</a></li> 
             <li id="pf_supplier" runat="server"><a href="<%= ResolveUrl("~/PF/PfSupplier.aspx") %>"><i class="fa fa-circle-o"></i> Party (Supplier & Customer)</a></li> 
             <li id="pf_purchase_menu" runat="server">
               <a href="#"><i class="fa fa-circle-o"></i> Purchase
@@ -350,7 +409,9 @@
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
-                <ul class="treeview-menu">
+                <ul class="treeview-menu">    
+                    <li id="pf_material_transaction" runat="server"><a href="<%= ResolveUrl("~/PF/PfMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i> Material Transaction</a></li>
+                    <li id="pf_daily_pur_prod_report" runat="server"><a href="<%= ResolveUrl("~/PF/PfDailyPurProdStatement.aspx") %>"><i class="fa fa-circle-o"></i> Daily Report</a></li>
                     <li id="pf_daily_pur_prod" runat="server"><a href="<%= ResolveUrl("~/PF/PfDailyPurProd.aspx") %>"><i class="fa fa-circle-o"></i> Daily Pur. Prod. & Sales</a></li>
                     <li id="pf_inventory_rm" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryRm.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for RM</a></li>  
                     <li id="pf_inventory_fg" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryFg.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for FG</a></li>        
@@ -364,12 +425,26 @@
                 </span>
               </a>
                 <ul class="treeview-menu"> 
+                       <li id="pf_salesman" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesman.aspx") %>"><i class="fa fa-circle-o"></i> Salesman</a></li> 
                        <li id="pf_sales" runat="server"><a href="<%= ResolveUrl("~/PF/PfSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales</a></li> 
                        <li id="pf_sales_jw" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesJw.aspx") %>"><i class="fa fa-circle-o"></i> Job Work (Sales)</a></li> 
                        <li id="pf_sales_check" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesCheck.aspx") %>"><i class="fa fa-circle-o"></i> Sales Approve CMO</a></li>      
                        <li id="pf_sales_return" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesReturn.aspx") %>"><i class="fa fa-circle-o"></i> Sales Return</a></li> 
                 </ul>
             </li>    
+           <li id="pf_overseas_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Overseas
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">  
+                       <li id="pf_export_container" runat="server"><a href="<%= ResolveUrl("~/PF/PfExpContainer.aspx") %>"><i class="fa fa-circle-o"></i> Weight Slip & Container</a></li> 
+                       <li id="pf_export_material_pricing" runat="server"><a href="<%= ResolveUrl("~/PF/PfExpMaterialPricing.aspx") %>"><i class="fa fa-circle-o"></i> Material Pricing</a></li> 
+                       <li id="pf_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/PF/PfExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i> Sales Invoice</a></li> 
+                       <li id="pf_export_shipment_cmo" runat="server"><a href="<%= ResolveUrl("~/PF/PfExpShipmentCmo.aspx") %>"><i class="fa fa-circle-o"></i> Shipment (CMO)</a></li>  
+                </ul>
+            </li>  
             <li id="pf_rm_statement" runat="server"><a href="<%= ResolveUrl("~/PF/PfRmStatement.aspx") %>"><i class="fa fa-circle-o"></i> Raw Material Statement</a></li>  
             <li id="pf_fg_statement" runat="server"><a href="<%= ResolveUrl("~/PF/PfFgStatement.aspx") %>"><i class="fa fa-circle-o"></i> Finished Goods Statement</a></li>  
           </ul>
@@ -377,58 +452,112 @@
         <% } %>
         <% if (Session["NRC_DIV_SHORT_NAME"].ToString() == "CO" || Session["NRC_DIV_SHORT_NAME"].ToString() == "MS")
            { %>  
-        <li class="treeview" id="metal_scrap" runat="server">
+        <li class="treeview" id="ms_menu" runat="server">
           <a href="#">
             <i class="fa fa-legal"></i> <span>Metal Scrap</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
+            <ul class="treeview-menu">  
+            <li id="ms_category" runat="server"><a href="<%= ResolveUrl("~/MF/MfCategory.aspx") %>"><i class="fa fa-circle-o"></i> Category</a></li>     
+            <li id="ms_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfItem.aspx") %>"><i class="fa fa-circle-o"></i> Item</a></li>   
+            <li id="ms_item_sales" runat="server"><a href="<%= ResolveUrl("~/MS/MsItemSales.aspx") %>"><i class="fa fa-circle-o"></i> Item (Sales Overseas)</a></li> 
+            <li id="ms_item_sales_ws" runat="server"><a href="<%= ResolveUrl("~/MS/MsItemSalesWs.aspx") %>"><i class="fa fa-circle-o"></i> Item (Weight Slip)</a></li> 
+            <li id="ms_driver" runat="server"><a href="<%= ResolveUrl("~/MS/MsDriver.aspx") %>"><i class="fa fa-circle-o"></i> Driver</a></li>  
+            <li id="ms_collection_for" runat="server"><a href="<%= ResolveUrl("~/MS/MsCollectionFor.aspx") %>"><i class="fa fa-circle-o"></i> Collection For</a></li> 
+            <li id="ms_supervisor" runat="server"><a href="<%= ResolveUrl("~/MS/MsSupervisor.aspx") %>"><i class="fa fa-circle-o"></i> Procurement Supervisor</a></li> 
+            <li id="ms_supplier_cat" runat="server"><a href="<%= ResolveUrl("~/MS/MsSupplierCat.aspx") %>"><i class="fa fa-circle-o"></i> Supplier Category</a></li> 
+            <li id="ms_party" runat="server"><a href="<%= ResolveUrl("~/MS/MsParty.aspx") %>"><i class="fa fa-circle-o"></i> Party (Supplier & Customer)</a></li> 
+            <li id="ms_purchase_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Purchase
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">  
+                <li id="ms_purchase" runat="server"><a href="<%= ResolveUrl("~/MS/MsPurchase.aspx") %>"><i class="fa fa-circle-o"></i> Purchase</a></li>  
+                <li id="ms_purchase_vat_adjustment" runat="server"><a href="<%= ResolveUrl("~/MS/MsPurchaseVatAdjustment.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Vat Adjustment</a></li>                  
+                <li id="ms_purchase_claim" runat="server"><a href="<%= ResolveUrl("~/MS/MsPurchaseClaim.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim</a></li>   
+                <li id="ms_purchase_claim_approve" runat="server"><a href="<%= ResolveUrl("~/MS/MsPurchaseClaimApprove.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim Approve</a></li>               
+                </ul>
+            </li>   
+             <li id="ms_inventory_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Inventory
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">
+                    <li id="ms_material_transaction" runat="server"><a href="<%= ResolveUrl("~/MS/MsMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i> Material Transaction</a></li>
+                    <li id="ms_material_garbage" runat="server"><a href="<%= ResolveUrl("~/MS/MsActualGarbage.aspx") %>"><i class="fa fa-circle-o"></i> Material Garbage</a></li>
+                    <li id="ms_inventory_rm" runat="server"><a href="<%= ResolveUrl("~/MS/MsInventoryRm.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for RM</a></li>          
+                 </ul>
+            </li>   
+             <li id="ms_sales_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Sales (Overseas & Local)
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+                <ul class="treeview-menu">  
+                       <li id="ms_sales" runat="server"><a href="<%= ResolveUrl("~/MS/MsSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Local)</a></li>  
+                       <li id="ms_sales_inter_division" runat="server"><a href="<%= ResolveUrl("~/MS/MsSalesInterDivision.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Inter Division)</a></li>  
+                       <li id="ms_export_container" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpContainer.aspx") %>"><i class="fa fa-circle-o"></i> Weight Slip & Container</a></li>  
+                       <li id="ms_material_pricing" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpMaterialPricing.aspx") %>"><i class="fa fa-circle-o"></i> Material Pricing</a></li>
+                       <li id="ms_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i> Sales Invoice</a></li> 
+                       <li id="ms_export_shipment_cmo" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpShipmentCmo.aspx") %>"><i class="fa fa-circle-o"></i> Shipment (CMO)</a></li> 
+                 </ul>
+            </li>      
+            <li id="ms_rm_statement" runat="server"><a href="<%= ResolveUrl("~/MS/MsRmStatement.aspx") %>"><i class="fa fa-circle-o"></i> Inventory & Value. Statement</a></li>   
+          </ul>
           </a> 
           </li>
           <%} %>
           <% if (Session["NRC_DIV_SHORT_NAME"].ToString() == "CO" || Session["NRC_DIV_SHORT_NAME"].ToString() == "MF")
              { %>  
-          <li class="treeview" id="metal_factory" runat="server">
+          <li class="treeview" id="mf_menu" runat="server">
           <a href="#">
             <i class="fa fa-tty"></i> <span>Metal Factory</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu"> 
-            <li id="Li1" runat="server"><a href="<%= ResolveUrl("~/PF/PfBusinessTargetMat.aspx") %>"><i class="fa fa-circle-o"></i> Business Target (Monthly)</a></li> 
-            <li id="Li2" runat="server"><a href="<%= ResolveUrl("~/PF/PfSupervisor.aspx") %>"><i class="fa fa-circle-o"></i> Procurement Supervisor</a></li> 
-            <li id="Li3" runat="server"><a href="<%= ResolveUrl("~/PF/PfItem.aspx") %>"><i class="fa fa-circle-o"></i> Item</a></li> 
-            <li id="Li4" runat="server"><a href="<%= ResolveUrl("~/PF/PfSubItem.aspx") %>"><i class="fa fa-circle-o"></i> Sub Item</a></li> 
-            <li id="Li5" runat="server"><a href="<%= ResolveUrl("~/PF/PfSupplier.aspx") %>"><i class="fa fa-circle-o"></i> Party (Supplier & Customer)</a></li> 
-            <li id="Li6" runat="server">
-              <a href="#"><i class="fa fa-circle-o"></i> Purchase
+          <ul class="treeview-menu">  
+            <li id="mf_category" runat="server"><a href="<%= ResolveUrl("~/MF/MfCategory.aspx") %>"><i class="fa fa-circle-o"></i> Category</a></li>  
+            <li id="mf_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfItem.aspx") %>"><i class="fa fa-circle-o"></i> Item</a></li>  
+            <li id="mf_item_sales" runat="server"><a href="<%= ResolveUrl("~/MF/MfItemSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales Item (Overseas)</a></li> 
+            <li id="mf_item_bin" runat="server"><a href="<%= ResolveUrl("~/MF/MfItemBin.aspx") %>"><i class="fa fa-circle-o"></i> Item Bin</a></li> 
+            <li id="mf_vehicle" runat="server"><a href="<%= ResolveUrl("~/MF/MfVehicle.aspx") %>"><i class="fa fa-circle-o"></i> Vehicle</a></li>                         
+            <li id="mf_party" runat="server"><a href="<%= ResolveUrl("~/MF/MfParty.aspx") %>"><i class="fa fa-circle-o"></i> Party (Supplier & Customer)</a></li>  
+             
+            <li id="mf_transfer_purchase_menu" runat="server">
+                <a href="#"><i class="fa fa-circle-o"></i> Transfer & Purchase
                 <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
+                <i class="fa fa-angle-left pull-right"></i>
                 </span>
-              </a>
-              <ul class="treeview-menu"> 
-                <li id="Li7" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchaseType.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Type</a></li>
-                <li id="Li8" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchase.aspx") %>"><i class="fa fa-circle-o"></i> Purchase</a></li>  
-                <li id="Li9" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchaseJw.aspx") %>"><i class="fa fa-circle-o"></i> Job Work (Purchase)</a></li>  
-                <li id="Li10" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchaseClaim.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim</a></li>   
-                <li id="Li11" runat="server"><a href="<%= ResolveUrl("~/PF/PfPurchaseClaimCheck.aspx") %>"><i class="fa fa-circle-o"></i> Purchase Claim Approve</a></li>               
-                </ul>
-            </li>   
-             <li id="Li12" runat="server">
+                </a>
+            <ul class="treeview-menu">  
+                <li id="mf_item_transfer" runat="server"><a href="<%= ResolveUrl("~/MF/MfItemTransfer.aspx") %>"><i class="fa fa-circle-o"></i> Material Transfer (MSY)</a></li> 
+                <li id="mf_purchase_local" runat="server"><a href="<%= ResolveUrl("~/MF/MfPurchase.aspx") %>"><i class="fa fa-circle-o"></i> Purchase</a></li>
+                <li id="mf_material_receiving" runat="server"><a href="<%= ResolveUrl("~/MF/MfMatReceiving.aspx") %>"><i class="fa fa-circle-o"></i> Material Receive (Import)</a></li>               
+                <li id="mf_rm_coordinator_approve" runat="server"><a href="<%= ResolveUrl("~/MF/MfRmCoordinatorApprove.aspx") %>"><i class="fa fa-circle-o"></i> RM Coordinator Approve</a></li> 
+            </ul>
+            </li> 
+              
+             <li id="mf_production_menu" runat="server">
               <a href="#"><i class="fa fa-circle-o"></i> Production
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li id="Li13" runat="server"><a href="<%= ResolveUrl("~/PF/PfProductionShift.aspx") %>"><i class="fa fa-circle-o"></i> Production Shift</a></li>
-                <li id="Li14" runat="server"><a href="<%= ResolveUrl("~/PF/PfMachine.aspx") %>"><i class="fa fa-circle-o"></i> Production Machine</a></li> 
-                <li id="Li15" runat="server"><a href="<%= ResolveUrl("~/PF/PfGaEstProd.aspx") %>"><i class="fa fa-circle-o"></i> Garbage Est. of Prod.</a></li>
-                <li id="Li16" runat="server"><a href="<%= ResolveUrl("~/PF/PfActualGarbage.aspx") %>"><i class="fa fa-circle-o"></i> Actual Garbage</a></li>  
-                <li id="Li17" runat="server"><a href="<%= ResolveUrl("~/PF/PfProcessingCost.aspx") %>"><i class="fa fa-circle-o"></i> Processing Cost</a></li> 
-                <li id="Li18" runat="server"><a href="<%= ResolveUrl("~/PF/PfProduction.aspx") %>"><i class="fa fa-circle-o"></i> Production</a></li> 
-                <li id="Li19" runat="server"><a href="<%= ResolveUrl("~/PF/PfProductionJw.aspx") %>"><i class="fa fa-circle-o"></i> Job Work (Production)</a></li>              
+                <li id="mf_furnaces" runat="server"><a href="<%= ResolveUrl("~/MF/MfFurnaces.aspx") %>"><i class="fa fa-circle-o"></i> Furnaces</a></li>
+                <li id="mf_grade_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfGradeItem.aspx") %>"><i class="fa fa-circle-o"></i> Grade (Templete)</a></li>
+                <li id="mf_batch_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfBatchItem.aspx") %>"><i class="fa fa-circle-o"></i> Batch Item (Target Qty.)</a></li>
+                <li id="mf_batch_rm_check" runat="server"><a href="<%= ResolveUrl("~/MF/MfBatchRmCheckItem.aspx") %>"><i class="fa fa-circle-o"></i> RM Inven. Check for Batch</a></li>
+                <li id="mf_prod_issue" runat="server"><a href="<%= ResolveUrl("~/MF/MfProductionIssue.aspx") %>"><i class="fa fa-circle-o"></i> Issue For Production</a></li> 
+                <li id="mf_fg_qa" runat="server"><a href="<%= ResolveUrl("~/MF/MfFgQualityAssurance.aspx") %>"><i class="fa fa-circle-o"></i> Quality Assurance (Lab Test)</a></li> 
+                <li id="mf_fg_issue" runat="server"><a href="<%= ResolveUrl("~/MF/MfFinishedGoodsIssue.aspx") %>"><i class="fa fa-circle-o"></i> Issue For Finished Goods</a></li>           
                 </ul>
             </li>  
              <li id="Li20" runat="server">
@@ -444,27 +573,27 @@
                     <li id="Li24" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryMonthlyStatement.aspx") %>"><i class="fa fa-circle-o"></i> Inven. Monthly Statement</a></li>        
                 </ul>
             </li>   
-             <li id="Li25" runat="server">
-              <a href="#"><i class="fa fa-circle-o"></i> Sales
+             <li id="mf_sales_menu" runat="server">
+              <a href="#"><i class="fa fa-circle-o"></i> Sales (Overseas & Local)
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
-                <ul class="treeview-menu"> 
-                       <li id="Li26" runat="server"><a href="<%= ResolveUrl("~/PF/PfSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales</a></li> 
-                       <li id="Li27" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesJw.aspx") %>"><i class="fa fa-circle-o"></i> Job Work (Sales)</a></li> 
-                       <li id="Li28" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesCheck.aspx") %>"><i class="fa fa-circle-o"></i> Sales Approve CMO</a></li>      
-                       <li id="Li29" runat="server"><a href="<%= ResolveUrl("~/PF/PfSalesReturn.aspx") %>"><i class="fa fa-circle-o"></i> Sales Return</a></li> 
-                </ul>
-            </li>    
-            <li id="Li30" runat="server"><a href="<%= ResolveUrl("~/PF/PfRmStatement.aspx") %>"><i class="fa fa-circle-o"></i> Raw Material Statement</a></li>  
-            <li id="Li31" runat="server"><a href="<%= ResolveUrl("~/PF/PfFgStatement.aspx") %>"><i class="fa fa-circle-o"></i> Finished Goods Statement</a></li>  
+                <ul class="treeview-menu">  
+                       <li id="mf_sales" runat="server"><a href="<%= ResolveUrl("~/MF/MfSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Local)</a></li>  
+                       <li id="mf_sales_inter_division" runat="server"><a href="<%= ResolveUrl("~/MF/MfSalesInterDivision.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Inter Division)</a></li>  
+                       <li id="mf_export_container" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpContainer.aspx") %>"><i class="fa fa-circle-o"></i> Weight Slip & Container</a></li>  
+                       <li id="mf_material_pricing" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpMaterialPricing.aspx") %>"><i class="fa fa-circle-o"></i> Material Pricing</a></li>
+                       <li id="mf_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i> Sales Documents(Overseas)</a></li> 
+                       <li id="mf_export_shipment_cmo" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpShipmentCmo.aspx") %>"><i class="fa fa-circle-o"></i> Shipment (CMO)</a></li> 
+                 </ul>
+            </li>       
           </ul>
           </li>
         <%} %>
    <% if ((Session["NRC_USER_SROLE"].ToString() == "SAD" || Session["NRC_USER_SROLE"].ToString() == "ADM") && Session["NRC_DIV_SHORT_NAME"].ToString() == "CO")
       { %>
-         <li class="treeview" id="it" runat="server">
+         <li class="treeview" id="it_menu" runat="server">
           <a href="#">
             <i class="fa fa-laptop"></i> <span>IT </span>
             <span class="pull-right-container">
@@ -481,6 +610,7 @@
                 <ul class="treeview-menu">
                     <li id="it_asset_category" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetCategory.aspx") %>"><i class="fa fa-circle-o"></i> Category</a></li>
                     <li id="it_asset_items" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItems.aspx") %>"><i class="fa fa-circle-o"></i> Items</a></li>
+                    <li id="it_asset_items_placement" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsPlacement.aspx") %>"><i class="fa fa-circle-o"></i> Items Placement</a></li> 
                     <li id="it_asset_items_emp" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsEmp.aspx") %>"><i class="fa fa-circle-o"></i> Items & Employee</a></li>
                     <li id="it_asset_items_dept" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsDept.aspx") %>"><i class="fa fa-circle-o"></i> Items & Department</a></li>
                     <li id="it_asset_items_expires" runat="server"><a href="<%= ResolveUrl("~/IT/IT_ASSET/AssetItemsExpires.aspx") %>"><i class="fa fa-circle-o"></i> Item Expires (Anti-Virus)</a></li> 
@@ -543,8 +673,14 @@
             </span>
           </a>
           <ul class="treeview-menu" >
-            <li id="nrc_apps_vat" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcVat.aspx") %>"><i class="fa fa-circle-o"></i> Vale Add Tax (VAT)</a></li>
+            <li id="nrc_apps_container" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcContainer.aspx") %>"><i class="fa fa-circle-o"></i> Container</a></li>   
+            <li id="nrc_apps_currency" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcCurrency.aspx") %>"><i class="fa fa-circle-o"></i> Currency & Exchange Rate</a></li>   
             <li id="nrc_apps_peyment_type" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcPaymentType.aspx") %>"><i class="fa fa-circle-o"></i> Payment Type</a></li> 
+            <li id="nrc_apps_peyment_terms" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcPaymentTerms.aspx") %>"><i class="fa fa-circle-o"></i> Payment Terms</a></li>
+            <li id="nrc_apps_shipping_incoterms" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcShippingIncoterms.aspx") %>"><i class="fa fa-circle-o"></i> Shipping Incoterms</a></li> 
+            <li id="nrc_apps_shipment_location" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcShipmentLocation.aspx") %>"><i class="fa fa-circle-o"></i> Shipment Location</a></li> 
+            <li id="nrc_apps_trading_vessel" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcTradingVessel.aspx") %>"><i class="fa fa-circle-o"></i> Trading Vessel</a></li>           
+            <li id="nrc_apps_vat" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcVat.aspx") %>"><i class="fa fa-circle-o"></i> Value Add Tax (VAT)</a></li>
             <li id="nrc_data_process" runat="server"><a href="<%= ResolveUrl("~/NRC/NrcDataProcess.aspx") %>"><i class="fa fa-circle-o"></i> Data Process</a></li>
          </ul>
         </li>
@@ -562,7 +698,7 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 1.0.1
+      <b>Version</b> 1.0.2
     </div>
     <strong>Copyright &copy; 2017-2018 <a href="http://nesmarecycling.com" target="_blank">NESMA Recycling Co. Ltd.</a></strong> All rights
     reserved.
@@ -574,6 +710,7 @@
 <!-- ./wrapper -->
   </form>
   
+ 
 <!-- PACE -->
 <script src="<%= ResolveUrl("~/plugins/pace/pace.min.js") %>"></script>
 <script  type="text/javascript">
@@ -587,18 +724,7 @@
         });
     }); 
 </script> 
-
-
-<!-- jQuery 2.2.3 --> 
-<script type="text/javascript" src='<%= ResolveUrl("~/plugins/jQuery/jquery-3.1.1.min.js") %>'></script>
-<!-- jQuery UI 1.11.4 -->
-<script type="text/javascript" src='<%= ResolveUrl("~/plugins/jQuery/jquery-ui.min.js") %>'></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button);
-</script>
-<!-- Bootstrap 3.3.6 -->
-<script type="text/javascript" src='<%= ResolveUrl("~/bootstrap/js/bootstrap.min.js") %>'></script> 
+     
 <!-- InputMask -->
 <script type="text/javascript" src='<%= ResolveUrl("~/plugins/input-mask/jquery.inputmask.js") %>'></script>
 <script type="text/javascript" src='<%= ResolveUrl("~/plugins/input-mask/jquery.inputmask.date.extensions.js") %>'></script>
@@ -613,8 +739,7 @@
 <script type="text/javascript" src='<%= ResolveUrl("~/plugins/colorpicker/bootstrap-colorpicker.min.js") %>'></script>
 <script type="text/javascript" src='<%= ResolveUrl("~/plugins/timepicker/bootstrap-timepicker.min.js") %>'></script>
 <!-- date-range-picker -->
-<!-- Bootstrap WYSIHTML5 --> 
-<script type="text/javascript" src='<%= ResolveUrl("~/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js") %>'></script> 
+ 
 <!-- DataTables -->
 <script type="text/javascript"  src='<%= ResolveUrl("~/plugins/datatables/jquery.dataTables.min.js") %>'></script>
 <script type="text/javascript"  src='<%= ResolveUrl("~/plugins/datatables/dataTables.bootstrap.min.js") %>'></script>
@@ -626,59 +751,454 @@
 <!-- AdminLTE App --> 
 <script type="text/javascript" src='<%= ResolveUrl("~/dist/js/app.min.js") %>'></script> 
 <script type="text/javascript" src='<%= ResolveUrl("~/plugins/iCheck/icheck.min.js") %>'></script>
-
- 
+     
  <script type="text/javascript">
      $(document).ready(function () {
-         
-         $("#ctl00_ContentPlaceHolder1_TextItemRate").keyup(function () {
-             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRate").val());
-             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeight").val());
-
-             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
-                 var sum = val1 * val2;
-                 $("#ctl00_ContentPlaceHolder1_TextItemAmount").val(Math.round(sum.toFixed(2)));
-
-                // $("#ctl00_ContentPlaceHolder1_TextItemRate").val("");
-             } 
-         });
-
-          $("#ctl00_ContentPlaceHolder1_TextItemWeight").keyup(function () {
-            var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRate").val());
-            var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeight").val());
-
-            if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
-                var sum = val1 * val2;
-                $("#ctl00_ContentPlaceHolder1_TextItemAmount").val(Math.round(sum.toFixed(2)));
-
-
-                $("#ctl00_ContentPlaceHolder1_TextItemRate").val("");
-
-            }
-        });
-
         
          // Fix up GridView to support THEAD tags            
-         $("#ctl00_ContentPlaceHolder1_GridView4 tbody").before("<thead><tr></tr></thead>");
-         $("#ctl00_ContentPlaceHolder1_GridView4 thead tr").append($("#ctl00_ContentPlaceHolder1_GridView4 th"));
-         $("#ctl00_ContentPlaceHolder1_GridView4 tbody tr:first").remove();
+         $("#ctl00_ContentPlaceHolder1_GridView4D tbody").before("<thead><tr></tr></thead>");
+         $("#ctl00_ContentPlaceHolder1_GridView4D thead tr").append($("#ctl00_ContentPlaceHolder1_GridView4D th"));
+         $("#ctl00_ContentPlaceHolder1_GridView4D tbody tr:first").remove(); 
+       //  $("#ctl00_ContentPlaceHolder1_GridView4D").tablesorter({ sortList: [[1, 0]] });
 
-         $("#ctl00_ContentPlaceHolder1_GridView4").tablesorter({ sortList: [[1, 0]] });
-
-
+         $("#ctl00_ContentPlaceHolder1_GridView5D tbody").before("<thead><tr></tr></thead>");
+         $("#ctl00_ContentPlaceHolder1_GridView5D thead tr").append($("#ctl00_ContentPlaceHolder1_GridView5D th"));
+         $("#ctl00_ContentPlaceHolder1_GridView5D tbody tr:first").remove(); 
 
      });
 </script> 
- <script type="text/javascript">
-    $(function () {
-       
-        //  $('input[type=checkbox]').each(function () {
+ <script type="text/javascript"> 
+     $(function () { 
+
+         // waste paper
+         $('[Id*=ctl00_ContentPlaceHolder1_TextWpSlipNo]').keyup(function (event) { 
+             var SlipLength = $(this).val().length;
+             
+             if (SlipLength == 6) { 
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();
+                  var RadioBtnSlipIs = $('#ctl00_ContentPlaceHolder1_radPurDuplicate input:checked').val(); 
+                 if (RadioBtnSlipIs == "Duplicate") { 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                 } else {
+                    WpSlipNo();}
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+             } else {
+                 $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
+                }); 
+          /* Function to get data wb slip check available */
+               function WpSlipNo() {
+                   var WpSlipNo = $("#ctl00_ContentPlaceHolder1_TextWpSlipNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "WpPurchase.aspx/WpSlipNoCheck",
+                        data: '{"WpSlipNo": "' + WpSlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                          if (r.d != '') {  
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "red");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+
+         // Wp Local sales
+             $('[Id*=ctl00_ContentPlaceHolder1_TextInvoiceWpNo]').keyup(function (event) { 
+             var SlipLength = $(this).val().length;
+             
+             if (SlipLength == 6) { 
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();   
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                  
+                    WpInvoiceNo(); 
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+             } else {
+                 $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
+                }); 
+          /* Function to get data wb slip check available */
+               function WpInvoiceNo() {
+                   var WpSlipNo = $("#ctl00_ContentPlaceHolder1_TextInvoiceWpNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "WpSales.aspx/WpSalesInvoiceNoCheck",
+                        data: '{"InvoiceNo": "' + WpSlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                          if (r.d != '') {  
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+
+         // end waste paper
+
+          // plastic factory
+         // purchase invoice check
+            $('[Id*=ctl00_ContentPlaceHolder1_TextSlipNo]').keyup(function (event) { 
+                    var SlipLength = $(this).val().length;  
+             if (SlipLength == 6) {
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();
+                    SlipNo();
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+               } else { $('#ctl00_ContentPlaceHolder1_CheckSlipNo').text('Insert 6 digit Slip Number');
+                    $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNo]').css("color", "red");
+                    $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                    $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+             }
+                }); 
+          /* Function to get data Item rate */
+               function SlipNo() {
+                   var SlipNo = $("#ctl00_ContentPlaceHolder1_TextSlipNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "PfPurchase.aspx/SlipNoCheck",
+                        data: '{"SlipNo": "' + SlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                          if (r.d != '') {  
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNo').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNo]').css("color", "red"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNo').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNo]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+
+
+         $('[Id*=ctl00_ContentPlaceHolder1_TextInvoiceNo]').keyup(function (event) { 
+                    var SlipLength = $(this).val().length;  
+             if (SlipLength == 5 || SlipLength == 6) {
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();
+                    SlipNoWp();
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+               } else { $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled");
+             }
+                }); 
+          /* Function to get data Item rate */
+               function SlipNoWp() {
+                   var InvoiceNo = $("#ctl00_ContentPlaceHolder1_TextInvoiceNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "PfSales.aspx/InvoiceNoCheck",
+                        data: '{"InvoiceNo": "' + InvoiceNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {     
+                         if (r.d == true) { 
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Invoice Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Invoice Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+         // plastic factory
+
+
+         // metal scrap start
+         // metal scrap purchase
+         $('[Id*=ctl00_ContentPlaceHolder1_TextMsSlipNo]').keyup(function (event) { 
+             var SlipLength = $(this).val().length;
+             
+             if (SlipLength == 6) { 
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();
+                  var RadioBtnSlipIs = $('#ctl00_ContentPlaceHolder1_radPurDuplicate input:checked').val(); 
+                 if (RadioBtnSlipIs == "Duplicate") { 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                 } else {
+                    MsSlipNo();}
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+             } else {
+                 $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
+                }); 
+          /* Function to get data wb slip check available */
+               function MsSlipNo() {
+                   var MsSlipNo = $("#ctl00_ContentPlaceHolder1_TextMsSlipNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "MsPurchase.aspx/MsSlipNoCheck",
+                        data: '{"WpSlipNo": "' + MsSlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                          if (r.d != '') {  
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "red");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+
+
+          // metal scrap Local sales
+             $('[Id*=ctl00_ContentPlaceHolder1_TextInvoiceMsNo]').keyup(function (event) { 
+             var SlipLength = $(this).val().length;
+             
+             if (SlipLength == 6) { 
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();   
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                  
+                    MsInvoiceNo(); 
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+             } else {
+                 $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
+                }); 
+          /* Function to get data wb slip check available */
+               function MsInvoiceNo() {
+                   var WpSlipNo = $("#ctl00_ContentPlaceHolder1_TextInvoiceMsNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "MsSales.aspx/WpSalesInvoiceNoCheck",
+                        data: '{"InvoiceNo": "' + WpSlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                          if (r.d != '') {  
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+
+          // metal scrap inter division
+             $('[Id*=ctl00_ContentPlaceHolder1_TextInvoiceInMsNo]').keyup(function (event) { 
+             var SlipLength = $(this).val().length;
+             
+             if (SlipLength == 6) { 
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();   
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                  
+                    MsInvoiceNo(); 
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+             } else {
+                 $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
+                }); 
+          /* Function to get data wb slip check available */
+               function MsInvoiceNo() {
+                   var WpSlipNo = $("#ctl00_ContentPlaceHolder1_TextInvoiceInMsNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "MsSalesInterDivision.aspx/MsSalesInvoiceNoCheck",
+                        data: '{"InvoiceNo": "' + WpSlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                          if (r.d != '') {  
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                        $('#ctl00_ContentPlaceHolder1_TextItemFirstWtWb').focus();
+                     }      
+                      }
+                    });
+         }
+
+         // metal scrap end
+
+         // metal factory transfer form
+           $('[Id*=ctl00_ContentPlaceHolder1_TextMfWbSlipNo]').keyup(function (event) { 
+             var SlipLength = $(this).val().length; 
+               if (SlipLength == 6) { 
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();  
+                     TransMfSlipNo(); 
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+             } else {
+                 $('#ctl00_ContentPlaceHolder1_CheckSlipNo').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNo]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
+                }); 
+          /* Function to get data wb slip check available */
+               function TransMfSlipNo() {
+                   var MsSlipNo = $("#ctl00_ContentPlaceHolder1_TextMfWbSlipNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "MfItemTransfer.aspx/MsSlipNoCheck",
+                        data: '{"MsSlipNo": "' + MsSlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                           
+                    if (r.d == true) {  
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNo').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNo]').css("color", "red");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                   else {
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNo').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNo]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+
+
+          // waste paper
+         $('[Id*=ctl00_ContentPlaceHolder1_TextMfSlipNo]').keyup(function (event) { 
+             var SlipLength = $(this).val().length;
+             
+             if (SlipLength == 6) { 
+                 $('[Id*=ctl00_ContentPlaceHolder1_loader]').show();
+                  var RadioBtnSlipIs = $('#ctl00_ContentPlaceHolder1_radPurDuplicate input:checked').val(); 
+                 if (RadioBtnSlipIs == "Duplicate") { 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                 } else {
+                    MfSlipNo();}
+                 if (event.which === 13) {
+                     $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
+                 }
+             } else {
+                 $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Insert 6 digit Slip Number');
+                 $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "red");
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                 $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
+                }); 
+          /* Function to get data wb slip check available */
+               function MfSlipNo() {
+                   var WpSlipNo = $("#ctl00_ContentPlaceHolder1_TextMfSlipNo").val();  
+                  
+                    $.ajax({
+                        type: "POST",
+                        url: "MfPurchase.aspx/WpSlipNoCheck",
+                        data: '{"WpSlipNo": "' + WpSlipNo + '"}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {  
+                          if (r.d != '') {  
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Slip Number is not available');
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "red");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                     }
+                else {
+                        $('#ctl00_ContentPlaceHolder1_CheckSlipNoWp').text('Slip Number is available');  
+                        $('[Id*=ctl00_ContentPlaceHolder1_CheckSlipNoWp]').css("color", "green");
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                     }      
+                      }
+                    });
+         }
+
+         // end metal factory
+
+       //  $('input[type=checkbox]').each(function () {
        //     $(this).attr('class', 'flat-red');
        //    });
 
-     //   $("span").find('input[type=checkbox]').each(function () {
-     //    $(this).attr('class', 'flat-red'); 
-   //    });;
+       //   $("span").find('input[type=checkbox]').each(function () {
+       //    $(this).attr('class', 'flat-red'); 
+       //    });;
 
         //Initialize Select2 Elements
         $(".select2").select2();
@@ -709,11 +1229,22 @@
         // data table
       //   $("#example1").DataTable();
        //  $("#ctl00_ContentPlaceHolder1_GridView2").DataTable();     
-          $('#ctl00_ContentPlaceHolder1_GridView3').DataTable({
+          $('#ctl00_ContentPlaceHolder1_GridView4D').DataTable({
               "paging": true,
               "lengthChange": false,
-              "searching": false,
-              "ordering": true,
+              "searching": true,
+              aaSorting : [[0, 'desc']],
+              "ordering": [[ 1, "desc" ]],
+              "info": true,
+              "autoWidth": false
+         });
+
+         $('#ctl00_ContentPlaceHolder1_GridView5D').DataTable({
+              "paging": true,
+              "lengthChange": false,
+              "searching": true,
+              aaSorting : [[0, 'asc']],
+              "ordering": [[ 1, "desc" ]],
               "info": true,
               "autoWidth": false
             });
@@ -790,10 +1321,31 @@
         }
     );
 
-        //Date picker
-        $('#ctl00_ContentPlaceHolder1_EntryDate').datepicker({ 
-             format: 'dd/mm/yyyy',
-        }); 
+            //Date picker
+            $('#ctl00_ContentPlaceHolder1_EntryDate').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
+            $('#ctl00_ContentPlaceHolder1_EntryDate1').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
+            $('#ctl00_ContentPlaceHolder1_EntryDate2').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
+            $('#ctl00_ContentPlaceHolder1_EntryDate3').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
+            $('#ctl00_ContentPlaceHolder1_EntryDate4').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
+            $('#ctl00_ContentPlaceHolder1_EntryDate5').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
+            $('#ctl00_ContentPlaceHolder1_EntryDate6').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
+            $('#ctl00_ContentPlaceHolder1_EntryDate7').datepicker({ 
+                format: 'dd/mm/yyyy',
+            }); 
 
     //    $('#ctl00_ContentPlaceHolder1_EntryDate').datepicker({ 
      //        format: 'dd/mm/yyyy',
@@ -827,6 +1379,11 @@
             viewMode: "months", 
             minViewMode: "months"
         });
+        $('#ctl00_ContentPlaceHolder1_TextMonthYear4').datepicker( {
+            format: "mm/yyyy",
+            viewMode: "months", 
+            minViewMode: "months"
+        });
 
         //iCheck for checkbox and radio inputs
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
@@ -842,12 +1399,396 @@
         $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
-        }).Val();
+        });
 
 
 
     });
 </script>
-  
+<script type="text/javascript">
+    $(document).ready(function () { 
+         
+  // start waste paper 
+           $("#ctl00_ContentPlaceHolder1_TextItemWeightWP").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRateWP").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeightWP").val());
+             var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var item_amt = (val1/1000) * val2;
+                 $("#ctl00_ContentPlaceHolder1_TextItemAmountWP").val(item_amt.toFixed(2)); 
+                 var RadioBtnVatVal = $('#ctl00_ContentPlaceHolder1_RadioBtnVatWp input:checked').val();
+                 var vat_amt = 0;
+                    if (RadioBtnVatVal == "VatYes") {  
+                        vat_amt = (item_amt * val3) / 100;
+                        $("#ctl00_ContentPlaceHolder1_TextItemVatAmountWP").val(vat_amt.toFixed(2)); 
+                    }
+                    if (RadioBtnVatVal == "VatNo") { 
+                         vat_amt = 0;
+                    } 
+                 var total_amt = Math.round(item_amt + vat_amt);
+                 $("#ctl00_ContentPlaceHolder1_TextTotalAmountWP").val(total_amt.toFixed(1));
+             }
+        });
+
+          $("#ctl00_ContentPlaceHolder1_TextItemRateWP").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRateWP").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeightWP").val());
+             var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var item_amt = (val1/1000) * val2;
+                 $("#ctl00_ContentPlaceHolder1_TextItemAmountWP").val(item_amt.toFixed(2)); 
+                 var RadioBtnVatVal = $('#ctl00_ContentPlaceHolder1_RadioBtnVatWp input:checked').val();
+                 var vat_amt = 0;
+                    if (RadioBtnVatVal == "VatYes") {  
+                        vat_amt = (item_amt * val3) / 100;
+                        $("#ctl00_ContentPlaceHolder1_TextItemVatAmountWP").val(vat_amt.toFixed(2)); 
+                    }
+                    if (RadioBtnVatVal == "VatNo") { 
+                         vat_amt = 0;
+                    } 
+                  var total_amt = Math.round(item_amt + vat_amt);
+                 $("#ctl00_ContentPlaceHolder1_TextTotalAmountWP").val(total_amt.toFixed(1));
+             }
+        });
+
+        $("#ctl00_ContentPlaceHolder1_RadioBtnVatWp").change(function () {              
+               var RadioBtnVatVal = $('#ctl00_ContentPlaceHolder1_RadioBtnVatWp input:checked').val()
+               if (RadioBtnVatVal == "VatYes") { 
+                   $("#ctl00_ContentPlaceHolder1_VatPercentBox").show();
+                    var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRateWP").val());
+                    var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeightWP").val());
+                    var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+                    var item_amt = (val1/1000) * val2;
+                    vat_amt = (item_amt * val3) / 100;
+                   $("#ctl00_ContentPlaceHolder1_TextItemVatAmountWP").val(vat_amt.toFixed(2)); 
+                    var total_amt = Math.round(item_amt + vat_amt);
+                   $("#ctl00_ContentPlaceHolder1_TextTotalAmountWP").val(total_amt.toFixed(1));
+               }
+               if (RadioBtnVatVal == "VatNo") { 
+                   $("#ctl00_ContentPlaceHolder1_VatPercentBox").hide();
+               }
+        });
+
+         $("#ctl00_ContentPlaceHolder1_DropDownSlipNoWp").change(function () {
+             var total = 0, count = 0; 
+             $.each($(this).val(), function (i, value) {
+                 var Item_Amt = value.split('-'); 
+                 total += Number(Item_Amt[1]);
+                 count++;
+                }); 
+                if (count <= 25) {
+                    $("#ctl00_ContentPlaceHolder1_TextTotalAmount").val(total.toFixed(2)); 
+                    $('#ctl00_ContentPlaceHolder1_CheckInvoiceCount').text('Total Invoice include in this claim: ' + count);
+                    $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceCount]').css("color", "green"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                } else {
+                    $('#ctl00_ContentPlaceHolder1_CheckInvoiceCount').text('Insert Maximum 25 Purchases Invoice for one claim.');
+                    $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceCount]').css("color", "red"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                }
+             
+        });
+
+        $("#ctl00_ContentPlaceHolder1_TextItemRateWp").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRateWp").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeightWp").val());
+             var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var item_amt = (val1 * val2)/1000;
+                 $("#ctl00_ContentPlaceHolder1_TextItemAmount").val(item_amt.toFixed(2));  
+                 var RadioBtnVatVal = $('#ctl00_ContentPlaceHolder1_RadioBtnVat input:checked').val();
+                 var vat_amt = 0;   
+                        vat_amt = (item_amt * val3) / 100;
+                        $("#ctl00_ContentPlaceHolder1_TextVatAmount").val(vat_amt.toFixed(2));  
+                 var total_amt =  item_amt + vat_amt;
+                 $("#ctl00_ContentPlaceHolder1_TextTotalAmount").val(total_amt.toFixed(2)); 
+             }
+         }); 
+
+        // end  waste paper 
+
+       // start plastic factory
+         
+         $("#ctl00_ContentPlaceHolder1_TextItemRate").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRate").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeight").val());
+             var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var item_amt = val1 * val2;
+                 $("#ctl00_ContentPlaceHolder1_TextItemAmount").val(item_amt.toFixed(2));  
+                 var RadioBtnVatVal = $('#ctl00_ContentPlaceHolder1_RadioBtnVat input:checked').val();
+                 var vat_amt = 0;
+                    if (RadioBtnVatVal == "VatYes") {  
+                        vat_amt = (item_amt * val3) / 100;
+                        $("#ctl00_ContentPlaceHolder1_TextItemVatAmount").val(vat_amt.toFixed(2)); 
+                    }
+                    if (RadioBtnVatVal == "VatNo") { 
+                         vat_amt = 0;
+                    } 
+                 var total_amt = Math.round(item_amt + vat_amt);
+                 $("#ctl00_ContentPlaceHolder1_TextTotalAmount").val(total_amt.toFixed(1)); 
+             }
+         });
+
+         $("#ctl00_ContentPlaceHolder1_TextItemWeight").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRate").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeight").val());
+             var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var item_amt = val1 * val2;
+                 $("#ctl00_ContentPlaceHolder1_TextItemAmount").val(item_amt.toFixed(2));  
+                 var RadioBtnVatVal = $('#ctl00_ContentPlaceHolder1_RadioBtnVat input:checked').val();
+                 var vat_amt = 0;
+                    if (RadioBtnVatVal == "VatYes") {  
+                        vat_amt = (item_amt * val3) / 100;
+                        $("#ctl00_ContentPlaceHolder1_TextItemVatAmount").val(vat_amt.toFixed(2)); 
+                    }
+                    if (RadioBtnVatVal == "VatNo") { 
+                         vat_amt = 0;
+                    } 
+                 var total_amt = Math.round(item_amt + vat_amt);
+                 $("#ctl00_ContentPlaceHolder1_TextTotalAmount").val(total_amt.toFixed(1)); 
+             }
+         }); 
+
+         $("#ctl00_ContentPlaceHolder1_RadioBtnVat").change(function () {              
+               var RadioBtnVatVal = $('#ctl00_ContentPlaceHolder1_RadioBtnVat input:checked').val()
+               if (RadioBtnVatVal == "VatYes") { 
+                   $("#ctl00_ContentPlaceHolder1_VatPercentBox").show();
+                    var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRate").val());
+                    var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeight").val());
+                    var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+                    var item_amt = val1 * val2;
+                    vat_amt = (item_amt * val3) / 100;
+                   $("#ctl00_ContentPlaceHolder1_TextItemVatAmount").val(vat_amt.toFixed(2)); 
+                    var total_amt = Math.round(item_amt + vat_amt);
+                   $("#ctl00_ContentPlaceHolder1_TextTotalAmount").val(total_amt.toFixed(1));
+               }
+               if (RadioBtnVatVal == "VatNo") { 
+                   $("#ctl00_ContentPlaceHolder1_VatPercentBox").hide();
+                   var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemRate").val());
+                    var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWeight").val());
+                    var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text()); 
+                    var item_amt = Math.round(val1 * val2);
+                    $("#ctl00_ContentPlaceHolder1_TextTotalAmount").val(item_amt.toFixed(1));
+               }
+        });
+
+         $("#ctl00_ContentPlaceHolder1_DropDownSlipNo").change(function () {
+             var total = 0, count = 0; 
+             $.each($(this).val(), function (i, value) {
+                 var Item_Amt = value.split('-'); 
+                 total += Number(Item_Amt[1]);
+                 count++;
+                }); 
+                if (count <= 25) {
+                    $("#ctl00_ContentPlaceHolder1_TextTotalAmount").val(total.toFixed(2)); 
+                    $('#ctl00_ContentPlaceHolder1_CheckInvoiceCount').text('Total Invoice include in this claim: ' + count);
+                    $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceCount]').css("color", "green"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+                } else {
+                    $('#ctl00_ContentPlaceHolder1_CheckInvoiceCount').text('Insert Maximum 25 Purchases Invoice for one claim.');
+                    $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceCount]').css("color", "red"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 
+                        $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); 
+                }
+             
+        });
+
+         $("#ctl00_ContentPlaceHolder1_TextNoOfPacking1").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking1").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking1").val());  
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var sum_pack1 = val1 * val2;
+                 var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking2").val());
+                 var val4 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking2").val());  
+                 var sum_pack2 = val3 * val4;
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val(Math.round(sum_pack1.toFixed(2)));
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val(Math.round(sum_pack2.toFixed(2)));  
+                 
+                 var ItemWeightWBEx = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWtWb").val()); 
+                 var Pack1Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val());  
+                 var Pack2Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val()); 
+                 var ItemWeightEx = ItemWeightWBEx - (Pack1Total + Pack2Total);
+                 $("#ctl00_ContentPlaceHolder1_TextItemWeightEx").val(Math.round(ItemWeightEx.toFixed(2))); 
+             }
+         });
+
+         $("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking1").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking1").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking1").val());  
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var sum_pack1 = val1 * val2;
+                 var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking2").val());
+                 var val4 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking2").val());  
+                 var sum_pack2 = val3 * val4;
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val(Math.round(sum_pack1.toFixed(2)));
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val(Math.round(sum_pack2.toFixed(2)));  
+                 
+                 var ItemWeightWBEx = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWtWb").val()); 
+                 var Pack1Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val());  
+                 var Pack2Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val()); 
+                 var ItemWeightEx = ItemWeightWBEx - (Pack1Total + Pack2Total);
+                 $("#ctl00_ContentPlaceHolder1_TextItemWeightEx").val(Math.round(ItemWeightEx.toFixed(2))); 
+             }
+         });
+
+         $("#ctl00_ContentPlaceHolder1_TextNoOfPacking2").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking2").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking2").val());  
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var sum_pack1 = val1 * val2;
+                 var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking2").val());
+                 var val4 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking2").val());  
+                 var sum_pack2 = val3 * val4;
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val(Math.round(sum_pack1.toFixed(2)));
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val(Math.round(sum_pack2.toFixed(2)));  
+                 
+                 var ItemWeightWBEx = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWtWb").val()); 
+                 var Pack1Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val());  
+                 var Pack2Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val()); 
+                 var ItemWeightEx = ItemWeightWBEx - (Pack1Total + Pack2Total);
+                 $("#ctl00_ContentPlaceHolder1_TextItemWeightEx").val(Math.round(ItemWeightEx.toFixed(2))); 
+             }
+         });
+
+         $("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking2").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking2").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking2").val());  
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var sum_pack1 = val1 * val2;
+                 var val3 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoOfPacking2").val());
+                 var val4 = parseFloat($("#ctl00_ContentPlaceHolder1_TextNoPerWtPacking2").val());  
+                 var sum_pack2 = val3 * val4;
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val(Math.round(sum_pack1.toFixed(2)));
+                 $("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val(Math.round(sum_pack2.toFixed(2)));  
+                 
+                 var ItemWeightWBEx = parseFloat($("#ctl00_ContentPlaceHolder1_TextItemWtWb").val()); 
+                 var Pack1Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking1").val());  
+                 var Pack2Total = parseFloat($("#ctl00_ContentPlaceHolder1_TextWtTotalPacking2").val()); 
+                 var ItemWeightEx = ItemWeightWBEx - (Pack1Total + Pack2Total);
+                 $("#ctl00_ContentPlaceHolder1_TextItemWeightEx").val(Math.round(ItemWeightEx.toFixed(2))); 
+             }
+         }); 
+          
+        
+          $("#ctl00_ContentPlaceHolder1_DropDownSlipNoEx").change(function () {
+             total = 0; 
+                 var Item_Wt = $(this).val().split('-');
+                //  alert(Item_Wt[1]);
+                 total = Number(Item_Wt[1]/1000); 
+            
+             $("#ctl00_ContentPlaceHolder1_TextTotalQty").val(total.toFixed(3));
+
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextPricePerMt").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextTotalQty").val());  
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var sum = val1 * val2;
+                 $("#ctl00_ContentPlaceHolder1_TextTotalAmountEx").val(sum.toFixed(2));   
+             }
+
+              $("#ctl00_ContentPlaceHolder1_DropDownCurrencyRateID").val(0);   
+              $("#ctl00_ContentPlaceHolder1_TextItemCurrencyAmount").val(0.00);  
+        });
+
+
+         $("#ctl00_ContentPlaceHolder1_TextPricePerMt").keyup(function () {
+             var val1 = parseFloat($("#ctl00_ContentPlaceHolder1_TextPricePerMt").val());
+             var val2 = parseFloat($("#ctl00_ContentPlaceHolder1_TextTotalQty").val());  
+             if (!isNaN(val1) && val1.length != 0 && !isNaN(val2) && val2.length != 0) {
+                 var sum = val1 * val2;
+                 $("#ctl00_ContentPlaceHolder1_TextTotalAmountEx").val(sum.toFixed(2));   
+
+                var Item_Wt = $("#ctl00_ContentPlaceHolder1_DropDownCurrencyRateID").val().split('-'); 
+                var TotalAmountEx = $("#ctl00_ContentPlaceHolder1_TextTotalAmountEx").val();    
+                 var total_temp = TotalAmountEx * Item_Wt[1];
+                 var total = total_temp; 
+                $("#ctl00_ContentPlaceHolder1_TextItemCurrencyAmount").val(total.toFixed(1));
+             }
+         }); 
+
+         $("#ctl00_ContentPlaceHolder1_DropDownCurrencyRateID").change(function () {  
+                var Item_Wt = $(this).val().split('-'); 
+                var TotalAmountEx = $("#ctl00_ContentPlaceHolder1_TextTotalAmountEx").val();    
+                var total_temp = TotalAmountEx * Item_Wt[1]; 
+                var total = total_temp; 
+                $("#ctl00_ContentPlaceHolder1_TextItemCurrencyAmount").val(total.toFixed(1));
+ 
+        });
+
+        
+         // end plastic factory
+
+        // metal factory start
+    $("#ctl00_ContentPlaceHolder1_TextMatWeightMf").keyup(function () {
+                var MatWeightMs = parseFloat($("#ctl00_ContentPlaceHolder1_TextMatWeightMs").val());
+                var Mat1stWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat1stWeightMf").val());
+                var Mat2ndWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat2ndWeightMf").val());
+
+                var MfNetWeight = (Mat1stWeightMf - Mat2ndWeightMf);
+                var VarianceMsMf = MatWeightMs - MfNetWeight; 
+                $("#ctl00_ContentPlaceHolder1_TextMatWeightMf").val(MfNetWeight);  
+                $("#ctl00_ContentPlaceHolder1_TextWeightVariance").val(VarianceMsMf); 
+         });
+
+         $("#ctl00_ContentPlaceHolder1_TextMat1stWeightMf").keyup(function () {
+              var MatWeightMs = parseFloat($("#ctl00_ContentPlaceHolder1_TextMatWeightMs").val());
+                var Mat1stWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat1stWeightMf").val());
+                var Mat2ndWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat2ndWeightMf").val());
+
+                var MfNetWeight = (Mat1stWeightMf - Mat2ndWeightMf);
+                var VarianceMsMf = MatWeightMs - MfNetWeight; 
+                $("#ctl00_ContentPlaceHolder1_TextMatWeightMf").val(MfNetWeight);  
+                $("#ctl00_ContentPlaceHolder1_TextWeightVariance").val(VarianceMsMf); 
+                $("#ctl00_ContentPlaceHolder1_TextItemWtWb").val(MfNetWeight); 
+        }); 
+
+        $("#ctl00_ContentPlaceHolder1_TextMat2ndWeightMf").keyup(function () {
+                var MatWeightMs = parseFloat($("#ctl00_ContentPlaceHolder1_TextMatWeightMs").val());
+                var Mat1stWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat1stWeightMf").val());
+                var Mat2ndWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat2ndWeightMf").val());
+
+                var MfNetWeight = (Mat1stWeightMf - Mat2ndWeightMf);
+                var VarianceMsMf = MatWeightMs - MfNetWeight; 
+                $("#ctl00_ContentPlaceHolder1_TextMatWeightMf").val(MfNetWeight);  
+                $("#ctl00_ContentPlaceHolder1_TextWeightVariance").val(VarianceMsMf); 
+                $("#ctl00_ContentPlaceHolder1_TextItemWtWb").val(MfNetWeight); 
+             //   $('#ctl00_ContentPlaceHolder1_EntryDate').focus();
+        }); 
+
+        $("#ctl00_ContentPlaceHolder1_TextMatWeightMs").keyup(function () {
+                var MatWeightMs = parseFloat($("#ctl00_ContentPlaceHolder1_TextMatWeightMs").val());
+                var Mat1stWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat1stWeightMf").val());
+                var Mat2ndWeightMf = parseFloat($("#ctl00_ContentPlaceHolder1_TextMat2ndWeightMf").val());
+
+                var MfNetWeight = (Mat1stWeightMf - Mat2ndWeightMf);
+                var VarianceMsMf = MatWeightMs - MfNetWeight; 
+                $("#ctl00_ContentPlaceHolder1_TextMatWeightMf").val(MfNetWeight);  
+                $("#ctl00_ContentPlaceHolder1_TextWeightVariance").val(VarianceMsMf); 
+        }); 
+
+
+// metal factory end
+
+     });
+</script> 
+   
+<script language="javascript" type="text/javascript">
+        var submit = 0;
+        function CheckIsRepeat() {
+            if (++submit > 1) {
+                alert(submit);
+             //   alert('An attempt was made to submit this form more than once; this extra attempt will be ignored.');
+                return false;
+            }
+    }
+
+       
+ </script>
+    
+     
 </body>
 </html>

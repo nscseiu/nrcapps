@@ -79,7 +79,7 @@ namespace NRCAPPS
                             html.Append(dt.Rows[j]["PURCHASE_AMT"].ToString());
                             html.Append(" <sup style='font-size: 20px'> SR</sup>");
                             html.Append("</h3>");
-                            html.Append("<p>Purchase Current Month (WT)</p>");
+                            html.Append("<p>Purchase Current Month (Amount)</p>");
                             html.Append("</div>");
                             html.Append("<div class='icon' style='padding-top:14px;'>");
                             html.Append("<i class='ion  ion-bag'></i>");
@@ -94,7 +94,7 @@ namespace NRCAPPS
                             html.Append("<div class='inner'>");
                             html.Append("<h3>");
                             html.Append(dt.Rows[j]["PURCHASE_WTD"].ToString());
-                            html.Append(" <sup style='font-size: 20px'> SR</sup>");
+                            html.Append(" <sup style='font-size: 20px'> MT</sup>");
                             html.Append("</h3>");
                             html.Append("<p>Direct Sales Current Month (WT)</p>");
                             html.Append("</div>");
@@ -273,13 +273,14 @@ namespace NRCAPPS
                         html.Append("  <div class='box-body'>");
                         html.Append("<div class='row'>");
 
-                        html.Append("<div class='col-md-6'>");
+                        html.Append("<div class='col-md-12'>");
                         html.Append("<div id='container_rm_pie' style=' margin: 10px'></div>");
                         html.Append("<table id='datatable_rm_pie' style='display:none'>");
                         html.Append("<thead>");
                         html.Append("<tr>");
                         html.Append("<th>ITEM NAME</th>");
                         html.Append("<th>Raw Material</th>");
+                        html.Append("<th>Finished Goods</th>");
                         html.Append("</tr>");
                         html.Append("</thead>");
                         html.Append("<tbody>");
@@ -292,30 +293,6 @@ namespace NRCAPPS
                             html.Append("<td>");
                             html.Append(dt.Rows[j]["FINAL_STOCK_WT_RM"].ToString());
                             html.Append("</td>");
-                            html.Append("</tr>");
-                        }
-
-                        html.Append(" </tbody>");
-                        html.Append(" </table>");
-                        html.Append("</div>");
-
-
-                        html.Append("<div class='col-md-6'>");
-                        html.Append("<div id='container_fg_pie' style=' margin: 10px'></div>");
-                        html.Append("<table id='datatable_fg_pie' style='display:none'>");
-                        html.Append("<thead>");
-                        html.Append("<tr>");
-                        html.Append("<th>ITEM NAME</th>");
-                        html.Append("<th>Finished Goods</th>");
-                        html.Append("</tr>");
-                        html.Append("</thead>");
-                        html.Append("<tbody>");
-                        for (int j = 0; j < RowCountj; j++)
-                        {
-                            html.Append("<tr>");
-                            html.Append("<th>");
-                            html.Append(dt.Rows[j]["ITEM_NAME"].ToString());
-                            html.Append("</th>");
                             html.Append("<td>");
                             html.Append(dt.Rows[j]["FINAL_STOCK_WT_FG"].ToString());
                             html.Append("</td>");
@@ -325,13 +302,239 @@ namespace NRCAPPS
                         html.Append(" </tbody>");
                         html.Append(" </table>");
                         html.Append("</div>");
+
+                         
                         html.Append("</div>");
+                        html.Append("</div>");
+                        html.Append("</div>"); 
+
+                    }
 
 
+                    if (IS_ITEM_ID == "4")
+                    {
+
+                        DataTable dt = this.PfChartGetDataMonthly();
+
+                        RowCountj = dt.Rows.Count;
+
+                        html.Append(" <div class='row'>");
+                        html.Append(" <div class='col-md-12'>");
+                        html.Append(" <div class='box'>");
+                        html.Append("  <div class='box-header with-border'");
+                        html.Append("    <h3 class='box-title'><i class='fa fa-bar-chart'></i>");
+                        html.Append(IS_ITEM_NAME);
+                        html.Append("</h3>");
+
+                        html.Append("    <div class='box-tools pull-right'>");
+                        html.Append("     <button type='button' class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i>");
+                        html.Append("    </button>");
+                        html.Append("     <div class='btn-group'>");
+                        html.Append("      <button type='button' class='btn btn-box-tool dropdown-toggle' data-toggle='dropdown'>");
+                        html.Append("       <i class='fa fa-wrench'></i></button> ");
+                        html.Append("   </div>");
+                        html.Append("    <button type='button' class='btn btn-box-tool' data-widget='remove'><i class='fa fa-times'></i></button>");
+                        html.Append("  </div>");
+                        html.Append(" </div> ");
+                        html.Append("  <div class='box-body'>");
+                        html.Append("   <div class='row'>");
+                        html.Append("<div class='col-md-12'>");
+
+                        html.Append("  <div id='container_pf_monthly' style=' margin: 10px'></div>");
+
+                        html.Append("<table id='datatable_pf_monthly' style='display:none;'>");
+                        html.Append("<thead>");
+                        html.Append("<tr>");
+                        html.Append("<th>Months</th>");
+                        html.Append("<th>Purchase</th>");  
+                        html.Append("<th>Production</th>");   
+                        html.Append("<th>Sales</th>");                        
+                        html.Append("</tr>");
+                        html.Append("</thead>");
+                        html.Append("<tbody>");
+
+                        for (int j = 0; j < RowCountj; j++)
+                        {
+                            html.Append("<tr>");
+                            html.Append("<th>");
+                            html.Append(dt.Rows[j]["MONTH_YEAR"].ToString());
+                            html.Append("</th>"); 
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["PURCHASE_WEIGHT"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["PRODUCTION_WEIGHT"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["SALES_WEIGHT"].ToString());
+                            html.Append("</td>");
+                            html.Append("</tr>");
+                        }
+
+                        html.Append(" </tbody>");
+                        html.Append(" </table>");
                         html.Append("</div>");
                         html.Append("</div>");
                         html.Append("</div>");
                         html.Append("</div>");
+                        html.Append("</div>");
+                        html.Append("</div>");
+
+                    }
+
+                    if (IS_ITEM_ID == "5")
+                    {
+
+                        DataTable dt = this.ItAssetAntiStatus();
+
+                        RowCountj = dt.Rows.Count;
+
+                        html.Append(" <div class='row'>");
+                        html.Append(" <div class='col-md-12'>");
+                        html.Append(" <div class='box'>");
+                        html.Append("  <div class='box-header with-border'");
+                        html.Append("    <h3 class='box-title'><i class='fa fa-bar-chart'></i>");
+                        html.Append(IS_ITEM_NAME);
+                        html.Append("</h3>"); 
+                        html.Append("    <div class='box-tools pull-right'>");
+                        html.Append("     <button type='button' class='btn btn-box-tool' data-widget='collapse'><i class='fa fa-minus'></i>");
+                        html.Append("    </button>");
+                        html.Append("     <div class='btn-group'>");
+                        html.Append("      <button type='button' class='btn btn-box-tool dropdown-toggle' data-toggle='dropdown'>");
+                        html.Append("       <i class='fa fa-wrench'></i></button> ");
+                        html.Append("   </div>");
+                        html.Append("    <button type='button' class='btn btn-box-tool' data-widget='remove'><i class='fa fa-times'></i></button>");
+                        html.Append("  </div>");
+                        html.Append(" </div> ");
+                        html.Append("  <div class='box-body'>");
+                        html.Append("   <div class='row'>");
+                        html.Append("<div class='col-md-12'>");
+
+                        html.Append("  <div ></div>"); 
+                        html.Append("<table id='ctl00_ContentPlaceHolder1_GridView5D' class='table table-hover table-bordered table-striped' >");
+                        html.Append("<thead>");
+                        html.Append("<tr>");
+                        html.Append("<th>Expire Days Left</th>");
+                        html.Append("<th>Emp Name</th>");
+                        html.Append("<th>QR Number</th>");
+                        html.Append("<th>Item ID</th>");
+                        html.Append("<th>Item Name</th>");
+                        html.Append("<th>Location</th>");
+                        html.Append("<th>Department</th>");
+                        html.Append("<th>Division</th>");
+                        html.Append("<th>Category</th>");
+                        html.Append("<th>Type</th>");
+                        html.Append("<th>Brand</th>"); 
+                        html.Append("</tr>");
+                        html.Append("</thead>");
+                        html.Append("<tbody>");
+
+                        for (int j = 0; j < RowCountj; j++)
+                        {
+                            html.Append("<tr>");
+                            html.Append("<td align='center'>");
+                            html.Append(dt.Rows[j]["EXPIRED_DAYS"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["EMP_NAME"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["QR_CODE_ID"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["EMP_ITEMS_ID"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["ITEM_NAME"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["LOCATION_NAME"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["DEPARTMENT_NAME"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["DIVISION_NAME"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["ITEM_CATEGORY_NAME"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["ITEM_TYPE"].ToString());
+                            html.Append("</td>");
+                            html.Append("<td>");
+                            html.Append(dt.Rows[j]["ITEM_BRAND"].ToString());
+                            html.Append("</td>");
+                         
+                            html.Append("</tr>");
+                        }
+
+                        html.Append(" </tbody>");
+                        html.Append(" </table>");
+                        html.Append("</div>");
+                        html.Append("</div>");
+                        html.Append("</div>");
+                        html.Append("</div>");
+                        html.Append("</div>");
+                        html.Append("</div>");
+
+                    }
+
+                    if (IS_ITEM_ID == "6")
+                    {
+
+                        //start waste paper material information
+                        //Populating a DataTable from database.
+                        DataTable dt = this.WpMatGetData();
+
+                        RowCountj = dt.Rows.Count;
+
+                        for (int j = 0; j < RowCountj; j++)
+                        {
+                            html.Append("<div class='row'>");
+
+                            html.Append("<div class='col-md-3 col-sm-6 col-xs-12'>");
+                            html.Append("<div class='info-box'>");
+                            html.Append("<span class='info-box-icon bg-aqua' style='padding-top:20px'><i class='fa fa-opencart'></i></span>"); 
+                            html.Append("<div class='info-box-content'>");
+                            html.Append("<span class='info-box-text'>"+ IS_ITEM_NAME + "  </br> Purchases Weight </span>");
+                            html.Append("<span class='info-box-number'>" + dt.Rows[j]["PURCHASE_WT"] + "<small> KG</small></span>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+
+                            html.Append("<div class='col-md-3 col-sm-6 col-xs-12'>");
+                            html.Append("<div class='info-box'>");
+                            html.Append("<span class='info-box-icon bg-red' style='padding-top:20px'><i class='fa fa-bank'></i></span>"); 
+                            html.Append("<div class='info-box-content'>");
+                            html.Append("<span class='info-box-text'>" + IS_ITEM_NAME + " </br> Purchases Amount </span>");
+                            html.Append("<span class='info-box-number'>" + dt.Rows[j]["PURCHASE_AMT"] + "<small> SR</small></span>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+
+                            html.Append("<div class='col-md-3 col-sm-6 col-xs-12'>");
+                            html.Append("<div class='info-box'>");
+                            html.Append("<span class='info-box-icon bg-green' style='padding-top:20px'><i class='fa fa-cubes'></i></span>"); 
+                            html.Append("<div class='info-box-content'>");
+                            html.Append("<span class='info-box-text'>" + IS_ITEM_NAME + " </br> Sales Weight </span>");
+                            html.Append("<span class='info-box-number'>" + dt.Rows[j]["SALES_WT"] + "<small> KG</small></span>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+                             
+                            html.Append("<div class='col-md-3 col-sm-6 col-xs-12'>");
+                            html.Append("<div class='info-box'>");
+                            html.Append("<span class='info-box-icon bg-yellow' style='padding-top:20px'><i class='fa fa-money'></i></span>"); 
+                            html.Append("<div class='info-box-content'>");
+                            html.Append("<span class='info-box-text'>" + IS_ITEM_NAME + " </br> Sales Amount </span>");
+                            html.Append("<span class='info-box-number'>" + dt.Rows[j]["SALES_AMT"] + "<small> SR</small></span>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+                            html.Append("</div>");
+                             
+                            html.Append("</div>");
+                        }
 
                     }
                 }
@@ -380,13 +583,42 @@ namespace NRCAPPS
 
         }
 
+
+        //start Waste Paper material information current months 
+        protected DataTable WpMatGetData()
+        {
+            int userID = Convert.ToInt32(Session["USER_ID"]);
+            using (var conn = new OracleConnection(strConnString))
+            {
+                string query = " SELECT TO_CHAR(sum(nvl(PPM.ITEM_WEIGHT,0)),'9,999,999,999.99') AS PURCHASE_WT, TO_CHAR(sum(nvl(PPM.ITEM_AMOUNT,0)),'9,999,999,999.99' )  AS PURCHASE_AMT, TO_CHAR(sum(nvl(PSMAS.ITEM_WEIGHT, 0)) + sum(nvl(PEWC.ITEM_WEIGHT, 0)), '9,999,999,999.99') AS SALES_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_AMOUNT, 0)) + sum(nvl(PEWC.ITEM_AMOUNT, 0)), '9,999,999,999.99' ) AS SALES_AMT FROM PF_ITEM PI LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM WP_PURCHASE_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY') GROUP BY ITEM_ID) PPM ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM WP_SALES_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PSMAS ON PI.ITEM_ID = PSMAS.ITEM_ID LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT)/ 1000 AS ITEM_WEIGHT, sum(MATERIAL_CONVERSION_AMOUNT) AS ITEM_AMOUNT FROM WP_EXPORT_WBSLIP_CON_ITEM WHERE IS_INVENTORY_STATUS = 'Complete' AND TO_CHAR(TO_DATE(IS_SHIPMENT_COMPLETE_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY') GROUP BY ITEM_ID) PEWC ON PI.ITEM_ID = PEWC.ITEM_ID ";
+                using (var cmd = new OracleCommand(query, conn))
+                {
+                    //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
+                    //  cmd.Parameters["NoUserID"].Value = userID;
+                    using (var sda = new OracleDataAdapter())
+                    {
+                        cmd.Connection = conn;
+                        sda.SelectCommand = cmd;
+
+                        using (TableData)
+                        {
+                            TableData.Clear();
+                            sda.Fill(TableData);
+                            return TableData;
+                        }
+                    }
+                }
+            }
+        }
+        //end  Waste Paper material information current months  
+
         //start Plastic Factory material information current months 
         protected DataTable PfMatGetData()
         {
             int userID = Convert.ToInt32(Session["USER_ID"]);
             using (var conn = new OracleConnection(strConnString))
             {
-                string query = " SELECT TO_CHAR(sum(nvl(PPM.ITEM_WEIGHT,0)),'999,999.999') AS PURCHASE_WT, TO_CHAR(sum(nvl(PPM.ITEM_AMOUNT,0)),'9,999,999,999.99' )  AS PURCHASE_AMT, TO_CHAR(sum(nvl(PPMD.ITEM_WEIGHT,0)),'999,999.999') AS PURCHASE_WTD, TO_CHAR(sum(nvl(PPMAS.ITEM_WEIGHT_IN_FG,0)),'999,999.999') AS PRODUCTION_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_WEIGHT,0)),'999,999.999') AS SALES_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_AMOUNT,0)),'9,999,999,999.99' ) AS SALES_AMT FROM PF_ITEM PI LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_PURCHASE_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY') GROUP BY ITEM_ID) PPM ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT FROM PF_SALES_MASTER  WHERE PUR_TYPE_ID = 1  AND TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')  GROUP BY ITEM_ID) PPMD ON PI.ITEM_ID = PPMD.ITEM_ID  LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_IN_FG FROM PF_PRODUCTION_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PPMAS ON PI.ITEM_ID = PPMAS.ITEM_ID LEFT JOIN (SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_SALES_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PSMAS ON PI.ITEM_ID = PSMAS.ITEM_ID ";
+                string query = " SELECT TO_CHAR(sum(nvl(PPM.ITEM_WEIGHT,0)),'999,999.999') AS PURCHASE_WT, TO_CHAR(sum(nvl(PPM.ITEM_AMOUNT,0)),'9,999,999,999.99' )  AS PURCHASE_AMT, TO_CHAR(sum(nvl(PPMD.ITEM_WEIGHT, 0)), '999,999.99') AS PURCHASE_WTD, TO_CHAR(sum(nvl(PPMAS.ITEM_WEIGHT, 0)), '999,999.999') AS PRODUCTION_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_WEIGHT, 0)) + sum(nvl(PEWC.ITEM_WEIGHT, 0)), '999,999.999') AS SALES_WT, TO_CHAR(sum(nvl(PSMAS.ITEM_AMOUNT, 0)) + sum(nvl(PEWC.ITEM_AMOUNT, 0)), '9,999,999,999.99' ) AS SALES_AMT FROM PF_ITEM PI LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_PURCHASE_MASTER  WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY') GROUP BY ITEM_ID) PPM ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT FROM PF_SALES_MASTER WHERE PUR_TYPE_ID = 1  AND TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')  GROUP BY ITEM_ID) PPMD ON PI.ITEM_ID = PPMD.ITEM_ID LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT FROM PF_PRODUCTION_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PPMAS ON PI.ITEM_ID = PPMAS.ITEM_ID LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT) AS ITEM_WEIGHT, sum(ITEM_AMOUNT) AS ITEM_AMOUNT FROM PF_SALES_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PSMAS ON PI.ITEM_ID = PSMAS.ITEM_ID LEFT JOIN(SELECT ITEM_ID, sum(ITEM_WEIGHT)/ 1000 AS ITEM_WEIGHT, sum(MATERIAL_CONVERSION_AMOUNT) AS ITEM_AMOUNT FROM PF_EXPORT_WBSLIP_CON WHERE IS_INVENTORY_STATUS = 'Complete' AND TO_CHAR(TO_DATE(IS_SHIPMENT_COMPLETE_DATE), 'mm-YYYY') = TO_CHAR(TO_DATE(sysdate), 'mm-YYYY')   GROUP BY ITEM_ID) PEWC ON PI.ITEM_ID = PEWC.ITEM_ID ";
                 using (var cmd = new OracleCommand(query, conn))
                 {
                     //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
@@ -410,9 +642,7 @@ namespace NRCAPPS
 
         //start Plastic Factory chart last 12 months (month value is variable)
         protected DataTable PfChartGetData()
-        {
-            int userID = Convert.ToInt32(Session["USER_ID"]);
-
+        {  
             DataTable dtItem = new DataTable();
             DataSet di = new DataSet();
             string makeItemChangeSQL = " SELECT * FROM PF_ITEM WHERE IS_ACTIVE = 'Enable' ORDER BY ITEM_ID ASC ";
@@ -449,14 +679,37 @@ namespace NRCAPPS
                 }
             }
         }
+
+        //start Plastic Factory chart last 12 months (purchase, poduction & sales )
+        protected DataTable PfChartGetDataMonthly()
+        {  
+            string query_str = "SELECT * FROM VIEW_PF_ITEM_WT_MONTHLY_SUM";
+            using (var conn = new OracleConnection(strConnString))
+            {
+                using (var cmd = new OracleCommand(query_str, conn))
+                {
+                    using (var sda = new OracleDataAdapter())
+                    {
+                        cmd.Connection = conn;
+                        sda.SelectCommand = cmd;
+
+                        using (TableData)
+                        {
+                            TableData.Clear();
+                            sda.Fill(TableData);
+                            return TableData;
+                        }
+                    }
+                }
+            }
+        }
         //end Plastic Factory material information current months 
         //start Plastic Factory chart last 12 months (month value is variable)
         protected DataTable PfPieChartGetData()
-        {
-            int userID = Convert.ToInt32(Session["USER_ID"]);
+        { 
             using (var conn = new OracleConnection(strConnString))
             {
-                string query = " SELECT  PI.ITEM_NAME,  nvl(PRSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_RM, nvl(PFSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_FG FROM PF_ITEM PI LEFT JOIN PF_RM_STOCK_INVENTORY_MASTER PRSIM ON PRSIM.ITEM_ID = PI.ITEM_ID LEFT JOIN PF_FG_STOCK_INVENTORY_MASTER PFSIM ON PFSIM.ITEM_ID = PI.ITEM_ID WHERE nvl(PRSIM.FINAL_STOCK_WT,0)>0 OR nvl(PFSIM.FINAL_STOCK_WT,0)>0 ORDER BY PI.ITEM_ID asc";
+                string query = " SELECT  PI.ITEM_NAME,  nvl(PRSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_RM, nvl(PFSIM.FINAL_STOCK_WT,0) AS FINAL_STOCK_WT_FG FROM PF_ITEM PI LEFT JOIN PF_RM_STOCK_INVENTORY_MASTER PRSIM ON PRSIM.ITEM_ID = PI.ITEM_ID LEFT JOIN PF_FG_STOCK_INVENTORY_MASTER PFSIM ON PFSIM.ITEM_ID = PI.ITEM_ID WHERE PI.IS_ACTIVE = 'Enable' AND (nvl(PRSIM.FINAL_STOCK_WT,0)>0 OR nvl(PFSIM.FINAL_STOCK_WT,0)>0) ORDER BY PI.ITEM_ID asc"; //WHERE nvl(PRSIM.FINAL_STOCK_WT,0)>0 OR nvl(PFSIM.FINAL_STOCK_WT,0)>0
                 using (var cmd = new OracleCommand(query, conn))
                 {
                     //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
@@ -478,6 +731,30 @@ namespace NRCAPPS
         }
         //end Plastic Factory material information current months 
 
+        //start IT Asset - Antivirus status
+        protected DataTable ItAssetAntiStatus()
+        {
+            using (var conn = new OracleConnection(strConnString))
+            {
+                string query = " SELECT HE.EMP_ID,  CASE WHEN  HE.EMP_FNAME IS NOT NULL  THEN UPPER(HE.EMP_FNAME) || ' ' || UPPER(HE.EMP_LNAME) WHEN HE.EMP_FNAME IS NULL  THEN UPPER(IAIP.PLACEMENT_NAME) END AS EMP_NAME, HEL.LOCATION_NAME, CASE WHEN HEDE.DEPARTMENT_NAME IS NOT NULL  THEN HEDE.DEPARTMENT_NAME WHEN HEDED.DEPARTMENT_NAME IS NOT NULL  THEN HEDED.DEPARTMENT_NAME END AS DEPARTMENT_NAME, CASE WHEN HED.DIVISION_NAME IS NOT NULL  THEN HED.DIVISION_NAME WHEN HEDD.DIVISION_NAME IS NOT NULL  THEN HEDD.DIVISION_NAME END AS DIVISION_NAME, AIC.ITEM_CATEGORY_NAME, AI.ITEM_TYPE, AI.ITEM_BRAND, AEI.EMP_ITEMS_ID, AEI.QR_CODE_ID, AI.ITEM_NAME,  (EXTRACT(DAY FROM(IAEIE.EXPIRES_DATE - SYSDATE)))  AS EXPIRED_DAYS FROM IT_ASSET_EMP_ITEMS AEI LEFT JOIN IT_ASSET_ITEMS AI ON AI.ITEM_ID = AEI.ITEM_ID LEFT JOIN IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID LEFT JOIN HR_EMPLOYEES HE  ON HE.EMP_ID = AEI.EMP_ID LEFT JOIN  HR_EMP_DIVISIONS HED ON HED.DIVISION_ID = HE.DIVISION_ID LEFT JOIN HR_EMP_DEPARTMENTS HEDE ON HEDE.DEPARTMENT_ID = HE.DEPARTMENT_ID LEFT JOIN HR_EMP_DEPARTMENTS HEDED ON HEDED.DEPARTMENT_ID = AEI.DEPARTMENT_ID LEFT JOIN  HR_EMP_DIVISIONS HEDD ON HEDD.DIVISION_ID = AEI.DIVISION_ID LEFT JOIN HR_EMP_LOCATIONS HEL ON HEL.LOCATION_ID = AEI.LOCATION_ID LEFT JOIN IT_ASSET_ITEMS_PLACEMENT IAIP ON IAIP.PLACEMENT_ID = AEI.PLACEMENT_ID LEFT JOIN(SELECT* FROM IT_ASSET_EMP_ITEM_EXPIRES)IAEIE ON  IAEIE.ITEM_ID = AEI.EMP_ITEMS_ID OR IAEIE.ITEM_ID = AEI.EMP_ITEMS_ID WHERE AI.IS_ACTIVE = 'Enable' AND(AIC.ITEM_CAT_QR_PRI_CODE = 'CPU' OR AIC.ITEM_CAT_QR_PRI_CODE = 'ITD') AND(EXTRACT(DAY FROM(IAEIE.EXPIRES_DATE - SYSDATE))) IS NOT NULL ORDER BY(EXTRACT(DAY FROM(IAEIE.EXPIRES_DATE - SYSDATE))) ASC, HE.EMP_ID ASC, IAIP.PLACEMENT_NAME ASC ";  
+                using (var cmd = new OracleCommand(query, conn))
+                { 
+                    using (var sda = new OracleDataAdapter())
+                    {
+                        cmd.Connection = conn;
+                        sda.SelectCommand = cmd;
+
+                        using (TableData)
+                        {
+                            TableData.Clear();
+                            sda.Fill(TableData);
+                            return TableData;
+                        }
+                    }
+                }
+            }
+        }
+        //end IT Asset - Antivirus status
 
         public DataSet ExecuteBySqlString(string sqlString)
         {

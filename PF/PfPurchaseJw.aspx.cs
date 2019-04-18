@@ -183,7 +183,7 @@ namespace NRCAPPS.PF
                     string get_user_purchase_id = "select PF_PURCHASE_JWID_SEQ.nextval from dual";
                     cmdsp = new OracleCommand(get_user_purchase_id, conn);
                     int newPurchaseID = Int16.Parse(cmdsp.ExecuteScalar().ToString());
-                    double ItemWeight = Convert.ToDouble(TextItemWeight.Text);
+                    double ItemWeight = Convert.ToDouble(TextItemWeight.Text.Trim());
 
                     string insert_purchase = "insert into  PF_PURCHASE_JW (PURCHASE_JW_ID, SLIP_NO, PARTY_ID, ITEM_ID, SUB_ITEM_ID, SUPERVISOR_ID, ITEM_WEIGHT, ENTRY_DATE, CREATE_DATE, C_USER_ID, IS_ACTIVE, DIVISION_ID) values  ( :NoPurchaseID, :NoSlipID, :NoSupplierID, :NoItemID, :NoSubItemID, :NoSupervisorID, :TextItemWeight, TO_DATE(:EntryDate, 'DD/MM/YYYY'), TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID, :TextIsActive, 3)";
                     cmdi = new OracleCommand(insert_purchase, conn);
@@ -352,29 +352,19 @@ namespace NRCAPPS.PF
                 string ItemName = DropDownItemID.SelectedItem.Text;
                 string SubItemName = "";
                 if (SubItemID == 0)
-                {
-                    SubItemID = 0;
-                    SubItemName = "";
-                }
-                else
-                {
-                    SubItemID = Convert.ToInt32(DropDownSubItemID.Text);
-                    SubItemName = DropDownSubItemID.SelectedItem.Text;
-                }
+                { SubItemID = 0; SubItemName = ""; }
+                else  { SubItemID = Convert.ToInt32(DropDownSubItemID.Text); SubItemName = DropDownSubItemID.SelectedItem.Text; }
 
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
-
                 string MakeEntryDate = EntryDate.Text;
                 string[] MakeEntryDateSplit = MakeEntryDate.Split('-'); 
                 String EntryDateTemp = MakeEntryDateSplit[0].Replace("/", "-");
                 DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-                string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy"); 
-                double ItemWeight = Convert.ToDouble(TextItemWeight.Text);  
+                string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
+                double ItemWeight = Convert.ToDouble(TextItemWeight.Text.Trim());  
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                
                 // purchase master update
-
                 string update_user = "update  PF_PURCHASE_JW  set PARTY_ID = :NoSupplierID, ITEM_ID = :NoItemID, SUB_ITEM_ID = :NoSubItemID, SUPERVISOR_ID = :NoSupervisorID, ITEM_WEIGHT = :NoItemWeight, ENTRY_DATE = TO_DATE(:EntryDate, 'DD/MM/YYYY'), UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID, IS_ACTIVE = :TextIsActive where SLIP_NO = :NoSlipNo ";
                 cmdi = new OracleCommand(update_user, conn);
 

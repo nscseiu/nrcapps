@@ -125,7 +125,8 @@ namespace NRCAPPS.PF
                         DropDownSubItemID.DataValueField = "SUB_ITEM_ID";
                         DropDownSubItemID.DataTextField = "SUB_ITEM_NAME";
                         DropDownSubItemID.DataBind();
-                        DropDownSubItemID.Items.Insert(0, new ListItem("Select Sub Item", "0"));
+                        DropDownSubItemID.Items.FindByValue("1").Selected = true;
+                        //   DropDownSubItemID.Items.Insert(0, new ListItem("Select Sub Item", "0"));
 
                         DataTable dtPgeID = new DataTable();
                         DataSet dsp = new DataSet();
@@ -138,7 +139,9 @@ namespace NRCAPPS.PF
                         DropDownPgeID.DataBind();
                         DropDownPgeID.Items.Insert(0, new ListItem("Select Garbage Est. of Prod.", "0"));
 
+                        TextPgeWet.Enabled = false;
                         Display();
+                        DisplaySummary();
                         DropDownShiftID.Focus();
                         alert_box.Visible = false;
 
@@ -238,7 +241,7 @@ namespace NRCAPPS.PF
                     double InitialStock = 0.00, StockInWet = 0.00, StockInWetDe = 0.00, StockOutWet = 0.00, StockOutWetDe = 0.00, FinalStock = 0.00, StockInWetNew = 0.00, StockOutWetNew = 0.00, FinalStockNew = 0.00;
 
                     // check inventory FG
-                    string makeSQL = " select * from PF_FG_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  AND SUB_ITEM_ID  = '" + SubItemID + "' ";
+                    string makeSQL = " select * from PF_FG_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  ";
                     cmdl = new OracleCommand(makeSQL);
                     oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                     dt = new DataTable();
@@ -257,21 +260,20 @@ namespace NRCAPPS.PF
                     }
 
                     StockInWetNew = StockInWet + ItemWeight;
-                    FinalStockNew = InitialStock + StockInWetNew - StockOutWet;
+                    FinalStockNew = (InitialStock + StockInWetNew) - StockOutWet;
 
                     if (0 < RowCount)
                     {
                         // update inventory FG
-                        string update_inven_mas = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
+                        string update_inven_mas = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
                         cmdu = new OracleCommand(update_inven_mas, conn);
 
-                        OracleParameter[] objPrmInevenMas = new OracleParameter[6];
+                        OracleParameter[] objPrmInevenMas = new OracleParameter[5];
                         objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockIn", StockInWetNew);
                         objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
                         objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", c_date);
                         objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                        objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
-                        objPrmInevenMas[5] = cmdu.Parameters.Add("NoSubItemID", InvenSubItemID);
+                        objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID); 
 
                         cmdu.ExecuteNonQuery();
                         cmdu.Parameters.Clear();
@@ -280,7 +282,7 @@ namespace NRCAPPS.PF
                     else
                     {
                         // insert inventory FG
-                        FinalStockNew = InitialStock + ItemWeight - StockOutWet;
+                        FinalStockNew = (InitialStock + ItemWeight) - StockOutWet;
 
                         string get_inven_mas_id = "select PF_FG_STOCK_INVEN_MASID_SEQ.nextval from dual";
                         cmdsp = new OracleCommand(get_inven_mas_id, conn);
@@ -353,21 +355,20 @@ namespace NRCAPPS.PF
                     }
 
                     StockOutWetNew = StockOutWet + ItemWeight + ItemPgeWet;
-                    FinalStockNew = InitialStock + StockInWet - StockOutWetNew;
+                    FinalStockNew = (InitialStock + StockInWet) - StockOutWetNew;
 
                     if (0 < RowCount)
                     {
 
-                        string update_inven_mas = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
+                        string update_inven_mas = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
                         cmdu = new OracleCommand(update_inven_mas, conn);
 
-                        OracleParameter[] objPrmInevenMas = new OracleParameter[6];
+                        OracleParameter[] objPrmInevenMas = new OracleParameter[5];
                         objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockOut", StockOutWetNew);
                         objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
                         objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", c_date);
                         objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                        objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
-                        objPrmInevenMas[5] = cmdu.Parameters.Add("NoSubItemID", InvenSubItemID);
+                        objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID); 
 
                         cmdu.ExecuteNonQuery();
                         cmdu.Parameters.Clear();
@@ -376,7 +377,7 @@ namespace NRCAPPS.PF
                     else
                     {
 
-                        FinalStockNew = InitialStock + ItemWeight - StockOutWet;
+                        FinalStockNew = (InitialStock + ItemWeight) - StockOutWet;
 
                         string get_inven_mas_id = "select PF_RM_STOCK_INVEN_MASID_SEQ.nextval from dual";
                         cmdsp = new OracleCommand(get_inven_mas_id, conn);
@@ -464,7 +465,7 @@ namespace NRCAPPS.PF
                      
                     clearText();
                     Display();
-                     
+                    DisplaySummary(); 
                 }
                 else
                 {
@@ -517,6 +518,10 @@ namespace NRCAPPS.PF
             Display();
             CheckItemWeight.Text = "";
             alert_box.Visible = false;
+        //    DropDownItemID.Enabled = false;
+        //    DropDownSubItemID.Enabled = false;
+       //     TextItemWeight.Enabled = false;
+        //    DropDownPgeID.Enabled = false;
             BtnAdd.Attributes.Add("aria-disabled", "false");
             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
            }
@@ -533,26 +538,37 @@ namespace NRCAPPS.PF
             if (IS_VIEW_ACTIVE == "Enable")
             {
                 OracleConnection conn = new OracleConnection(strConnString);
-                conn.Open();
-
-                DataTable dtEmpTypeID = new DataTable();
-                DataSet ds = new DataSet();
-
+                conn.Open(); 
                 string makeSQL = "";
+                string MonthYear = System.DateTime.Now.ToString("MM/yyyy");
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER,  SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID ORDER BY PPRM.CREATE_DATE DESC";
+                    makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER,  SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID WHERE to_char(PPRM.ENTRY_DATE, 'mm/yyyy') = '" + MonthYear + "' ORDER BY PPRM.CREATE_DATE DESC";
+
+                    if (TextMonthYear3.Text != "") {
+
+                      //  makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER,  SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID WHERE to_char(PPRM.ENTRY_DATE, 'mm/yyyy') = '" + TextMonthYear3.Text + "' ORDER BY PPRM.CREATE_DATE DESC";
+
+                        if (DropDownItemID1.Text == "0")
+                        {
+                            makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where to_char(PPRM.ENTRY_DATE, 'mm/yyyy') = '" + TextMonthYear3.Text + "' AND (PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%'  or  to_char(PPRM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%') ORDER BY PPRM.CREATE_DATE DESC";
+                        }
+                        else
+                        {
+                            makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where to_char(PPRM.ENTRY_DATE, 'mm/yyyy') = '" + TextMonthYear3.Text + "' AND PI.ITEM_ID like '" + DropDownItemID1.Text + "%' AND (PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%' or  to_char(PPRM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%') ORDER BY PPRM.CREATE_DATE DESC";
+                        }
+                    }
                 }
                 else
                 {
                     if (DropDownItemID1.Text == "0")
                     {
-                        makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PPRM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY PPRM.CREATE_DATE DESC";
+                        makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PPRM.ENTRY_DATE like '" + txtSearchEmp.Text + "%'  or  to_char(PPRM.ENTRY_DATE, 'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY PPRM.CREATE_DATE DESC";
                     }
                     else
                     {
-                        makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where PI.ITEM_ID like '" + DropDownItemID1.Text + "%' AND (PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%'  or PPRM.ENTRY_DATE like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%') ORDER BY PPRM.CREATE_DATE DESC";
-                    }
+                        makeSQL = " SELECT PPRM.PRODUCTION_ID, PPS.SHIFT_NAME, PPM.MACHINE_NUMBER, SUBSTR(PPRM.ENTRY_DATE,0,2) || '-' || PPS.SHIFT_NAME || '-' || PPM.MACHINE_NUMBER  AS SHIFT_MACHINE, PS.SUPERVISOR_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PPRM.ITEM_WEIGHT, PPRM.ITEM_WEIGHT_IN_FG, PPRM.PGE_PERCENT, PPRM.PGE_WEIGHT, PPRM.ENTRY_DATE, PPRM.CREATE_DATE, PPRM.UPDATE_DATE, PPRM.IS_ACTIVE FROM PF_PRODUCTION_MASTER PPRM LEFT JOIN PF_PRODUCTION_SHIFT PPS ON PPS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_PRODUCTION_MACHINE PPM ON PPM.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID where PI.ITEM_ID like '" + DropDownItemID1.Text + "%' AND (PPRM.PRODUCTION_ID like '" + txtSearchEmp.Text + "%' or PPS.SHIFT_NAME like '" + txtSearchEmp.Text + "%' or PS.SUPERVISOR_NAME  like '" + txtSearchEmp.Text + "%' or PPM.MACHINE_NUMBER like '" + txtSearchEmp.Text + "%'  or PPRM.ENTRY_DATE like '" + txtSearchEmp.Text + "%'  or  to_char(PPRM.ENTRY_DATE, 'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PPRM.IS_ACTIVE like '" + txtSearchEmp.Text + "%') ORDER BY PPRM.CREATE_DATE DESC";
+                    } 
                     alert_box.Visible = false; 
                 }
 
@@ -563,6 +579,7 @@ namespace NRCAPPS.PF
                 GridView1.DataSource = dt;
                 GridView1.DataKeyNames = new string[] { "PRODUCTION_ID" };
                 GridView1.DataBind();
+                 
                 conn.Close();
                 // alert_box.Visible = false;
             }
@@ -579,6 +596,87 @@ namespace NRCAPPS.PF
             Display();
             alert_box.Visible = false;
         }
+         
+        public void DisplaySummary()
+        {
+            if (IS_VIEW_ACTIVE == "Enable")
+            {
+                OracleConnection conn = new OracleConnection(strConnString);
+                conn.Open();
+                string makeSQL = "";
+                string MonthYear = System.DateTime.Now.ToString("MM/yyyy");
+                if (TextMonthYear4.Text == "")
+                {
+                    makeSQL = "  SELECT PI.ITEM_NAME, count(PPM.PRODUCTION_ID) AS PRODUCTION_ID, sum(PPM.ITEM_WEIGHT) AS ITEM_WEIGHT, sum(PGE_WEIGHT) AS PGE_WEIGHT, nvl(PAG.ACTUAL_GAR_WEIGHT,0) AS ACTUAL_GAR_WEIGHT, nvl(sum(ITEM_WEIGHT) + sum(PGE_WEIGHT) + PAG.ACTUAL_GAR_WEIGHT,0) AS TOTAL_WEIGHT FROM PF_ITEM PI LEFT JOIN PF_PRODUCTION_MASTER PPM ON PPM.ITEM_ID = PI.ITEM_ID LEFT JOIN PF_ACTUAL_GARBAGE PAG ON PAG.ITEM_ID = PI.ITEM_ID AND to_char(PAG.MONTH_YEAR, 'mm/yyyy') = '" + MonthYear + "' WHERE to_char(PPM.ENTRY_DATE, 'mm/yyyy') = '" + MonthYear + "' GROUP BY PI.ITEM_ID, PI.ITEM_NAME, PAG.ACTUAL_GAR_WEIGHT ORDER BY PI.ITEM_ID ";
+                }
+                else
+                {
+                    makeSQL = "  SELECT PI.ITEM_NAME, count(PPM.PRODUCTION_ID) AS PRODUCTION_ID, sum(PPM.ITEM_WEIGHT) AS ITEM_WEIGHT, sum(PGE_WEIGHT) AS PGE_WEIGHT, nvl(PAG.ACTUAL_GAR_WEIGHT,0) AS ACTUAL_GAR_WEIGHT, nvl(sum(ITEM_WEIGHT) + sum(PGE_WEIGHT) + PAG.ACTUAL_GAR_WEIGHT,0) AS TOTAL_WEIGHT FROM PF_ITEM PI LEFT JOIN PF_PRODUCTION_MASTER PPM ON PPM.ITEM_ID = PI.ITEM_ID LEFT JOIN PF_ACTUAL_GARBAGE PAG ON PAG.ITEM_ID = PI.ITEM_ID AND to_char(PAG.MONTH_YEAR, 'mm/yyyy') = '" + TextMonthYear4.Text + "' WHERE to_char(PPM.ENTRY_DATE, 'mm/yyyy') = '" + TextMonthYear4.Text + "' GROUP BY PI.ITEM_ID, PI.ITEM_NAME, PAG.ACTUAL_GAR_WEIGHT ORDER BY PI.ITEM_ID ";
+              
+                    alert_box.Visible = false;
+                }
+
+                cmdl = new OracleCommand(makeSQL);
+                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                dt = new DataTable();
+                oradata.Fill(dt);
+                GridView2.DataSource = dt;
+                GridView2.DataKeyNames = new string[] { "ITEM_NAME" };
+                GridView2.DataBind();
+                if (dt.Rows.Count > 0)
+                {
+                    GridView2.HeaderRow.Cells[5].HorizontalAlign = HorizontalAlign.Right;
+                    //Calculate Sum and display in Footer Row 
+                    GridView2.FooterRow.Cells[0].Font.Bold = true;
+                    GridView2.FooterRow.Cells[0].Text = "Grand Total";
+                    GridView2.FooterRow.Cells[0].HorizontalAlign = HorizontalAlign.Right;
+
+                    decimal total_prod = dt.AsEnumerable().Sum(row => row.Field<decimal>("PRODUCTION_ID"));
+                    GridView2.FooterRow.Cells[1].Font.Bold = true;
+                    GridView2.FooterRow.Cells[1].HorizontalAlign = HorizontalAlign.Center;
+                    GridView2.FooterRow.Cells[1].Text = total_prod.ToString("N0");
+
+                    decimal total_wt = dt.AsEnumerable().Sum(row => row.Field<decimal>("ITEM_WEIGHT"));
+                    GridView2.FooterRow.Cells[2].Font.Bold = true;
+                    GridView2.FooterRow.Cells[2].HorizontalAlign = HorizontalAlign.Right;
+                    GridView2.FooterRow.Cells[2].Text = total_wt.ToString("N3");
+
+                    decimal total_pge_wt = dt.AsEnumerable().Sum(row => row.Field<decimal>("PGE_WEIGHT"));
+                    GridView2.FooterRow.Cells[3].Font.Bold = true;
+                    GridView2.FooterRow.Cells[3].HorizontalAlign = HorizontalAlign.Right;
+                    GridView2.FooterRow.Cells[3].Text = total_pge_wt.ToString("N3");
+
+                    decimal total_ag_wt = dt.AsEnumerable().Sum(row => row.Field<decimal>("ACTUAL_GAR_WEIGHT"));
+                    GridView2.FooterRow.Cells[4].Font.Bold = true;
+                    GridView2.FooterRow.Cells[4].HorizontalAlign = HorizontalAlign.Right;
+                    GridView2.FooterRow.Cells[4].Text = total_ag_wt.ToString("N3");
+
+                    decimal total_grand_wt = dt.AsEnumerable().Sum(row => row.Field<decimal>("TOTAL_WEIGHT"));
+                    GridView2.FooterRow.Cells[5].Font.Bold = true;
+                    GridView2.FooterRow.Cells[5].HorizontalAlign = HorizontalAlign.Right;
+                    GridView2.FooterRow.Cells[5].Text = total_grand_wt.ToString("N3");
+                }
+                else
+                {
+
+                }
+                conn.Close();
+                // alert_box.Visible = false;
+            }
+        }
+
+        protected void GridViewSearchSummary(object sender, EventArgs e)
+        {
+            this.DisplaySummary();
+        }
+
+        protected void GridView2_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GridView1.PageIndex = e.NewPageIndex;
+            DisplaySummary();
+            alert_box.Visible = false;
+        }
+
 
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
@@ -614,6 +712,11 @@ namespace NRCAPPS.PF
                 DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                 string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
 
+                //inventory calculation
+
+                int InvenItemID = 0;
+                int InvenSubItemID = 0;
+                double InitialStock = 0.00, StockInWet = 0.00, StockInWetDe = 0.00, StockOutWet = 0.00, StockOutWetDe = 0.00, FinalStock = 0.00, StockInWetNew = 0.00, StockOutWetNew = 0.00, FinalStockNew = 0.00;
 
                 // check production data
                 int ItemIdOld = 0, SubItemIdOld = 0; double ItemWeightOld = 0.00, ItemWeightOldFg = 0.00, ItemPgeWetOld = 0.00;
@@ -633,15 +736,92 @@ namespace NRCAPPS.PF
                     ItemPgeWetOld = Convert.ToDouble(dt.Rows[i]["PGE_WEIGHT"].ToString());
                 }
 
+               
+                    // check inventory RM
+                    string makeSQLRmIn = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "'  ";
+                    cmdl = new OracleCommand(makeSQLRmIn);
+                    oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                    dt = new DataTable();
+                    oradata.Fill(dt);
+                    RowCount = dt.Rows.Count;
 
-                //inventory calculation
 
-                int InvenItemID = 0;
-                int InvenSubItemID = 0;
-                double InitialStock = 0.00, StockInWet = 0.00, StockInWetDe = 0.00, StockOutWet = 0.00, StockOutWetDe = 0.00, FinalStock = 0.00, StockInWetNew = 0.00, StockOutWetNew = 0.00, FinalStockNew = 0.00;
+                    for (int i = 0; i < RowCount; i++)
+                    {
+                        InvenItemID = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
+                        InvenSubItemID = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
+                        InitialStock = Convert.ToDouble(dt.Rows[i]["INITIAL_STOCK_WT"].ToString());
+                        StockInWet = Convert.ToDouble(dt.Rows[i]["STOCK_IN_WT"].ToString());
+                        StockOutWet = Convert.ToDouble(dt.Rows[i]["STOCK_OUT_WT"].ToString());
+                        FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
+                    }
 
+                    if ((ItemWeightOld + ItemPgeWetOld) <= FinalStock)
+                    {
+                     
+                    StockOutWetNew = Math.Abs(StockOutWet - (ItemWeightOld + ItemPgeWetOld));  
+                    FinalStockNew = (InitialStock + StockInWet) - StockOutWetNew;
+
+                    if (0 < RowCount)
+                    {
+                        // update inventory RM (minus old data)
+                        string update_inven_mas = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
+                        cmdu = new OracleCommand(update_inven_mas, conn);
+
+                        OracleParameter[] objPrmInevenMas = new OracleParameter[5];
+                        objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockOut", StockOutWetNew);
+                        objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
+                        objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
+                        objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
+                        objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
+
+                        cmdu.ExecuteNonQuery();
+                        cmdu.Parameters.Clear();
+                        cmdu.Dispose();
+                    }
+                   
+
+                    // check inventory RM
+                    string makeSQLRmInNew = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  ";
+                    cmdl = new OracleCommand(makeSQLRmInNew);
+                    oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                    dt = new DataTable();
+                    oradata.Fill(dt);
+                    RowCount = dt.Rows.Count;
+
+
+                    for (int i = 0; i < RowCount; i++)
+                    {
+                        InvenItemID = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
+                        InvenSubItemID = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
+                        InitialStock = Convert.ToDouble(dt.Rows[i]["INITIAL_STOCK_WT"].ToString());
+                        StockInWet = Convert.ToDouble(dt.Rows[i]["STOCK_IN_WT"].ToString());
+                        StockOutWet = Convert.ToDouble(dt.Rows[i]["STOCK_OUT_WT"].ToString());
+                        FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
+                    }
+                   // update inventory RM (plus new data)
+                    StockOutWetDe = StockOutWet + ItemWeight + ItemPgeWet;
+                    FinalStockNew = (InitialStock + StockInWet) - StockOutWetDe;
+
+                    // update inventory RM
+                    string update_inven_rm_new = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
+                    cmdu = new OracleCommand(update_inven_rm_new, conn);
+
+                    OracleParameter[] objPrmInevenRMn = new OracleParameter[5];
+                    objPrmInevenRMn[0] = cmdu.Parameters.Add("NoStockOut", StockOutWetDe);
+                    objPrmInevenRMn[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
+                    objPrmInevenRMn[2] = cmdu.Parameters.Add("u_date", u_date);
+                    objPrmInevenRMn[3] = cmdu.Parameters.Add("NoCuserID", userID);
+                    objPrmInevenRMn[4] = cmdu.Parameters.Add("NoItemID", ItemID);
+
+                    cmdu.ExecuteNonQuery();
+                    cmdu.Parameters.Clear();
+                    cmdu.Dispose();
+
+
+            
                 // check inventory FG
-                string makeSQL = " select * from PF_FG_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "'  AND SUB_ITEM_ID  = '" + SubItemIdOld + "' ";
+                string makeSQL = " select * from PF_FG_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "'  ";
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
@@ -659,43 +839,62 @@ namespace NRCAPPS.PF
                     FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
                 }
 
-                StockInWetNew = StockInWet - ItemWeightOldFg;
-                FinalStockNew = InitialStock + StockInWetNew - StockOutWet;
+                StockInWetNew = StockInWet - ItemWeightOld;
+                FinalStockNew = (InitialStock + StockInWetNew) - StockOutWet;
 
                 if (0 < RowCount)
                 {
                     // update inventory FG (minus old data)
-                    string update_inven_mas = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
+                    string update_inven_mas = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
                     cmdu = new OracleCommand(update_inven_mas, conn);
 
-                    OracleParameter[] objPrmInevenMas = new OracleParameter[6];
+                    OracleParameter[] objPrmInevenMas = new OracleParameter[5];
                     objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockIn", StockInWetNew);
                     objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
                     objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
                     objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                    objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
-                    objPrmInevenMas[5] = cmdu.Parameters.Add("NoSubItemID", InvenSubItemID);
+                    objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID); 
 
                     cmdu.ExecuteNonQuery();
                     cmdu.Parameters.Clear();
                     cmdu.Dispose();
                 }
-                // update inventory FG (plus new data)
 
-                StockInWetDe  = StockInWetNew + ItemWeightInFg;
-                FinalStockNew = InitialStock + StockInWetDe - StockOutWet;
+
+                    // check inventory FG
+                    string makeFgSQL = " select * from PF_FG_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  ";
+                    cmdl = new OracleCommand(makeFgSQL);
+                    oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                    dt = new DataTable();
+                    oradata.Fill(dt);
+                    RowCount = dt.Rows.Count;
+
+
+                    for (int i = 0; i < RowCount; i++)
+                    {
+                        InvenItemID = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
+                        InvenSubItemID = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
+                        InitialStock = Convert.ToDouble(dt.Rows[i]["INITIAL_STOCK_WT"].ToString());
+                        StockInWet = Convert.ToDouble(dt.Rows[i]["STOCK_IN_WT"].ToString());
+                        StockOutWet = Convert.ToDouble(dt.Rows[i]["STOCK_OUT_WT"].ToString());
+                        FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
+                    }
+
+                    // update inventory FG (plus new data)
+
+                StockInWetDe = StockInWet + ItemWeight;
+                FinalStockNew = (InitialStock + StockInWetDe) - StockOutWet;
 
                 // update inventory FG
-                string update_inven_fg_new = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
+                string update_inven_fg_new = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
                 cmdu = new OracleCommand(update_inven_fg_new, conn);
 
-                OracleParameter[] objPrmInevenFGn = new OracleParameter[6];
+                OracleParameter[] objPrmInevenFGn = new OracleParameter[5];
                 objPrmInevenFGn[0] = cmdu.Parameters.Add("NoStockIn", StockInWetDe);
                 objPrmInevenFGn[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
                 objPrmInevenFGn[2] = cmdu.Parameters.Add("u_date", u_date);
                 objPrmInevenFGn[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                objPrmInevenFGn[4] = cmdu.Parameters.Add("NoItemID", ItemID);
-                objPrmInevenFGn[5] = cmdu.Parameters.Add("NoSubItemID", SubItemID);
+                objPrmInevenFGn[4] = cmdu.Parameters.Add("NoItemID", ItemID); 
 
                 cmdu.ExecuteNonQuery();
                 cmdu.Parameters.Clear();
@@ -711,7 +910,7 @@ namespace NRCAPPS.PF
                 objPrmIfgd[2] = cmdi.Parameters.Add("TextItemName", ItemName);
                 objPrmIfgd[3] = cmdi.Parameters.Add("NoSubItemID", SubItemID);
                 objPrmIfgd[4] = cmdi.Parameters.Add("TextSubItemName", SubItemName);
-                objPrmIfgd[5] = cmdi.Parameters.Add("NoStockIn", ItemWeightInFg);
+                objPrmIfgd[5] = cmdi.Parameters.Add("NoStockIn", ItemWeight);
                 objPrmIfgd[6] = cmdi.Parameters.Add("u_date", u_date);
                 objPrmIfgd[7] = cmdi.Parameters.Add("NoCuserID", userID);
                 objPrmIfgd[8] = cmdi.Parameters.Add("NoRefID", Production_ID);
@@ -719,67 +918,7 @@ namespace NRCAPPS.PF
                 cmdi.Parameters.Clear();
                 cmdi.Dispose();
 
-
-                // check inventory RM
-                string makeSQLRmIn = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "'  AND SUB_ITEM_ID  = '" + SubItemIdOld + "' ";
-                cmdl = new OracleCommand(makeSQLRmIn);
-                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
-                dt = new DataTable();
-                oradata.Fill(dt);
-                RowCount = dt.Rows.Count;
-
-
-                for (int i = 0; i < RowCount; i++)
-                {
-                    InvenItemID = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
-                    InvenSubItemID = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
-                    InitialStock = Convert.ToDouble(dt.Rows[i]["INITIAL_STOCK_WT"].ToString());
-                    StockInWet = Convert.ToDouble(dt.Rows[i]["STOCK_IN_WT"].ToString());
-                    StockOutWet = Convert.ToDouble(dt.Rows[i]["STOCK_OUT_WT"].ToString());
-                    FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
-                }
-
-                StockOutWetNew = StockOutWet - (ItemWeightOld + ItemPgeWetOld);
-                FinalStockNew = InitialStock + StockInWet - StockOutWetNew;
-
-                if (0 < RowCount)
-                {
-                    // update inventory RM (minus old data)
-                    string update_inven_mas = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
-                    cmdu = new OracleCommand(update_inven_mas, conn);
-
-                    OracleParameter[] objPrmInevenMas = new OracleParameter[6];
-                    objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockOut", StockOutWetNew);
-                    objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
-                    objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
-                    objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                    objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
-                    objPrmInevenMas[5] = cmdu.Parameters.Add("NoSubItemID", InvenSubItemID);
-
-                    cmdu.ExecuteNonQuery();
-                    cmdu.Parameters.Clear();
-                    cmdu.Dispose();
-                }
-                // update inventory RM (plus new data)
-
-                StockOutWetDe = StockOutWetNew + ItemWeight + ItemPgeWet;
-                FinalStockNew = InitialStock + StockInWet - StockOutWetDe;
-
-                // update inventory RM
-                string update_inven_rm_new = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
-                cmdu = new OracleCommand(update_inven_rm_new, conn);
-
-                OracleParameter[] objPrmInevenRMn = new OracleParameter[6];
-                objPrmInevenRMn[0] = cmdu.Parameters.Add("NoStockOut", StockOutWetDe);
-                objPrmInevenRMn[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
-                objPrmInevenRMn[2] = cmdu.Parameters.Add("u_date", u_date);
-                objPrmInevenRMn[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                objPrmInevenRMn[4] = cmdu.Parameters.Add("NoItemID", ItemID);
-                objPrmInevenRMn[5] = cmdu.Parameters.Add("NoSubItemID", SubItemID);
-
-                cmdu.ExecuteNonQuery();
-                cmdu.Parameters.Clear();
-                cmdu.Dispose();
+               
 
 
                 // update inventory RM details
@@ -852,6 +991,15 @@ namespace NRCAPPS.PF
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
                 clearText();
                 Display();
+                DisplaySummary();
+                }
+                else
+                {
+
+                    alert_box.Visible = true;
+                    alert_box.Controls.Add(new LiteralControl("Item Weight is not available in the RM Inventory"));
+                    alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
+                }
             }
             else
             {
@@ -873,7 +1021,11 @@ namespace NRCAPPS.PF
                 int SubItemID = Convert.ToInt32(DropDownSubItemID.Text); 
                  
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
-             
+                 //inventory calculation
+
+                int InvenItemID = 0;
+                int InvenSubItemID = 0;
+                double InitialStock = 0.00, StockInWet = 0.00, StockOutWet = 0.00,  FinalStock = 0.00, StockInWetNew = 0.00, StockOutWetNew = 0.00, FinalStockNew = 0.00;
                 // check production data
                 int ItemIdOld = 0, SubItemIdOld = 0; double ItemWeightOld = 0.00, ItemWeightOldFg = 0.00, ItemPgeWetOld = 0.00;
                 string makeSQLPro = " select ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT, ITEM_WEIGHT_IN_FG, PGE_WEIGHT from PF_PRODUCTION_MASTER where PRODUCTION_ID  = '" + Production_ID + "'  ";
@@ -891,15 +1043,53 @@ namespace NRCAPPS.PF
                     ItemWeightOldFg = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_IN_FG"].ToString());
                     ItemPgeWetOld = Convert.ToDouble(dt.Rows[i]["PGE_WEIGHT"].ToString());
                 }
-                 
-                //inventory calculation
 
-                int InvenItemID = 0;
-                int InvenSubItemID = 0;
-                double InitialStock = 0.00, StockInWet = 0.00, StockOutWet = 0.00,  FinalStock = 0.00, StockInWetNew = 0.00, StockOutWetNew = 0.00, FinalStockNew = 0.00;
+                    // check inventory RM
+                    string makeSQLRmIn = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "'  ";
+                    cmdl = new OracleCommand(makeSQLRmIn);
+                    oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                    dt = new DataTable();
+                    oradata.Fill(dt);
+                    RowCount = dt.Rows.Count;
+
+                    for (int i = 0; i < RowCount; i++)
+                    {
+                        InvenItemID = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
+                        InvenSubItemID = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
+                        InitialStock = Convert.ToDouble(dt.Rows[i]["INITIAL_STOCK_WT"].ToString());
+                        StockInWet = Convert.ToDouble(dt.Rows[i]["STOCK_IN_WT"].ToString());
+                        StockOutWet = Convert.ToDouble(dt.Rows[i]["STOCK_OUT_WT"].ToString());
+                        FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
+                    }
+                    if ((ItemWeightOld + ItemPgeWetOld) <= FinalStock)
+                    {
+
+                    StockOutWetNew = StockOutWet - (ItemWeightOld + ItemPgeWetOld);
+                    FinalStockNew = (InitialStock + StockInWet) - StockOutWetNew;
+
+                    if (0 < RowCount)
+                    {
+                        // update inventory RM (minus old data)
+                        string update_inven_mas = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
+                        cmdu = new OracleCommand(update_inven_mas, conn);
+
+                        OracleParameter[] objPrmInevenMas = new OracleParameter[5];
+                        objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockOut", StockOutWetNew);
+                        objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
+                        objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
+                        objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
+                        objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
+
+                        cmdu.ExecuteNonQuery();
+                        cmdu.Parameters.Clear();
+                        cmdu.Dispose();
+                    }
+
+               
+            
 
                 // check inventory FG
-                string makeSQL = " select * from PF_FG_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "'  AND SUB_ITEM_ID  = '" + SubItemIdOld + "' ";
+                string makeSQL = " select * from PF_FG_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "' ";
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
@@ -916,22 +1106,22 @@ namespace NRCAPPS.PF
                     FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
                 }
 
-                StockInWetNew = StockInWet - ItemWeightOldFg;
-                FinalStockNew = InitialStock + StockInWetNew - StockOutWet;
+              
+                StockInWetNew = StockInWet - ItemWeightOld;
+                FinalStockNew = (InitialStock + StockInWetNew) - StockOutWet;
 
                 if (0 < RowCount)
                 {
                     // update inventory FG (minus old data)
-                    string update_inven_mas = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
+                    string update_inven_mas = "update  PF_FG_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
                     cmdu = new OracleCommand(update_inven_mas, conn);
 
-                    OracleParameter[] objPrmInevenMas = new OracleParameter[6];
+                    OracleParameter[] objPrmInevenMas = new OracleParameter[5];
                     objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockIn", StockInWetNew);
                     objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
                     objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
                     objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                    objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
-                    objPrmInevenMas[5] = cmdu.Parameters.Add("NoSubItemID", InvenSubItemID);
+                    objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID); 
 
                     cmdu.ExecuteNonQuery();
                     cmdu.Parameters.Clear();
@@ -945,45 +1135,7 @@ namespace NRCAPPS.PF
                 cmdi.Parameters.Clear();
                 cmdi.Dispose(); 
                  
-                // check inventory RM
-                string makeSQLRmIn = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "'  AND SUB_ITEM_ID  = '" + SubItemIdOld + "' ";
-                cmdl = new OracleCommand(makeSQLRmIn);
-                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
-                dt = new DataTable();
-                oradata.Fill(dt);
-                RowCount = dt.Rows.Count;
-                 
-                for (int i = 0; i < RowCount; i++)
-                {
-                    InvenItemID = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
-                    InvenSubItemID = Convert.ToInt32(dt.Rows[i]["SUB_ITEM_ID"].ToString());
-                    InitialStock = Convert.ToDouble(dt.Rows[i]["INITIAL_STOCK_WT"].ToString());
-                    StockInWet = Convert.ToDouble(dt.Rows[i]["STOCK_IN_WT"].ToString());
-                    StockOutWet = Convert.ToDouble(dt.Rows[i]["STOCK_OUT_WT"].ToString());
-                    FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
-                }
-
-                StockOutWetNew = StockOutWet - ItemWeightOld - ItemPgeWetOld;
-                FinalStockNew = InitialStock + StockInWet - StockOutWetNew;
-
-                if (0 < RowCount)
-                {
-                    // update inventory RM (minus old data)
-                    string update_inven_mas = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_OUT_WT = :NoStockOut, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID AND  SUB_ITEM_ID = :NoSubItemID ";
-                    cmdu = new OracleCommand(update_inven_mas, conn);
-
-                    OracleParameter[] objPrmInevenMas = new OracleParameter[6];
-                    objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockOut", StockOutWetNew);
-                    objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
-                    objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
-                    objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
-                    objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
-                    objPrmInevenMas[5] = cmdu.Parameters.Add("NoSubItemID", InvenSubItemID);
-
-                    cmdu.ExecuteNonQuery();
-                    cmdu.Parameters.Clear();
-                    cmdu.Dispose();
-                } 
+              
                 
                 // delete inventory RM details
                 string delete_prod_rm_de = " delete from PF_RM_STOCK_INVENTORY_MAS_DE where REF_ID  = '" + Production_ID + "'";
@@ -1012,7 +1164,16 @@ namespace NRCAPPS.PF
                 alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
                 clearText(); 
                 Display();
-            }
+                DisplaySummary();
+                    }
+                    else
+                    {
+
+                        alert_box.Visible = true;
+                        alert_box.Controls.Add(new LiteralControl("Item Weight is not available in the RM Inventory"));
+                        alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
+                    }
+                }
             else
             {
                 Response.Redirect("~/PagePermissionError.aspx");
@@ -1188,7 +1349,7 @@ namespace NRCAPPS.PF
                     OracleConnection conn = new OracleConnection(strConnString);
                     conn.Open();
 
-                    string makeSQL = " select nvl(FINAL_STOCK_WT,0) AS FINAL_STOCK_WT from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "'  AND SUB_ITEM_ID  = '" + SubItemID + "' ";
+                    string makeSQL = " select nvl(FINAL_STOCK_WT,0) AS FINAL_STOCK_WT from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemID + "' ";
                     cmdl = new OracleCommand(makeSQL);
                     oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                     dt = new DataTable();

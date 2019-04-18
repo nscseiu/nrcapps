@@ -14,7 +14,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="../Dashboard.aspx"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Plastic Fctory</a></li>
+        <li><a href="#">Plastic Factory</a></li>
         <li class="active">Supplier</li>
       </ol>
     </section>
@@ -51,11 +51,22 @@
                     <div class="col-sm-3"><asp:Label ID="CheckSupplierName" runat="server"></asp:Label> 
                     </div>
                 </div>
+                 <div class="form-group">
+                  <label  class="col-sm-2 control-label">Party Name Arabic</label> 
+                  <div class="col-sm-3">  
+                    <asp:TextBox ID="TextSupArabicName" class="form-control input-sm"  runat="server"></asp:TextBox>     
+                  </div> 
+                </div> 
+                 <div class="form-group">
+                  <label  class="col-sm-2 control-label">Party Vat No</label> 
+                  <div class="col-sm-3">  
+                    <asp:TextBox ID="TextSupVatNo" class="form-control input-sm"  runat="server"></asp:TextBox>     
+                  </div> 
+                </div> 
                 <div class="form-group">
                   <label  class="col-sm-2 control-label">Party Address Line 1</label> 
                   <div class="col-sm-3">  
-                    <asp:TextBox ID="TextSup_Add_1" class="form-control input-sm"  runat="server"></asp:TextBox>   
-                      
+                    <asp:TextBox ID="TextSup_Add_1" class="form-control input-sm"  runat="server"></asp:TextBox>     
                   </div> 
                 </div> 
                 <div class="form-group">
@@ -94,7 +105,7 @@
             <div class="box-header with-border">
               <h3 class="box-title">Party (Supplier & Customer) List</h3>
               <div class="box-tools">
-              <div class="input-group input-group-sm" style="width: 200px;">
+              <div class="input-group input-group-sm" style="width: 300px;">
                 <asp:TextBox ID="txtSearchUserRole" Class="form-control input-sm" runat="server" />
                  <div class="input-group-btn">
                       <asp:Button ID="ButtonSearchUser" Class="btn btn-info"   
@@ -110,11 +121,13 @@
     SelectedRowStyle-BackColor="Yellow" 
     AllowPaging="true" 
     AllowSorting="true"
-    PageSize = "8" 
+    PageSize = "12" 
     OnPageIndexChanging="GridViewUser_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="PARTY_ID" HeaderText="Party ID" />  
-                     <asp:BoundField DataField="PARTY_NAME"  HeaderText="Party Name" />   
+                     <asp:BoundField DataField="PARTY_NAME"  HeaderText="Party Name" />
+                     <asp:BoundField DataField="PARTY_ARABIC_NAME"  HeaderText="Party Arabic Name" /> 
+                     <asp:BoundField DataField="PARTY_VAT_NO"  HeaderText="Party Vat No" />    
                      <asp:BoundField DataField="PARTY_ADD_1"  HeaderText="Party Add. Line 1" /> 
                      <asp:BoundField DataField="PARTY_ADD_2"  HeaderText="Party Add. Line 2" /> 
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">

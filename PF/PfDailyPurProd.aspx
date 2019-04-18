@@ -4,12 +4,7 @@
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="ContentPlaceHolder1"> 
     
      <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <script src="../plugins/Highcharts-6.0.7/code/highcharts.js" type="text/javascript"></script>
-    <script src="../plugins/Highcharts-6.0.7/code/highcharts.js" type="text/javascript"></script>
-    <script src="../plugins/Highcharts-6.0.7/code/highcharts.src.js" type="text/javascript"></script>
-    <script src="../plugins/Highcharts-6.0.7/code/modules/data.src.js" type="text/javascript"></script>
-    <script src="../plugins/Highcharts-6.0.7/code/modules/exporting.js" type="text/javascript"></script>
+  <div class="content-wrapper"> 
 
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -37,7 +32,7 @@
             <!-- /.box-header -->
             <!-- form start --> 
               <div class="box-body">
-                <div class="form-group">
+                <div class="form-group" style="display:none;">
                   <label  class="col-sm-5 control-label">Purchase Type</label> 
                   <div class="col-sm-4">   
                        <asp:DropDownList ID="DropDownPurchaseTypeID" class="form-control input-sm"   ValidationGroup='valGroup' runat="server"> 
@@ -392,10 +387,49 @@
        </div> 
     </div> 
       </div>
+
+
+              <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title"> Purchase Statement (Average Purchase Price) Parameter</h3>
+            </div>
+            <!-- /.box-header -->
+
+         <div class="box-body">
+            <!-- form start -->    
+                   <div class="form-group">
+                    <label class="col-sm-2 control-label">Select Date</label>
+                     <div class="col-sm-2">   
+                    <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>  
+                       <asp:TextBox  class="form-control  input-sm pull-right" ID="EntryDate3"  runat="server" ></asp:TextBox>  
+                    </div>
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" 
+                         ControlToValidate="EntryDate3" ErrorMessage="Insert Date" 
+                         SetFocusOnError="True" Display="Dynamic" ValidationGroup='valGroup6'></asp:RequiredFieldValidator> 
+                  </div>
+                  </div>
+                </div> 
+              <!-- /.box-body -->
+              <div class="box-footer">
+               <div class="form-group">
+                  <div  class="col-sm-2" style="text-align:right;"> 
+                      <asp:LinkButton ID="LinkButton8" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
+                   <div class="col-sm-6">     
+                    <asp:LinkButton ID="LinkButton9" class="btn btn-info" runat="server" Text="View Report"  onclick="BtnReportPurProd_Click"  ValidationGroup='valGroup6' ClientIDMode="Static"><span class="fa fa-fax"></span> View Report</asp:LinkButton> 
+                   </div>
+                </div>
+              </div>
+              <!-- /.box-footer -->
+         <!-- /.box -->
+        </div>   
+         
       <!-- /.row -->
     </section>
     <!-- /.content -->
- 
+  <asp:Panel ID="PanelPrint" runat="server" ></asp:Panel>  
 </div>
 
 </asp:Content> 

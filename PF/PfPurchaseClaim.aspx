@@ -35,6 +35,9 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Purchase Claim Form</h3>
+                <div class="box-tools">
+                       <asp:LinkButton ID="btnPrint" class="btn btn-warning"  runat="server" OnClick="btnPrint_Click" ><span class="fa fa-print"></span> Claim Print</asp:LinkButton>
+                 </div>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -42,12 +45,9 @@
               <div class="box-body">
                 <div class="form-group">   
                     <label class="col-sm-2 control-label">Claim No</label> 
-                   <div class="col-sm-1">   
+                   <div class="col-sm-2">   
                    <asp:TextBox ID="TextPurchaseClaimID" style="display:none" runat="server"></asp:TextBox>
-                    <asp:TextBox ID="TextClaimNo" class="form-control"  runat="server" AutoPostBack="True"  ontextchanged="TextClaimNo_TextChanged"></asp:TextBox>  
-                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
-                          ControlToValidate="TextClaimNo" ErrorMessage="Insert Slip No." 
-                          Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
+                    <asp:TextBox ID="TextClaimNo" class="form-control input-sm"  runat="server" ></asp:TextBox>   
                  </div>
                   <div class="col-sm-3"><asp:Label ID="CheckClaimNo" runat="server"></asp:Label></div>  
                </div>
@@ -63,6 +63,21 @@
                     <div class="col-sm-3"><asp:Label ID="CheckEmpID" runat="server"></asp:Label> 
                     </div>
                 </div>
+               <div class="form-group">
+                    <label class="col-sm-2 control-label">Claim For Months</label>
+                     <div class="col-sm-2">   
+                    <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>  
+                        <asp:TextBox  class="form-control  input-sm pull-right" ID="TextMonthYear4"  runat="server" ></asp:TextBox>  
+                    </div>
+                      </div> 
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                          ControlToValidate="TextMonthYear4" ErrorMessage="Insert Claim Months" 
+                          Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
+                    <!-- /.input group -->
+                  </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Claim Date</label>
                      <div class="col-sm-2">   
@@ -70,18 +85,18 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>  
-                       <asp:TextBox  class="form-control pull-right" ID="EntryDate"  runat="server" ></asp:TextBox>  
+                       <asp:TextBox  class="form-control input-sm pull-right" ID="EntryDate"  runat="server" ></asp:TextBox>  
                     </div>
                       </div> 
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
                           ControlToValidate="EntryDate" ErrorMessage="Insert Claim Date" 
                           Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
                     <!-- /.input group -->
-                  </div>
+                  </div> 
                <div class="form-group">
                   <label  class="col-sm-2 control-label">Pyement Type</label> 
                   <div class="col-sm-2">   
-                    <asp:DropDownList ID="DropDownPaymentTypeID" class="form-control" runat="server" > 
+                    <asp:DropDownList ID="DropDownPaymentTypeID"  class="form-control input-sm" runat="server" > 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" 
                           ControlToValidate="DropDownPaymentTypeID" Display="Dynamic" 
@@ -89,7 +104,7 @@
                   </div>
                 </div>   
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Select Purchase Order Invoice No</label> 
+                  <label  class="col-sm-2 control-label">Select Purchase Order No</label> 
                   <div class="col-sm-9">    
                   <asp:ListBox runat="server" ID="DropDownSlipNo" class="form-control select2"   SelectionMode="multiple"> 
                   </asp:ListBox>  
@@ -101,11 +116,14 @@
                 <div class="form-group">   
                     <label class="col-sm-2 control-label">Total Amount</label> 
                    <div class="col-sm-2">    
-                    <asp:TextBox ID="TextTotalAmount" class="form-control"  runat="server"></asp:TextBox>  
+                       <div class="input-group"> 
+                          <asp:TextBox ID="TextTotalAmount" class="form-control input-sm"  runat="server"></asp:TextBox>     
+                       <span class="input-group-addon">SR</span>      
+                    </div>     
                      <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
                           ControlToValidate="TextTotalAmount" ErrorMessage="Insert Total Amount of This Claim" 
                           Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
-                 </div> 
+                 </div><asp:Label ID="CheckInvoiceCount" runat="server"></asp:Label> 
                </div> 
                   <div class="form-group">
                   <label  class="col-sm-2 control-label">Is Active Status</label> 
@@ -122,7 +140,7 @@
                   <div  class="col-sm-2" style="text-align:right;"> 
                       <asp:LinkButton ID="ClearFiled" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
                    <div class="col-sm-6">     
-                    <asp:LinkButton ID="BtnAdd" class="btn btn-primary" runat="server" Text="Add New" onclick="BtnAdd_Click"><span class="fa fa-plus"></span> Add New</asp:LinkButton>
+                    <asp:LinkButton ID="BtnAdd" class="btn btn-primary" runat="server" Text="Add New" onclick="BtnAdd_Click" OnClientClick="return CheckIsRepeat();"><span class="fa fa-plus"></span> Add New</asp:LinkButton>
                     <asp:LinkButton ID="BtnUpdate" class="btn btn-success" runat="server" Text="Update"  onclick="BtnUpdate_Click"><span class="fa fa-edit"></span> Update</asp:LinkButton>
                     <asp:LinkButton ID="BtnDelete" class="btn btn-danger" runat="server" onclick="BtnDelete_Click" onclientclick="return confirm('Are you sure to delete?');" ><span class="fa fa-close"></span> Delete</asp:LinkButton>
                    
@@ -153,11 +171,12 @@
                         SelectedRowStyle-BackColor="Yellow" 
                         AllowPaging="true" 
                         AllowSorting="true"
-                        PageSize = "10" 
+                        PageSize = "15" 
                         OnPageIndexChanging="GridViewPage_PageIndexChanging" AutoGenerateColumns="false" CssClass="table table-hover table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="CLAIM_NO" HeaderText="Claim No" />
                      <asp:BoundField DataField="EMP_NAME" HeaderText="Petty Cash Holder" />
+                     <asp:BoundField DataField="CLAIM_FOR_MONTH"  HeaderText="Claim For Months"  DataFormatString="{0:MM/yyyy}"  /> 
                      <asp:BoundField DataField="CLAIM_DATE"  HeaderText="Claim Date"  DataFormatString="{0:dd/MM/yyyy}"  /> 
                      <asp:BoundField DataField="PAYMENT_TYPE_NAME" HeaderText="Payment Type" />  
                      <asp:BoundField DataField="TOTAL_AMOUNT" HeaderText="Total Amt." DataFormatString="{0:0,0.00}" />  
@@ -179,7 +198,13 @@
                              <asp:Label ID="Label2" Text='<%# Eval("OBJ_QUERY_C_DATE", "{0:d/MM/yyyy h:mm:ss tt}")%>' runat="server"></asp:Label>
                           </ItemTemplate>   
                      </asp:TemplateField>    
-                       
+                       <asp:TemplateField HeaderText="Is Print" ItemStyle-Width="100" ItemStyle-HorizontalAlign="Center">
+                        <ItemTemplate> 
+                             <asp:Label ID="IsPrintedCheck" CssClass="label" Text='<%# Eval("IS_PRINT").ToString() == "Printed" ? "<span Class=label-success style=Padding:2px >Printed</span> </br></br>" : "<span Class=label-danger style=Padding:2px>Not Printed</span>" %>'  runat="server" /> 
+                             <asp:Label ID="IsPrintedDate" class="text-green" Style="font-size:11px;" Text='<%# Eval("IS_PRINT").ToString() == "Printed" ? Eval("PRINT_DATE") : "" %>'  runat="server" /> 
+                             <asp:Label ID="IsPrintedCheckLink" style="display:none" Text='<%# Eval("IS_PRINT").ToString() == "Printed" ? "Printed" : "Not_Printed" %>'  runat="server" /> 
+                        </ItemTemplate>
+                     </asp:TemplateField> 
                       <asp:TemplateField  HeaderText="Action" >
                        <ItemTemplate>
                         <asp:LinkButton ID="linkSelect" class="btn btn-info btn-sm" runat="server" CommandArgument='<%#  Eval("CLAIM_NO")%>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
@@ -192,7 +217,7 @@
                           </ItemTemplate>
                     </asp:TemplateField> 
                      <asp:BoundField DataField="SLIP_NO" HeaderText="Slip No" />
-                     <asp:BoundField DataField="SUPPLIER_NAME" HeaderText="Supplier Details" />
+                     <asp:BoundField DataField="PARTY_NAME" HeaderText="Supplier Details" />
                      
                     
                      </Columns>
@@ -215,7 +240,7 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
-   
+    <asp:Panel ID="PanelPrint" runat="server" ></asp:Panel>  
 </div>
 <style type="text/css"> 
     tr{ 

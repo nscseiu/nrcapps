@@ -18,7 +18,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 
 
-namespace NRCAPPS.PF
+namespace NRCAPPS.NRC
 {
     public partial class NrcDataProcess : System.Web.UI.Page
     {
@@ -85,11 +85,62 @@ namespace NRCAPPS.PF
                 Response.Redirect("~/Default.aspx");
             }
         }
+        public void BtnDataProcWp_Click(object sender, EventArgs e)
+          {
+        //  try {
+            if (IS_ADD_ACTIVE == "Enable")
+            {
+                OracleConnection conn = new OracleConnection(strConnString);
 
+                int userID = Convert.ToInt32(Session["USER_ID"]);
+                string c_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
+
+                string MakeAsOnDate = TextMonthYear1.Text;
+                string[] MakeAsOnDateSplit = MakeAsOnDate.Split('-');
+                String AsOnDateTemp = MakeAsOnDateSplit[0].Replace("/", "-");
+                DateTime AsOnDateNewD = DateTime.ParseExact(AsOnDateTemp, "MM-yyyy", CultureInfo.InvariantCulture);
+                string AsOnDateNew = AsOnDateNewD.ToString("dd-MM-yyyy");
+
+                DateTime curDate = AsOnDateNewD;
+                DateTime startDate = curDate.AddMonths(-1);
+                DateTime LastDateTemp = curDate.AddDays(-(curDate.Day));
+                string LastDate = LastDateTemp.ToString("dd-MM-yyyy");
+                string LastMonth = startDate.ToString("MM-yyyy");
+                string CurrentMonth = AsOnDateNewD.ToString("MM-yyyy");
+                DateTime LastDateCurrentMonthTemp = AsOnDateNewD.AddMonths(1).AddDays(-1);
+                string LastDateCurrentMonth = LastDateCurrentMonthTemp.ToString("dd-MM-yyyy");
+
+                OracleCommand cmd = new OracleCommand("PRO_WP_DATA_PROCESS_MONTHLY", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new OracleParameter("TextLastDate", OracleType.VarChar)).Value = LastDate;
+                cmd.Parameters.Add(new OracleParameter("TextLastMonth", OracleType.VarChar)).Value = LastMonth;
+                cmd.Parameters.Add(new OracleParameter("TextCurrentMonth", OracleType.VarChar)).Value = CurrentMonth;
+                cmd.Parameters.Add(new OracleParameter("TextLastDateCurrentMonth", OracleType.VarChar)).Value = LastDateCurrentMonth;
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+
+                alert_box.Visible = true;
+                alert_box.Controls.Add(new LiteralControl("Waste Paper Data Process Successfully " + LastDateCurrentMonth));
+                alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
+
+                clearText();
+            } 
+            else
+            {
+                Response.Redirect("~/PagePermissionError.aspx");
+            }
+         // }
+       //   catch
+       //   {
+       //       Response.Redirect("~/ParameterError.aspx");
+       //   } 
+        }
 
         public void BtnDataProcPf_Click(object sender, EventArgs e)
         {
-          try {
+        //  try {
             if (IS_ADD_ACTIVE == "Enable")
             {
                 OracleConnection conn = new OracleConnection(strConnString);
@@ -133,11 +184,11 @@ namespace NRCAPPS.PF
             {
                 Response.Redirect("~/PagePermissionError.aspx");
             }
-          }
-          catch
-          {
-              Response.Redirect("~/ParameterError.aspx");
-          } 
+         // }
+       //   catch
+       //   {
+       //       Response.Redirect("~/ParameterError.aspx");
+       //   } 
         }
 
         public void clearTextField(object sender, EventArgs e)

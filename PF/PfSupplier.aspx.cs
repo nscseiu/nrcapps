@@ -62,7 +62,8 @@ namespace NRCAPPS.PF
                 {
                      
                     if (!IsPostBack)
-                    {  
+                    {
+                        TextSupplierName.Focus();
                         Display();
                         alert_box.Visible = false;
 
@@ -99,17 +100,19 @@ namespace NRCAPPS.PF
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into PF_PARTY (PARTY_ID, PARTY_NAME, PARTY_ADD_1, PARTY_ADD_2, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoSupplierID, :TextSupplierName, :TextSup_Add_1, :TextSup_Add_2, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into PF_PARTY (PARTY_ID, PARTY_NAME, PARTY_ARABIC_NAME, PARTY_VAT_NO, PARTY_ADD_1, PARTY_ADD_2, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoSupplierID, :TextSupplierName, :TextSupArabicName, :TextSupVatNo, :TextSup_Add_1, :TextSup_Add_2, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
-                    OracleParameter[] objPrm = new OracleParameter[7];
+                    OracleParameter[] objPrm = new OracleParameter[9];
                     objPrm[0] = cmdi.Parameters.Add("NoSupplierID", newSupplierID);
                     objPrm[1] = cmdi.Parameters.Add("TextSupplierName", TextSupplierName.Text);
-                    objPrm[2] = cmdi.Parameters.Add("TextSup_Add_1", TextSup_Add_1.Text);
-                    objPrm[3] = cmdi.Parameters.Add("TextSup_Add_2", TextSup_Add_2.Text);
-                    objPrm[4] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPrm[5] = cmdi.Parameters.Add("u_date", u_date);
-                    objPrm[6] = cmdi.Parameters.Add("NoCuserID", userID);
+                    objPrm[2] = cmdi.Parameters.Add("TextSupArabicName", TextSupArabicName.Text);
+                    objPrm[3] = cmdi.Parameters.Add("TextSupVatNo", TextSupVatNo.Text);
+                    objPrm[4] = cmdi.Parameters.Add("TextSup_Add_1", TextSup_Add_1.Text);
+                    objPrm[5] = cmdi.Parameters.Add("TextSup_Add_2", TextSup_Add_2.Text);
+                    objPrm[6] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPrm[7] = cmdi.Parameters.Add("u_date", u_date);
+                    objPrm[8] = cmdi.Parameters.Add("NoCuserID", userID);
 
 
                     cmdi.ExecuteNonQuery();
@@ -119,8 +122,9 @@ namespace NRCAPPS.PF
                     conn.Close();
                     alert_box.Visible = true;
                     alert_box.Controls.Add(new LiteralControl("Insert New Party Data Successfully"));
-                    alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
+                    alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
                     clearText();
+                    TextSupplierName.Focus();
                     Display();
                 }
                 else { 
@@ -154,6 +158,8 @@ namespace NRCAPPS.PF
              {
                  TextSupplierID.Text = dt.Rows[i]["PARTY_ID"].ToString();
                  TextSupplierName.Text = dt.Rows[i]["PARTY_NAME"].ToString();
+                 TextSupArabicName.Text = dt.Rows[i]["PARTY_ARABIC_NAME"].ToString();
+                 TextSupVatNo.Text   = dt.Rows[i]["PARTY_VAT_NO"].ToString();
                  TextSup_Add_1.Text = dt.Rows[i]["PARTY_ADD_1"].ToString();
                  TextSup_Add_2.Text = dt.Rows[i]["PARTY_ADD_2"].ToString(); 
                  CheckIsActive.Checked   = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
@@ -162,6 +168,7 @@ namespace NRCAPPS.PF
              
              conn.Close();
              Display();
+             TextSupplierName.Focus();
              CheckSupplierName.Text = "";
              alert_box.Visible = false;
              BtnAdd.Attributes.Add("aria-disabled", "false");
@@ -190,7 +197,7 @@ namespace NRCAPPS.PF
                 }
                 else
                 {
-                    makeSQL = " select  * from PF_PARTY where PARTY_ID like '" + txtSearchUserRole.Text + "%' or PARTY_NAME like '" + txtSearchUserRole.Text + "%'  or IS_ACTIVE like '" + txtSearchUserRole.Text + "%' ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
+                    makeSQL = " select  * from PF_PARTY where PARTY_ID like '" + txtSearchUserRole.Text + "%' or PARTY_NAME like '" + txtSearchUserRole.Text + "%' or PARTY_ARABIC_NAME like '" + txtSearchUserRole.Text + "%' or PARTY_VAT_NO like '" + txtSearchUserRole.Text + "%' or IS_ACTIVE like '" + txtSearchUserRole.Text + "%' ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
 
                     alert_box.Visible = false;
                 }
@@ -205,6 +212,7 @@ namespace NRCAPPS.PF
                 GridView1.DataBind();
                 conn.Close();
                 //alert_box.Visible = false;
+                TextSupplierName.Focus();
             }
             else
             {
@@ -236,17 +244,19 @@ namespace NRCAPPS.PF
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                string update_user = "update  PF_PARTY  set PARTY_NAME = :TextSupplierName, PARTY_ADD_1 = :TextSup_Add_1, PARTY_ADD_2 = :TextSup_Add_2, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where PARTY_ID = :NoSupplierID ";
+                string update_user = "update  PF_PARTY  set PARTY_NAME = :TextSupplierName, PARTY_ARABIC_NAME = :TextSupArabicName, PARTY_VAT_NO = :TextSupVatNo, PARTY_ADD_1 = :TextSup_Add_1, PARTY_ADD_2 = :TextSup_Add_2, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where PARTY_ID = :NoSupplierID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[7];
+                OracleParameter[] objPrm = new OracleParameter[9];
                 objPrm[0] = cmdi.Parameters.Add("TextSupplierName", TextSupplierName.Text);
-                objPrm[1] = cmdi.Parameters.Add("TextSup_Add_1", TextSup_Add_1.Text);
-                objPrm[2] = cmdi.Parameters.Add("TextSup_Add_2", TextSup_Add_2.Text); 
-                objPrm[3] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[4] = cmdi.Parameters.Add("NoSupplierID", USER_DATA_ID);
-                objPrm[5] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[6] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                objPrm[1] = cmdi.Parameters.Add("TextSupArabicName", TextSupArabicName.Text);
+                objPrm[2] = cmdi.Parameters.Add("TextSupVatNo", TextSupVatNo.Text);
+                objPrm[3] = cmdi.Parameters.Add("TextSup_Add_1", TextSup_Add_1.Text);
+                objPrm[4] = cmdi.Parameters.Add("TextSup_Add_2", TextSup_Add_2.Text); 
+                objPrm[5] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[6] = cmdi.Parameters.Add("NoSupplierID", USER_DATA_ID);
+                objPrm[7] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[8] = cmdi.Parameters.Add("TextIsActive", ISActive);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -258,6 +268,7 @@ namespace NRCAPPS.PF
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
                 clearText();
                 Display();
+                TextSupplierName.Focus();
             }
                 else { 
                     Response.Redirect("~/PagePermissionError.aspx");
@@ -290,7 +301,7 @@ namespace NRCAPPS.PF
                 alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
                 clearText(); 
                 Display();
-
+                TextSupplierName.Focus(); 
             }
             else
             {
@@ -307,6 +318,7 @@ namespace NRCAPPS.PF
         {
             TextSupplierID.Text = "";
             TextSupplierName.Text = "";
+            TextSupVatNo.Text = "";
             TextSup_Add_1.Text = "";
             TextSup_Add_2.Text = "";
             CheckSupplierName.Text = ""; 
@@ -319,6 +331,8 @@ namespace NRCAPPS.PF
         {
             TextSupplierID.Text = "";
             TextSupplierName.Text = "";
+            TextSupArabicName.Text = "";
+            TextSupVatNo.Text = "";
             TextSup_Add_1.Text = "";
             TextSup_Add_2.Text = "";
             CheckSupplierName.Text = ""; 

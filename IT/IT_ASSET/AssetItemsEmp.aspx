@@ -43,7 +43,7 @@
                   <div class="col-sm-3"> 
                    <label  class="control-label">Enter QR Code ID</label> 
                   <!-- asp:label ID="PlaceHolder1"  / --><!-- /label --> 
-                  <asp:TextBox runat="server" ID="TextEmpItemsID" class="form-control input-sm" data-placeholder="QR Code ID No." AutoPostBack="True"  ontextchanged="DisplayItemSearch"> 
+                  <asp:TextBox runat="server" ID="TextQrCodeID" class="form-control input-sm" data-placeholder="QR Code ID No." AutoPostBack="True"  ontextchanged="DisplayItemSearch"> 
                   </asp:TextBox>
                      <asp:LinkButton ID="LinkButton4" runat="server" class="btn btn-default btn-sm" style="margin-top:4px;" OnClick="clearTextFieldSearch" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> 
                   </div>   
@@ -66,7 +66,7 @@
                <div class="form-group">
                   <label  class="col-sm-3 control-label">Employee</label> 
                   <div class="col-sm-7"> 
-                  
+                   <asp:TextBox ID="TextEmpItemsID" style="display:none" runat="server"></asp:TextBox>
                   <!-- asp:label ID="PlaceHolder1"  / --><!-- /label --> 
                   <asp:ListBox runat="server" ID="DropDownEmployeeID" class="form-control  input-sm select2" data-placeholder="Select Employee" AutoPostBack="True"  ontextchanged="DisplayEmpItem" > 
                   </asp:ListBox>  
@@ -75,6 +75,16 @@
                           ErrorMessage="select Employee" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div>
                 </div> 
+                <div class="form-group">
+                  <label  class="col-sm-3 control-label">Location</label> 
+                  <div class="col-sm-4">   
+                    <asp:DropDownList ID="DropDownLocationID" class="form-control input-sm" runat="server"> 
+                    </asp:DropDownList>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" 
+                          ControlToValidate="DropDownLocationID" Display="Dynamic" 
+                          ErrorMessage="Select Emp Location" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                  </div>
+                </div>
                 <div class="form-group">  
                    <label for="User_Name" class="col-sm-3 control-label">Select Item</label>
                  <div class="col-sm-7">  
@@ -83,14 +93,19 @@
                   </asp:ListBox>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                           ControlToValidate="DropDownItemID" Display="Dynamic" 
-                          ErrorMessage="select Item" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
-                     
-                  </div> 
-                    
-                </div>
+                          ErrorMessage="select Item" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator> 
+                  </div>  
+                </div> 
                 <div class="form-group">
-                  <label  class="col-sm-3 control-label">QR Code ID</label> 
-                  <div class="col-sm-3">  
+                  <label  class="col-sm-3 control-label">Is QR Code</label> 
+                     <div class="col-sm-2"> 
+                       <asp:RadioButtonList ID="RadioBtnQrCode" runat="server" AutoPostBack = "true"  onselectedindexchanged="Redio_QrCodeChanged" RepeatDirection="Horizontal">
+                             <asp:ListItem Value="QrCodeYes" Selected="True">Yes &nbsp;</asp:ListItem>
+                             <asp:ListItem Value="QrCodeNo">No </asp:ListItem>  
+                        </asp:RadioButtonList>  
+                    </div> 
+                  <div class="col-sm-5">  
+                  <div id="QrCodeBox" style="border:#d2d6de solid 1px;" runat="server">
                     <asp:TextBox ID="TextQRPreCode" class="form-control input-sm"  runat="server"></asp:TextBox>   
                     <asp:TextBox ID="TextQRCode" class="form-control input-sm"  runat="server" AutoPostBack="True" ontextchanged="TextQRCode_TextChanged"></asp:TextBox>   
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
@@ -99,13 +114,15 @@
                           <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" 
                           ControlToValidate="TextQRCode" Display="Dynamic" 
                           ErrorMessage="Insert 6 digit QR ID number" SetFocusOnError="True" 
-                          ValidationExpression="^([0-9]{6})$"></asp:RegularExpressionValidator>
-                      <asp:Image ID="TextQrImage" Height = "125" Width = "125" runat="server" />
+                          ValidationExpression="^([0-9]{6})$"></asp:RegularExpressionValidator> 
+                      <div class="col-sm-7"><asp:Label ID="CheckQRCode" runat="server"></asp:Label></div> 
+                    <asp:Panel  id="ImageBox" runat="server">
+                     <asp:Image ID="TextQrImage" Height = "125" Width = "125" runat="server" /> 
+                     </asp:Panel>  
                       <asp:PlaceHolder ID="plBarCode" runat="server" />  
+                     </div>  
                   </div> 
-                    <div class="col-sm-4"><asp:Label ID="CheckQRCode" runat="server"></asp:Label> 
-                    </div> 
-               </div>
+               </div> 
                 <div class="form-group">
                   <label  class="col-sm-3 control-label">Is Active Status</label> 
                   <div class="col-sm-4" style="padding-top:6px;">    
@@ -122,7 +139,7 @@
                       <asp:LinkButton ID="ClearFiled" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
                    <div class="col-sm-7">    
                     <asp:LinkButton ID="BtnAdd" class="btn btn-primary" runat="server" Text="Add New" onclick="BtnAdd_Click"><span class="fa fa-plus"></span> Add New</asp:LinkButton>
-                    <asp:LinkButton ID="BtnUpdate" class="btn btn-success" runat="server" Text="Update"  style="display:none;"  onclick="BtnUpdate_Click"><span class="fa fa-edit"></span> Update</asp:LinkButton>
+                    <asp:LinkButton ID="BtnUpdate" class="btn btn-success" runat="server" Text="Update"  onclick="BtnUpdate_Click"><span class="fa fa-edit"></span> Update</asp:LinkButton>
                     <asp:LinkButton ID="BtnDelete" class="btn btn-danger" runat="server" onclick="BtnDelete_Click" onclientclick="return confirm('Are you sure to delete?');" ><span class="fa fa-close"></span> Delete</asp:LinkButton>
                  </div>
                 </div>
@@ -173,7 +190,17 @@
                           ControlToValidate="DropDownEmployeeIDChangeFor" Display="Dynamic" 
                           ErrorMessage="select Employee" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup1'></asp:RequiredFieldValidator>
                   </div>
-                </div> 
+                </div>
+                 <div class="form-group">
+                  <label  class="col-sm-4 control-label">Location</label> 
+                  <div class="col-sm-5">   
+                    <asp:DropDownList ID="DropDownLocationChangeFor" class="form-control input-sm" runat="server"> 
+                    </asp:DropDownList>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" 
+                          ControlToValidate="DropDownLocationChangeFor" Display="Dynamic" 
+                          ErrorMessage="Select Emp Location" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup1'></asp:RequiredFieldValidator>
+                  </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -225,7 +252,7 @@
                 <div class="form-group">
                   <label  class="col-sm-4 control-label">Item Change for Department</label> 
                   <div class="col-sm-5"> 
-                  <asp:DropDownList runat="server" ID="DropDownDepartmentID" class="form-control" data-placeholder="Select Department"  > 
+                  <asp:DropDownList runat="server" ID="DropDownDepartmentID" class="form-control input-sm" data-placeholder="Select Department"  > 
                   </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" 
                           ControlToValidate="DropDownDepartmentID" Display="Dynamic" 
@@ -235,13 +262,30 @@
                  <div class="form-group">
                   <label  class="col-sm-4 control-label">Select Division</label> 
                   <div class="col-sm-5"> 
-                  <asp:DropDownList runat="server" ID="DropDownDivisionID" class="form-control" data-placeholder="Select Division" > 
+                  <asp:DropDownList runat="server" ID="DropDownDivisionID" class="form-control input-sm" data-placeholder="Select Division" > 
                   </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" 
                           ControlToValidate="DropDownDivisionID" Display="Dynamic" 
                           ErrorMessage="Select Division" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup3'></asp:RequiredFieldValidator>
                   </div>
                 </div> 
+                   <div class="form-group">
+                  <label  class="col-sm-4 control-label">Location</label> 
+                  <div class="col-sm-5">   
+                    <asp:DropDownList ID="DropDownChangeDeptLocationID" class="form-control input-sm" runat="server"> 
+                    </asp:DropDownList>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" 
+                          ControlToValidate="DropDownChangeDeptLocationID" Display="Dynamic" 
+                          ErrorMessage="Select Location" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup3'></asp:RequiredFieldValidator>
+                  </div>
+                </div>
+                 <div class="form-group">
+                  <label  class="col-sm-4 control-label">Placement</label> 
+                  <div class="col-sm-5">   
+                    <asp:DropDownList ID="DropDownChangeDeptPlacementID" class="form-control input-sm" runat="server"  > 
+                    </asp:DropDownList>   
+                  </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -268,7 +312,8 @@
             <div class="box-body table-responsive">  
                     <asp:GridView ID="GridViewItem" runat="server" EnablePersistedSelection="true"  AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
                      <Columns>
-                     <asp:BoundField DataField="EMP_ITEMS_ID" HeaderText="QR Code ID" /> 
+                     <asp:BoundField DataField="EMP_ITEMS_ID" HeaderText="ID" /> 
+                     <asp:BoundField DataField="QR_CODE_ID" HeaderText="QR Code ID" /> 
                       <asp:TemplateField HeaderText="QR Code">
                         <ItemTemplate>
                           <asp:Image ID="Image1" Height = "40" Width = "40" runat="server"
@@ -277,7 +322,8 @@
                      </asp:TemplateField>     
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item Name" />    
                      <asp:BoundField DataField="ITEM_TYPE"  HeaderText="Item Type" />  
-                      <asp:BoundField DataField="ITEM_BRAND"  HeaderText="Item Brand" />   
+                      <asp:BoundField DataField="ITEM_BRAND"  HeaderText="Item Brand" /> 
+                      <asp:BoundField DataField="LOCATION_NAME"  HeaderText="Location" />                          
                       <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 
                              <asp:Label ID="IsActiveGV" CssClass="label" Text='<%# Eval("IS_ACTIVE").ToString() == "Enable" ? "<span Class=label-success style=Padding:2px >Enable<span>" : "<span Class=label-danger style=Padding:2px>Disable<span>" %>'  runat="server" /> 

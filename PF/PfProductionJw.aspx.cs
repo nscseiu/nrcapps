@@ -23,7 +23,7 @@ namespace NRCAPPS.PF
     public partial class PfProductionJw : System.Web.UI.Page
     {
         string strConnString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        OracleCommand cmdu, cmdi, cmdl, cmdsp, cmdsg;
+        OracleCommand cmdu, cmdi, cmdl, cmdsp;
         OracleDataAdapter oradata; 
         DataTable dt;
         int RowCount;

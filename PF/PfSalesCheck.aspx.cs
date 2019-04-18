@@ -143,11 +143,11 @@ namespace NRCAPPS.PF
                 string makeSQL = "";
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.CUSTOMER_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_CHECK, PSM.IS_OBJ_QUERY, PSM.OBJ_QUERY_DES, PSM.OBJ_QUERY_C_DATE, PSM.CHECK_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_CUSTOMER PC ON PC.CUSTOMER_ID = PSM.CUSTOMER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_CHECK IS NULL ";
+                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_CHECK, PSM.IS_OBJ_QUERY, PSM.OBJ_QUERY_DES, PSM.OBJ_QUERY_C_DATE, PSM.CHECK_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_CHECK IS NULL ";
                 }
                 else
                 {
-                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.CUSTOMER_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_CHECK FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_CUSTOMER PC ON PC.CUSTOMER_ID = PSM.CUSTOMER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchEmp.Text + "%' or PC.CUSTOMER_NAME like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PSI.SUB_ITEM_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
+                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_CHECK, PSM.IS_OBJ_QUERY, PSM.OBJ_QUERY_DES, PSM.OBJ_QUERY_C_DATE, PSM.CHECK_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchEmp.Text + "%' or PC.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PSI.SUB_ITEM_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
                 }
 
                 cmdl = new OracleCommand(makeSQL);
@@ -186,7 +186,7 @@ namespace NRCAPPS.PF
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
                 int userID = Convert.ToInt32(Session["USER_ID"]);  
-                int InvoiceNo = Convert.ToInt32(TextInvoiceNo.Text);
+             //   int InvoiceNo = Convert.ToInt32(TextInvoiceNo.Text);
                  
                 string IsQuery = CheckIsQuery.Checked ? "Yes" : "No";
                 string IsCmoCheck = CheckIsCmo.Checked ? "Complete" : ""; 
@@ -204,7 +204,7 @@ namespace NRCAPPS.PF
                 objPr[2] = cmdu.Parameters.Add("DateObjQuery", u_date);
                 objPr[3] = cmdu.Parameters.Add("TextIsCmoCheck", IsCmoCheck);
                 objPr[4] = cmdu.Parameters.Add("NoC_USER_ID", userID);
-                objPr[5] = cmdu.Parameters.Add("NoInvoiceNo", InvoiceNo);
+                objPr[5] = cmdu.Parameters.Add("NoInvoiceNo", TextInvoiceNo.Text);
 
 
                 cmdu.ExecuteNonQuery();
@@ -251,7 +251,7 @@ namespace NRCAPPS.PF
                     string update_user = "update  PF_SALES_MASTER set IS_CHECK = :NoIsSalesCheck, CHECK_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), CHECK_USER_ID = :NoC_USER_ID  where INVOICE_NO = :NoInvoiceID ";
                     cmdi = new OracleCommand(update_user, conn);
                     OracleParameter[] objPrm = new OracleParameter[5];
-                    objPrm[0] = cmdi.Parameters.Add("NoInvoiceID", Convert.ToInt32(gridRow.Cells[1].Text));
+                    objPrm[0] = cmdi.Parameters.Add("NoInvoiceID", gridRow.Cells[1].Text);
                     objPrm[1] = cmdi.Parameters.Add("NoIsSalesCheck", IsSalesCheck);
                     objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
                     objPrm[3] = cmdi.Parameters.Add("NoC_USER_ID", userID);

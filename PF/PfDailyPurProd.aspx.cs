@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Configuration;
-using System.Data; 
-using System.Text;
+using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.Security;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
 using System.Data.OracleClient;
-using System.IO; 
-using System.Collections.Generic; 
+using System.IO;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Collections.Generic;
+using System.Web.Services;
+using System.Text;
 
 namespace NRCAPPS.PF
 {
@@ -29,42 +25,44 @@ namespace NRCAPPS.PF
 
         double qtyTotal = 0.00;
         double grQtyTotal = 0.00;
+        double ItemVatAmt = 0.0, ItemAmtTotal = 0.0, ItemWtWbTotal = 0.0, TotalInvoiceAmt = 0.0, TotalGarbage = 0.0; string EntryDateSlip = "", PartyArabicName = "", PartyName = "";
+
         int storid = 0;
         int rowIndex = 1;
-
-        string IS_PAGE_ACTIVE   = "";
-        string IS_ADD_ACTIVE    = "";
-        string IS_EDIT_ACTIVE   = "";
-        string IS_DELETE_ACTIVE = "";
-        string IS_VIEW_ACTIVE   = "";  
+       
         public DataTable TableData = new DataTable();
         public DataTable TableData2 = new DataTable();
         public DataTable TableData3 = new DataTable(); 
-
-        public bool IsLoad { get; set; }  
-
+         
+        string IS_PAGE_ACTIVE = "", IS_ADD_ACTIVE = "", IS_EDIT_ACTIVE = "", IS_DELETE_ACTIVE = "", IS_VIEW_ACTIVE = "", IS_REPORT_ACTIVE = "", IS_PRINT_ACTIVE = "";
+    
+        public bool IsLoad { get; set; }
+        public bool IsLoad2 { get; set; }
+        public bool IsLoad3 { get; set; }
+        public bool IsLoad4 { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["USER_NAME"] != null)
             {
-                string requestedFile = Path.GetFileName(Request.Path);  
+                string requestedFile = Path.GetFileName(Request.Path);
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-                string makeSQL = " SELECT  NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE FROM NRC_USER_PAGE_PERMISSION NUPP LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID = NUPP.USER_PAGE_ID  WHERE NUPP.USER_ID = '" + Session["USER_ID"] + "' AND NUP.IS_ACTIVE = 'Enable' AND NUP.PAGE_URL = '" + requestedFile + "' ";
-
-                cmd = new OracleCommand(makeSQL);
-                oradata = new OracleDataAdapter(cmd.CommandText, conn);
+                string makeSQL = " SELECT  NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, NUPP.IS_REPORT_ACTIVE, NUPP.IS_PRINT_ACTIVE FROM NRC_USER_PAGE_PERMISSION NUPP LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID = NUPP.USER_PAGE_ID  WHERE NUPP.USER_ID = '" + Session["USER_ID"] + "' AND NUP.IS_ACTIVE = 'Enable' AND NUP.PAGE_URL = '" + requestedFile + "' ";
+                cmdl = new OracleCommand(makeSQL);
+                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
                 oradata.Fill(dt);
                 RowCount = dt.Rows.Count;
-                 
+
                 for (int i = 0; i < RowCount; i++)
                 {
-                    IS_PAGE_ACTIVE   = dt.Rows[i]["IS_PAGE_ACTIVE"].ToString();
-                    IS_ADD_ACTIVE    = dt.Rows[i]["IS_ADD_ACTIVE"].ToString();
-                    IS_EDIT_ACTIVE   = dt.Rows[i]["IS_EDIT_ACTIVE"].ToString();
+                    IS_PAGE_ACTIVE = dt.Rows[i]["IS_PAGE_ACTIVE"].ToString();
+                    IS_ADD_ACTIVE = dt.Rows[i]["IS_ADD_ACTIVE"].ToString();
+                    IS_EDIT_ACTIVE = dt.Rows[i]["IS_EDIT_ACTIVE"].ToString();
                     IS_DELETE_ACTIVE = dt.Rows[i]["IS_DELETE_ACTIVE"].ToString();
-                    IS_VIEW_ACTIVE   = dt.Rows[i]["IS_VIEW_ACTIVE"].ToString();  
+                    IS_VIEW_ACTIVE = dt.Rows[i]["IS_VIEW_ACTIVE"].ToString();
+                    IS_REPORT_ACTIVE = dt.Rows[i]["IS_REPORT_ACTIVE"].ToString();
+                    IS_PRINT_ACTIVE = dt.Rows[i]["IS_PRINT_ACTIVE"].ToString();
                 }
 
                 if (IS_PAGE_ACTIVE == "Enable")
@@ -167,11 +165,11 @@ namespace NRCAPPS.PF
                 if (AsOnDate.Text == "")
                 {
                     Today_Date = System.DateTime.Now.ToString("dd/MM/yyyy");
-                    makeSQL2 = " SELECT PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME AS ITEM_NAME_FULL, PI.ITEM_CODE, SUM(PPRM.ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_IN_FG FROM PF_PRODUCTION_MASTER PPRM  LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_PRODUCTION_MACHINE PPRMA ON PPRMA.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_PRODUCTION_SHIFT PPRS ON PPRS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID WHERE TO_CHAR(TO_DATE(PPRM.ENTRY_DATE),'dd/mm/yyyy') = '" + Today_Date + "' GROUP BY PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME, PI.ITEM_CODE ORDER BY PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID ASC ";
+                    makeSQL2 = " SELECT PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME AS ITEM_NAME_FULL, PI.ITEM_CODE, SUM(PPRM.ITEM_WEIGHT) AS ITEM_WEIGHT_IN_FG FROM PF_PRODUCTION_MASTER PPRM  LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_PRODUCTION_MACHINE PPRMA ON PPRMA.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_PRODUCTION_SHIFT PPRS ON PPRS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID WHERE TO_CHAR(TO_DATE(PPRM.ENTRY_DATE),'dd/mm/yyyy') = '" + Today_Date + "' GROUP BY PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME, PI.ITEM_CODE ORDER BY PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID ASC ";
                 }
                 else
                 {
-                    makeSQL2 = " SELECT PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME AS ITEM_NAME_FULL, PI.ITEM_CODE, SUM(PPRM.ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_IN_FG FROM PF_PRODUCTION_MASTER PPRM  LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_PRODUCTION_MACHINE PPRMA ON PPRMA.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_PRODUCTION_SHIFT PPRS ON PPRS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID WHERE TO_CHAR(TO_DATE(PPRM.ENTRY_DATE),'dd/mm/yyyy') = '" + AsOnDate.Text + "' GROUP BY PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME, PI.ITEM_CODE ORDER BY PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID ASC ";
+                    makeSQL2 = " SELECT PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME AS ITEM_NAME_FULL, PI.ITEM_CODE, SUM(PPRM.ITEM_WEIGHT) AS ITEM_WEIGHT_IN_FG FROM PF_PRODUCTION_MASTER PPRM  LEFT JOIN PF_SUPERVISOR PS ON PS.SUPERVISOR_ID = PPRM.SUPERVISOR_ID LEFT JOIN PF_PRODUCTION_MACHINE PPRMA ON PPRMA.MACHINE_ID = PPRM.MACHINE_ID LEFT JOIN PF_PRODUCTION_SHIFT PPRS ON PPRS.SHIFT_ID = PPRM.SHIFT_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPRM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PPRM.SUB_ITEM_ID WHERE TO_CHAR(TO_DATE(PPRM.ENTRY_DATE),'dd/mm/yyyy') = '" + AsOnDate.Text + "' GROUP BY PPRS.SHIFT_ID, PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID, PI.ITEM_NAME || ' ' || PSI.SUB_ITEM_NAME, PI.ITEM_CODE ORDER BY PPRS.SHIFT_NAME, PPRMA.MACHINE_NUMBER,  PI.ITEM_ID ASC ";
 
                 }
 
@@ -252,7 +250,7 @@ namespace NRCAPPS.PF
                     Today_Date = System.DateTime.Now.ToString("yyyy-MM-dd");
                     CurrentMonth = System.DateTime.Now.ToString("MM-yyyy");
 
-                    makeSQL4 = " SELECT sum(nvl(PPRM.ITEM_WEIGHT_IN_FG,0)) AS ITEM_WEIGHT_IN_FG, sum(nvl(PMT.ITEM_WEIGHT_PROD,0)) AS ITEM_WEIGHT_PROD, sum(nvl((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT_IN_FG),0)) AS BELOW_TARGET, nvl(PMT.DAYS,0) AS DAYS, sum(nvl(ROUND(((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT_IN_FG)/nullif(PMT.DAYS,0)),3),0)) AS PER_DAY_ACHIV_TAR FROM (SELECT SUM(ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_IN_FG  FROM PF_PRODUCTION_MASTER WHERE  TO_CHAR(TO_DATE(ENTRY_DATE),'mm-yyyy') = '" + CurrentMonth + "') PPRM LEFT JOIN (SELECT ITEM_WEIGHT_PROD, TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') AS MONTH_YEAR,  trunc(last_day(MONTH_YEAR))- to_date('" + Today_Date + "', 'yyyy-mm-dd') AS DAYS FROM PF_MONTHLY_TARGET WHERE TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') = '" + CurrentMonth + "') PMT ON  PMT.MONTH_YEAR = '" + CurrentMonth + "' GROUP BY   nvl(PMT.DAYS,0)  ";
+                    makeSQL4 = " SELECT sum(nvl(PPRM.ITEM_WEIGHT,0)) AS ITEM_WEIGHT_IN_FG, sum(nvl(PMT.ITEM_WEIGHT_PROD,0)) AS ITEM_WEIGHT_PROD, sum(nvl((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT),0)) AS BELOW_TARGET, nvl(PMT.DAYS,0) AS DAYS, sum(nvl(ROUND(((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT)/nullif(PMT.DAYS,0)),3),0)) AS PER_DAY_ACHIV_TAR FROM (SELECT SUM(ITEM_WEIGHT) AS ITEM_WEIGHT  FROM PF_PRODUCTION_MASTER WHERE  TO_CHAR(TO_DATE(ENTRY_DATE),'mm-yyyy') = '" + CurrentMonth + "') PPRM LEFT JOIN (SELECT ITEM_WEIGHT_PROD, TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') AS MONTH_YEAR,  trunc(last_day(MONTH_YEAR))- to_date('" + Today_Date + "', 'yyyy-mm-dd') AS DAYS FROM PF_MONTHLY_TARGET WHERE TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') = '" + CurrentMonth + "') PMT ON  PMT.MONTH_YEAR = '" + CurrentMonth + "' GROUP BY   nvl(PMT.DAYS,0)  ";
                 }
                 else
                 {
@@ -266,7 +264,7 @@ namespace NRCAPPS.PF
                     DateTime AsOnDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                     CurrentMonth = AsOnDateNewD.ToString("MM-yyyy");
 
-                    makeSQL4 = " SELECT sum(nvl(PPRM.ITEM_WEIGHT_IN_FG,0)) AS ITEM_WEIGHT_IN_FG, sum(nvl(PMT.ITEM_WEIGHT_PROD,0)) AS ITEM_WEIGHT_PROD, sum(nvl((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT_IN_FG),0)) AS BELOW_TARGET, nvl(PMT.DAYS,0) AS DAYS, sum(nvl(ROUND(((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT_IN_FG)/nullif(PMT.DAYS,0)),3),0)) AS PER_DAY_ACHIV_TAR FROM (SELECT SUM(ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_IN_FG  FROM PF_PRODUCTION_MASTER WHERE  TO_CHAR(TO_DATE(ENTRY_DATE),'mm-yyyy') = '" + CurrentMonth + "') PPRM LEFT JOIN (SELECT ITEM_WEIGHT_PROD, TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') AS MONTH_YEAR,  trunc(last_day(MONTH_YEAR))- to_date('" + AsOnDateAr + "', 'yyyy-mm-dd') AS DAYS FROM PF_MONTHLY_TARGET WHERE TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') = '" + CurrentMonth + "') PMT ON  PMT.MONTH_YEAR = '" + CurrentMonth + "' GROUP BY   nvl(PMT.DAYS,0)   ";
+                    makeSQL4 = " SELECT sum(nvl(PPRM.ITEM_WEIGHT,0)) AS ITEM_WEIGHT_IN_FG, sum(nvl(PMT.ITEM_WEIGHT_PROD,0)) AS ITEM_WEIGHT_PROD, sum(nvl((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT),0)) AS BELOW_TARGET, nvl(PMT.DAYS,0) AS DAYS, sum(nvl(ROUND(((PMT.ITEM_WEIGHT_PROD - PPRM.ITEM_WEIGHT)/nullif(PMT.DAYS,0)),3),0)) AS PER_DAY_ACHIV_TAR FROM (SELECT SUM(ITEM_WEIGHT) AS ITEM_WEIGHT  FROM PF_PRODUCTION_MASTER WHERE  TO_CHAR(TO_DATE(ENTRY_DATE),'mm-yyyy') = '" + CurrentMonth + "') PPRM LEFT JOIN (SELECT ITEM_WEIGHT_PROD, TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') AS MONTH_YEAR,  trunc(last_day(MONTH_YEAR))- to_date('" + AsOnDateAr + "', 'yyyy-mm-dd') AS DAYS FROM PF_MONTHLY_TARGET WHERE TO_CHAR(TO_DATE(MONTH_YEAR),'mm-yyyy') = '" + CurrentMonth + "') PMT ON  PMT.MONTH_YEAR = '" + CurrentMonth + "' GROUP BY   nvl(PMT.DAYS,0)   ";
                 } 
                 this.GetProAchiveData(AsOnDateAr, makeSQL4);
                  
@@ -359,7 +357,7 @@ namespace NRCAPPS.PF
             int userID = Convert.ToInt32(Session["USER_ID"]);
             using (var conn = new OracleConnection(strConnString))
             {
-                string query = " SELECT PPM.ITEM_WEIGHT_PUR , sum(ROUND(PMT.TARGET_PUR_PER_DAY)) AS TARGET_PUR_PER_DAY, PPRM.ITEM_WEIGHT_PROD, sum(PMT.TARGET_PROD_PER_DAY) AS TARGET_PROD_PER_DAY, PSM.ITEM_WEIGHT_SALES   FROM (SELECT SUM(ITEM_WEIGHT) AS ITEM_WEIGHT_PUR, TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE FROM PF_PURCHASE_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE),'dd-mm-YYYY') = '" + AsOnDateAr + "' AND PUR_TYPE_ID = '" + DropDownPurchaseTypeID.SelectedValue + "' GROUP BY TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy')) PPM LEFT JOIN (SELECT SUM(ITEM_WEIGHT_IN_FG) AS ITEM_WEIGHT_PROD, TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE  FROM PF_PRODUCTION_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE),'dd-mm-YYYY') = '" + AsOnDateAr + "' GROUP BY TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy')) PPRM ON PPM.ENTRY_DATE = PPRM.ENTRY_DATE LEFT JOIN (SELECT SUM(ITEM_WEIGHT) AS ITEM_WEIGHT_SALES, TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE  FROM PF_SALES_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE),'dd-mm-YYYY') = '" + AsOnDateAr + "' GROUP BY TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy')) PSM ON PSM.ENTRY_DATE = PPRM.ENTRY_DATE LEFT JOIN (SELECT  ITEM_WEIGHT_PUR,  ROUND(ITEM_WEIGHT_PUR/(1+trunc(last_day(MONTH_YEAR))-trunc(MONTH_YEAR,'MM')),3) AS TARGET_PUR_PER_DAY,  ITEM_WEIGHT_PROD, ROUND(ITEM_WEIGHT_PROD/(1+trunc(last_day(MONTH_YEAR))-trunc(MONTH_YEAR,'MM')),3) AS TARGET_PROD_PER_DAY, TO_CHAR(TO_DATE(MONTH_YEAR),'mm-YYYY') AS MONTH_YEAR,  1+trunc(last_day(MONTH_YEAR))-trunc(MONTH_YEAR,'MM') AS DAYS FROM PF_MONTHLY_TARGET WHERE TO_CHAR(TO_DATE(MONTH_YEAR),'mm-YYYY') = '" + CurrentMonth + "') PMT ON  PMT.MONTH_YEAR = '" + CurrentMonth + "' GROUP BY PPM.ITEM_WEIGHT_PUR, PPRM.ITEM_WEIGHT_PROD, PSM.ITEM_WEIGHT_SALES ";
+                string query = " SELECT PPM.ITEM_WEIGHT_PUR , sum(ROUND(PMT.TARGET_PUR_PER_DAY)) AS TARGET_PUR_PER_DAY, PPRM.ITEM_WEIGHT_PROD, sum(PMT.TARGET_PROD_PER_DAY) AS TARGET_PROD_PER_DAY, PSM.ITEM_WEIGHT_SALES   FROM (SELECT SUM(ITEM_WEIGHT) AS ITEM_WEIGHT_PUR, TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE FROM PF_PURCHASE_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE),'dd-mm-YYYY') = '" + AsOnDateAr + "' AND PUR_TYPE_ID = '" + DropDownPurchaseTypeID.SelectedValue + "' GROUP BY TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy')) PPM LEFT JOIN (SELECT SUM(ITEM_WEIGHT) AS ITEM_WEIGHT_PROD, TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE  FROM PF_PRODUCTION_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE),'dd-mm-YYYY') = '" + AsOnDateAr + "' GROUP BY TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy')) PPRM ON PPM.ENTRY_DATE = PPRM.ENTRY_DATE LEFT JOIN (SELECT SUM(ITEM_WEIGHT) AS ITEM_WEIGHT_SALES, TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE  FROM PF_SALES_MASTER WHERE TO_CHAR(TO_DATE(ENTRY_DATE),'dd-mm-YYYY') = '" + AsOnDateAr + "' GROUP BY TO_CHAR(TO_DATE(ENTRY_DATE),'dd/mm/yyyy')) PSM ON PSM.ENTRY_DATE = PPRM.ENTRY_DATE LEFT JOIN (SELECT  ITEM_WEIGHT_PUR,  ROUND(ITEM_WEIGHT_PUR/(1+trunc(last_day(MONTH_YEAR))-trunc(MONTH_YEAR,'MM')),3) AS TARGET_PUR_PER_DAY,  ITEM_WEIGHT_PROD, ROUND(ITEM_WEIGHT_PROD/(1+trunc(last_day(MONTH_YEAR))-trunc(MONTH_YEAR,'MM')),3) AS TARGET_PROD_PER_DAY, TO_CHAR(TO_DATE(MONTH_YEAR),'mm-YYYY') AS MONTH_YEAR,  1+trunc(last_day(MONTH_YEAR))-trunc(MONTH_YEAR,'MM') AS DAYS FROM PF_MONTHLY_TARGET WHERE TO_CHAR(TO_DATE(MONTH_YEAR),'mm-YYYY') = '" + CurrentMonth + "') PMT ON  PMT.MONTH_YEAR = '" + CurrentMonth + "' GROUP BY PPM.ITEM_WEIGHT_PUR, PPRM.ITEM_WEIGHT_PROD, PSM.ITEM_WEIGHT_SALES ";
                 using (var cmd = new OracleCommand(query, conn))
                 {
                     //  cmd.Parameters.Add("NoUserID", SqlDbType.Int);
@@ -519,6 +517,224 @@ namespace NRCAPPS.PF
         { 
 
         }
+
+
+        public int BusinessDaysUntil(DateTime firstDay, DateTime lastDay)
+        {
+            firstDay = firstDay.Date;
+            lastDay = lastDay.Date;
+
+            TimeSpan span = lastDay - firstDay;
+            int businessDays = span.Days + 1;
+            int fullWeekCount = businessDays / 7;
+            // find out if there are weekends during the time exceedng the full weeks
+            if (businessDays > fullWeekCount * 7)
+            {
+                // we are here to find out if there is a 1-day or 2-days weekend
+                // in the time interval remaining after subtracting the complete weeks
+                int firstDayOfWeek = (int)firstDay.DayOfWeek;
+                int lastDayOfWeek = (int)lastDay.DayOfWeek;
+                if (lastDayOfWeek < firstDayOfWeek)
+                    lastDayOfWeek += 7;
+                if (firstDayOfWeek <= 5)
+                {
+                    if (lastDayOfWeek >= 5)// Only Friday is in the remaining time interval
+                        businessDays -= 1;
+                }
+            }
+
+            // subtract the weekends during the full weeks in the interval
+            businessDays -= fullWeekCount;
+
+            return businessDays;
+        }
+
+        protected void BtnReportPurProd_Click(object sender, EventArgs e)
+        { 
+            if (IS_REPORT_ACTIVE == "Enable")
+            {
+               // alert_box.Visible = false;
+                OracleConnection conn = new OracleConnection(strConnString);
+                conn.Open();
+                string HtmlString = "";
+                string StartDateTemp = EntryDate3.Text;
+                DateTime StartDateTemp1 = DateTime.ParseExact(StartDateTemp, "dd/mm/yyyy", CultureInfo.InvariantCulture);
+                DateTime StartDateTemp2 = new DateTime(StartDateTemp1.Year, StartDateTemp1.Month, 1);
+
+                string EndDate = EntryDate3.Text;
+
+                //   DateTime StartDateNew = DateTime.ParseExact(StartDateTemp2, "dd/mm/yyyy", CultureInfo.InvariantCulture);
+                string StartDateQuery = StartDateTemp2.ToString("yyyy/mm/dd");
+
+                DateTime EndDateNew = DateTime.ParseExact(EndDate, "dd/mm/yyyy", CultureInfo.InvariantCulture);
+                string EndDateQuery = EndDateNew.ToString("yyyy/mm/dd");
+
+                int TotalDaysWithOutFriday = BusinessDaysUntil(StartDateTemp2, EndDateNew);
+
+                string EndDateTemp = EndDate;
+                string[] EndDateTempSplit = EndDateTemp.Split('-');
+                String EndDateFormTemp = EndDateTempSplit[0].Replace("/", "-");
+                DateTime EndMonthNew = DateTime.ParseExact(EndDateFormTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                string EndMonth = EndMonthNew.ToString("dd-MMMM-yyyy");
+
+                string makeSQL = " SELECT WI.ITEM_NAME, SUM(nvl(WPM.ITEM_WEIGHT,0)) AS ITEM_WEIGHT, SUM(nvl(WPM.ITEM_AMOUNT,0)) AS ITEM_AMOUNT, ROUND(nvl((SUM(WPM.ITEM_AMOUNT)/SUM(WPM.ITEM_WEIGHT))*1000,0),2) AS ITEM_RATE, (SUM(nvl(WPM.ITEM_WEIGHT, 0)) * 2) / 100 GARBAGE_WT FROM WP_ITEM WI LEFT JOIN  WP_PURCHASE_MASTER WPM ON WPM.ITEM_ID = WI.ITEM_ID AND TO_CHAR(TO_DATE(WPM.ENTRY_DATE), 'YYYY/mm/dd') BETWEEN '" + StartDateQuery + "' AND '" + EndDateQuery + "' GROUP BY WI.ITEM_ID, WI.ITEM_NAME ORDER BY WI.ITEM_ID ";
+
+                cmdl = new OracleCommand(makeSQL);
+                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                dt = new DataTable();
+                oradata.Fill(dt);
+                RowCount = dt.Rows.Count;
+
+                HtmlString += "<div style='float:left;width:725px;height:960px;margin:10px 0 0 40px;padding:10px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 16px;border:black solid 1px;'> ";
+                HtmlString += "<div style='float:left;width:725px;height:100px;text-align:center;' ><img src='../../image/logo_from.png'/></div> ";
+                HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:17px;font-weight:700;'>Waste Paper Division</span></div> ";
+                HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:16px;font-weight:700;'>Average Purchase Price : " + EndMonth + "</span></div> ";
+                HtmlString += "<table cellpadding='4px' cellspacing='0' style='font-size: 14px;' width=100%>";
+                HtmlString += "<th style='border:black solid 1px; -webkit-border-top-left-radius:10px;width:85px;'>ITEM NAME</th> ";
+                HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;'>WEIGHT IN KG</span></th> ";
+                HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;'>AMOUNT - SR</th> ";
+                HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;'>RATE PER MT</th> ";
+                HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;-webkit-border-top-right-radius:10px;'><span style='size:12px'>DAILY PURCHASE AVG. IN KG</th> ";
+
+                for (int i = 0; i < RowCount; i++)
+                {
+                    ItemWtWbTotal += Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString());
+                    ItemAmtTotal += Convert.ToDouble(dt.Rows[i]["ITEM_AMOUNT"].ToString());
+                    TotalGarbage += Convert.ToDouble(dt.Rows[i]["GARBAGE_WT"].ToString());
+
+                    HtmlString += "<tr valign='top'> ";
+
+                    HtmlString += "<td style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;'> ";
+                    HtmlString += "" + dt.Rows[i]["ITEM_NAME"].ToString() + " ";
+                    HtmlString += "</td> ";
+
+                    HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;'> ";
+                    HtmlString += "" + string.Format("{0:n2}", dt.Rows[i]["ITEM_WEIGHT"]) + " ";
+                    HtmlString += "</td> ";
+
+                    HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;'> ";
+                    HtmlString += "" + string.Format("{0:n2}", dt.Rows[i]["ITEM_AMOUNT"]) + "";
+                    HtmlString += "</td> ";
+
+                    HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:center;'> ";
+                    HtmlString += "" + string.Format("{0:n2}", dt.Rows[i]["ITEM_RATE"]) + " ";
+                    HtmlString += "</td> ";
+
+                    HtmlString += "<td style='text-align:center;border-bottom:black solid 1px;border-right:black solid 1px;'> ";
+                    HtmlString += "" + string.Format("{0:n0}", dt.Rows[i]["ITEM_WEIGHT"]) + "</br> ";
+
+                    HtmlString += "</td> ";
+                    HtmlString += "</tr> ";
+
+                }
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "Grand Total ";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", ItemWtWbTotal) + " ";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", ItemAmtTotal) + "";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:center;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", ((ItemAmtTotal / ItemWtWbTotal) * 1000)) + " ";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='text-align:center;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n0}", ItemWtWbTotal) + "</br> ";
+                HtmlString += "</td> ";
+                HtmlString += "</tr> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=4 style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "Less - Garbage 2% ";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='text-align:center;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", TotalGarbage) + "</br> ";
+                HtmlString += "</td> ";
+                HtmlString += "</tr> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=4 style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "Net Total";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='text-align:center;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", (ItemWtWbTotal - TotalGarbage)) + "</br> ";
+                HtmlString += "</td> ";
+                HtmlString += "</tr> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=4 style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "Net Average Rate After Deduction of Garbage ";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='text-align:center;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", (ItemAmtTotal / (ItemWtWbTotal - TotalGarbage)) * 1000) + "</br> ";
+                HtmlString += "</td> ";
+                HtmlString += "</tr> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=4 style='-webkit-border-bottom-left-radius:10px;border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "Daily Average Collection (Total Working Days: " + TotalDaysWithOutFriday + ")";
+                HtmlString += "</td> ";
+                HtmlString += "<td style='-webkit-border-bottom-right-radius:10px;text-align:center;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", (ItemWtWbTotal / TotalDaysWithOutFriday)) + "</br> ";
+                HtmlString += "</td> ";
+                HtmlString += "</tr> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=2> ";
+                HtmlString += "&nbsp;";
+                HtmlString += "</td> ";
+                HtmlString += "<td  colspan=3> ";
+                HtmlString += "&nbsp; ";
+                HtmlString += "</td> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=2> ";
+                HtmlString += "Prepared By:";
+                HtmlString += "</td> ";
+                HtmlString += "<td  colspan=3 style='text-align:right;'> ";
+                HtmlString += "Approved By:";
+                HtmlString += "</td> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=2> ";
+                HtmlString += "&nbsp;";
+                HtmlString += "</td> ";
+                HtmlString += "<td  colspan=3> ";
+                HtmlString += "&nbsp; ";
+                HtmlString += "</td> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=2> ";
+                HtmlString += "&nbsp;";
+                HtmlString += "</td> ";
+                HtmlString += "<td  colspan=3> ";
+                HtmlString += "&nbsp; ";
+                HtmlString += "</td> ";
+
+                HtmlString += "<tr valign='top'> ";
+                HtmlString += "<td colspan=2> ";
+                HtmlString += "Rajesh .R.G.</br>(Site Manager)";
+                HtmlString += "</td> ";
+                HtmlString += "<td  colspan=3 style='text-align:right;'> ";
+                HtmlString += "Khalid Mohsin Ali Tanwar </br>(Deputy Chief Executive Officer)";
+                HtmlString += "</td> ";
+
+                HtmlString += "</tr> ";
+
+                HtmlString += "</table> ";
+                HtmlString += "</div> ";
+                HtmlString += "</div> ";
+                HtmlString += "</div> ";
+
+                PanelPrint.Controls.Add(new LiteralControl(HtmlString));
+                Session["ctrl"] = PanelPrint;
+                ClientScript.RegisterStartupScript(this.GetType(), "onclick", "<script language=javascript>window.open('Print.aspx','PrintMe','height=900px,width=1200px,scrollbars=1');</script>");
+
+            }
+        }
+
 
         public DataSet ExecuteBySqlString(string sqlString)
         {

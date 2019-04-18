@@ -14,7 +14,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="../Dashboard.aspx"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Plastic Fctory</a></li>
+        <li><a href="#">Plastic Factory</a></li>
         <li class="active">Item</li>
       </ol>
     </section>
@@ -40,7 +40,7 @@
             <!-- form start --> 
               <div class="box-body">
                 <div class="form-group">  
-                   <label for="User_Name" class="col-sm-2 control-label">Item Name</label>
+                   <label for="TextItemName" class="col-sm-2 control-label">Item Name</label>
                  <div class="col-sm-3">  
                     <asp:TextBox ID="TextItemID" style="display:none" runat="server"></asp:TextBox>
                     <asp:TextBox ID="TextItemName" class="form-control input-sm"  runat="server" AutoPostBack="True" ontextchanged="TextItemName_TextChanged"></asp:TextBox>  
@@ -50,6 +50,18 @@
                   </div> 
                     <div class="col-sm-3"><asp:Label ID="CheckItemName" runat="server"></asp:Label> 
                     </div>
+                </div>
+                <div class="form-group">  
+                   <label for="TextItemArabicName" class="col-sm-2 control-label">Item Arabic Name</label>
+                 <div class="col-sm-3">   
+                    <asp:TextBox ID="TextItemArabicName" class="form-control input-sm"  runat="server"></asp:TextBox>   
+                  </div>  
+                </div>
+               <div class="form-group">  
+                   <label for="TextItemDescription" class="col-sm-2 control-label">Description</label>
+                 <div class="col-sm-3">   
+                    <asp:TextBox ID="TextItemDescription" class="form-control input-sm"  runat="server"></asp:TextBox>   
+                  </div>  
                 </div>
                  <div class="form-group">  
                    <label for="User_Name" class="col-sm-2 control-label">Item Code</label>
@@ -111,8 +123,10 @@
     OnPageIndexChanging="GridViewUser_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="ITEM_ID" HeaderText="Item ID" />  
-                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item Name" />  
-                     <asp:BoundField DataField="ITEM_CODE"  HeaderText="Item Code" />    
+                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item Name" /> 
+                     <asp:BoundField DataField="ITEM_ARABIC_NAME"  HeaderText="Item Arabic Name" />                       
+                     <asp:BoundField DataField="ITEM_CODE"  HeaderText="Item Code" />   
+                     <asp:BoundField DataField="ITEM_DESCRIPTION"  HeaderText="Item Description" />                            
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 
                              <asp:Label ID="IsActiveGV" CssClass="label" Text='<%# Eval("IS_ACTIVE").ToString() == "Enable" ? "<span Class=label-success style=Padding:2px >Enable<span>" : "<span Class=label-danger style=Padding:2px>Disable<span>" %>'  runat="server" /> 

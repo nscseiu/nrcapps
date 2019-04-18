@@ -175,7 +175,7 @@ namespace NRCAPPS.PF
                 alert_box.Visible = true;
                 alert_box.Controls.Add(new LiteralControl("Business Target Data Update successfully"));
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
-                
+                clearText();
                 Display();
             }
             else
@@ -217,6 +217,10 @@ namespace NRCAPPS.PF
              }
               
              conn.Close();
+             DropDownItemID.Enabled = false;
+             TextMonthYear0.Enabled = false;
+             BtnAdd.Attributes.Add("aria-disabled", "false");
+             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
              Display(); 
              alert_box.Visible = false;
              CheckMonthYear.Text = "";
@@ -354,6 +358,7 @@ namespace NRCAPPS.PF
 
         public void TextMonthYear0_TextChanged(object sender, EventArgs e)
         {
+            try{
             if (!string.IsNullOrEmpty(TextMonthYear0.Text))
             {
                 alert_box.Visible = false;
@@ -389,7 +394,11 @@ namespace NRCAPPS.PF
                 CheckMonthYear.ForeColor = System.Drawing.Color.Red;
                 TextMonthYear0.Focus();
             }
-
+            }
+            catch
+            {
+                Response.Redirect("~/ParameterError.aspx");
+            } 
         }
 
 

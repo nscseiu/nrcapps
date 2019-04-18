@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NRCAPPS</RootNamespace>
     <AssemblyName>nrcapps</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -50,79 +50,362 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BotDetect, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\CAPTCHA.asp.net.core.on.legacy.net.frameworks.4.4.0\lib\net46\BotDetect.dll</HintPath>
+    </Reference>
+    <Reference Include="BotDetect.Web.Mvc, Version=4.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\CAPTCHA.asp.net.core.on.legacy.net.frameworks.4.4.0\lib\net46\BotDetect.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.Design.dll</HintPath>
+      <HintPath>..\..\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.Design.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
-    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.CrystalReports.TemplateEngine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\..\Program Files (x86)\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.TemplateEngine.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>C:\Program Files\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.CrystalReports.TemplateEngine.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>C:\Program Files\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.Enterprise.Viewing.ReportSource.dll</HintPath>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.AspNetCore.Antiforgery, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Antiforgery.1.0.0\lib\net451\Microsoft.AspNetCore.Antiforgery.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.ReportSource.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.Authorization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Authorization.1.0.0\lib\net451\Microsoft.AspNetCore.Authorization.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Shared, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.Shared.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.Cors, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Cors.1.0.0\lib\net451\Microsoft.AspNetCore.Cors.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.Web, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\SAP BusinessObjects\Crystal Reports for .NET Framework 4.0\Common\SAP BusinessObjects Enterprise XI 4.0\win32_x86\dotnet\CrystalDecisions.Web.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.Cryptography.Internal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Cryptography.Internal.1.0.0\lib\net451\Microsoft.AspNetCore.Cryptography.Internal.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.SignalR.Core.2.3.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.DataProtection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.DataProtection.1.0.0\lib\net451\Microsoft.AspNetCore.DataProtection.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.SignalR.SystemWeb.2.3.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.DataProtection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.DataProtection.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.DataProtection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Diagnostics.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Diagnostics.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.AspNetCore.Diagnostics.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Hosting.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Hosting.Server.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Html.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Html.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.AspNetCore.Html.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Http.1.0.0\lib\net451\Microsoft.AspNetCore.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Http.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Http.Extensions.1.0.0\lib\net451\Microsoft.AspNetCore.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Http.Features.1.0.0\lib\net451\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.JsonPatch, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.JsonPatch.1.0.0\lib\netstandard1.1\Microsoft.AspNetCore.JsonPatch.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Localization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Localization.1.0.0\lib\net451\Microsoft.AspNetCore.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.ApiExplorer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.ApiExplorer.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.ApiExplorer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.Core.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Cors, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.Cors.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.DataAnnotations, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.DataAnnotations.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.DataAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Formatters.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.Formatters.Json.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.Formatters.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Localization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.Localization.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.Razor.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Razor.Host, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.Razor.Host.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.Razor.Host.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.TagHelpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.TagHelpers.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.TagHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Mvc.ViewFeatures.1.0.0\lib\net451\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Razor.1.0.0\lib\net451\Microsoft.AspNetCore.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Razor.Runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Razor.Runtime.1.0.0\lib\net451\Microsoft.AspNetCore.Razor.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Routing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Routing.1.0.0\lib\net451\Microsoft.AspNetCore.Routing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Routing.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Routing.Abstractions.1.0.0\lib\net451\Microsoft.AspNetCore.Routing.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Session, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.Session.1.0.0\lib\net451\Microsoft.AspNetCore.Session.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNetCore.WebUtilities.1.0.0\lib\net451\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.CodeAnalysis.Common.1.3.0\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.CodeAnalysis.CSharp.1.3.0\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    <Reference Include="Microsoft.DotNet.InternalAbstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.DotNet.InternalAbstractions.1.0.0\lib\net451\Microsoft.DotNet.InternalAbstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Caching.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Caching.Memory.1.0.0\lib\net451\Microsoft.Extensions.Caching.Memory.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Configuration.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Configuration.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\My Doc\Development Environment Soft\SignalR-master\SignalR\bin\Oracle.ManagedDataAccess.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Configuration.Binder.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
     </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.1.0.0\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyModel.1.0.0\lib\net451\Microsoft.Extensions.DependencyModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.FileProviders.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Composite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.FileProviders.Composite.1.0.0\lib\netstandard1.0\Microsoft.Extensions.FileProviders.Composite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileProviders.Physical, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.FileProviders.Physical.1.0.0\lib\net451\Microsoft.Extensions.FileProviders.Physical.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.FileSystemGlobbing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.FileSystemGlobbing.1.0.0\lib\net451\Microsoft.Extensions.FileSystemGlobbing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Globalization.CultureInfoCache, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Globalization.CultureInfoCache.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Globalization.CultureInfoCache.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Localization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Localization.1.0.0\lib\net451\Microsoft.Extensions.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Localization.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Localization.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Localization.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Logging.Abstractions.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.ObjectPool, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.ObjectPool.1.0.0\lib\net451\Microsoft.Extensions.ObjectPool.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Options.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.PlatformAbstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.PlatformAbstractions.1.0.0\lib\net451\Microsoft.Extensions.PlatformAbstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.Primitives.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.WebEncoders, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.WebEncoders.1.0.0\lib\netstandard1.0\Microsoft.Extensions.WebEncoders.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http.Headers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Net.Http.Headers.1.0.0\lib\netstandard1.1\Microsoft.Net.Http.Headers.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="QRCoder">
       <HintPath>..\..\Development Environment Soft\QRCode\Bin\QRCoder.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.AppContext.4.1.0\lib\net463\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.0.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Collections.NonGeneric.4.0.1\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.ComponentModel.Primitives, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.ComponentModel.Primitives.4.1.0\lib\net45\System.ComponentModel.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.TypeConverter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.ComponentModel.TypeConverter.4.1.0\lib\net462\System.ComponentModel.TypeConverter.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.FileVersionInfo.4.0.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.StackTrace.4.0.1\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.4.1.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Linq, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Linq.4.1.0\lib\net463\System.Linq.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Linq.Expressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Linq.Expressions.4.1.0\lib\net463\System.Linq.Expressions.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Reflection.4.1.0\lib\net462\System.Reflection.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Reflection.Metadata.1.3.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.Extensions.4.1.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.InteropServices.4.1.0\lib\net462\System.Runtime.InteropServices.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.Serialization.Primitives.4.1.1\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Security.Cryptography.Encoding.4.0.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Security.Cryptography.Primitives.4.0.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encoding.CodePages.4.0.1\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Thread, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Thread.4.0.0\lib\net46\System.Threading.Thread.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Core.5.2.4\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.WebHost.5.2.4\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -130,6 +413,21 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Xml.XmlDocument.4.0.1\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.XPath, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Xml.XPath.4.0.1\lib\net46\System.Xml.XPath.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Xml.XPath.XDocument.4.0.1\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="IT\IT_ASSET\AssetCategory.aspx" />
@@ -137,6 +435,7 @@
     <Content Include="IT\IT_ASSET\AssetItemsEmp.aspx" />
     <Content Include="IT\IT_ASSET\AssetItemsExpires.aspx" />
     <Content Include="IT\IT_ASSET\AssetItemsExpiresEmp.aspx" />
+    <Content Include="IT\IT_ASSET\AssetItemsPlacement.aspx" />
     <Content Include="IT\IT_ASSET\ASSET_Reports\AssetClass.aspx" />
     <Content Include="IT\IT_ASSET\ASSET_Reports\Asset_Items_Employee_Report_View.aspx" />
     <Content Include="HR\HrEmployee.aspx" />
@@ -145,8 +444,40 @@
     <Content Include="HR\HrEmpLocation.aspx" />
     <Content Include="IT\IT_ASSET\AssetItemsDept.aspx" />
     <Content Include="IT\IT_ASSET\ASSET_Reports\Asset_Items_Department_Report_View.aspx" />
+    <Content Include="MF\MfFgQualityAssurance.aspx" />
+    <Content Include="MF\MfFinishedGoodsIssue.aspx" />
+    <Content Include="MF\MfProductionIssue.aspx" />
+    <Content Include="MF\MfBatchRmCheckItem.aspx" />
+    <Content Include="MF\MfGradeItem.aspx" />
+    <Content Include="MF\MfBatchItem.aspx" />
+    <Content Include="MF\MfFurnaces.aspx" />
+    <Content Include="MF\MfItemBin.aspx" />
+    <Content Include="MF\MfItem.aspx" />
+    <Content Include="MF\MfVehicle.aspx" />
+    <Content Include="MF\MfParty.aspx" />
+    <Content Include="MF\MfItemTransfer.aspx" />
+    <Content Include="MF\MfCategory.aspx" />
+    <Content Include="MF\MF_Reports\MfRmIssueReportView.aspx" />
+    <Content Include="MF\MF_Reports\MfItemTransferMonthWiseReportView.aspx" />
+    <Content Include="MF\MF_Reports\MfClass.aspx" />
+    <Content Include="MF\MfMatReceiving.aspx" />
+    <Content Include="MF\MfExpContainer.aspx" />
+    <Content Include="MF\MfItemSales.aspx" />
+    <Content Include="MF\MfExpMaterialPricing.aspx" />
+    <Content Include="MF\MfExpSalesInvoice.aspx" />
+    <Content Include="MF\MfExpShipmentCmo.aspx" />
+    <Content Include="MF\Print.aspx" />
+    <Content Include="MF\MfPurchase.aspx" />
+    <Content Include="MF\MfRmCoordinatorApprove.aspx" />
+    <Content Include="MS\MsActualGarbage.aspx" />
+    <Content Include="NRC\NrcShipmentLocation.aspx" />
+    <Content Include="NRC\NrcTradingVessel.aspx" />
+    <Content Include="NRC\NrcShippingIncoterms.aspx" />
+    <Content Include="NRC\NrcPaymentTerms.aspx" />
+    <Content Include="NRC\NrcCurrency.aspx" />
     <Content Include="NRC\NrcMainMenu.aspx" />
     <Content Include="NRC\NrcDataProcess.aspx" />
+    <Content Include="NRC\NrcContainer.aspx" />
     <Content Include="NRC\NrcUserChangePassword.aspx" />
     <Content Include="NRC\NrcPaymentType.aspx" />
     <Content Include="NRC\NrcUser.aspx" />
@@ -165,6 +496,11 @@
     <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="ParameterError.aspx" />
+    <Content Include="PF\PfDailyPurProdStatement.aspx" />
+    <Content Include="PF\PfExpShipmentCmo.aspx" />
+    <Content Include="PF\PfExpContainerEX.aspx" />
+    <Content Include="PF\PfExpMaterialPricing.aspx" />
+    <Content Include="PF\PfExpSalesInvoice.aspx" />
     <Content Include="PF\PfSalesJw.aspx" />
     <Content Include="PF\PfProductionJw.aspx" />
     <Content Include="PF\PfPurchaseJw.aspx" />
@@ -178,6 +514,12 @@
     <Content Include="PF\PfInventoryMonthlyStatement.aspx" />
     <Content Include="PF\PfDailyPurProd.aspx" />
     <Content Include="PF\PfInventoryFg.aspx" />
+    <Content Include="PF\PfExpContainer.aspx" />
+    <Content Include="PF\PfSalesman.aspx" />
+    <Content Include="PF\PF_Reports\PfJWMonthlyReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfExpContainerMonthlyReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfSalesSummaryCustomerReportView.aspx" />
+    <Content Include="PF\Print.aspx" />
     <Content Include="PF\PfSupplier.aspx" />
     <Content Include="PF\PfPurchaseClaimCheck.aspx" />
     <Content Include="PF\PfPurchaseClaim.aspx" />
@@ -210,16 +552,70 @@
     <Content Include="PF\PfPurchaseType.aspx" />
     <Content Include="PF\PfSupervisor.aspx" />
     <Content Include="PF\PfCustomer.aspx" />
-    <None Include="packages.config" />
-    <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.6.4.js" />
-    <Content Include="Scripts\jquery-1.6.4.min.js" />
-    <Content Include="Scripts\jquery.signalR-2.3.0.js" />
-    <Content Include="Scripts\jquery.signalR-2.3.0.min.js" />
+    <Content Include="PF\PfItemSales.aspx" />
+    <Content Include="PF\PfMaterialTransaction.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Welcome.aspx" />
+    <Content Include="MS\Print.aspx" />
+    <Content Include="MS\MsCategory.aspx" />
+    <Content Include="MS\MsCollectionFor.aspx" />
+    <Content Include="MS\MsDriver.aspx" />
+    <Content Include="MS\MsExpContainer.aspx" />
+    <Content Include="MS\MsExpMaterialPricing.aspx" />
+    <Content Include="MS\MsExpSalesInvoice.aspx" />
+    <Content Include="MS\MsExpShipmentCmo.aspx" />
+    <Content Include="MS\MsInventoryRm.aspx" />
+    <Content Include="MS\MsItem.aspx" />
+    <Content Include="MS\MsItemSales.aspx" />
+    <Content Include="MS\MsItemSalesWs.aspx" />
+    <Content Include="MS\MsMaterialTransaction.aspx" />
+    <Content Include="MS\MsParty.aspx" />
+    <Content Include="MS\MsPurchase.aspx" />
+    <Content Include="MS\MsPurchaseClaim.aspx" />
+    <Content Include="MS\MsPurchaseClaimApprove.aspx" />
+    <Content Include="MS\MsPurchaseVatAdjustment.aspx" />
+    <Content Include="MS\MsRmStatement.aspx" />
+    <Content Include="MS\MsSales.aspx" />
+    <Content Include="MS\MsSalesInterDivision.aspx" />
+    <Content Include="MS\MsSupervisor.aspx" />
+    <Content Include="MS\MsSupplierCat.aspx" />
+    <Content Include="MS\MS_Reports\MsClass.aspx" />
+    <Content Include="MS\MS_Reports\MsExpContainerMonthlyReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsInventoryValuationStatementReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsPurchaseCollectionForReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsPurchaseDriverWiseReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsPurchaseSupplierWiseReportView.aspx" />
+    <Content Include="WP\WpItemSalesWs.aspx" />
+    <Content Include="WP\WpPurchaseVatAdjustment.aspx" />
+    <Content Include="WP\WpSales.aspx" />
+    <Content Include="WP\WpRmStatement.aspx" />
+    <Content Include="WP\WpExpShipmentCmo.aspx" />
+    <Content Include="WP\WpInventoryRm.aspx" />
+    <Content Include="WP\WpExpSalesInvoice.aspx" />
+    <Content Include="WP\WpExpMaterialPricing.aspx" />
+    <Content Include="WP\WpItemSales.aspx" />
+    <Content Include="WP\WpMaterialTransaction.aspx" />
+    <Content Include="WP\WpExpContainer.aspx" />
+    <Content Include="WP\WpSalesInterDivision.aspx" />
+    <Content Include="WP\WP_Reports\WpInventoryValuationStatementReportView.aspx" />
+    <Content Include="WP\WP_Reports\WpExpContainerMonthlyReportView.aspx" />
+    <Content Include="WP\WP_Reports\WpClass.aspx" />
+    <Content Include="WP\WP_Reports\WpPurchaseDriverWiseReportView.aspx" />
+    <Content Include="WP\WP_Reports\WpPurchaseCollectionForReportView.aspx" />
+    <Content Include="WP\WP_Reports\WpPurchaseSupplierWiseReportView.aspx" />
+    <Content Include="WP\WpPurchaseClaimApprove.aspx" />
+    <Content Include="WP\WpPurchaseClaim.aspx" />
+    <Content Include="WP\Print.aspx" />
+    <Content Include="WP\WpPurchase.aspx" />
+    <Content Include="WP\WpCollectionFor.aspx" />
+    <Content Include="WP\WpParty.aspx" />
+    <Content Include="WP\WpDriver.aspx" />
+    <Content Include="WP\WpSupplierCat.aspx" />
+    <Content Include="WP\WpSupervisor.aspx" />
+    <Content Include="WP\WpItem.aspx" />
+    <Content Include="WP\WpCategory.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IT\IT_ASSET\AssetCategory.aspx.cs">
@@ -256,6 +652,13 @@
     </Compile>
     <Compile Include="IT\IT_ASSET\AssetItemsExpiresEmp.aspx.designer.cs">
       <DependentUpon>AssetItemsExpiresEmp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="IT\IT_ASSET\AssetItemsPlacement.aspx.cs">
+      <DependentUpon>AssetItemsPlacement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="IT\IT_ASSET\AssetItemsPlacement.aspx.designer.cs">
+      <DependentUpon>AssetItemsPlacement.aspx</DependentUpon>
     </Compile>
     <Compile Include="IT\IT_ASSET\ASSET_Reports\AssetClass.aspx.cs">
       <DependentUpon>AssetClass.aspx</DependentUpon>
@@ -335,7 +738,238 @@
     <Compile Include="IT\IT_ASSET\AssetItemsDept.aspx.designer.cs">
       <DependentUpon>AssetItemsDept.aspx</DependentUpon>
     </Compile>
-    <Compile Include="NrcHub.cs" />
+    <Compile Include="MF\ClassVariable.cs" />
+    <Compile Include="MF\MfFgQualityAssurance.aspx.cs">
+      <DependentUpon>MfFgQualityAssurance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfFgQualityAssurance.aspx.designer.cs">
+      <DependentUpon>MfFgQualityAssurance.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfFinishedGoodsIssue.aspx.cs">
+      <DependentUpon>MfFinishedGoodsIssue.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfFinishedGoodsIssue.aspx.designer.cs">
+      <DependentUpon>MfFinishedGoodsIssue.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfProductionIssue.aspx.cs">
+      <DependentUpon>MfProductionIssue.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfProductionIssue.aspx.designer.cs">
+      <DependentUpon>MfProductionIssue.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfBatchRmCheckItem.aspx.cs">
+      <DependentUpon>MfBatchRmCheckItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfBatchRmCheckItem.aspx.designer.cs">
+      <DependentUpon>MfBatchRmCheckItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfGradeItem.aspx.cs">
+      <DependentUpon>MfGradeItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfGradeItem.aspx.designer.cs">
+      <DependentUpon>MfGradeItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfBatchItem.aspx.cs">
+      <DependentUpon>MfBatchItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfBatchItem.aspx.designer.cs">
+      <DependentUpon>MfBatchItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfFurnaces.aspx.cs">
+      <DependentUpon>MfFurnaces.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfFurnaces.aspx.designer.cs">
+      <DependentUpon>MfFurnaces.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfItemBin.aspx.cs">
+      <DependentUpon>MfItemBin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfItemBin.aspx.designer.cs">
+      <DependentUpon>MfItemBin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfItem.aspx.cs">
+      <DependentUpon>MfItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfItem.aspx.designer.cs">
+      <DependentUpon>MfItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfVehicle.aspx.cs">
+      <DependentUpon>MfVehicle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfVehicle.aspx.designer.cs">
+      <DependentUpon>MfVehicle.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfParty.aspx.cs">
+      <DependentUpon>MfParty.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfParty.aspx.designer.cs">
+      <DependentUpon>MfParty.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfItemTransfer.aspx.cs">
+      <DependentUpon>MfItemTransfer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfItemTransfer.aspx.designer.cs">
+      <DependentUpon>MfItemTransfer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfCategory.aspx.cs">
+      <DependentUpon>MfCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfCategory.aspx.designer.cs">
+      <DependentUpon>MfCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MF_Reports\MfRmIssueReportView.aspx.cs">
+      <DependentUpon>MfRmIssueReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MF_Reports\MfRmIssueReportView.aspx.designer.cs">
+      <DependentUpon>MfRmIssueReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MF_Reports\MfItemTransferMonthWiseReportView.aspx.cs">
+      <DependentUpon>MfItemTransferMonthWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MF_Reports\MfItemTransferMonthWiseReportView.aspx.designer.cs">
+      <DependentUpon>MfItemTransferMonthWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MF_Reports\Mf_Rm_Issue_Production_Wise_Report.cs">
+      <DependentUpon>Mf_Rm_Issue_Production_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MF\MF_Reports\Mf_Item_Trnasfer_Wise_Report.cs">
+      <DependentUpon>Mf_Item_Trnasfer_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MF\MF_Reports\MfClass.aspx.cs">
+      <DependentUpon>MfClass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MF_Reports\MfClass.aspx.designer.cs">
+      <DependentUpon>MfClass.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfMatReceiving.aspx.cs">
+      <DependentUpon>MfMatReceiving.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfMatReceiving.aspx.designer.cs">
+      <DependentUpon>MfMatReceiving.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfExpContainer.aspx.cs">
+      <DependentUpon>MfExpContainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfExpContainer.aspx.designer.cs">
+      <DependentUpon>MfExpContainer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfItemSales.aspx.cs">
+      <DependentUpon>MfItemSales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfItemSales.aspx.designer.cs">
+      <DependentUpon>MfItemSales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfExpMaterialPricing.aspx.cs">
+      <DependentUpon>MfExpMaterialPricing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfExpMaterialPricing.aspx.designer.cs">
+      <DependentUpon>MfExpMaterialPricing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfExpSalesInvoice.aspx.cs">
+      <DependentUpon>MfExpSalesInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfExpSalesInvoice.aspx.designer.cs">
+      <DependentUpon>MfExpSalesInvoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfExpShipmentCmo.aspx.cs">
+      <DependentUpon>MfExpShipmentCmo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfExpShipmentCmo.aspx.designer.cs">
+      <DependentUpon>MfExpShipmentCmo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\Print.aspx.designer.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfPurchase.aspx.cs">
+      <DependentUpon>MfPurchase.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfPurchase.aspx.designer.cs">
+      <DependentUpon>MfPurchase.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfRmCoordinatorApprove.aspx.cs">
+      <DependentUpon>MfRmCoordinatorApprove.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfRmCoordinatorApprove.aspx.designer.cs">
+      <DependentUpon>MfRmCoordinatorApprove.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsActualGarbage.aspx.cs">
+      <DependentUpon>MsActualGarbage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsActualGarbage.aspx.designer.cs">
+      <DependentUpon>MsActualGarbage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcShipmentLocation.aspx.cs">
+      <DependentUpon>NrcShipmentLocation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcShipmentLocation.aspx.designer.cs">
+      <DependentUpon>NrcShipmentLocation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcTradingVessel.aspx.cs">
+      <DependentUpon>NrcTradingVessel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcTradingVessel.aspx.designer.cs">
+      <DependentUpon>NrcTradingVessel.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcShippingIncoterms.aspx.cs">
+      <DependentUpon>NrcShippingIncoterms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcShippingIncoterms.aspx.designer.cs">
+      <DependentUpon>NrcShippingIncoterms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcPaymentTerms.aspx.cs">
+      <DependentUpon>NrcPaymentTerms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcPaymentTerms.aspx.designer.cs">
+      <DependentUpon>NrcPaymentTerms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcCurrency.aspx.cs">
+      <DependentUpon>NrcCurrency.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcCurrency.aspx.designer.cs">
+      <DependentUpon>NrcCurrency.aspx</DependentUpon>
+    </Compile>
     <Compile Include="NRC\NrcMainMenu.aspx.cs">
       <DependentUpon>NrcMainMenu.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -349,6 +983,13 @@
     </Compile>
     <Compile Include="NRC\NrcDataProcess.aspx.designer.cs">
       <DependentUpon>NrcDataProcess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcContainer.aspx.cs">
+      <DependentUpon>NrcContainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcContainer.aspx.designer.cs">
+      <DependentUpon>NrcContainer.aspx</DependentUpon>
     </Compile>
     <Compile Include="NRC\NrcUserChangePassword.aspx.cs">
       <DependentUpon>NrcUserChangePassword.aspx</DependentUpon>
@@ -479,6 +1120,41 @@
     <Compile Include="ParameterError.aspx.designer.cs">
       <DependentUpon>ParameterError.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PF\PfDailyPurProdStatement.aspx.cs">
+      <DependentUpon>PfDailyPurProdStatement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfDailyPurProdStatement.aspx.designer.cs">
+      <DependentUpon>PfDailyPurProdStatement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfExpShipmentCmo.aspx.cs">
+      <DependentUpon>PfExpShipmentCmo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfExpShipmentCmo.aspx.designer.cs">
+      <DependentUpon>PfExpShipmentCmo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfExpContainerEX.aspx.cs">
+      <DependentUpon>PfExpContainerEX.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfExpContainerEX.aspx.designer.cs">
+      <DependentUpon>PfExpContainerEX.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfExpMaterialPricing.aspx.cs">
+      <DependentUpon>PfExpMaterialPricing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfExpMaterialPricing.aspx.designer.cs">
+      <DependentUpon>PfExpMaterialPricing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfExpSalesInvoice.aspx.cs">
+      <DependentUpon>PfExpSalesInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfExpSalesInvoice.aspx.designer.cs">
+      <DependentUpon>PfExpSalesInvoice.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PF\PfSalesJw.aspx.cs">
       <DependentUpon>PfSalesJw.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -570,6 +1246,66 @@
     <Compile Include="PF\PfInventoryFg.aspx.designer.cs">
       <DependentUpon>PfInventoryFg.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PF\PfExpContainer.aspx.cs">
+      <DependentUpon>PfExpContainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfExpContainer.aspx.designer.cs">
+      <DependentUpon>PfExpContainer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfSalesman.aspx.cs">
+      <DependentUpon>PfSalesman.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfSalesman.aspx.designer.cs">
+      <DependentUpon>PfSalesman.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfJWMonthlyReportView.aspx.cs">
+      <DependentUpon>PfJWMonthlyReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfJWMonthlyReportView.aspx.designer.cs">
+      <DependentUpon>PfJWMonthlyReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfExpContainerMonthlyReportView.aspx.cs">
+      <DependentUpon>PfExpContainerMonthlyReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfExpContainerMonthlyReportView.aspx.designer.cs">
+      <DependentUpon>PfExpContainerMonthlyReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryCustomerReportView.aspx.cs">
+      <DependentUpon>PfSalesSummaryCustomerReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryCustomerReportView.aspx.designer.cs">
+      <DependentUpon>PfSalesSummaryCustomerReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_ExpContainer_Monthly_Wise_Report.cs">
+      <DependentUpon>Pf_ExpContainer_Monthly_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_JW_Monthly.cs">
+      <DependentUpon>Pf_JW_Monthly.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Sales_Summary_Customer_Report.cs">
+      <DependentUpon>Pf_Sales_Summary_Customer_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\Print.aspx.designer.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PF\PfSupplier.aspx.cs">
       <DependentUpon>PfSupplier.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -650,8 +1386,367 @@
     <Compile Include="PF\PF_Reports\PfSalesSummaryItemWiseReportView.aspx.designer.cs">
       <DependentUpon>PfSalesSummaryItemWiseReportView.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PF\PF_Reports\Pf_Production_Summary_Report.cs">
-      <DependentUpon>Pf_Production_Summary_Report.rpt</DependentUpon>
+    <Compile Include="PF\PfItemSales.aspx.cs">
+      <DependentUpon>PfItemSales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfItemSales.aspx.designer.cs">
+      <DependentUpon>PfItemSales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfMaterialTransaction.aspx.cs">
+      <DependentUpon>PfMaterialTransaction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfMaterialTransaction.aspx.designer.cs">
+      <DependentUpon>PfMaterialTransaction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\Print.aspx.designer.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsCategory.aspx.cs">
+      <DependentUpon>MsCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsCategory.aspx.designer.cs">
+      <DependentUpon>MsCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsCollectionFor.aspx.cs">
+      <DependentUpon>MsCollectionFor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsCollectionFor.aspx.designer.cs">
+      <DependentUpon>MsCollectionFor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsDriver.aspx.cs">
+      <DependentUpon>MsDriver.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsDriver.aspx.designer.cs">
+      <DependentUpon>MsDriver.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsExpContainer.aspx.cs">
+      <DependentUpon>MsExpContainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsExpContainer.aspx.designer.cs">
+      <DependentUpon>MsExpContainer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsExpMaterialPricing.aspx.cs">
+      <DependentUpon>MsExpMaterialPricing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsExpMaterialPricing.aspx.designer.cs">
+      <DependentUpon>MsExpMaterialPricing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsExpSalesInvoice.aspx.cs">
+      <DependentUpon>MsExpSalesInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsExpSalesInvoice.aspx.designer.cs">
+      <DependentUpon>MsExpSalesInvoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsExpShipmentCmo.aspx.cs">
+      <DependentUpon>MsExpShipmentCmo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsExpShipmentCmo.aspx.designer.cs">
+      <DependentUpon>MsExpShipmentCmo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsInventoryRm.aspx.cs">
+      <DependentUpon>MsInventoryRm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsInventoryRm.aspx.designer.cs">
+      <DependentUpon>MsInventoryRm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsItem.aspx.cs">
+      <DependentUpon>MsItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsItem.aspx.designer.cs">
+      <DependentUpon>MsItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsItemSales.aspx.cs">
+      <DependentUpon>MsItemSales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsItemSales.aspx.designer.cs">
+      <DependentUpon>MsItemSales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsItemSalesWs.aspx.cs">
+      <DependentUpon>MsItemSalesWs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsItemSalesWs.aspx.designer.cs">
+      <DependentUpon>MsItemSalesWs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsMaterialTransaction.aspx.cs">
+      <DependentUpon>MsMaterialTransaction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsMaterialTransaction.aspx.designer.cs">
+      <DependentUpon>MsMaterialTransaction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsParty.aspx.cs">
+      <DependentUpon>MsParty.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsParty.aspx.designer.cs">
+      <DependentUpon>MsParty.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsPurchase.aspx.cs">
+      <DependentUpon>MsPurchase.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsPurchase.aspx.designer.cs">
+      <DependentUpon>MsPurchase.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsPurchaseClaim.aspx.cs">
+      <DependentUpon>MsPurchaseClaim.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsPurchaseClaim.aspx.designer.cs">
+      <DependentUpon>MsPurchaseClaim.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsPurchaseClaimApprove.aspx.cs">
+      <DependentUpon>MsPurchaseClaimApprove.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsPurchaseClaimApprove.aspx.designer.cs">
+      <DependentUpon>MsPurchaseClaimApprove.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsPurchaseVatAdjustment.aspx.cs">
+      <DependentUpon>MsPurchaseVatAdjustment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsPurchaseVatAdjustment.aspx.designer.cs">
+      <DependentUpon>MsPurchaseVatAdjustment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsRmStatement.aspx.cs">
+      <DependentUpon>MsRmStatement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsRmStatement.aspx.designer.cs">
+      <DependentUpon>MsRmStatement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsSales.aspx.cs">
+      <DependentUpon>MsSales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsSales.aspx.designer.cs">
+      <DependentUpon>MsSales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsSalesInterDivision.aspx.cs">
+      <DependentUpon>MsSalesInterDivision.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsSalesInterDivision.aspx.designer.cs">
+      <DependentUpon>MsSalesInterDivision.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsSupervisor.aspx.cs">
+      <DependentUpon>MsSupervisor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsSupervisor.aspx.designer.cs">
+      <DependentUpon>MsSupervisor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsSupplierCat.aspx.cs">
+      <DependentUpon>MsSupplierCat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsSupplierCat.aspx.designer.cs">
+      <DependentUpon>MsSupplierCat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsClass.aspx.cs">
+      <DependentUpon>MsClass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsClass.aspx.designer.cs">
+      <DependentUpon>MsClass.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsExpContainerMonthlyReportView.aspx.cs">
+      <DependentUpon>MsExpContainerMonthlyReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsExpContainerMonthlyReportView.aspx.designer.cs">
+      <DependentUpon>MsExpContainerMonthlyReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsInventoryStatementReport.cs">
+      <DependentUpon>MsInventoryStatementReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsInventoryValuationStatementReport.cs">
+      <DependentUpon>MsInventoryValuationStatementReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsInventoryValuationStatementReportView.aspx.cs">
+      <DependentUpon>MsInventoryValuationStatementReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsInventoryValuationStatementReportView.aspx.designer.cs">
+      <DependentUpon>MsInventoryValuationStatementReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseCollectionForReportView.aspx.cs">
+      <DependentUpon>MsPurchaseCollectionForReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseCollectionForReportView.aspx.designer.cs">
+      <DependentUpon>MsPurchaseCollectionForReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseDriverWiseReportView.aspx.cs">
+      <DependentUpon>MsPurchaseDriverWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseDriverWiseReportView.aspx.designer.cs">
+      <DependentUpon>MsPurchaseDriverWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseSupplierWiseReportView.aspx.cs">
+      <DependentUpon>MsPurchaseSupplierWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseSupplierWiseReportView.aspx.designer.cs">
+      <DependentUpon>MsPurchaseSupplierWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Ms_ExpContainer_Monthly_Wise_Report.cs">
+      <DependentUpon>Ms_ExpContainer_Monthly_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Ms_Purchase_Collection_For_Wise_Report.cs">
+      <DependentUpon>Ms_Purchase_Collection_For_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Ms_Purchase_Driver_Wise_Report.cs">
+      <DependentUpon>Ms_Purchase_Driver_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Ms_Purchase_Supplier_Wise_Report.cs">
+      <DependentUpon>Ms_Purchase_Supplier_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="WP\WpItemSalesWs.aspx.cs">
+      <DependentUpon>WpItemSalesWs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpItemSalesWs.aspx.designer.cs">
+      <DependentUpon>WpItemSalesWs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpPurchaseVatAdjustment.aspx.cs">
+      <DependentUpon>WpPurchaseVatAdjustment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpPurchaseVatAdjustment.aspx.designer.cs">
+      <DependentUpon>WpPurchaseVatAdjustment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpSales.aspx.cs">
+      <DependentUpon>WpSales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpSales.aspx.designer.cs">
+      <DependentUpon>WpSales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpRmStatement.aspx.cs">
+      <DependentUpon>WpRmStatement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpRmStatement.aspx.designer.cs">
+      <DependentUpon>WpRmStatement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpExpShipmentCmo.aspx.cs">
+      <DependentUpon>WpExpShipmentCmo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpExpShipmentCmo.aspx.designer.cs">
+      <DependentUpon>WpExpShipmentCmo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpInventoryRm.aspx.cs">
+      <DependentUpon>WpInventoryRm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpInventoryRm.aspx.designer.cs">
+      <DependentUpon>WpInventoryRm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpExpSalesInvoice.aspx.cs">
+      <DependentUpon>WpExpSalesInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpExpSalesInvoice.aspx.designer.cs">
+      <DependentUpon>WpExpSalesInvoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpExpMaterialPricing.aspx.cs">
+      <DependentUpon>WpExpMaterialPricing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpExpMaterialPricing.aspx.designer.cs">
+      <DependentUpon>WpExpMaterialPricing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpItemSales.aspx.cs">
+      <DependentUpon>WpItemSales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpItemSales.aspx.designer.cs">
+      <DependentUpon>WpItemSales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpSalesInterDivision.aspx.cs">
+      <DependentUpon>WpSalesInterDivision.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpSalesInterDivision.aspx.designer.cs">
+      <DependentUpon>WpSalesInterDivision.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpInventoryStatementReport.cs">
+      <DependentUpon>WpInventoryStatementReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpInventoryValuationStatementReportView.aspx.cs">
+      <DependentUpon>WpInventoryValuationStatementReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpInventoryValuationStatementReportView.aspx.designer.cs">
+      <DependentUpon>WpInventoryValuationStatementReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpInventoryValuationStatementReport.cs">
+      <DependentUpon>WpInventoryValuationStatementReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpPurchaseDriverWiseReportView.aspx.cs">
+      <DependentUpon>WpPurchaseDriverWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpPurchaseDriverWiseReportView.aspx.designer.cs">
+      <DependentUpon>WpPurchaseDriverWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpPurchaseCollectionForReportView.aspx.cs">
+      <DependentUpon>WpPurchaseCollectionForReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpPurchaseCollectionForReportView.aspx.designer.cs">
+      <DependentUpon>WpPurchaseCollectionForReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\Wp_ExpContainer_Monthly_Wise_Report.cs">
+      <DependentUpon>Wp_ExpContainer_Monthly_Wise_Report.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
@@ -867,6 +1962,8 @@
     <Compile Include="PF\PfCustomer.aspx.designer.cs">
       <DependentUpon>PfCustomer.aspx</DependentUpon>
     </Compile>
+    <Compile Include="NumberToInWords.cs" />
+    <Compile Include="PrintHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -875,13 +1972,145 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="Startup.cs" />
     <Compile Include="Welcome.aspx.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Welcome.aspx.designer.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpMaterialTransaction.aspx.cs">
+      <DependentUpon>WpMaterialTransaction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpMaterialTransaction.aspx.designer.cs">
+      <DependentUpon>WpMaterialTransaction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpExpContainer.aspx.cs">
+      <DependentUpon>WpExpContainer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpExpContainer.aspx.designer.cs">
+      <DependentUpon>WpExpContainer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpExpContainerMonthlyReportView.aspx.cs">
+      <DependentUpon>WpExpContainerMonthlyReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpExpContainerMonthlyReportView.aspx.designer.cs">
+      <DependentUpon>WpExpContainerMonthlyReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpClass.aspx.cs">
+      <DependentUpon>WpClass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpClass.aspx.designer.cs">
+      <DependentUpon>WpClass.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpPurchaseSupplierWiseReportView.aspx.cs">
+      <DependentUpon>WpPurchaseSupplierWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WP_Reports\WpPurchaseSupplierWiseReportView.aspx.designer.cs">
+      <DependentUpon>WpPurchaseSupplierWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WP_Reports\Wp_Purchase_Driver_Wise_Report.cs">
+      <DependentUpon>Wp_Purchase_Driver_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="WP\WP_Reports\Wp_Purchase_Collection_For_Wise_Report.cs">
+      <DependentUpon>Wp_Purchase_Collection_For_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="WP\WP_Reports\Wp_Purchase_Supplier_Wise_Report.cs">
+      <DependentUpon>Wp_Purchase_Supplier_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="WP\WpPurchaseClaimApprove.aspx.cs">
+      <DependentUpon>WpPurchaseClaimApprove.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpPurchaseClaimApprove.aspx.designer.cs">
+      <DependentUpon>WpPurchaseClaimApprove.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpPurchaseClaim.aspx.cs">
+      <DependentUpon>WpPurchaseClaim.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpPurchaseClaim.aspx.designer.cs">
+      <DependentUpon>WpPurchaseClaim.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\Print.aspx.designer.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpPurchase.aspx.cs">
+      <DependentUpon>WpPurchase.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpPurchase.aspx.designer.cs">
+      <DependentUpon>WpPurchase.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpCollectionFor.aspx.cs">
+      <DependentUpon>WpCollectionFor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpCollectionFor.aspx.designer.cs">
+      <DependentUpon>WpCollectionFor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpParty.aspx.cs">
+      <DependentUpon>WpParty.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpParty.aspx.designer.cs">
+      <DependentUpon>WpParty.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpDriver.aspx.cs">
+      <DependentUpon>WpDriver.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpDriver.aspx.designer.cs">
+      <DependentUpon>WpDriver.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpSupplierCat.aspx.cs">
+      <DependentUpon>WpSupplierCat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpSupplierCat.aspx.designer.cs">
+      <DependentUpon>WpSupplierCat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpSupervisor.aspx.cs">
+      <DependentUpon>WpSupervisor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpSupervisor.aspx.designer.cs">
+      <DependentUpon>WpSupervisor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpItem.aspx.cs">
+      <DependentUpon>WpItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpItem.aspx.designer.cs">
+      <DependentUpon>WpItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WP\WpCategory.aspx.cs">
+      <DependentUpon>WpCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WP\WpCategory.aspx.designer.cs">
+      <DependentUpon>WpCategory.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -917,6 +2146,7 @@
     </None>
     <Content Include="HR\HandlerProfileImage.ashx" />
     <Content Include="NRC\HandlerProfileImage.ashx" />
+    <None Include="packages.config" />
     <None Include="PF\PF_Reports\DataSetAssetClass.xsc">
       <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
     </None>
@@ -928,6 +2158,7 @@
     <None Include="PF\PF_Reports\DataSetAssetClass.xss">
       <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
     </None>
+    <None Include="Properties\PublishProfiles\ProfileNRC.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PF\PF_Reports\Pf_Rm_Statement_Report.rpt">
@@ -968,9 +2199,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PF\PF_Reports\Pf_Production_Summary_Report.rpt">
+    <Content Include="WP\WP_Reports\Wp_ExpContainer_Monthly_Wise_Report.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Pf_Production_Summary_Report.cs</LastGenOutput>
+      <LastGenOutput>Wp_ExpContainer_Monthly_Wise_Report.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -1022,6 +2253,114 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>Asset_Items_Department_Report.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_JW_Monthly.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_JW_Monthly.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Sales_Summary_Customer_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Sales_Summary_Customer_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WP\WP_Reports\Wp_Purchase_Supplier_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Wp_Purchase_Supplier_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_ExpContainer_Monthly_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_ExpContainer_Monthly_Wise_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WP\WP_Reports\WpInventoryValuationStatementReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>WpInventoryValuationStatementReport.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WP\WP_Reports\Wp_Purchase_Driver_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Wp_Purchase_Driver_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WP\WP_Reports\WpInventoryStatementReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>WpInventoryStatementReport.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WP\WP_Reports\Wp_Purchase_Collection_For_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Wp_Purchase_Collection_For_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MF\MF_Reports\Mf_Item_Trnasfer_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Mf_Item_Trnasfer_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MF\MF_Reports\Mf_Rm_Issue_Production_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Mf_Rm_Issue_Production_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS\MS_Reports\Ms_ExpContainer_Monthly_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Ms_ExpContainer_Monthly_Wise_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS\MS_Reports\Ms_Purchase_Collection_For_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Ms_Purchase_Collection_For_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS\MS_Reports\Ms_Purchase_Driver_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Ms_Purchase_Driver_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS\MS_Reports\Ms_Purchase_Supplier_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Ms_Purchase_Supplier_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS\MS_Reports\MsInventoryStatementReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>MsInventoryStatementReport.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS\MS_Reports\MsInventoryValuationStatementReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>MsInventoryValuationStatementReport.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <PropertyGroup>

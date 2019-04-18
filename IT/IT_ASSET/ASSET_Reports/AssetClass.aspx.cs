@@ -40,6 +40,12 @@ namespace NRCAPPS.ASSET.ASSET_Reports
             get { return Division_Name; }
             set { Division_Name = value; }
         }
+        private string Location_Name;
+        public string LOCATION_NAME
+        {
+            get { return Location_Name; }
+            set { Location_Name = value; }
+        }
         private string Item_Category_Name;
         public string ITEM_CATEGORY_NAME
         {
@@ -96,7 +102,12 @@ namespace NRCAPPS.ASSET.ASSET_Reports
             get { return Limit_Amt; }
             set { Limit_Amt = value; }
         }
-       
+        private string Qr_Code_ID;
+        public string QR_CODE_ID
+        {
+            get { return Qr_Code_ID; }
+            set { Qr_Code_ID = value; }
+        }
         private DateTime Effective_Dt;
         public DateTime EFFECTIVE_DT
         {
@@ -104,13 +115,14 @@ namespace NRCAPPS.ASSET.ASSET_Reports
             set { Effective_Dt = value; }
         }
 
-        public AssetClass(string EMP_ITEMS_ID, string EMP_NAME, string DEPARTMENT_NAME, string DIVISION_NAME, string ITEM_CATEGORY_NAME, string ITEM_TYPE, string ITEM_BRAND, string ITEM_NAME, string ITEM_EXP_ID, string EMAIL, int EXPIRED_DAYS, byte[] IMAGE_QR_CODE, float LIMIT_AMT, string BRANCH_NM, DateTime EFFECTIVE_DT)
+        public AssetClass(string EMP_ITEMS_ID, string EMP_NAME, string DEPARTMENT_NAME, string DIVISION_NAME, string LOCATION_NAME, string ITEM_CATEGORY_NAME, string QR_CODE_ID, string ITEM_TYPE, string ITEM_BRAND, string ITEM_NAME, string ITEM_EXP_ID, string EMAIL, int EXPIRED_DAYS, byte[] IMAGE_QR_CODE, float LIMIT_AMT, string BRANCH_NM, DateTime EFFECTIVE_DT)
         {
 
             this.Emp_Items_Id       = EMP_ITEMS_ID;
             this.Emp_Name           = EMP_NAME;
             this.Department_Name    = DEPARTMENT_NAME;
             this.Division_Name      = DIVISION_NAME;
+            this.Location_Name      = LOCATION_NAME;
             this.Item_Category_Name = ITEM_CATEGORY_NAME;
             this.Item_Type          = ITEM_TYPE;
             this.Item_Name          = ITEM_NAME;
@@ -120,6 +132,7 @@ namespace NRCAPPS.ASSET.ASSET_Reports
             this.Expired_Days       = EXPIRED_DAYS;
             this.Image_Qr_Code      = IMAGE_QR_CODE; 
             this.Limit_Amt          = LIMIT_AMT; 
+            this.Qr_Code_ID         = QR_CODE_ID; 
             this.Effective_Dt       = EFFECTIVE_DT;
              
         }

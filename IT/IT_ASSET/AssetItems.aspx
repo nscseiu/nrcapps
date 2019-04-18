@@ -22,12 +22,14 @@
     
     <!-- Main content -->
     <section class="content">
+
+      
       <div class="row">
         <!-- left column --> 
             
         <!--/.col (left) -->
         <!-- right column -->
-        <div class="col-md-12"> 
+        <div class="col-xs-12"> 
              <asp:Panel  id="alert_box" runat="server">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <h4><i class="icon fa fa-check"></i> Alert!</h4>  
@@ -114,28 +116,19 @@
               <!-- /.box-footer -->
          <!-- /.box -->
         </div>   
-        <div class="box box-success">
-            <div class="box-header with-border">
+       
+          <div class="box box-success">
+            <div class="box-header">
               <h3 class="box-title">Asset Item List</h3>
+
               <div class="box-tools">
-              <div class="input-group input-group-sm" style="width: 200px;">
-                <asp:TextBox ID="txtSearchUserRole" Class="form-control" runat="server" />
-                 <div class="input-group-btn">
-                      <asp:Button ID="ButtonSearchUser" Class="btn btn-info"   
-                        Text="Search" runat="server" OnClick="GridViewSearchUser" 
-                        CausesValidation="False" />
-                  </div>  
-              </div>    
+                
+              </div>
             </div>
-            </div> 
             <!-- /.box-header -->
-            <div class="box-body table-responsive"> 
-                    <asp:GridView ID="GridView1" runat="server" EnablePersistedSelection="true"            
-    SelectedRowStyle-BackColor="Yellow" 
-    AllowPaging="true" 
-    AllowSorting="true"
-    PageSize = "8" 
-    OnPageIndexChanging="GridViewUser_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
+            <div class="box-body table-responsive">
+                <asp:GridView ID="GridView4D" runat="server" EnablePersistedSelection="true"            
+    SelectedRowStyle-BackColor="Yellow"   AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="ITEM_ID" HeaderText="Item ID" />  
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item Name" />   
@@ -163,9 +156,13 @@
                         <PagerStyle CssClass="pagination-ys" />
                         <SelectedRowStyle BackColor="Yellow"></SelectedRowStyle>
                     </asp:GridView>  
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
         </div>
-       </div> 
-    </div> 
+             
+  
           <!-- /.box --> 
         <!--/.col (right) -->
       </div>

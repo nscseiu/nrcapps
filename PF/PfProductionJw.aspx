@@ -86,7 +86,9 @@
                   <label  class="col-sm-2 control-label">Sub Item</label> 
                   <div class="col-sm-3">   
                     <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server"  > </asp:DropDownList> <!-- AutoPostBack="True"  ontextchanged="TextSubItem_Changed" -->
-                    
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" 
+                          ControlToValidate="DropDownSubItemID" Display="Dynamic" 
+                          ErrorMessage="Select Sub Item" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>  
                   </div>
                 </div> 
                 <div class="form-group">
@@ -110,10 +112,13 @@
                         <i class="fa fa-calendar"></i>
                       </div>  
                        <asp:TextBox  class="form-control input-sm pull-right" ID="EntryDate"  runat="server" ></asp:TextBox>  <!-- AutoPostBack="True"  ontextchanged="TextCheckDataProcess" -->
-                    </div>
+                    </div>   <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
+                          ControlToValidate="EntryDate" ErrorMessage="insert Entry Date" 
+                          Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
                       </div> 
                       <div class="col-sm-3"><asp:Label ID="CheckEntryDate" runat="server"></asp:Label></div>  
                     <!-- /.input group -->
+                  
                   </div>
                  
                 <div class="form-group">

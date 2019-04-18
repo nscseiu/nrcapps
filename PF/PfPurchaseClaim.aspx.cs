@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
+using System.Data; 
+using System.Web.UI; 
+using System.Web.UI.WebControls; 
 using System.Data.OracleClient;
-using System.IO; 
-using System.Collections.Generic; 
+using System.IO;  
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Globalization;
@@ -31,8 +24,8 @@ namespace NRCAPPS.PF
         string IS_ADD_ACTIVE = "";
         string IS_EDIT_ACTIVE = "";
         string IS_DELETE_ACTIVE = "";
-        string IS_VIEW_ACTIVE = "";  
- 
+        string IS_VIEW_ACTIVE = "";
+        double ItemVatAmt = 0.0, ItemAmtTotal = 0.0, ItemWtWbTotal = 0.0; string EntryDateSlip = "", PartyName = "", FullName ="";
         public bool IsLoad { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -63,7 +56,7 @@ namespace NRCAPPS.PF
                     {
                         DataTable dtEmployeeID = new DataTable();
                         DataSet dse = new DataSet();
-                        string makeEmployeeSQL = " SELECT EMP_ID, EMP_FNAME || ' ' ||EMP_LNAME AS EMP_NAME FROM HR_EMPLOYEES WHERE IS_ACTIVE = 'Enable' ORDER BY EMP_ID ASC";
+                        string makeEmployeeSQL = " SELECT EMP_ID, EMP_ID || ' - ' || EMP_FNAME || ' ' ||EMP_LNAME AS EMP_NAME FROM HR_EMPLOYEES WHERE IS_ACTIVE = 'Enable' ORDER BY EMP_ID ASC";
                         dse = ExecuteBySqlString(makeEmployeeSQL);
                         dtEmployeeID = (DataTable)dse.Tables[0];
                         DropDownEmployeeID.DataSource = dtEmployeeID;
@@ -86,15 +79,16 @@ namespace NRCAPPS.PF
 
                         DataTable dtSlipNo = new DataTable();
                         DataSet dsp = new DataSet();
-                        string makePageSQL = " SELECT PPM.SLIP_NO, PPM.SLIP_NO || ' - ' || PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME AS SUPPLIER_NAME FROM PF_PURCHASE_MASTER PPM  LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID  WHERE PPM.CLAIM_NO IS NULL  ORDER BY  PPM.SLIP_NO ASC";
+                        string makePageSQL = " SELECT PPM.PURCHASE_ID || '-' || ROUND((nvl(PPM.ITEM_AMOUNT,0)+nvl(PPM.VAT_AMOUNT,0))) AS PURCHASE_ID, PPM.SLIP_NO || ' - ' || PC.PARTY_ID || ' - ' || PC.PARTY_NAME || ', Item -' || PI.ITEM_NAME || ', Weight- ' || PPM.ITEM_WEIGHT || ', Amount- ' || TO_CHAR(ROUND((nvl(PPM.ITEM_AMOUNT,0)+nvl(PPM.VAT_AMOUNT,0))), '999,999,999.99') AS PARTY_NAME FROM PF_PURCHASE_MASTER PPM  LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PPM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID  WHERE PPM.CLAIM_NO IS NULL  ORDER BY  PPM.SLIP_NO ASC";
                         dsp = ExecuteBySqlString(makePageSQL);
                         dtSlipNo = (DataTable)dsp.Tables[0];
                         DropDownSlipNo.DataSource = dtSlipNo;
-                        DropDownSlipNo.DataValueField = "SLIP_NO";
-                        DropDownSlipNo.DataTextField = "SUPPLIER_NAME";
+                        DropDownSlipNo.DataValueField = "PURCHASE_ID";
+                        DropDownSlipNo.DataTextField = "PARTY_NAME";
                         DropDownSlipNo.DataBind();
-                    
-                           
+
+                        TextClaimNo.Enabled = false;
+                        TextTotalAmount.Attributes.Add("readonly", "readonly");
                         Display();
 
                         BtnUpdate.Attributes.Add("aria-disabled", "false");
@@ -128,8 +122,8 @@ namespace NRCAPPS.PF
                     conn.Open();
 
                     int userID = Convert.ToInt32(Session["USER_ID"]); 
-                    int EmpID = Convert.ToInt32(DropDownEmployeeID.Text);
-                    int ClaimNoFrom = Convert.ToInt32(TextClaimNo.Text);
+                    string EmpID = DropDownEmployeeID.Text;
+                  //  int ClaimNoFrom = Convert.ToInt32(TextClaimNo.Text);
                     int PaymentTypeID = Convert.ToInt32(DropDownPaymentTypeID.Text);
                     double TotalAmount = Convert.ToDouble(TextTotalAmount.Text);
 
@@ -140,9 +134,23 @@ namespace NRCAPPS.PF
                     DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                     string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
 
+                    string ClaimForMonthsGet = TextMonthYear4.Text;
+                    string[] MakeClaimForMonthsSplit = ClaimForMonthsGet.Split('/');
+                    String ClaimMonths = MakeClaimForMonthsSplit[0];
+                    String ClaimYear = MakeClaimForMonthsSplit[1];
+                    string ClaimDay = "01";
+                    string ClaimForMonthsTemp = ClaimDay +"-" +ClaimMonths+ "-"+ClaimYear;
+                    DateTime ClaimForMonthsNew = DateTime.ParseExact(ClaimForMonthsTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                    string ClaimForMonths = ClaimForMonthsNew.ToString("dd-MM-yyyy");
+
                     string get_pur_claim_id = "select PF_PURCHASE_CLAIM_ID_SEQ.nextval from dual";
                     cmdu = new OracleCommand(get_pur_claim_id, conn);
-                    int newPurClaimID = Int16.Parse(cmdu.ExecuteScalar().ToString());
+                    int newPurClaimID = Int32.Parse(cmdu.ExecuteScalar().ToString());
+                     
+                    string get_pur_claim_no = "select PF_PURCHASE_CLAIMNO_SEQ.nextval from dual";
+                    cmdu = new OracleCommand(get_pur_claim_no, conn);
+                    int newPurClaimNo = Int32.Parse(cmdu.ExecuteScalar().ToString());
+
 
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string c_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
@@ -153,12 +161,13 @@ namespace NRCAPPS.PF
 
                         if (li.Selected == true)
                         {
-                            string update_purchase = " update  PF_PURCHASE_MASTER set CLAIM_NO =:NoClaimNo  where SLIP_NO =: NoSlipNo ";
+                            string[] SlipNo = li.Value.Split('-');
+                            string update_purchase = " update  PF_PURCHASE_MASTER set CLAIM_NO =:NoClaimNo  where PURCHASE_ID =: NoSlipNo ";
                             cmdi = new OracleCommand(update_purchase, conn);
 
-                            OracleParameter[] objPrm = new OracleParameter[3];
-                            objPrm[0] = cmdi.Parameters.Add("NoSlipNo", li.Value);
-                            objPrm[1] = cmdi.Parameters.Add("NoClaimNo", ClaimNoFrom);
+                            OracleParameter[] objPrm = new OracleParameter[2];
+                            objPrm[0] = cmdi.Parameters.Add("NoSlipNo", SlipNo[0]);
+                            objPrm[1] = cmdi.Parameters.Add("NoClaimNo", newPurClaimNo);
 
                             cmdi.ExecuteNonQuery();
                         }
@@ -167,21 +176,22 @@ namespace NRCAPPS.PF
                     cmdi.Parameters.Clear();
                     cmdi.Dispose();
 
-                    string insert_pur_claim = "insert into PF_PURCHASE_CLAIM (PURCHASE_CLAIM_ID, CLAIM_NO, EMP_ID, CLAIM_DATE, PAYMENT_TYPE_ID, TOTAL_AMOUNT, CREATE_DATE, C_USER_ID, IS_ACTIVE, IS_CHECK, IS_OBJ_QUERY) VALUES ( :NoPurClaimID, :NoClaimNo, :NoEmpID, TO_DATE(:ClaimDate, 'DD/MM/YYYY'), :NoPaymentTypeID, :NoTotalAmount, TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID, :TextIsActive, :TextIsCheck, :TextIsObjQuery)";
+                    string insert_pur_claim = "insert into PF_PURCHASE_CLAIM (PURCHASE_CLAIM_ID, CLAIM_NO, EMP_ID, CLAIM_DATE, CLAIM_FOR_MONTH, PAYMENT_TYPE_ID, TOTAL_AMOUNT, CREATE_DATE, C_USER_ID, IS_ACTIVE, IS_CHECK, IS_OBJ_QUERY) VALUES ( :NoPurClaimID, :NoClaimNo, :NoEmpID, TO_DATE(:ClaimDate, 'DD/MM/YYYY'), TO_DATE(:ClaimForMonth, 'DD/MM/YYYY'), :NoPaymentTypeID, :NoTotalAmount, TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'),  :NoCuserID, :TextIsActive, :TextIsCheck, :TextIsObjQuery)";
                     cmdi = new OracleCommand(insert_pur_claim, conn);
 
-                    OracleParameter[] objPr = new OracleParameter[11];
+                    OracleParameter[] objPr = new OracleParameter[12];
                     objPr[0] = cmdi.Parameters.Add("NoPurClaimID", newPurClaimID);
-                    objPr[1] = cmdi.Parameters.Add("NoClaimNo", ClaimNoFrom);
-                    objPr[2] = cmdi.Parameters.Add("NoEmpID", EmpID);
-                    objPr[3] = cmdi.Parameters.Add("ClaimDate", EntryDateNew);
-                    objPr[4] = cmdi.Parameters.Add("NoPaymentTypeID", PaymentTypeID);
-                    objPr[5] = cmdi.Parameters.Add("NoTotalAmount", TotalAmount); 
-                    objPr[6] = cmdi.Parameters.Add("c_date", c_date);
-                    objPr[7] = cmdi.Parameters.Add("NoCuserID", userID);
-                    objPr[8] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPr[9] = cmdi.Parameters.Add("TextIsCheck", "Incomplete");
-                    objPr[10] = cmdi.Parameters.Add("TextIsObjQuery", "No");
+                    objPr[1] = cmdi.Parameters.Add("NoClaimNo", newPurClaimNo);
+                    objPr[2] = cmdi.Parameters.Add("NoEmpID", EmpID); 
+                    objPr[3] = cmdi.Parameters.Add("ClaimForMonth", ClaimForMonths);
+                    objPr[4] = cmdi.Parameters.Add("ClaimDate", EntryDateNew);
+                    objPr[5] = cmdi.Parameters.Add("NoPaymentTypeID", PaymentTypeID);
+                    objPr[6] = cmdi.Parameters.Add("NoTotalAmount", TotalAmount); 
+                    objPr[7] = cmdi.Parameters.Add("c_date", c_date);
+                    objPr[8] = cmdi.Parameters.Add("NoCuserID", userID);
+                    objPr[9] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPr[10] = cmdi.Parameters.Add("TextIsCheck", "Incomplete");
+                    objPr[11] = cmdi.Parameters.Add("TextIsObjQuery", "No");
 
                     cmdi.ExecuteNonQuery();
 
@@ -199,25 +209,172 @@ namespace NRCAPPS.PF
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
-           }
+             }
             catch
             {
-                Response.Redirect("~/ParameterError.aspx");
-            }  
+            Response.Redirect("~/ParameterError.aspx");
+           }  
         }
 
 
+        protected void btnPrint_Click(object sender, EventArgs e)
+        {
+            OracleConnection conn = new OracleConnection(strConnString);
+            conn.Open();
+            string HtmlString = "";
+            string makeSQL = " SELECT PPC.CLAIM_NO, TO_CHAR(TO_DATE(CLAIM_DATE),'dd/MON/YYYY') AS CLAIM_DATE, TO_CHAR(TO_DATE(CLAIM_FOR_MONTH),'MON/YYYY') AS CLAIM_MONTH, HE.EMP_FNAME || ' '|| HE.EMP_LNAME AS FULL_NAME,  PP.PARTY_NAME, PPM.SLIP_NO, PPM.ITEM_AMOUNT+nvl(PPM.VAT_AMOUNT,0) AS ITEM_AMOUNT FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN PF_PARTY PP ON PP.PARTY_ID = PPM.PARTY_ID  LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID WHERE PPC.CLAIM_NO = '" + TextClaimNo.Text + "' ORDER BY PPM.SLIP_NO ASC";
+
+            cmdl = new OracleCommand(makeSQL);
+            oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+            dt = new DataTable();
+            oradata.Fill(dt);
+            RowCount = dt.Rows.Count;
+
+
+            HtmlString += "<div style='float:left;width:772px;height:auto;margin:20px 0 0 60px;'> ";
+
+            for (int i = 0; i < 1; i++)
+            { 
+                int ClaimsNo = Convert.ToInt32(dt.Rows[i]["CLAIM_NO"].ToString());
+                FullName = dt.Rows[i]["FULL_NAME"].ToString();
+                EntryDateSlip = dt.Rows[i]["CLAIM_DATE"].ToString();
+                       
+                HtmlString += "<div style='float:left;width:770px;height:auto;margin-top:10px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 16px;'> ";
+                HtmlString += "<div style='float:left;width:770px;height:115px;text-align:center;' ><img src='../../image/logo_from.png'/></div> ";
+                HtmlString += "<div style='float:left;width:770px;height:45px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:17px;font-weight:700;'>RAW MATERIAL REIMBURSEMENT REQUEST</span></div> ";
+                  
+                HtmlString += "<div style='float:left;width:190px;height:40px; margin:0 0 0 40px;'><span style='font-family:Times New Roman,Times, serif;font-size:15px;font-weight:700;'>Claim No.</span><span style='color:red;font-weight:700;font-size:17px;'> " + ClaimsNo + "</span></div> ";
+                HtmlString += "<div style='float:left;width:325px;height:40px;text-align:center;font-weight:700;text-decoration:underline;font-size:17px;'>  " + dt.Rows[i]["CLAIM_MONTH"].ToString() + "</div> ";
+                HtmlString += "<div style='float:left;width:210px;height:40px;font-weight:700;'><span style='font-family:Times New Roman,Times, serif;size:13px; '>Division:</span><span style='color:#c72cb7;'>  Plastic Factory</span></div>  ";
+
+                HtmlString += "<div style='float:left;width:485px;height:45px;margin:0 0 0 40px;'><div style='float:left;width:45px;font-family:Times New Roman,Times, serif;size:13px;font-weight:700;'>Name:</div><div style='float:left;width:435px;height:15px;padding-left:5px;font-weight:700;border-bottom:black dotted 1px;'>" + FullName + "</div></div> ";
+                HtmlString += "<div style='float:left;width:206px;height:45px; margin:0 0 0 30px;'><span style='font-family:Times New Roman,Times, serif;size:13px;font-weight:700;'>Date:</span>  " + EntryDateSlip + "</div> ";
+
+
+            }
+            
+             
+            HtmlString += "</div>";
+
+            HtmlString += "<div style='border:black solid 1px;float:left;width:740px;height:auto;margin:0 0 0 40px;-webkit-border-top-left-radius:10px;-webkit-border-top-right-radius:10px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight:400; line-height: 16px;'> ";
+            HtmlString += "<div style='float:left;width:35px;text-align:center;border-bottom:black solid 1px;padding:5px;'><span style='font-family:Times New Roman,Times, serif;size:13px'>S.No.</span></div> ";
+            HtmlString += "<div style='float:left;width:445px;border-bottom:black solid 1px;border-left:black solid 1px;padding:5px;text-align:center;' ><span style='font-family:Times New Roman,Times, serif;size:13px'>Description</span></div> ";
+            HtmlString += "<div style='float:left;width:96px;text-align:right;border-bottom:black solid 1px;border-left:black solid 1px;text-align:center;padding:5px;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Ref. No.</span></div> ";
+            HtmlString += "<div style='float:left;width:121px;text-align:right;border-bottom:black solid 1px;border-left:black solid 1px;padding:5px;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Amount</span></div> ";
+            int l=1;
+            for (int i = 0; i < RowCount; i++)
+            {
+                
+                double ItemAmt = Convert.ToDouble(Math.Round(Convert.ToDecimal(dt.Rows[i]["ITEM_AMOUNT"]), 0, MidpointRounding.AwayFromZero));
+                ItemAmtTotal += Convert.ToDouble(Math.Round(Convert.ToDecimal(dt.Rows[i]["ITEM_AMOUNT"]), 0, MidpointRounding.AwayFromZero)); 
+                double TotalInvoiceAmt = +Convert.ToDouble(decimal.Parse(dt.Rows[i]["ITEM_AMOUNT"].ToString()).ToString(".00")); 
+                HtmlString += "<div style='float:left;width:39px;text-align:center;border-bottom:black dotted 1px;padding:3px;'> " + l+"</div> ";
+                HtmlString += "<div style='float:left;width:449px;border-bottom:black dotted 1px;border-left:black dotted 1px;padding:3px;' >" + dt.Rows[i]["PARTY_NAME"].ToString() + "</div> ";  
+                HtmlString += "<div style='float:left;width:100px;text-align:right;border-bottom:black dotted 1px;border-left:black dotted 1px;text-align:center;padding:3px;'>" + dt.Rows[i]["SLIP_NO"].ToString() + " </div> ";
+                HtmlString += "<div style='float:left;width:125px;text-align:right;border-bottom:black dotted 1px;border-left:black dotted 1px;padding:3px;'>" + string.Format("{0:n0}", ItemAmt) + "/-</div> ";
+              l++;  
+            }
+            int CountRow = 25;
+            int BlankRow = CountRow - RowCount;
+            for (int i = 1; i <= BlankRow; i++) { 
+                if (i == BlankRow) {
+                    HtmlString += "<div style='float:left;width:39px;height:15px;text-align:center;padding:3px;'></div> ";
+                    HtmlString += "<div style='float:left;width:449px;height:15px;border-left:black dotted 1px;padding:3px;' ></div> ";
+                    HtmlString += "<div style='float:left;width:100px;height:15px;text-align:right;border-left:black dotted 1px;text-align:center;padding:3px;'></div> ";
+                    HtmlString += "<div style='float:left;width:125px;height:15px;text-align:right;border-left:black dotted 1px;padding:3px;'></div> "; }
+                else
+                {
+                    HtmlString += "<div style='float:left;width:39px;height:15px;text-align:center;border-bottom:black dotted 1px;padding:3px;'></div> ";
+                    HtmlString += "<div style='float:left;width:449px;height:15px;border-bottom:black dotted 1px;border-left:black dotted 1px;padding:3px;' ></div> ";
+                    HtmlString += "<div style='float:left;width:100px;height:15px;text-align:right;border-bottom:black dotted 1px;border-left:black dotted 1px;text-align:center;padding:3px;'></div> ";
+                    HtmlString += "<div style='float:left;width:125px;height:15px;text-align:right;border-bottom:black dotted 1px;border-left:black dotted 1px;padding:3px;'></div> ";
+                }
+                
+
+            }
+
+                HtmlString += "</div>";
+            string NumberToInWord = NumberToWords(ItemAmtTotal).Trim().ToUpper();
+            HtmlString += "<div style='float:left;width:785px;height:265px;margin:0 0 0 40px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight:400; line-height: 16px;'>";
+
+            HtmlString += "<div style='float:left;width:741px;height:80;'>";
+            HtmlString += "<div style='float:left;width:740px;height:auto;border-left:black solid 1px;border-bottom:black solid 1px;-webkit-border-bottom-left-radius:10px;border-right:black solid 1px;border-right:black solid 1px;-webkit-border-bottom-right-radius:10px;'>"; 
+            HtmlString += "<div style='float:left;width:104px;padding:5px;font-family:Times New Roman,Times, serif;size:13px'><div style='display:flex;justify-content:center;align-items: center; '>Total Amount SR.</div></div> ";
+            HtmlString += "<div style='float:left;width:484px;padding:5px;border-right:black solid 1px;'><span style='font-weight:700;'> " + NumberToInWord + "</span></div> ";
+            HtmlString += "<div style='float:left;width:121px;padding:5px;text-align:right;font-weight:700;'>" + string.Format("{0:n0}", ItemAmtTotal) + "/- </div> ";
+            HtmlString += "</div>";
+            HtmlString += "</div>";
+
+            HtmlString += "<div style='float:left;width:77px;height:15px;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Prepared by:</span></div> ";
+            HtmlString += "<div style='float:left;width:230px;height:15px; margin:0 0 0 5px;'><div style='float:left;width:230px;height:12px;border-bottom:black dotted 1px;'></div></div> ";
+            HtmlString += "<div style='float:left;width:140px;height:15px; margin:0 0 0 55px;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Checked & Verified by:</span></div> ";
+            HtmlString += "<div style='float:left;width:220px;height:15px;'><div style='float:left;width:220px;height:12px;border-bottom:black dotted 1px;'></div></div> ";
+
+            HtmlString += "<div style='float:left;width:152px;height:15px;margin:5px 0 0 0;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Site Accountant / User</span></div> ";
+            HtmlString += "<div style='float:left;width:155px;height:15px; margin:5px 0 0 5px;'></div> ";
+            HtmlString += "<div style='float:left;width:140px;height:15px; margin:5px 0 0 55px;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Site Manager</span></div> ";
+            HtmlString += "<div style='float:left;width:220px;height:15px; margin:5px 0 0 0;'></div> ";
+
+            HtmlString += "<div style='float:left;width:77px;height:15px;margin:25px 0 0 0;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Checked by:</span></div> ";
+            HtmlString += "<div style='float:left;width:230px;height:15px; margin:25px 0 0 5px;'><div style='float:left;width:230px;height:12px;border-bottom:black dotted 1px;'></div></div> ";
+            HtmlString += "<div style='float:left;width:140px;height:15px; margin:25px 0 0 55px;'><span style='font-family:Times New Roman,Times, serif;size:13px'></span></div> ";
+            HtmlString += "<div style='float:left;width:220px;height:15px;margin:25px 0 0 0;'><div style='float:left;width:220px;height:12px;'></div></div> ";
+
+            HtmlString += "<div style='float:left;width:152px;height:15px;margin:5px 0 0 0;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Office Accountant</span></div> ";
+            HtmlString += "<div style='float:left;width:155px;height:15px; margin:5px 0 0 5px;'></div> ";
+            HtmlString += "<div style='float:left;width:140px;height:15px; margin:5px 0 0 55px;'><span style='font-family:Times New Roman,Times, serif;size:13px'></span></div> ";
+            HtmlString += "<div style='float:left;width:220px;height:15px; margin:5px 0 0 0;'></div> ";
+
+            HtmlString += "<div style='float:left;width:155px;height:15px;margin:20px 0 0 0;'><span style='font-family:Times New Roman,Times, serif;size:13px;font-weight:700;'>Approved for Payment</span></div> ";
+            HtmlString += "<div style='float:left;width:230px;height:15px; margin:20px 0 0 5px;'><div style='float:left;width:230px;height:12px;'></div></div> ";
+            HtmlString += "<div style='float:left;width:140px;height:15px; margin:20px 0 0 55px;'><span style='font-family:Times New Roman,Times, serif;size:13px'></span></div> ";
+            HtmlString += "<div style='float:left;width:120px;height:15px;margin:20px 0 0 0;'><div style='float:left;width:220px;height:12px;'></div></div> ";
+
+            HtmlString += "<div style='float:left;width:115px;height:15px;margin:25px 0 0 0;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Accounts Manager</span></div> ";
+            HtmlString += "<div style='float:left;width:192px;height:15px; margin:25px 0 0 5px;'><div style='float:left;width:192px;height:12px;border-bottom:black dotted 1px;'></div></div> ";
+            HtmlString += "<div style='float:left;width:140px;height:15px; margin:25px 0 0 55px;'><span style='font-family:Times New Roman,Times, serif;size:13px'>Internal Audit Manager</span></div> ";
+            HtmlString += "<div style='float:left;width:220px;height:15px; margin:25px 0 0 0;'><div style='float:left;width:220px;height:12px;border-bottom:black dotted 1px;'></div></div> ";
+
+            HtmlString += "</div>";
+            HtmlString += "</div>";
+            HtmlString += "</div>";
+
+            HtmlString += "</div>";
+            // purchase master update for print
+            int userID = Convert.ToInt32(Session["USER_ID"]);
+            string ClaimNo = TextClaimNo.Text;
+            string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
+            string update_user = "update  PF_PURCHASE_CLAIM  set IS_PRINT = :TextIsPrint, PRINT_DATE  = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), P_USER_ID = :NoCuserID where CLAIM_NO = :NoClaimNo ";
+            cmdi = new OracleCommand(update_user, conn);
+
+            OracleParameter[] objPrm = new OracleParameter[4];
+            objPrm[0] = cmdi.Parameters.Add("TextIsPrint", "Printed");
+            objPrm[1] = cmdi.Parameters.Add("u_date", u_date);
+            objPrm[2] = cmdi.Parameters.Add("NoCuserID", userID);
+            objPrm[3] = cmdi.Parameters.Add("NoClaimNo", ClaimNo);
+
+            cmdi.ExecuteNonQuery();
+            cmdi.Parameters.Clear();
+            cmdi.Dispose();
+            conn.Close();
+
+            PanelPrint.Controls.Add(new LiteralControl(HtmlString));
+            Session["ctrl"] = PanelPrint;
+            ClientScript.RegisterStartupScript(this.GetType(), "onclick", "<script language=javascript>window.open('Print.aspx','PrintMe','height=900px,width=1200px,scrollbars=1');</script>");
+            Display();
+        }
+
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
-           try
-            {
+         //  try
+         //   {
             if (IS_EDIT_ACTIVE == "Enable")
             { 
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
                 int userID = Convert.ToInt32(Session["USER_ID"]);
                 int PurchaseClaimID = Convert.ToInt32(TextPurchaseClaimID.Text);
-                int EmpID = Convert.ToInt32(DropDownEmployeeID.Text);
+                string EmpID = DropDownEmployeeID.Text;
                 int ClaimNoFrom = Convert.ToInt32(TextClaimNo.Text);
                 int PaymentTypeID = Convert.ToInt32(DropDownPaymentTypeID.Text);
                 double TotalAmount = Convert.ToDouble(TextTotalAmount.Text);
@@ -231,7 +388,16 @@ namespace NRCAPPS.PF
                 DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                 string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
 
-                string makeSlipSQL = " SELECT PPC.CLAIM_NO, PPM.SLIP_NO FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO WHERE  PPC.PURCHASE_CLAIM_ID = '" + PurchaseClaimID + "'";
+                string ClaimForMonthsGet = TextMonthYear4.Text;
+                string[] MakeClaimForMonthsSplit = ClaimForMonthsGet.Split('/');
+                String ClaimMonths = MakeClaimForMonthsSplit[0];
+                String ClaimYear = MakeClaimForMonthsSplit[1];
+                string ClaimDay = "01";
+                string ClaimForMonthsTemp = ClaimDay + "-" + ClaimMonths + "-" + ClaimYear;
+                DateTime ClaimForMonthsNew = DateTime.ParseExact(ClaimForMonthsTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                string ClaimForMonths = ClaimForMonthsNew.ToString("dd-MM-yyyy");
+
+                    string makeSlipSQL = " SELECT PPC.CLAIM_NO, PPM.SLIP_NO FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO WHERE  PPC.PURCHASE_CLAIM_ID = '" + PurchaseClaimID + "'";
 
                 cmdl = new OracleCommand(makeSlipSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -257,11 +423,12 @@ namespace NRCAPPS.PF
 
                     if (li.Selected == true)
                     {
-                        string update_purchase = " update  PF_PURCHASE_MASTER set CLAIM_NO =:NoClaimNo  where SLIP_NO =: NoSlipNo ";
+                        string[] SlipNo = li.Value.Split('-');
+                        string update_purchase = " update  PF_PURCHASE_MASTER set CLAIM_NO =:NoClaimNo  where PURCHASE_ID =: NoSlipNo ";
                         cmdi = new OracleCommand(update_purchase, conn);
 
-                        OracleParameter[] objPrm = new OracleParameter[3]; 
-                        objPrm[0] = cmdi.Parameters.Add("NoSlipNo", li.Value);
+                        OracleParameter[] objPrm = new OracleParameter[2]; 
+                        objPrm[0] = cmdi.Parameters.Add("NoSlipNo", SlipNo[0]);
                         objPrm[1] = cmdi.Parameters.Add("NoClaimNo", ClaimNoFrom); 
 
                         cmdi.ExecuteNonQuery(); 
@@ -272,19 +439,20 @@ namespace NRCAPPS.PF
                 cmdi.Dispose();
 
 
-                string update_purchase_claim = " update  PF_PURCHASE_CLAIM set CLAIM_NO =:NoClaimNo, EMP_ID =:NoEmpID,  CLAIM_DATE = TO_DATE(:ClaimDate, 'DD/MM/YYYY'), PAYMENT_TYPE_ID =:NoPaymentTypeID, TOTAL_AMOUNT =:NoTotalAmount, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where PURCHASE_CLAIM_ID =: NoPurClaimID ";
+                string update_purchase_claim = " update  PF_PURCHASE_CLAIM set CLAIM_NO =:NoClaimNo, EMP_ID =:NoEmpID,  CLAIM_DATE = TO_DATE(:ClaimDate, 'DD/MM/YYYY'), CLAIM_FOR_MONTH = TO_DATE(:ClaimForMonth, 'DD/MM/YYYY'), PAYMENT_TYPE_ID =:NoPaymentTypeID, TOTAL_AMOUNT =:NoTotalAmount, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where PURCHASE_CLAIM_ID =: NoPurClaimID ";
                 cmdu = new OracleCommand(update_purchase_claim, conn);
 
-                OracleParameter[] objPr = new OracleParameter[9];
+                OracleParameter[] objPr = new OracleParameter[10];
                 objPr[0] = cmdu.Parameters.Add("NoClaimNo", ClaimNoFrom); 
                 objPr[1] = cmdu.Parameters.Add("NoEmpID", EmpID);
-                objPr[2] = cmdu.Parameters.Add("ClaimDate", EntryDateNew);
-                objPr[3] = cmdu.Parameters.Add("NoPaymentTypeID", PaymentTypeID);
-                objPr[4] = cmdu.Parameters.Add("NoTotalAmount", TotalAmount);
-                objPr[5] = cmdu.Parameters.Add("u_date", u_date); 
-                objPr[6] = cmdu.Parameters.Add("NoC_USER_ID", userID);
-                objPr[7] = cmdu.Parameters.Add("TextIsActive", ISActive);
-                objPr[8] = cmdu.Parameters.Add("NoPurClaimID", PurchaseClaimID);
+                objPr[2] = cmdu.Parameters.Add("ClaimForMonth", ClaimForMonths);
+                objPr[3] = cmdu.Parameters.Add("ClaimDate", EntryDateNew);
+                objPr[4] = cmdu.Parameters.Add("NoPaymentTypeID", PaymentTypeID);
+                objPr[5] = cmdu.Parameters.Add("NoTotalAmount", TotalAmount);
+                objPr[6] = cmdu.Parameters.Add("u_date", u_date); 
+                objPr[7] = cmdu.Parameters.Add("NoC_USER_ID", userID);
+                objPr[8] = cmdu.Parameters.Add("TextIsActive", ISActive);
+                objPr[9] = cmdu.Parameters.Add("NoPurClaimID", PurchaseClaimID);
 
 
                 cmdu.ExecuteNonQuery(); 
@@ -297,16 +465,7 @@ namespace NRCAPPS.PF
                 alert_box.Visible = true;
                 alert_box.Controls.Add(new LiteralControl("Purchase Claim Data Update successfully"));
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
-                clearText();
-                DataTable dtSlipNo = new DataTable();
-                DataSet dsp = new DataSet();
-                string makePageSQL = " SELECT PPM.SLIP_NO, PPM.SLIP_NO || ' - ' || PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME AS SUPPLIER_NAME FROM PF_PURCHASE_MASTER PPM  LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID  WHERE PPM.CLAIM_NO IS NULL  ORDER BY  PPM.SLIP_NO ASC";
-                dsp = ExecuteBySqlString(makePageSQL);
-                dtSlipNo = (DataTable)dsp.Tables[0];
-                DropDownSlipNo.DataSource = dtSlipNo;
-                DropDownSlipNo.DataValueField = "SLIP_NO";
-                DropDownSlipNo.DataTextField = "SUPPLIER_NAME";
-                DropDownSlipNo.DataBind();
+                clearText(); 
 
                 Display();
                 CheckClaimNo.Text = "";
@@ -316,11 +475,11 @@ namespace NRCAPPS.PF
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
-            }
-           catch
-           {
-               Response.Redirect("~/ParameterError.aspx");
-           }  
+        //    }
+         //  catch
+         //  {
+         //      Response.Redirect("~/ParameterError.aspx");
+         //  }  
         }
 
 
@@ -397,15 +556,15 @@ namespace NRCAPPS.PF
 
              DataTable dtSlipNo = new DataTable();
              DataSet dsp = new DataSet();
-             string makePageSQL = " SELECT PPM.SLIP_NO, PPM.SLIP_NO || ' - ' || PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME || ', Item -' || PI.ITEM_NAME || ', Weight- ' || PPM.ITEM_WEIGHT || ', Amount- ' || TO_CHAR(PPM.ITEM_AMOUNT, '999,999,999.99') AS SUPPLIER_NAME FROM PF_PURCHASE_MASTER PPM  LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID  WHERE (PPM.CLAIM_NO IS NULL OR PPM.CLAIM_NO = '" + USER_DATA_ID + "' ) ORDER BY  PPM.SLIP_NO ASC"; //  
+             string makePageSQL = " SELECT PPM.PURCHASE_ID || '-' || ROUND((nvl(PPM.ITEM_AMOUNT,0)+nvl(PPM.VAT_AMOUNT,0))) AS PURCHASE_ID, PPM.SLIP_NO || ' - ' || PC.PARTY_ID || ' - ' || PC.PARTY_NAME || ', Item -' || PI.ITEM_NAME || ', Weight- ' || PPM.ITEM_WEIGHT || ', Amount- ' || TO_CHAR(ROUND((nvl(PPM.ITEM_AMOUNT,0)+nvl(PPM.VAT_AMOUNT,0))), '999,999,999.99') AS PARTY_NAME FROM PF_PURCHASE_MASTER PPM  LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PPM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID  WHERE (PPM.CLAIM_NO IS NULL OR PPM.CLAIM_NO = '" + USER_DATA_ID + "' ) ORDER BY  PPM.SLIP_NO ASC"; //  
              dsp = ExecuteBySqlString(makePageSQL);
              dtSlipNo = (DataTable)dsp.Tables[0];
              DropDownSlipNo.DataSource = dtSlipNo;
-             DropDownSlipNo.DataValueField = "SLIP_NO";
-             DropDownSlipNo.DataTextField = "SUPPLIER_NAME";
+             DropDownSlipNo.DataValueField = "PURCHASE_ID";
+             DropDownSlipNo.DataTextField = "PARTY_NAME";
              DropDownSlipNo.DataBind();
 
-             string makeSQL = " SELECT PURCHASE_CLAIM_ID, CLAIM_NO, EMP_ID, TO_CHAR(TO_DATE(CLAIM_DATE),'dd/mm/yyyy') AS CLAIM_DATE, PAYMENT_TYPE_ID, TOTAL_AMOUNT, IS_ACTIVE FROM PF_PURCHASE_CLAIM where CLAIM_NO = '" + USER_DATA_ID + "'";
+             string makeSQL = " SELECT PURCHASE_CLAIM_ID, CLAIM_NO, EMP_ID, TO_CHAR(TO_DATE(CLAIM_DATE),'dd/mm/yyyy') AS CLAIM_DATE, TO_CHAR(TO_DATE(CLAIM_FOR_MONTH),'mm/yyyy') CLAIM_FOR_MONTH, PAYMENT_TYPE_ID, TOTAL_AMOUNT, IS_ACTIVE FROM PF_PURCHASE_CLAIM where CLAIM_NO = '" + USER_DATA_ID + "'";
 
              cmdl = new OracleCommand(makeSQL);
              oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -418,13 +577,14 @@ namespace NRCAPPS.PF
                  TextPurchaseClaimID.Text     = ds.Rows[i]["PURCHASE_CLAIM_ID"].ToString();
                  TextClaimNo.Text             = ds.Rows[i]["CLAIM_NO"].ToString();                 
                  DropDownEmployeeID.Text      = ds.Rows[i]["EMP_ID"].ToString();
-                 EntryDate.Text               = ds.Rows[i]["CLAIM_DATE"].ToString(); 
+                 EntryDate.Text               = ds.Rows[i]["CLAIM_DATE"].ToString();
+                 TextMonthYear4.Text          = ds.Rows[i]["CLAIM_FOR_MONTH"].ToString(); 
                  DropDownPaymentTypeID.Text   = ds.Rows[i]["PAYMENT_TYPE_ID"].ToString();
-                 TextTotalAmount.Text         = ds.Rows[i]["TOTAL_AMOUNT"].ToString();
+                 TextTotalAmount.Text         = decimal.Parse(ds.Rows[i]["TOTAL_AMOUNT"].ToString()).ToString(".00");
                  CheckIsActive.Checked        = Convert.ToBoolean(ds.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false); 
              }
 
-             string makeSlipSQL = " SELECT PPC.CLAIM_NO, PPM.SLIP_NO FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO WHERE PPC.IS_CHECK = 'Incomplete' AND  PPC.CLAIM_NO = '" + USER_DATA_ID + "' ORDER BY PPM.SLIP_NO ASC";
+             string makeSlipSQL = " SELECT PPC.CLAIM_NO, PPM.PURCHASE_ID || '-' || ROUND((nvl(PPM.ITEM_AMOUNT,0)+nvl(PPM.VAT_AMOUNT,0))) AS PURCHASE_ID FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO WHERE PPC.IS_CHECK = 'Incomplete' AND  PPC.CLAIM_NO = '" + USER_DATA_ID + "' ORDER BY PPM.SLIP_NO ASC";
 
              cmdl = new OracleCommand(makeSlipSQL);
              oradata = new OracleDataAdapter(cmdl.CommandText, conn); 
@@ -437,7 +597,7 @@ namespace NRCAPPS.PF
                   for (int i = 0; i < RowCount; i++)
                   {
                     //  DropDownUserRoleID.Text = dt.Rows[i]["USER_ROLE_ID"].ToString();
-                      if (li.Value == dt.Rows[i]["SLIP_NO"].ToString())
+                      if (li.Value == dt.Rows[i]["PURCHASE_ID"].ToString())
                       {
                           li.Selected = true;
                         //  lblMessage.Text += "" + "Item value :: " + "</font>" + "<b><font color=red>" + li.Value + "</font></br>";
@@ -473,11 +633,11 @@ namespace NRCAPPS.PF
             string makeSQL = "";
             if (txtSearchUser.Text == "")
             {
-                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME AS SUPPLIER_NAME, PPC.IS_CHECK FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID  ORDER BY PPC.CLAIM_NO DESC, PPM.SLIP_NO ASC "; //WHERE PPC.IS_CHECK = 'Incomplete'
+                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_FOR_MONTH, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.PARTY_ID || ' - ' || PC.PARTY_NAME AS PARTY_NAME, PPC.IS_CHECK, PPC.IS_PRINT, TO_CHAR(PPC.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE  FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PPM.PARTY_ID WHERE PPC.IS_CHECK = 'Incomplete' ORDER BY PPC.CLAIM_NO DESC, PPM.CLAIM_NO ASC "; //WHERE PPC.IS_CHECK = 'Incomplete'
             }
             else
             {
-                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME AS SUPPLIER_NAME, PPC.IS_CHECK FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID WHERE PPC.CLAIM_NO like '" + txtSearchUser.Text + "%' or  HE.EMP_FNAME like '" + txtSearchUser.Text + "%'  ORDER BY PPC.CLAIM_NO DESC, PPM.SLIP_NO ASC ";
+                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_FOR_MONTH, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.PARTY_ID || ' - ' || PC.PARTY_NAME AS PARTY_NAME, PPC.IS_CHECK, PPC.IS_PRINT, TO_CHAR(PPC.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PPM.PARTY_ID WHERE PPC.CLAIM_NO like '" + txtSearchUser.Text + "%' or  HE.EMP_FNAME like '" + txtSearchUser.Text + "%'  ORDER BY PPC.CLAIM_NO DESC, PPM.SLIP_NO ASC ";
                 alert_box.Visible = false;
             }
 
@@ -585,6 +745,7 @@ namespace NRCAPPS.PF
             DropDownEmployeeID.Text = "0";
             DropDownSlipNo.SelectedIndex = -1;
             CheckClaimNo.Text = "";
+            TextTotalAmount.Text = "";
         }
 
         public void clearText()
@@ -592,7 +753,8 @@ namespace NRCAPPS.PF
               
           //  DropDownPaymentTypeID.Text = "0";
             TextClaimNo.Text = "";
-            EntryDate.Text = "";
+            EntryDate.Text = ""; 
+            TextTotalAmount.Text = "";
             DropDownEmployeeID.Text = "0";
             DropDownSlipNo.SelectedIndex = -1;
             CheckClaimNo.Text = "";
@@ -650,7 +812,7 @@ namespace NRCAPPS.PF
                 }
             }
         }
-
+         
         public DataSet ExecuteBySqlString(string sqlString)
         {
             string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -683,6 +845,81 @@ namespace NRCAPPS.PF
             return ds;
         }
 
- 
-   }
+        public static string NumberToWords(double doubleNumber)
+        {
+            var beforeFloatingPoint = (int)Math.Floor(doubleNumber);
+            var beforeFloatingPointWord = $"{NumberToWords(beforeFloatingPoint)} ";
+            var afterFloatingPointWord = "";
+            if ((int)((doubleNumber - beforeFloatingPoint) * 100) == 0)
+            {
+                afterFloatingPointWord = " only";
+            }
+            else
+            {
+                afterFloatingPointWord = $"and halalas {SmallNumberToWord((int)((doubleNumber - beforeFloatingPoint) * 100), "")} only.";
+            }
+
+             
+            return $"{beforeFloatingPointWord} {afterFloatingPointWord}";
+        }
+
+        private static string NumberToWords(int number)
+        {
+            if (number == 0)
+                return "zero";
+
+            if (number < 0)
+                return "minus " + NumberToWords(Math.Abs(number));
+
+            var words = "";
+
+            if (number / 1000000000 > 0)
+            {
+                words += NumberToWords(number / 1000000000) + " billion ";
+                number %= 1000000000;
+            }
+
+            if (number / 1000000 > 0)
+            {
+                words += NumberToWords(number / 1000000) + " million ";
+                number %= 1000000;
+            }
+
+            if (number / 1000 > 0)
+            {
+                words += NumberToWords(number / 1000) + " thousand ";
+                number %= 1000;
+            }
+
+            if (number / 100 > 0)
+            {
+                words += NumberToWords(number / 100) + " hundred ";
+                number %= 100;
+            }
+
+            words = SmallNumberToWord(number, words);
+
+            return words;
+        }
+
+        private static string SmallNumberToWord(int number, string words)
+        {
+            if (number <= 0) return words;
+            if (words != "")
+                words += " ";
+
+            var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+            var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+
+            if (number < 20)
+                words += unitsMap[number];
+            else
+            {
+                words += tensMap[number / 10];
+                if ((number % 10) > 0)
+                    words += "-" + unitsMap[number % 10];
+            }
+            return words;
+        }
+    }
 }

@@ -161,8 +161,8 @@ namespace NRCAPPS.PF
                     cmdu = new OracleCommand(update_inven_mas, conn);
 
                     OracleParameter[] objPrmInevenMas = new OracleParameter[5];
-                    objPrmInevenMas[0] = cmdu.Parameters.Add("NoItemID", DropDownItemID.Text);
-                    objPrmInevenMas[1] = cmdu.Parameters.Add("NoCostRate", TextItemCostRate.Text);
+                    objPrmInevenMas[0] = cmdu.Parameters.Add("NoItemID", Convert.ToInt32(DropDownItemID.Text));
+                    objPrmInevenMas[1] = cmdu.Parameters.Add("NoCostRate", Convert.ToDouble(TextItemCostRate.Text));
                     objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
                     objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
                     objPrmInevenMas[4] = cmdu.Parameters.Add("TextMonthYear", DataMonthYear);
@@ -245,8 +245,10 @@ namespace NRCAPPS.PF
              conn.Close();
              Display(); 
              alert_box.Visible = false;
-             CheckMonthYear.Text = "";
-             
+             CheckMonthYear.Text = ""; 
+            BtnAdd.Attributes.Add("aria-disabled", "false");
+            BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
+
         }
 
       

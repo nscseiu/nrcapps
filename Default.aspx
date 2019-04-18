@@ -5,7 +5,7 @@
 <head id="Head1" runat="server">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Nesma Recycling Management Application | Log in</title>
+  <title>Nesma Recycling Company Application | Log in</title>
   <link rel='shortcut icon' href='favicon.ico' />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -31,7 +31,7 @@
 <div class="login-box">
   <div class="login-logo">
     <img src="image/logo.png" /><br />
-     <b>NRC</b> Management Application 
+     <b>NRC</b> Application 
   </div>
   <!-- /.login-logo --> 
   <div class="login-box-body">
@@ -54,6 +54,7 @@
                     Display="Dynamic" SetFocusOnError="True"></asp:RequiredFieldValidator>
                     <asp:Label ID="LabelPassword" runat="server" Text=""></asp:Label> 
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+           
       </div>
       <div class="row">
         <div class="col-xs-8">

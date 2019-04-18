@@ -121,7 +121,7 @@
     SelectedRowStyle-BackColor="Yellow" 
     AllowPaging="true" 
     AllowSorting="true"
-    PageSize = "8" 
+    PageSize = "15" 
     OnPageIndexChanging="GridViewUser_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="MENU_NAME" HeaderText="Main Menu" />  

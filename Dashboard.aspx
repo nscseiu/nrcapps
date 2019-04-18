@@ -1,4 +1,4 @@
-﻿<%@ Page Title="NESMA Recycling Apps| Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="NRCAPPS.Dashboard" %>
+﻿<%@ Page Title="NESMA Recycling Applications | Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="NRCAPPS.Dashboard" %>
  
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
@@ -23,6 +23,32 @@
       <!-- Small boxes (Stat box) -->
       <asp:PlaceHolder ID = "PlaceHolderDashboardReport" runat="server" />  
       <!-- /.row --> 
+      <script type="text/javascript">
+          Highcharts.chart('container_pf_monthly', {
+              data: {
+                  table: 'datatable_pf_monthly'
+              },
+              chart: {
+                  type: 'line'
+              },
+              title: {
+                  text: ''
+              },
+              yAxis: {
+                  allowDecimals: true,
+                  title: {
+                      text: 'Material Weight (MT)'
+                  }
+              },
+              tooltip: {
+                  formatter: function () {
+                      return '<b>' + this.series.name + '</b><br/>' +
+                this.point.y + ' ' + this.point.name.toLowerCase();
+                  }
+              }
+          }); 
+		</script>
+
       <script type="text/javascript"> 
           Highcharts.chart('container', {
               data: {
@@ -55,15 +81,15 @@
                   table: 'datatable_rm_pie'
               },
               chart: {
-                  type: 'pie'
+                  type: 'column'
               },
               title: {
-                  text: 'Raw Material (Weight - MT)'
+                  text: 'Raw Material & Finished Goods (Weight - MT)'
               },
               yAxis: {
                   allowDecimals: false,
                   title: {
-                      text: 'Amount (SR)'
+                      text: 'Weight (MT)'
                   }
               },
               tooltip: {
@@ -81,37 +107,7 @@
           });
 
 		</script>
-              <script type="text/javascript">
-                  Highcharts.chart('container_fg_pie', {
-                      data: {
-                          table: 'datatable_fg_pie'
-                      },
-                      chart: {
-                          type: 'pie' 
-                      },
-                      title: {
-                          text: 'Finished Goods (Weight - MT)'
-                      },
-                      yAxis: {
-                          allowDecimals: false,
-                          title: {
-                              text: 'Amount (SR)'
-                          }
-                      },
-                      tooltip: {
-                          formatter: function () {
-                              return '<b>' + this.series.name + '</b><br/>' +
-                this.point.y + ' ' + this.point.name.toUpperCase(); 
-                          }
-                      },
-                      plotOptions: {
-                          pie: {
-                              allowPointSelect: true,
-                              cursor: 'pointer'  
-                          }
-                      }
-                  }); 
-		</script>
+     
          
       <!-- Main row -->
       <div class="row">

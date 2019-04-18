@@ -14,7 +14,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="../Dashboard.aspx"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Plastic Fctory</a></li>
+        <li><a href="#">Plastic Factory</a></li>
         <li class="active">Sub Item</li>
       </ol>
     </section>

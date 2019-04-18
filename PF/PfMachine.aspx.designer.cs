@@ -58,6 +58,24 @@ namespace NRCAPPS.PF {
         protected global::System.Web.UI.WebControls.Label CheckMachineName;
         
         /// <summary>
+        /// DropDownProductionLineID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownProductionLineID;
+        
+        /// <summary>
+        /// RequiredFieldValidator8 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator8;
+        
+        /// <summary>
         /// CheckIsActive control.
         /// </summary>
         /// <remarks>

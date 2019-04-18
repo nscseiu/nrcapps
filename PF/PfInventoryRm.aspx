@@ -50,13 +50,6 @@
                           ControlToValidate="DropDownItemID" Display="Dynamic" 
                           ErrorMessage="Select Item" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div>
-                </div>
-                 <div class="form-group">
-                  <label  class="col-sm-5 control-label">Sub Item</label> 
-                  <div class="col-sm-4">   
-                    <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server" disabled = "disabled"> 
-                    </asp:DropDownList>   
-                  </div>
                 </div> 
                 <div class="form-group">
                   <label  class="col-sm-5 control-label">Initial Stock of RM</label> 
@@ -128,12 +121,17 @@
         
             <div class="box-header with-border">
               <h3 class="box-title">Inventory Raw Material List</h3>
-              <div class="box-tools">
-              <div class="input-group input-group-sm" style="width: 200px;">
-                <asp:TextBox ID="txtSearchUserRole" Class="form-control input-sm" runat="server" />
+               <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 300px;">
+                <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>  
+                       <asp:TextBox  class="form-control  input-sm pull-right" ID="TextMonthYear1"  runat="server" ></asp:TextBox>   
+                    </div>
                  <div class="input-group-btn">
-                      <asp:Button ID="ButtonSearchUser" Class="btn btn-info"   
-                        Text="Search" runat="server" OnClick="GridViewSearchUser" 
+                      <asp:Button ID="BtnDataCheckWp" Class="btn btn-warning"   
+                        Text="Check Inventory" runat="server" OnClick="BtnDataCheckPf_Click" 
                         CausesValidation="False" />
                   </div>  
               </div>    
@@ -142,22 +140,17 @@
             <!-- /.box-header -->
             <div class="box-body table-responsive"> 
                     <asp:GridView ID="GridView1" runat="server" EnablePersistedSelection="true"            
-    SelectedRowStyle-BackColor="Yellow" 
-    AllowPaging="true" 
-    AllowSorting="true"
-    PageSize = "10" 
-    OnPageIndexChanging="GridViewUser_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-hover table-bordered table-striped" >
+    SelectedRowStyle-BackColor="Yellow"   AutoGenerateColumns="false"   CssClass="table table-hover table-bordered table-striped" >
                      <Columns>
                      <%-- asp:BoundField DataField="RM_INVENTORY_ID" HeaderText="Inventory RM ID" / --%>  
-                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />   
-                     <asp:BoundField DataField="SUB_ITEM_NAME"  HeaderText="Sub Item" /> 
+                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />    
                      <asp:BoundField DataField="INITIAL_STOCK_WT"  HeaderText="Initial Stock" DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right"  /> 
                      <asp:BoundField DataField="STOCK_IN_WT"  HeaderText="Stock In"  DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" /> 
                      <asp:BoundField DataField="STOCK_OUT_WT"  HeaderText="Stock Out"  DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right"  /> 
                      <asp:BoundField DataField="FINAL_STOCK_WT"  HeaderText="Final Stock"  DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" /> 
                      <asp:BoundField DataField="ITEM_AVG_RATE"  HeaderText="AVG. Rate"  DataFormatString="{0:0.00}" ItemStyle-HorizontalAlign="Right"  />   
-                     <asp:BoundField DataField="CREATE_DATE"  HeaderText="Create Date" DataFormatString="{0:dd/MM/yyyy h:mm:ss tt}"  />  
-                     <asp:BoundField DataField="UPDATE_DATE"  HeaderText="Update Date" DataFormatString="{0:dd/MM/yyyy h:mm:ss tt}"  />   
+                     <%-- asp:BoundField DataField="CREATE_DATE"  HeaderText="Create Date" DataFormatString="{0:dd/MM/yyyy h:mm:ss tt}"  /--%>  
+                     <%-- asp:BoundField DataField="UPDATE_DATE"  HeaderText="Update Date" DataFormatString="{0:dd/MM/yyyy h:mm:ss tt}"  / --%>   
                      <asp:TemplateField>
                        <ItemTemplate>
                         <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-xs" runat="server" CommandArgument='<%# Eval("RM_INVENTORY_ID") %>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
@@ -173,12 +166,99 @@
     </div>
           <!-- /.box --> 
         <!--/.col (right) -->
-
-        <div class="col-md-12">  
+        <div class="col-md-4">
+          
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Inventory Raw Material Monthly History Form</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start --> 
+              <div class="box-body">
+                 
+                <div class="form-group">
+                  <label  class="col-sm-5 control-label">Item</label> 
+                  <div class="col-sm-4">   
+                   <asp:TextBox ID="TextInventoryRmHisID" style="display:none" runat="server"></asp:TextBox>
+                    <asp:DropDownList ID="DropDownItemID1" class="form-control input-sm" runat="server" disabled = "disabled"> 
+                    </asp:DropDownList>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
+                          ControlToValidate="DropDownItemID1" Display="Dynamic" 
+                          ErrorMessage="Select Item" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup1'></asp:RequiredFieldValidator>
+                  </div>
+                </div> 
+                <div class="form-group">
+                  <label  class="col-sm-5 control-label">Initial Stock of RM</label> 
+                  <div class="col-sm-4"> 
+                   <div class="input-group">  
+                    <asp:TextBox ID="TextInitialStockHis" class="form-control input-sm"  runat="server" disabled = "disabled"></asp:TextBox> 
+                    <span class="input-group-addon">MT</span>      
+                    </div>  
+                  </div> 
+                </div> 
+                <div class="form-group">
+                  <label  class="col-sm-5 control-label">Stock In of RM</label> 
+                  <div class="col-sm-4">  
+                   <div class="input-group"> 
+                    <asp:TextBox ID="TextStockInHis" class="form-control input-sm"  runat="server" disabled = "disabled"></asp:TextBox>   
+                    <span class="input-group-addon">MT</span>      
+                    </div> 
+                  </div> 
+                </div> 
+                 <div class="form-group">
+                  <label  class="col-sm-5 control-label">Stock Out of RM</label> 
+                  <div class="col-sm-4">  
+                   <div class="input-group"> 
+                    <asp:TextBox ID="TextStockOutHis" class="form-control input-sm"  runat="server" disabled = "disabled"></asp:TextBox> 
+                    <span class="input-group-addon">MT</span>      
+                    </div>  
+                  </div> 
+                </div> 
+                <div class="form-group">
+                  <label  class="col-sm-5 control-label">Final Stock of RM</label> 
+                  <div class="col-sm-4">  
+                   <div class="input-group"> 
+                    <asp:TextBox ID="TextFinalStockHis" class="form-control input-sm"  runat="server" ></asp:TextBox>    
+                    <span class="input-group-addon">MT</span> 
+                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
+                          ControlToValidate="TextFinalStockHis" Display="Dynamic" 
+                          ErrorMessage="Insert Final Stock" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup1'></asp:RequiredFieldValidator>     
+                    </div>
+                  </div> 
+                </div>
+                <div class="form-group">
+                  <label  class="col-sm-5 control-label">Average Rate of RM</label> 
+                  <div class="col-sm-4"> 
+                   <div class="input-group">  
+                    <asp:TextBox ID="TextItemAvgRateHis" class="form-control input-sm"  runat="server"></asp:TextBox> 
+                    <span class="input-group-addon">MT</span>      
+                    </div> <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" 
+                          ControlToValidate="TextItemAvgRateHis" Display="Dynamic" 
+                          ErrorMessage="Insert Average Rate" SetFocusOnError="True" ValidationGroup='valGroup1'></asp:RequiredFieldValidator>  
+                  </div> 
+                </div>            
+                 <!-- checkbox --> 
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+               <div class="form-group">
+                  <div  class="col-sm-5" style="text-align:right;"> 
+                      <asp:LinkButton ID="LinkButton1" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
+                   <div class="col-sm-6">    
+                     <asp:LinkButton ID="BtnUpdateHis" class="btn btn-success" runat="server" Text="Update"  onclick="BtnUpdateHis_Click" ValidationGroup='valGroup1'><span class="fa fa-edit"></span> Update</asp:LinkButton>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-footer -->
+         <!-- /.box -->
+        </div> 
+         </div>  
+        <div class="col-md-8">  
         <div class="box box-warning">
         
             <div class="box-header with-border">
-              <h3 class="box-title">Inventory Raw Material Daily History List</h3>
+              <h3 class="box-title">Inventory Raw Material Monthly History List</h3>
               <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 200px;">
                 <asp:TextBox ID="txtSearchHistory" Class="form-control input-sm" runat="server" />
@@ -196,18 +276,21 @@
     SelectedRowStyle-BackColor="Yellow" 
     AllowPaging="true" 
     AllowSorting="true"
-    PageSize = "10" 
+    PageSize = "13" 
     OnPageIndexChanging="GridViewHistory_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-hover table-bordered table-striped" >
-                     <Columns>
-                     <asp:BoundField DataField="IN_RM_HIS_ID" HeaderText="In. RM History ID" />  
+                     <Columns>  
                      <asp:BoundField DataField="CREATE_DATE"  HeaderText="Create Date" DataFormatString="{0:dd/MM/yyyy}"  />     
-                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />   
-                     <asp:BoundField DataField="SUB_ITEM_NAME"  HeaderText="Sub Item" /> 
+                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />     
                      <asp:BoundField DataField="INITIAL_STOCK_WT"  HeaderText="Initial Stock" DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right"  /> 
                      <asp:BoundField DataField="STOCK_IN_WT"  HeaderText="Stock In"  DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" /> 
                      <asp:BoundField DataField="STOCK_OUT_WT"  HeaderText="Stock Out"  DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" /> 
                      <asp:BoundField DataField="FINAL_STOCK_WT"  HeaderText="Final Stock"  DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" />  
-                     <asp:BoundField DataField="ITEM_AVG_RATE"  HeaderText="AVG. Rate"  DataFormatString="{0:0.00}" ItemStyle-HorizontalAlign="Right"  />  
+                     <asp:BoundField DataField="ITEM_AVG_RATE"  HeaderText="AVG. Rate"  DataFormatString="{0:0.00}" ItemStyle-HorizontalAlign="Right"  /> 
+                      <asp:TemplateField>
+                       <ItemTemplate>
+                        <asp:LinkButton ID="linkSelectRmHisClick" class="btn btn-info btn-xs" runat="server" CommandArgument='<%# Eval("IN_RM_HIS_ID") %>' OnClick="linkSelectRmHisClick" CausesValidation="False">Select</asp:LinkButton> 
+                        </ItemTemplate>
+                       </asp:TemplateField>  
                      </Columns>
                         <PagerStyle CssClass="pagination-ys" />
                         <SelectedRowStyle BackColor="Yellow"></SelectedRowStyle>

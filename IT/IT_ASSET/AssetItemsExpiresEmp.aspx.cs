@@ -26,7 +26,7 @@ namespace NRCAPPS.IT.IT_ASSET
         string strConnString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         OracleCommand  cmdi, cmdl;
         OracleDataAdapter oradata; 
-        DataTable dt;
+        DataTable dt, ds;
         int RowCount;
         public static int EmpStatus;
 
@@ -79,11 +79,11 @@ namespace NRCAPPS.IT.IT_ASSET
 
                         DataTable dtItemID = new DataTable();
                         DataSet di = new DataSet();
-                        string makeItemSQL = " SELECT AI.ITEM_ID, AI.ITEM_NAME || ' - ' || AI.ITEM_TYPE || ' ' || AI.ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_ITEMS AI LEFT JOIN IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID WHERE AI.IS_ACTIVE = 'Enable' AND AIC.ITEM_CAT_QR_PRI_CODE = 'CPU' ORDER BY AI.ITEM_ID ASC";
+                        string makeItemSQL = " SELECT IAEI.EMP_ITEMS_ID, AI.ITEM_NAME || ' - ' || AI.ITEM_TYPE || ' ' || AI.ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_EMP_ITEMS IAEI  LEFT JOIN  IT_ASSET_ITEMS AI ON AI.ITEM_ID = IAEI.ITEM_ID  LEFT JOIN IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID WHERE AI.IS_ACTIVE = 'Enable' AND (AIC.ITEM_CAT_QR_PRI_CODE = 'CPU' OR AIC.ITEM_CAT_QR_PRI_CODE = 'ITD') ORDER BY AI.ITEM_ID ASC";
                         di = ExecuteBySqlString(makeItemSQL);
                         dtItemID = (DataTable)di.Tables[0];
                         DropDownItemID.DataSource = dtItemID;
-                        DropDownItemID.DataValueField = "ITEM_ID";
+                        DropDownItemID.DataValueField = "EMP_ITEMS_ID";
                         DropDownItemID.DataTextField = "ITEM_NAME_ALL";
                         DropDownItemID.DataBind();
                         DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
@@ -121,7 +121,29 @@ namespace NRCAPPS.IT.IT_ASSET
                         DropDownDivisionID.DataBind();
                         DropDownDivisionID.Items.Insert(0, new ListItem("Select  Division", "0"));
 
-                      //  Display();
+                        DataTable dtLocationID = new DataTable();
+                        DataSet dsl = new DataSet();
+                        string makeLocationSQL = " SELECT * FROM HR_EMP_LOCATIONS WHERE IS_ACTIVE = 'Enable' ORDER BY LOCATION_ID ASC";
+                        dsl = ExecuteBySqlString(makeLocationSQL);
+                        dtLocationID = (DataTable)dsl.Tables[0];
+                        DropDownLocationID.DataSource = dtLocationID;
+                        DropDownLocationID.DataValueField = "LOCATION_ID";
+                        DropDownLocationID.DataTextField = "LOCATION_NAME";
+                        DropDownLocationID.DataBind();
+                        DropDownLocationID.Items.Insert(0, new ListItem("Select  Location", "0")); 
+
+                        DataTable dtPlacementID = new DataTable();
+                        DataSet depl = new DataSet();
+                        string makePlacementSQL = " SELECT * FROM IT_ASSET_ITEMS_PLACEMENT WHERE IS_ACTIVE = 'Enable' ORDER BY PLACEMENT_ID ASC";
+                        depl = ExecuteBySqlString(makePlacementSQL);
+                        dtPlacementID = (DataTable)depl.Tables[0];
+                        DropDownPlacementID.DataSource = dtPlacementID;
+                        DropDownPlacementID.DataValueField = "PLACEMENT_ID";
+                        DropDownPlacementID.DataTextField = "PLACEMENT_NAME";
+                        DropDownPlacementID.DataBind();
+                        DropDownPlacementID.Items.Insert(0, new ListItem("Select Placement", "0"));
+
+                        //  Display();
                         DropDownItemID.Attributes.Add("disabled", "disabled");
                    //     TextQrImage.Visible = false; 
                         alert_box.Visible = false;
@@ -152,7 +174,7 @@ namespace NRCAPPS.IT.IT_ASSET
                     conn.Open();
 
                     int userID = Convert.ToInt32(Session["USER_ID"]);
-                    string TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text; 
+                 //   string TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text; 
                     int ItemID     = Convert.ToInt32(DropDownItemID.Text);
                     int ItemExpID = Convert.ToInt32(DropDownItemExpID.Text);
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt"); 
@@ -169,16 +191,19 @@ namespace NRCAPPS.IT.IT_ASSET
                     String ExpiryDateTemp1 = ExpiryDateTemp.Trim();
                     DateTime ExpiryDate = DateTime.ParseExact(ExpiryDateTemp1, "dd-MM-yyyy h:mm:ss tt", CultureInfo.InvariantCulture);
 
+                string get_user_id = "select IT_ASSET_EMP_ITEM_EXPSID_SEQ.nextval from dual";
+                cmdi = new OracleCommand(get_user_id, conn);
+                int newExpID = Int16.Parse(cmdi.ExecuteScalar().ToString());
 
-                    if (radExpSelect.SelectedValue == "Employee")
+                if (radExpSelect.SelectedValue == "Employee")
                       {
                     
-                        int EmployeeID = Convert.ToInt32(DropDownEmployeeID.Text);
-                        string insert_user = "insert into IT_ASSET_EMP_ITEM_EXPIRES (EMP_ITEM_EXP_ID, EMP_ID, ITEM_EXP_ID, ITEM_ID, SERIAL_NO, ACTIVATION_CODE, START_DATE, EXPIRES_DATE, EXPIRED_DAYS, CREATE_DATE, U_USER_ID, IS_ACTIVE) VALUES ( :TextEmpItemsExpID, :NoEmployeeID, :NoItemExpID, :NoItemID, :TextSerialNo, :TextActivationCode, :TextStartDate, :TextExpiryDate, :TextExpiryDays, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoC_USER_ID, :TextIsActive)";
+                        string EmployeeID = DropDownEmployeeID.Text;
+                        string insert_user = "insert into IT_ASSET_EMP_ITEM_EXPIRES (EMP_ITEM_EXP_ID, EMP_ID, ITEM_EXP_ID, ITEM_ID, SERIAL_NO, ACTIVATION_CODE, START_DATE, EXPIRES_DATE, EXPIRED_DAYS, CREATE_DATE, U_USER_ID, IS_ACTIVE) VALUES ( 'ANT-' || LPAD(:TextEmpItemsExpID, 6, '0'), :NoEmployeeID, :NoItemExpID, :NoItemID, :TextSerialNo, :TextActivationCode, :TextStartDate, :TextExpiryDate, :TextExpiryDays, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoC_USER_ID, :TextIsActive)";
                         cmdi = new OracleCommand(insert_user, conn);
 
                         OracleParameter[] objPrm = new OracleParameter[12];
-                        objPrm[0] = cmdi.Parameters.Add("TextEmpItemsExpID", TextQRCodeAll);
+                        objPrm[0] = cmdi.Parameters.Add("TextEmpItemsExpID", newExpID);
                         objPrm[1] = cmdi.Parameters.Add("NoEmployeeID", EmployeeID);
                         objPrm[2] = cmdi.Parameters.Add("NoItemExpID", ItemExpID);
                         objPrm[3] = cmdi.Parameters.Add("NoItemID", ItemID);
@@ -194,23 +219,28 @@ namespace NRCAPPS.IT.IT_ASSET
                     else {
                         int DepartmentID = Convert.ToInt32(DropDownDepartmentID.Text);
                         int DivisionID   = Convert.ToInt32(DropDownDivisionID.Text);
-                        string insert_user = "insert into IT_ASSET_EMP_ITEM_EXPIRES (EMP_ITEM_EXP_ID, DEPARTMENT_ID, DIVISION_ID, ITEM_EXP_ID, ITEM_ID, SERIAL_NO, ACTIVATION_CODE, START_DATE, EXPIRES_DATE, EXPIRED_DAYS, CREATE_DATE, U_USER_ID, IS_ACTIVE) VALUES ( :TextEmpItemsExpID, :NoDepartmentID, :NoDivisionID, :NoItemExpID, :NoItemID, :TextSerialNo, :TextActivationCode, :TextStartDate, :TextExpiryDate, :TextExpiryDays, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoC_USER_ID, :TextIsActive)";
+                        int LocationID = Convert.ToInt32(DropDownLocationID.Text);
+                        int PlacementID   = Convert.ToInt32(DropDownPlacementID.Text);
+
+                        string insert_user = "insert into IT_ASSET_EMP_ITEM_EXPIRES (EMP_ITEM_EXP_ID, DEPARTMENT_ID, DIVISION_ID, LOCATION_ID, PLACEMENT_ID, ITEM_EXP_ID, ITEM_ID, SERIAL_NO, ACTIVATION_CODE, START_DATE, EXPIRES_DATE, EXPIRED_DAYS, CREATE_DATE, U_USER_ID, IS_ACTIVE) VALUES ( 'ANT-' || LPAD(:TextEmpItemsExpID, 6, '0'), :NoDepartmentID, :NoDivisionID, :NoLocationID, :NoPlacementID, :NoItemExpID, :NoItemID, :TextSerialNo, :TextActivationCode, :TextStartDate, :TextExpiryDate, :TextExpiryDays, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoC_USER_ID, :TextIsActive)";
                         cmdi = new OracleCommand(insert_user, conn);
 
-                        OracleParameter[] objPrm = new OracleParameter[13];
-                        objPrm[0] = cmdi.Parameters.Add("TextEmpItemsExpID", TextQRCodeAll);
+                        OracleParameter[] objPrm = new OracleParameter[15];
+                        objPrm[0] = cmdi.Parameters.Add("TextEmpItemsExpID", newExpID);
                         objPrm[1] = cmdi.Parameters.Add("NoDepartmentID", DepartmentID);
                         objPrm[2] = cmdi.Parameters.Add("NoDivisionID", DivisionID);
-                        objPrm[3] = cmdi.Parameters.Add("NoItemExpID", ItemExpID);
-                        objPrm[4] = cmdi.Parameters.Add("NoItemID", ItemID);
-                        objPrm[5] = cmdi.Parameters.Add("TextSerialNo", TextSerialNo.Text);
-                        objPrm[6] = cmdi.Parameters.Add("TextActivationCode", TextActivationCode.Text);
-                        objPrm[7] = cmdi.Parameters.Add("TextStartDate", StartDate);
-                        objPrm[8] = cmdi.Parameters.Add("TextExpiryDate", ExpiryDate);
-                        objPrm[9] = cmdi.Parameters.Add("TextExpiryDays", TextExpiredDays.Text);
-                        objPrm[10] = cmdi.Parameters.Add("u_date", u_date);
-                        objPrm[11] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                        objPrm[12] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                        objPrm[3] = cmdi.Parameters.Add("NoLocationID", LocationID);
+                        objPrm[4] = cmdi.Parameters.Add("NoPlacementID", PlacementID); 
+                        objPrm[5] = cmdi.Parameters.Add("NoItemExpID", ItemExpID);
+                        objPrm[6] = cmdi.Parameters.Add("NoItemID", ItemID);
+                        objPrm[7] = cmdi.Parameters.Add("TextSerialNo", TextSerialNo.Text);
+                        objPrm[8] = cmdi.Parameters.Add("TextActivationCode", TextActivationCode.Text);
+                        objPrm[9] = cmdi.Parameters.Add("TextStartDate", StartDate);
+                        objPrm[10] = cmdi.Parameters.Add("TextExpiryDate", ExpiryDate);
+                        objPrm[11] = cmdi.Parameters.Add("TextExpiryDays", TextExpiredDays.Text);
+                        objPrm[12] = cmdi.Parameters.Add("u_date", u_date);
+                        objPrm[13] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                        objPrm[14] = cmdi.Parameters.Add("TextIsActive", ISActive);
                     
                     
                     } 
@@ -257,19 +287,44 @@ namespace NRCAPPS.IT.IT_ASSET
              
              for (int i = 0; i < RowCount; i++)
              {
-                 string[] TextQRPreCodeAll = dt.Rows[i]["EMP_ITEM_EXP_ID"].ToString().Split('-');
-                 TextQRPreCode.Text        = TextQRPreCodeAll[0];
-                 TextQRCode.Text           = TextQRPreCodeAll[1];
+                 TextItemExpID.Text = dt.Rows[i]["EMP_ITEM_EXP_ID"].ToString(); 
                  DropDownItemExpID.Text    = dt.Rows[i]["ITEM_EXP_ID"].ToString();
-                 DropDownItemID.Text       = dt.Rows[i]["ITEM_ID"].ToString();
+                
                  if (radExpSelect.SelectedValue == "Employee")
                  {
-                     DropDownEmployeeID.Text = dt.Rows[i]["EMP_ID"].ToString();
+                    DataTable dtItemID = new DataTable();
+                    DataSet di = new DataSet();
+                    string makeItemSQL = " SELECT IAEI.EMP_ITEMS_ID, AI.ITEM_NAME || ' - ' || AI.ITEM_TYPE || ' ' || AI.ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_EMP_ITEMS IAEI  LEFT JOIN  IT_ASSET_ITEMS AI ON AI.ITEM_ID = IAEI.ITEM_ID LEFT JOIN IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID WHERE AI.IS_ACTIVE = 'Enable' AND IAEI.EMP_ID = '" + dt.Rows[i]["EMP_ID"].ToString() +"' AND (AIC.ITEM_CAT_QR_PRI_CODE = 'CPU' OR AIC.ITEM_CAT_QR_PRI_CODE = 'ITD') ORDER BY AI.ITEM_ID ASC";
+                    di = ExecuteBySqlString(makeItemSQL);
+                    dtItemID = (DataTable)di.Tables[0];
+                    DropDownItemID.DataSource = dtItemID;
+                    DropDownItemID.DataValueField = "EMP_ITEMS_ID";
+                    DropDownItemID.DataTextField = "ITEM_NAME_ALL";
+                    DropDownItemID.DataBind();
+                    DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
+
+                    DropDownItemID.Text       = dt.Rows[i]["ITEM_ID"].ToString();
+                    DropDownEmployeeID.Text = dt.Rows[i]["EMP_ID"].ToString();
                  }
                  else {
                      DropDownDepartmentID.Text = dt.Rows[i]["DEPARTMENT_ID"].ToString();
                      DropDownDivisionID.Text   = dt.Rows[i]["DIVISION_ID"].ToString();
-                 }
+                     DropDownLocationID.Text = dt.Rows[i]["LOCATION_ID"].ToString();
+                     DropDownPlacementID.Text = dt.Rows[i]["PLACEMENT_ID"].ToString();
+
+                    string makeItemSQL = " SELECT IAEI.EMP_ITEMS_ID, AI.ITEM_ID, AI.ITEM_NAME || ' - ' || AI.ITEM_TYPE || ' ' || AI.ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_EMP_ITEMS IAEI LEFT JOIN IT_ASSET_ITEMS AI ON IAEI.ITEM_ID = AI.ITEM_ID LEFT JOIN IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID WHERE AI.IS_ACTIVE = 'Enable' AND IAEI.DEPARTMENT_ID = '" + dt.Rows[i]["DEPARTMENT_ID"].ToString() + "'  AND IAEI.DIVISION_ID = '" + dt.Rows[i]["DIVISION_ID"].ToString() + "' AND IAEI.LOCATION_ID = '" + dt.Rows[i]["LOCATION_ID"].ToString() + "' AND IAEI.PLACEMENT_ID = '" + dt.Rows[i]["PLACEMENT_ID"].ToString() + "' AND (AIC.ITEM_CAT_QR_PRI_CODE = 'CPU' OR AIC.ITEM_CAT_QR_PRI_CODE = 'ITD') ORDER BY AI.ITEM_ID ASC";
+                    DataTable dtItemdID = new DataTable();
+                    DataSet did = new DataSet();
+                    did = ExecuteBySqlString(makeItemSQL);
+                    dtItemdID = (DataTable)did.Tables[0];
+                    DropDownItemID.DataSource = dtItemdID;
+                    DropDownItemID.DataValueField = "EMP_ITEMS_ID";
+                    DropDownItemID.DataTextField = "ITEM_NAME_ALL";
+                    DropDownItemID.DataBind();
+                    DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
+
+                    DropDownItemID.Text = dt.Rows[i]["ITEM_ID"].ToString();
+                }
                  TextSerialNo.Text         = dt.Rows[i]["SERIAL_NO"].ToString();
                  TextActivationCode.Text   = dt.Rows[i]["ACTIVATION_CODE"].ToString(); 
                  DateTime StartDateTemp    = DateTime.ParseExact(dt.Rows[i]["START_DATE"].ToString(), "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture);
@@ -277,27 +332,25 @@ namespace NRCAPPS.IT.IT_ASSET
                  DateTime ExpiryDateTemp   = DateTime.ParseExact(dt.Rows[i]["EXPIRES_DATE"].ToString(), "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture);
                  string ExpiryDate         = String.Format("{0:dd/MM/yyyy h:mm:ss tt}", ExpiryDateTemp); 
                  TextStartExpiryDate.Text  = StartDate + " - " + ExpiryDate;
-                 TextExpiredDays.Text      = dt.Rows[i]["EXPIRED_DAYS"].ToString();
-              //   TextQrImage.ImageUrl    = "QRCode/"+ dt.Rows[i]["IMAGE_QR_CODE"].ToString();
+                 TextExpiredDays.Text      = dt.Rows[i]["EXPIRED_DAYS"].ToString(); 
                  CheckIsActive.Checked     = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
              } 
              
              conn.Close();
-        //     Display();
-             CheckQRCode.Text = "";
+        //     Display(); 
              alert_box.Visible = false;
              BtnAdd.Attributes.Add("aria-disabled", "false");
              BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
 
-             GridViewItem.UseAccessibleHeader = true;
-             GridViewItem.HeaderRow.TableSection = TableRowSection.TableHeader;
+         //    GridViewItem.UseAccessibleHeader = true;
+        //     GridViewItem.HeaderRow.TableSection = TableRowSection.TableHeader;
           //   TextQrImage.Visible = true;
 
             // PlaceHolder1.Text = USER_DATA_ID;
 
         }
 
-        protected void DisplayItemCatQRPriCode(object sender, EventArgs e) 
+    /*    protected void DisplayItemCatQRPriCode(object sender, EventArgs e) 
         { 
              OracleConnection conn = new OracleConnection(strConnString);
              conn.Open();
@@ -342,49 +395,82 @@ namespace NRCAPPS.IT.IT_ASSET
 
              
 
-        }
+        } */
     
         
          public void DisplayEmpItem(object sender, EventArgs e)
          { 
              OracleConnection conn = new OracleConnection(strConnString);
              conn.Open();
-
-             int USER_DATA_ID = 0, USER_DATA_ID2 = 0; string makeSQL = "";
+                DataTable dtItemID = new DataTable();
+                DataSet di = new DataSet();
+             string USER_DATA_ID0 = ""; int USER_DATA_ID=0, USER_DATA_ID2 = 0, USER_DATA_ID3 = 0, USER_DATA_ID4=0; string makeSQL = "";
              if (radExpSelect.SelectedValue == "Employee")
              {
-                 USER_DATA_ID = Convert.ToInt32(DropDownEmployeeID.SelectedValue);
-                 makeSQL = " select AEIE.*, AIE.ITEM_EXP_NAME, (EXTRACT (DAY FROM (AEIE.EXPIRES_DATE-SYSDATE)))  AS EXPIRED_DAYS_BET,  AEIE.EXPIRED_DAYS , AEIE.IS_ACTIVE from IT_ASSET_EMP_ITEM_EXPIRES AEIE left join IT_ASSET_ITEM_EXPIRES AIE ON AIE.ITEM_EXP_ID = AEIE.ITEM_EXP_ID where AEIE.EMP_ID = '" + USER_DATA_ID + "' order by AEIE.EMP_ITEM_EXP_ID";
-              } else { 
+                 USER_DATA_ID0 = DropDownEmployeeID.SelectedValue;
+                 makeSQL = " select AEIE.*, AIE.ITEM_EXP_NAME, (EXTRACT (DAY FROM (AEIE.EXPIRES_DATE-SYSDATE)))  AS EXPIRED_DAYS_BET,  AEIE.EXPIRED_DAYS , AEIE.IS_ACTIVE from IT_ASSET_EMP_ITEM_EXPIRES AEIE left join IT_ASSET_ITEM_EXPIRES AIE ON AIE.ITEM_EXP_ID = AEIE.ITEM_EXP_ID where AEIE.EMP_ID = '" + USER_DATA_ID0 + "' order by AEIE.EMP_ITEM_EXP_ID";
+
+            
+                string makeItemSQL = " SELECT IAEI.EMP_ITEMS_ID, AI.ITEM_NAME || ' - ' || AI.ITEM_TYPE || ' ' || AI.ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_EMP_ITEMS IAEI  LEFT JOIN  IT_ASSET_ITEMS AI ON AI.ITEM_ID = IAEI.ITEM_ID  LEFT JOIN IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID WHERE IAEI.EMP_ID = '" + USER_DATA_ID0 + "' AND AI.IS_ACTIVE = 'Enable' AND (AIC.ITEM_CAT_QR_PRI_CODE = 'CPU' OR AIC.ITEM_CAT_QR_PRI_CODE = 'ITD') ORDER BY AI.ITEM_ID ASC";
+                di = ExecuteBySqlString(makeItemSQL);
+                dtItemID = (DataTable)di.Tables[0];
+                DropDownItemID.DataSource = dtItemID;
+                DropDownItemID.DataValueField = "EMP_ITEMS_ID";
+                DropDownItemID.DataTextField = "ITEM_NAME_ALL";
+                DropDownItemID.DataBind();
+                DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
+
+                cmdl = new OracleCommand(makeSQL);
+                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                dt = new DataTable();
+                oradata.Fill(dt);
+                GridViewItem.DataSource = dt;
+                GridViewItem.DataKeyNames = new string[] { "EMP_ITEM_EXP_ID" };
+                GridViewItem.DataBind();
+
+                
+                 
+                for (int i = 0; GridViewItemDept.Columns.Count > i;)
+                {
+                    GridViewItemDept.Columns.RemoveAt(i);
+                }
+
+            } else { 
                  USER_DATA_ID  = Convert.ToInt32(DropDownDepartmentID.SelectedValue);
                  USER_DATA_ID2 = Convert.ToInt32(DropDownDivisionID.SelectedValue);
-                 makeSQL = " select AEIE.*, AIE.ITEM_EXP_NAME, (EXTRACT (DAY FROM (AEIE.EXPIRES_DATE-SYSDATE)))  AS EXPIRED_DAYS_BET,  AEIE.EXPIRED_DAYS , AEIE.IS_ACTIVE from IT_ASSET_EMP_ITEM_EXPIRES AEIE left join IT_ASSET_ITEM_EXPIRES AIE ON AIE.ITEM_EXP_ID = AEIE.ITEM_EXP_ID where AEIE.DEPARTMENT_ID = '" + USER_DATA_ID + "' AND AEIE.DIVISION_ID = '" + USER_DATA_ID2 + "' order by AEIE.EMP_ITEM_EXP_ID";
-              }
-              
-             cmdl = new OracleCommand(makeSQL);
-             oradata = new OracleDataAdapter(cmdl.CommandText, conn);
-             dt = new DataTable();
-             oradata.Fill(dt);
-             GridViewItem.DataSource = dt;
-             GridViewItem.DataKeyNames = new string[] { "EMP_ITEM_EXP_ID" };
-             GridViewItem.DataBind();
-
-             if (dt.Rows.Count == 0)
-             {
-                 EmpStatus = 0;
-             }
-             else
-             { 
-                 GridViewItem.UseAccessibleHeader = true;
-                 GridViewItem.HeaderRow.TableSection = TableRowSection.TableHeader;
-                 EmpStatus = 1;
+                 USER_DATA_ID3 = Convert.ToInt32(DropDownLocationID.SelectedValue);
+                 USER_DATA_ID4 = Convert.ToInt32(DropDownPlacementID.SelectedValue);
+                 makeSQL = " select AEIE.*, AIE.ITEM_EXP_NAME, (EXTRACT (DAY FROM (AEIE.EXPIRES_DATE-SYSDATE)))  AS EXPIRED_DAYS_BET,  AEIE.EXPIRED_DAYS , AEIE.IS_ACTIVE, IAIP.PLACEMENT_NAME from IT_ASSET_EMP_ITEM_EXPIRES AEIE left join IT_ASSET_ITEM_EXPIRES AIE ON AIE.ITEM_EXP_ID = AEIE.ITEM_EXP_ID left join IT_ASSET_ITEMS_PLACEMENT IAIP ON IAIP.PLACEMENT_ID = AEIE.PLACEMENT_ID  where AEIE.DEPARTMENT_ID = '" + USER_DATA_ID + "' AND AEIE.DIVISION_ID = '" + USER_DATA_ID2 + "' AND AEIE.LOCATION_ID = '" + USER_DATA_ID3 + "' AND AEIE.PLACEMENT_ID = '" + USER_DATA_ID4 + "' order by AEIE.EMP_ITEM_EXP_ID";
                  
-             } 
-             DropDownItemID.Attributes.Remove("disabled"); 
+                string makeItemSQL = " SELECT IAEI.EMP_ITEMS_ID, AI.ITEM_NAME || ' - ' || AI.ITEM_TYPE || ' ' || AI.ITEM_BRAND AS ITEM_NAME_ALL from IT_ASSET_EMP_ITEMS IAEI  LEFT JOIN  IT_ASSET_ITEMS AI ON AI.ITEM_ID = IAEI.ITEM_ID  LEFT JOIN IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID WHERE IAEI.DEPARTMENT_ID = '" + USER_DATA_ID + "' AND IAEI.DIVISION_ID = '" + USER_DATA_ID2 + "' AND IAEI.LOCATION_ID = '" + USER_DATA_ID3 + "'  AND IAEI.PLACEMENT_ID = '" + USER_DATA_ID4 + "'  AND AI.IS_ACTIVE = 'Enable' AND (AIC.ITEM_CAT_QR_PRI_CODE = 'CPU' OR AIC.ITEM_CAT_QR_PRI_CODE = 'ITD') ORDER BY AI.ITEM_ID ASC";
+                di = ExecuteBySqlString(makeItemSQL);
+                dtItemID = (DataTable)di.Tables[0];
+                DropDownItemID.DataSource = dtItemID;
+                DropDownItemID.DataValueField = "EMP_ITEMS_ID";
+                DropDownItemID.DataTextField = "ITEM_NAME_ALL";
+                DropDownItemID.DataBind();
+                DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
 
-             TextItemID.Text = "";
-             TextQRPreCode.Text = ""; 
-             TextQRCode.Text = ""; 
+                cmdl = new OracleCommand(makeSQL);
+                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                ds = new DataTable();
+                oradata.Fill(ds);
+                GridViewItemDept.DataSource = ds;
+                GridViewItemDept.DataKeyNames = new string[] { "EMP_ITEM_EXP_ID" };
+                GridViewItemDept.DataBind();
+
+                
+                for (int i = 0; GridViewItem.Columns.Count > i;)
+                {
+                    GridViewItem.Columns.RemoveAt(i);
+                } 
+            } 
+
+             DropDownItemID.Attributes.Remove("disabled"); 
+             BtnAdd.Attributes.Add("aria-disabled", "true");
+             BtnAdd.Attributes.Add("class", "btn btn-primary active");
+
+             TextItemID.Text = ""; 
              DropDownItemID.Text = "0";
              DropDownItemExpID.Text = "0";
              TextSerialNo.Text = "";
@@ -401,8 +487,7 @@ namespace NRCAPPS.IT.IT_ASSET
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-                int userID = Convert.ToInt32(Session["USER_ID"]); 
-                string TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text; 
+                int userID = Convert.ToInt32(Session["USER_ID"]);  
                 int ItemID = Convert.ToInt32(DropDownItemID.Text);
                 int ItemExpID = Convert.ToInt32(DropDownItemExpID.Text);
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
@@ -423,7 +508,7 @@ namespace NRCAPPS.IT.IT_ASSET
                 if (radExpSelect.SelectedValue == "Employee")
                 {
 
-                    int EmployeeID = Convert.ToInt32(DropDownEmployeeID.Text); 
+                    string EmployeeID = DropDownEmployeeID.Text; 
                     string update_user = "update  IT_ASSET_EMP_ITEM_EXPIRES  set  EMP_ID = :NoEmployeeID, ITEM_EXP_ID = :NoItemExpID, ITEM_ID = :NoItemID, SERIAL_NO = :TextSerialNo, ACTIVATION_CODE = :TextActivationCode, START_DATE = : TextStartDate, EXPIRES_DATE = : TextExpiryDate, EXPIRED_DAYS = : TextExpiryDays, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where EMP_ITEM_EXP_ID = :TextEmpItemsExpID ";
                     cmdi = new OracleCommand(update_user, conn);
 
@@ -439,12 +524,13 @@ namespace NRCAPPS.IT.IT_ASSET
                     objPrm[8] = cmdi.Parameters.Add("u_date", u_date);
                     objPrm[9] = cmdi.Parameters.Add("NoC_USER_ID", userID);
                     objPrm[10] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPrm[11] = cmdi.Parameters.Add("TextEmpItemsExpID", TextQRCodeAll);
+                    objPrm[11] = cmdi.Parameters.Add("TextEmpItemsExpID", TextItemExpID.Text);
                 }
                 else
                 {
                     int DepartmentID = Convert.ToInt32(DropDownDepartmentID.Text);
                     int DivisionID = Convert.ToInt32(DropDownDivisionID.Text); 
+
                     string update_user = "update  IT_ASSET_EMP_ITEM_EXPIRES  set  DEPARTMENT_ID = :NoDepartmentID, DIVISION_ID =:NoDivisionID, ITEM_EXP_ID = :NoItemExpID, ITEM_ID = :NoItemID, SERIAL_NO = :TextSerialNo, ACTIVATION_CODE = :TextActivationCode, START_DATE = : TextStartDate, EXPIRES_DATE = : TextExpiryDate, EXPIRED_DAYS = : TextExpiryDays, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where EMP_ITEM_EXP_ID = :TextEmpItemsExpID ";
                     cmdi = new OracleCommand(update_user, conn); 
                     OracleParameter[] objPrm = new OracleParameter[13];
@@ -460,7 +546,7 @@ namespace NRCAPPS.IT.IT_ASSET
                     objPrm[9] = cmdi.Parameters.Add("u_date", u_date);
                     objPrm[10] = cmdi.Parameters.Add("NoC_USER_ID", userID);
                     objPrm[11] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPrm[12] = cmdi.Parameters.Add("TextEmpItemsExpID", TextQRCodeAll);  
+                    objPrm[12] = cmdi.Parameters.Add("TextEmpItemsExpID", TextItemExpID.Text);  
                 }  
 
                     cmdi.ExecuteNonQuery();
@@ -489,9 +575,8 @@ namespace NRCAPPS.IT.IT_ASSET
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-
-                string TextQRCodeAll = TextQRPreCode.Text + '-' + TextQRCode.Text; 
-                string delete_user_page = " delete from IT_ASSET_EMP_ITEMS where EMP_ITEMS_ID  = '" + TextQRCodeAll + "'";
+                 
+                string delete_user_page = " delete from IT_ASSET_EMP_ITEM_EXPIRES where EMP_ITEM_EXP_ID  = '" + TextItemExpID.Text + "'";
 
                 cmdi = new OracleCommand(delete_user_page, conn);
             
@@ -529,9 +614,7 @@ namespace NRCAPPS.IT.IT_ASSET
 
         public void clearTextField(object sender, EventArgs e)
         {
-            TextItemID.Text = "";
-            TextQRPreCode.Text = ""; 
-            TextQRCode.Text = ""; 
+            TextItemID.Text = ""; 
             DropDownEmployeeID.Text = "0";
             DropDownItemID.Text = "0";
             DropDownItemExpID.Text = "0";
@@ -542,16 +625,14 @@ namespace NRCAPPS.IT.IT_ASSET
             DropDownItemID.Attributes.Add("disabled", "disabled");
             BtnAdd.Attributes.Add("aria-disabled", "true");
             BtnAdd.Attributes.Add("class", "btn btn-primary active");
-            GridViewItem.DataBind();
-            GridViewItem.UseAccessibleHeader = true; 
+         //   GridViewItem.DataBind();
+         //   GridViewItem.UseAccessibleHeader = true; 
             
         }
 
         public void clearText()
         {
-            TextItemID.Text = ""; 
-            TextQRPreCode.Text = ""; 
-            TextQRCode.Text = ""; 
+            TextItemID.Text = "";  
             DropDownEmployeeID.Text = "0";
             DropDownItemID.Text = "0";
             DropDownItemExpID.Text = "0";
@@ -561,8 +642,8 @@ namespace NRCAPPS.IT.IT_ASSET
             TextStartExpiryDate.Text = "";  
             BtnAdd.Attributes.Add("aria-disabled", "false");
             BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
-            GridViewItem.DataBind();
-            GridViewItem.UseAccessibleHeader = true; 
+        //    GridViewItem.DataBind();
+         //   GridViewItem.UseAccessibleHeader = true; 
 
         }
 
@@ -598,78 +679,6 @@ namespace NRCAPPS.IT.IT_ASSET
             return ds;
         }
 
-      
-
-
-        public void TextQRCode_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(TextQRCode.Text))
-            {
-                alert_box.Visible = false;
-            //    PlaceHolder1.Text = EmpStatus.ToString();
-                if (EmpStatus == 1) { 
-                    GridViewItem.UseAccessibleHeader = true;
-                    GridViewItem.HeaderRow.TableSection = TableRowSection.TableHeader; 
-                }
-                
-                OracleConnection conn = new OracleConnection(strConnString);
-                conn.Open();
-                OracleCommand cmd = new OracleCommand();
-                cmd.Connection = conn;
-                 
-                string TextQRCodeAll = TextQRPreCode.Text+"-"+TextQRCode.Text;
-
-                cmd.CommandText = "select * from IT_ASSET_EMP_ITEM_EXPIRES where EMP_ITEM_EXP_ID = '" + TextQRCodeAll + "'";
-                cmd.CommandType = CommandType.Text;
-
-                OracleDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
-                {
-                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> Item name is already exist</label>";
-                    CheckQRCode.ForeColor = System.Drawing.Color.Red;
-                    TextQRCode.Focus();
-                    BtnAdd.Attributes.Add("aria-disabled", "false");
-                    BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
-
-                    
-                }
-                else
-                {
-                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa fa-check'></i> Item name is available</label>";
-                    CheckQRCode.ForeColor = System.Drawing.Color.Green;
-                   
-                    BtnAdd.Attributes.Add("aria-disabled", "true");
-                    BtnAdd.Attributes.Add("class", "btn btn-primary active");
-
-                /*    string code = TextQRPreCode.Text + '-' + TextQRCode.Text;
-                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                    QRCodeGenerator.QRCode qrCode = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
-                    System.Web.UI.WebControls.Image imgBarCode = new System.Web.UI.WebControls.Image();
-                    imgBarCode.Height = 125;
-                    imgBarCode.Width = 125;
-                    using (Bitmap bitMap = qrCode.GetGraphic(20))
-                    {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            bitMap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                            byte[] byteImage = ms.ToArray();
-                            imgBarCode.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(byteImage);
-                             
-                          //  bitMap.Save(Server.MapPath("~/ASSET/QRCode/" + code + ".png"));
-                        }
-                        plBarCode.Controls.Add(imgBarCode);
-                    }
-                   // PlaceHolder1.Text = code + "." + "png";
-                    TextQrImage.Visible = false;
-                    TextQrImage.ImageUrl = null; */
-                }
-            }
-            else {
-                    CheckQRCode.Text = "<label class='control-label'><i class='fa fa-hand-o-left'></i> Item name is not blank</label>";
-                    CheckQRCode.ForeColor = System.Drawing.Color.Red;
-                    TextQRCode.Focus();
-            }
-            
-        } 
+       
    }
 }

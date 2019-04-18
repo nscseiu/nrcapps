@@ -66,8 +66,8 @@ namespace NRCAPPS.PF
                     {
                          
                         Display();
-                        DisplaySalesRtn();
-
+                        DisplaySalesFgRtn();
+                        DisplaySalesRmRtn();
                         txtSearchSales.Text = "";
 
                         alert_box.Visible = false;
@@ -88,10 +88,10 @@ namespace NRCAPPS.PF
         }
 
 
-        public void BtnUpdateSalesCheck_Click(object sender, EventArgs e)
+        public void BtnUpdateSalesFGCheck_Click(object sender, EventArgs e)
         {
             try
-            {
+              {
                 if (IS_EDIT_ACTIVE == "Enable")
                 {
 
@@ -104,14 +104,14 @@ namespace NRCAPPS.PF
                     foreach (GridViewRow gridRow in GridView1.Rows)
                     {
                         CheckBox chkRowIs = (gridRow.Cells[0].FindControl("IschkRowSalesRtn") as CheckBox);
-                        string IsSalesRtnCheck = chkRowIs.Checked ? "Yes" : null;
+                        string IsSalesRtnCheck = chkRowIs.Checked ? "FG" : null;
                         if (chkRowIs.Checked)
                         {
                             // update data 
                             string update_user = "update  PF_SALES_MASTER set IS_SALES_RETURN = :NoIsSalesRtnCheck, SALES_RTN_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), SALES_RTN_USER_ID = :NoC_USER_ID  where INVOICE_NO = :NoInvoiceID ";
                             cmdi = new OracleCommand(update_user, conn);
                             OracleParameter[] objPrm = new OracleParameter[5];
-                            objPrm[0] = cmdi.Parameters.Add("NoInvoiceID", Convert.ToInt32(gridRow.Cells[1].Text));
+                            objPrm[0] = cmdi.Parameters.Add("NoInvoiceID", gridRow.Cells[1].Text);
                             objPrm[1] = cmdi.Parameters.Add("NoIsSalesRtnCheck", IsSalesRtnCheck);
                             objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
                             objPrm[3] = cmdi.Parameters.Add("NoC_USER_ID", userID);
@@ -179,10 +179,122 @@ namespace NRCAPPS.PF
                     cmdi.Dispose();
                     conn.Close();
 
+                    Display(); 
+                    DisplaySalesFgRtn();
+                    alert_box.Visible = true;
+                    alert_box.Controls.Add(new LiteralControl("Sales Return (Finished Goods) Data Update successfully"));
+                    alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
+                }
+                else
+                {
+                    Response.Redirect("~/PagePermissionError.aspx");
+                }
+               }
+              catch
+           {
+             Response.Redirect("~/ParameterError.aspx");
+         }
+
+        }
+
+
+
+        public void BtnUpdateSalesRMCheck_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (IS_EDIT_ACTIVE == "Enable")
+                {
+
+                    OracleConnection conn = new OracleConnection(strConnString);
+                    conn.Open();
+                    int userID = Convert.ToInt32(Session["USER_ID"]);
+
+                    string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
+
+                    foreach (GridViewRow gridRow in GridView1.Rows)
+                    {
+                        CheckBox chkRowIs = (gridRow.Cells[0].FindControl("IschkRowSalesRtn") as CheckBox);
+                        string IsSalesRtnCheck = chkRowIs.Checked ? "RM" : null;
+                        if (chkRowIs.Checked)
+                        {
+                            // update data 
+                            string update_user = "update  PF_SALES_MASTER set IS_SALES_RETURN = :NoIsSalesRtnCheck, SALES_RTN_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), SALES_RTN_USER_ID = :NoC_USER_ID  where INVOICE_NO = :NoInvoiceID ";
+                            cmdi = new OracleCommand(update_user, conn);
+                            OracleParameter[] objPrm = new OracleParameter[5];
+                            objPrm[0] = cmdi.Parameters.Add("NoInvoiceID", gridRow.Cells[1].Text);
+                            objPrm[1] = cmdi.Parameters.Add("NoIsSalesRtnCheck", IsSalesRtnCheck);
+                            objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
+                            objPrm[3] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                            cmdi.ExecuteNonQuery();
+
+                            int ItemIdOld = 0; double ItemWeightOld = 0.00;
+                            string makeSQLPro = " select ITEM_ID, SUB_ITEM_ID, ITEM_WEIGHT from PF_SALES_MASTER where INVOICE_NO  = '" + Convert.ToInt32(gridRow.Cells[1].Text) + "'  ";
+                            cmdl = new OracleCommand(makeSQLPro);
+                            oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                            dt = new DataTable();
+                            oradata.Fill(dt);
+                            RowCount = dt.Rows.Count;
+
+                            for (int i = 0; i < RowCount; i++)
+                            {
+                                ItemIdOld = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
+                                ItemWeightOld = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString());
+                            }
+
+                            //inventory calculation
+
+                            int InvenItemID = 0;
+                            double InitialStock = 0.00, StockInWet = 0.00, StockOutWet = 0.00, FinalStock = 0.00, StockInWetNew = 0.00, FinalStockNew = 0.00;
+
+                            // check inventory FG
+                            string makeSQL = " select * from PF_RM_STOCK_INVENTORY_MASTER where ITEM_ID  = '" + ItemIdOld + "' ";
+                            cmdl = new OracleCommand(makeSQL);
+                            oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                            dt = new DataTable();
+                            oradata.Fill(dt);
+                            RowCount = dt.Rows.Count;
+
+                            for (int i = 0; i < RowCount; i++)
+                            {
+                                InvenItemID = Convert.ToInt32(dt.Rows[i]["ITEM_ID"].ToString());
+                                InitialStock = Convert.ToDouble(dt.Rows[i]["INITIAL_STOCK_WT"].ToString());
+                                StockInWet = Convert.ToDouble(dt.Rows[i]["STOCK_IN_WT"].ToString());
+                                StockOutWet = Convert.ToDouble(dt.Rows[i]["STOCK_OUT_WT"].ToString());
+                                FinalStock = Convert.ToDouble(dt.Rows[i]["FINAL_STOCK_WT"].ToString());
+                            }
+
+                            StockInWetNew = StockInWet + ItemWeightOld;
+                            FinalStockNew = InitialStock + StockInWetNew - StockOutWet;
+
+
+                            // update inventory FG (minus old data)
+                            string update_inven_mas = "update  PF_RM_STOCK_INVENTORY_MASTER  set STOCK_IN_WT = :NoStockIn, FINAL_STOCK_WT = :NoFinalStock, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where ITEM_ID = :NoItemID ";
+                            cmdu = new OracleCommand(update_inven_mas, conn);
+
+                            OracleParameter[] objPrmInevenMas = new OracleParameter[5];
+                            objPrmInevenMas[0] = cmdu.Parameters.Add("NoStockIn", StockInWetNew);
+                            objPrmInevenMas[1] = cmdu.Parameters.Add("NoFinalStock", FinalStockNew);
+                            objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
+                            objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
+                            objPrmInevenMas[4] = cmdu.Parameters.Add("NoItemID", InvenItemID);
+
+                            cmdu.ExecuteNonQuery();
+                            cmdu.Parameters.Clear();
+                            cmdu.Dispose();
+
+                        }
+
+                    }
+                    cmdi.Parameters.Clear();
+                    cmdi.Dispose();
+                    conn.Close();
+
                     Display();
+                    DisplaySalesRmRtn();
 
                     alert_box.Visible = true;
-                    alert_box.Controls.Add(new LiteralControl("Sales Return Data Update successfully"));
+                    alert_box.Controls.Add(new LiteralControl("Sales Return (Raw Material) Data Update successfully"));
                     alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
                 }
                 else
@@ -196,7 +308,8 @@ namespace NRCAPPS.PF
             }
 
         }
-             
+
+
 
         public void Display()
         {
@@ -208,11 +321,11 @@ namespace NRCAPPS.PF
                 string makeSQL = "";
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.CUSTOMER_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_CUSTOMER PC ON PC.CUSTOMER_ID = PSM.CUSTOMER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN IS NULL ";
+                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN IS NULL ORDER BY PSM.CREATE_DATE DESC";
                 }
                 else
                 {
-                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.CUSTOMER_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_CUSTOMER PC ON PC.CUSTOMER_ID = PSM.CUSTOMER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN IS NULL AND PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchEmp.Text + "%' or PC.CUSTOMER_NAME like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PSI.SUB_ITEM_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
+                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN IS NULL AND PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchEmp.Text + "%' or PC.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PI.ITEM_NAME like '" + txtSearchEmp.Text + "%' or PSI.SUB_ITEM_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
                 }
 
                 cmdl = new OracleCommand(makeSQL);
@@ -240,7 +353,7 @@ namespace NRCAPPS.PF
         }
 
 
-        public void DisplaySalesRtn()
+        public void DisplaySalesFgRtn()
         {
             if (IS_VIEW_ACTIVE == "Enable")
             {
@@ -250,11 +363,11 @@ namespace NRCAPPS.PF
                 string makeSQL1 = "";
                 if (txtSearchSales.Text == "")
                 {
-                    makeSQL1 = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.CUSTOMER_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN, PSM.SALES_RTN_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_CUSTOMER PC ON PC.CUSTOMER_ID = PSM.CUSTOMER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN = 'Yes' ";
+                    makeSQL1 = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN, PSM.SALES_RTN_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN = 'FG' ";
                 }
                 else
                 {
-                    makeSQL1 = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.CUSTOMER_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN, PSM.SALES_RTN_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_CUSTOMER PC ON PC.CUSTOMER_ID = PSM.CUSTOMER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN = 'Yes' AND (PSM.INVOICE_NO like '" + txtSearchSales.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchSales.Text + "%' or PC.CUSTOMER_NAME like '" + txtSearchSales.Text + "%' or PI.ITEM_NAME like '" + txtSearchSales.Text + "%' or PSI.SUB_ITEM_NAME like '" + txtSearchSales.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchSales.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchSales.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchSales.Text + "%') ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
+                    makeSQL1 = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN, PSM.SALES_RTN_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN = 'FG' AND (PSM.INVOICE_NO like '" + txtSearchSales.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchSales.Text + "%' or PC.PARTY_NAME like '" + txtSearchSales.Text + "%' or PI.ITEM_NAME like '" + txtSearchSales.Text + "%' or PSI.SUB_ITEM_NAME like '" + txtSearchSales.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchSales.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchSales.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchSales.Text + "%') ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
                 }
 
                 cmdi = new OracleCommand(makeSQL1);
@@ -271,21 +384,61 @@ namespace NRCAPPS.PF
 
         protected void GridViewSearchSalesRtn(object sender, EventArgs e)
         {
-            this.DisplaySalesRtn();
+            this.DisplaySalesFgRtn();
         }
 
         protected void GridViewSalesRtn_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GridView2.PageIndex = e.NewPageIndex;
-            DisplaySalesRtn();
+            DisplaySalesFgRtn();
             alert_box.Visible = false;
         }
 
-         
-      
 
-         
-         
+        public void DisplaySalesRmRtn()
+        {
+            if (IS_VIEW_ACTIVE == "Enable")
+            {
+                OracleConnection conn = new OracleConnection(strConnString);
+                conn.Open();
+
+                string makeSQL1 = "";
+                if (txtSearchSales.Text == "")
+                {
+                    makeSQL1 = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN, PSM.SALES_RTN_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN = 'RM' ";
+                }
+                else
+                {
+                    makeSQL1 = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PPT.PUR_TYPE_NAME, PC.PARTY_NAME, PI.ITEM_NAME, PSI.SUB_ITEM_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE, PSM.IS_SALES_RETURN, PSM.SALES_RTN_DATE FROM PF_SALES_MASTER PSM LEFT JOIN PF_PURCHASE_TYPE PPT ON  PPT.PUR_TYPE_ID = PSM.PUR_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PSM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN PF_SUB_ITEM PSI ON PSI.SUB_ITEM_ID = PSM.SUB_ITEM_ID WHERE PSM.IS_SALES_RETURN = 'RM' AND (PSM.INVOICE_NO like '" + txtSearchSales.Text + "%' or PPT.PUR_TYPE_NAME like '" + txtSearchSales.Text + "%' or PC.PARTY_NAME like '" + txtSearchSales.Text + "%' or PI.ITEM_NAME like '" + txtSearchSales.Text + "%' or PSI.SUB_ITEM_NAME like '" + txtSearchSales.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchSales.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchSales.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchSales.Text + "%') ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
+                }
+
+                cmdi = new OracleCommand(makeSQL1);
+                oradata = new OracleDataAdapter(cmdi.CommandText, conn);
+                ds = new DataTable();
+                oradata.Fill(ds);
+                GridView3.DataSource = ds;
+                GridView3.DataKeyNames = new string[] { "INVOICE_NO" };
+                GridView3.DataBind();
+                conn.Close();
+                // alert_box.Visible = false;
+            }
+        }
+
+        protected void GridViewSearchSalesRmRtn(object sender, EventArgs e)
+        {
+            this.DisplaySalesRmRtn();
+        }
+
+        protected void GridViewSalesRmRtn_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GridView3.PageIndex = e.NewPageIndex;
+            DisplaySalesRmRtn();
+            alert_box.Visible = false;
+        }
+
+
+
+
     }
-          
+
 }

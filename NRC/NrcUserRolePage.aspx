@@ -42,7 +42,7 @@
               <div class="box-body">
                 
                <div class="form-group">
-                  <label  class="col-sm-2 control-label">User Role</label> 
+                  <label  class="col-sm-1 control-label">User Role</label> 
                   <div class="col-sm-3">   
                     <asp:DropDownList ID="DropDownUserRoleID" class="form-control" runat="server"  AutoPostBack="True" 
                         ontextchanged="linkSelectClick" > 
@@ -53,8 +53,8 @@
                   </div>
                 </div>  
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">User Pages</label> 
-                  <div class="col-sm-9">    
+                  <label  class="col-sm-1 control-label">User Pages</label> 
+                  <div class="col-sm-11">    
                   <asp:ListBox runat="server" ID="DropDownUserPageID" class="form-control select2" data-placeholder="Select Pages"  SelectionMode="multiple"> 
                   </asp:ListBox>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
@@ -66,9 +66,9 @@
               <!-- /.box-body -->
               <div class="box-footer">
                <div class="form-group">
-                  <div  class="col-sm-2" style="text-align:right;"> 
+                  <div  class="col-sm-1" style="text-align:right;"> 
                       <asp:LinkButton ID="ClearFiled" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
-                   <div class="col-sm-6">     
+                   <div class="col-sm-7">     
                     <asp:LinkButton ID="BtnUpdate" class="btn btn-success" runat="server" Text="Update"  onclick="BtnUpdate_Click"><span class="fa fa-edit"></span> Update</asp:LinkButton>
                     
                 </div>

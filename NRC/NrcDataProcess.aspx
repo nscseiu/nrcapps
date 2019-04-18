@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Data Process" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="NrcDataProcess.aspx.cs" Inherits="NRCAPPS.PF.NrcDataProcess" %>
+﻿<%@ Page Title="Data Process" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="NrcDataProcess.aspx.cs" Inherits="NRCAPPS.NRC.NrcDataProcess" %>
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="ContentPlaceHolder1"> 
@@ -32,6 +32,43 @@
                 <h4><i class="icon fa fa-check"></i> Alert!</h4>  
            </asp:Panel> 
           <!-- Horizontal Form -->
+  <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Data Process (Waste Paper - Monthly)</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start --> 
+              <div class="box-body"> 
+              <div class="form-group">
+                    <label class="col-sm-3 control-label">Select Month</label>
+                     <div class="col-sm-2">   
+                    <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>  
+                       <asp:TextBox  class="form-control  input-sm pull-right" ID="TextMonthYear1"  runat="server" ></asp:TextBox>  <%-- AutoPostBack="True" ontextchanged="CheckDataProcess_PF_Monthly"  --%>
+                    </div>
+                       <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                          ControlToValidate="TextMonthYear1" ErrorMessage="Insert Month Year" 
+                          Display="Dynamic" SetFocusOnError="True"  ValidationGroup="ValGroupWp" ></asp:RequiredFieldValidator>
+                      </div>   <div class="col-sm-3"><asp:Label ID="Label1" runat="server"></asp:Label> 
+                  </div>
+                  </div> 
+                  </div> 
+              <!-- /.box-body -->
+              <div class="box-footer">
+               <div class="form-group">
+                  <div  class="col-sm-3" style="text-align:right;"> 
+                      <asp:LinkButton ID="LinkButton1" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
+                   <div class="col-sm-6">   
+                     <asp:LinkButton ID="LinkButton2" class="btn btn-warning" runat="server" Text="Add New" onclick="BtnDataProcWp_Click" ValidationGroup="ValGroupWp"><span class="fa fa-refresh"></span> Data Process</asp:LinkButton>  
+                  </div>
+                </div>
+              </div>
+             
+              <!-- /.box-footer -->
+         <!-- /.box -->
+        </div>   
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">Data Process (Plastic Factory - Monthly)</h3>
@@ -69,7 +106,7 @@
               <!-- /.box-footer -->
          <!-- /.box -->
         </div>   
-       
+          
     </div> 
           <!-- /.box --> 
         <!--/.col (right) -->

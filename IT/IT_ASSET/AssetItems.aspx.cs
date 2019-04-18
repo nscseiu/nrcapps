@@ -95,8 +95,8 @@ namespace NRCAPPS.ASSET
 
         public void BtnAdd_Click(object sender, EventArgs e)
         {
-            try
-            {
+           try
+           {
                 if (IS_ADD_ACTIVE == "Enable")
                 {
                     OracleConnection conn = new OracleConnection(strConnString);
@@ -132,7 +132,7 @@ namespace NRCAPPS.ASSET
                     cmdi.Dispose();
                     conn.Close();
                     alert_box.Visible = true;
-                    alert_box.Controls.Add(new LiteralControl("Insert New Department successfully"));
+                    alert_box.Controls.Add(new LiteralControl("Insert New Items successfully"));
                     alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
                     clearText();
                     Display();
@@ -140,11 +140,11 @@ namespace NRCAPPS.ASSET
                 else { 
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
-            }
-            catch
-            {
-                Response.Redirect("~/ParameterError.aspx");
-            }
+          }
+          catch
+          {
+             Response.Redirect("~/ParameterError.aspx");
+          }
         }
 
         protected void linkSelectClick(object sender, EventArgs e) 
@@ -193,30 +193,27 @@ namespace NRCAPPS.ASSET
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-
-                DataTable dtUserTypeID = new DataTable();
-                DataSet ds = new DataSet();
-
+                  
                 string makeSQL = "";
-                if (txtSearchUserRole.Text == "")
-                {
+            //    if (txtSearchUserRole.Text == "")
+             //   {
                     makeSQL = " select  AI.*, AIC.ITEM_CAT_QR_PRI_CODE || ' - ' || AIC.ITEM_CATEGORY_NAME AS ITEM_CATEGORY_NAME_CODE from IT_ASSET_ITEMS AI left join IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID ORDER BY AI.UPDATE_DATE desc, AI.CREATE_DATE desc";
-                }
-                else
-                {
-                    makeSQL = " select  * from IT_ASSET_ITEM_CATEGORIES where ITEM_CATEGORY_ID like '" + txtSearchUserRole.Text + "%' or ITEM_CATEGORY_NAME like '" + txtSearchUserRole.Text + "%' or ITEM_CATEGORY_CODE like '" + txtSearchUserRole.Text + "%' or IS_ACTIVE like '" + txtSearchUserRole.Text + "%' ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
-
+            //    }
+            //    else
+            //    {
+            //        makeSQL = " select  AI.*, AIC.ITEM_CAT_QR_PRI_CODE || ' - ' || AIC.ITEM_CATEGORY_NAME AS ITEM_CATEGORY_NAME_CODE from IT_ASSET_ITEMS AI left join IT_ASSET_ITEM_CATEGORIES AIC ON AIC.ITEM_CATEGORY_ID = AI.ITEM_CATEGORY_ID where AI.ITEM_NAME like '" + txtSearchUserRole.Text + "%' or AI.ITEM_TYPE like '" + txtSearchUserRole.Text + "%'  ORDER BY AI.UPDATE_DATE desc, AI.CREATE_DATE desc";
+             
                     alert_box.Visible = false;
-                }
+            //    }
                  
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
                 oradata.Fill(dt);
-                GridView1.DataSource = dt;
-                GridView1.DataKeyNames = new string[] { "ITEM_ID" };
+                GridView4D.DataSource = dt;
+                GridView4D.DataKeyNames = new string[] { "ITEM_ID" };
 
-                GridView1.DataBind();
+                GridView4D.DataBind();
                 conn.Close();
                 //alert_box.Visible = false;
             }
@@ -233,7 +230,7 @@ namespace NRCAPPS.ASSET
  
          protected void GridViewUser_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            GridView1.PageIndex = e.NewPageIndex;
+            GridView4D.PageIndex = e.NewPageIndex;
             Display();
             alert_box.Visible = false;
         }
@@ -271,7 +268,7 @@ namespace NRCAPPS.ASSET
                 conn.Close();  
 
                 alert_box.Visible = true;
-                alert_box.Controls.Add(new LiteralControl("Category Update successfully"));
+                alert_box.Controls.Add(new LiteralControl("Items Update successfully"));
                 alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
                 clearText();
                 Display();
@@ -294,7 +291,7 @@ namespace NRCAPPS.ASSET
                 conn.Open();
 
                 int USER_DATA_ID = Convert.ToInt32(TextItemID.Text);
-                string delete_user_page = " delete from IT_ASSET_ITEMS where ITEM_CATEGORY_ID  = '" + USER_DATA_ID + "'";
+                string delete_user_page = " delete from IT_ASSET_ITEMS where ITEM_ID  = '" + USER_DATA_ID + "'";
 
                 cmdi = new OracleCommand(delete_user_page, conn);
             
@@ -303,7 +300,7 @@ namespace NRCAPPS.ASSET
                 cmdi.Dispose();
                 conn.Close();
                 alert_box.Visible = true;
-                alert_box.Controls.Add(new LiteralControl("Category Delete successfully"));
+                alert_box.Controls.Add(new LiteralControl("Items Delete successfully"));
                 alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
                 clearText(); 
                 Display();
@@ -415,7 +412,8 @@ namespace NRCAPPS.ASSET
 
         public void TextItemName_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(TextItemName.Text))
+          try{
+              if (!string.IsNullOrEmpty(TextItemName.Text))
             {
                 alert_box.Visible = false;
 
@@ -450,6 +448,11 @@ namespace NRCAPPS.ASSET
                     CheckItemName.ForeColor = System.Drawing.Color.Red;
                     TextItemName.Focus();
             }
+             }
+          catch
+          {
+             Response.Redirect("~/ParameterError.aspx");
+          }
             
         } 
    }

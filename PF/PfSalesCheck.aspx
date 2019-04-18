@@ -137,7 +137,7 @@
                      </asp:TemplateField>
                      <asp:BoundField DataField="INVOICE_NO" HeaderText="Invoice No." />
                      <asp:BoundField DataField="PUR_TYPE_NAME" HeaderText="Sales Type" />
-                     <asp:BoundField DataField="CUSTOMER_NAME"  HeaderText="Customer Name" />
+                     <asp:BoundField DataField="PARTY_NAME"  HeaderText="Customer Name" />
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />   
                      <asp:BoundField DataField="SUB_ITEM_NAME"  HeaderText="Sub Item" /> 
                      <asp:BoundField DataField="ITEM_RATE"  HeaderText="Rate" DataFormatString="{0:0.00}" />  

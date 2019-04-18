@@ -62,7 +62,19 @@ namespace NRCAPPS.PF
                 {
                      
                     if (!IsPostBack)
-                    {  
+                    {
+
+                        DataTable dtProdID = new DataTable();
+                        DataSet dc = new DataSet();
+                        string makeDropDownProdIDSQL = " SELECT * FROM PF_PRODUCTION_LINE WHERE IS_ACTIVE = 'Enable' ORDER BY PROD_LINE_NAME ASC";
+                        dc = ExecuteBySqlString(makeDropDownProdIDSQL);
+                        dtProdID = (DataTable)dc.Tables[0];
+                        DropDownProductionLineID.DataSource = dtProdID;
+                        DropDownProductionLineID.DataValueField = "PRODUCTION_LINE_ID";
+                        DropDownProductionLineID.DataTextField = "PROD_LINE_NAME";
+                        DropDownProductionLineID.DataBind();
+                        DropDownProductionLineID.Items.Insert(0, new ListItem("Select  Category", "0"));
+
                         Display();
                         alert_box.Visible = false;
 
@@ -99,15 +111,16 @@ namespace NRCAPPS.PF
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into PF_PRODUCTION_MACHINE (MACHINE_ID, MACHINE_NUMBER, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoMachineID, :TextMachineName, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into PF_PRODUCTION_MACHINE (MACHINE_ID, MACHINE_NUMBER, PRODUCTION_LINE_ID, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoMachineID, :TextMachineName, :TextProdLineID, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
-                    OracleParameter[] objPrm = new OracleParameter[7];
+                    OracleParameter[] objPrm = new OracleParameter[6];
                     objPrm[0] = cmdi.Parameters.Add("NoMachineID", newMachineID);
-                    objPrm[1] = cmdi.Parameters.Add("TextMachineName", TextMachineName.Text); 
-                    objPrm[4] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                    objPrm[5] = cmdi.Parameters.Add("u_date", u_date);
-                    objPrm[6] = cmdi.Parameters.Add("NoCuserID", userID);
+                    objPrm[1] = cmdi.Parameters.Add("TextMachineName", TextMachineName.Text);
+                    objPrm[2] = cmdi.Parameters.Add("TextProdLineID", Convert.ToInt32(DropDownProductionLineID.Text));
+                    objPrm[3] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPrm[4] = cmdi.Parameters.Add("u_date", u_date);
+                    objPrm[5] = cmdi.Parameters.Add("NoCuserID", userID);
 
 
                     cmdi.ExecuteNonQuery();
@@ -153,7 +166,8 @@ namespace NRCAPPS.PF
              for (int i = 0; i < RowCount; i++)
              {
                  TextMachineID.Text = dt.Rows[i]["MACHINE_ID"].ToString();
-                 TextMachineName.Text = dt.Rows[i]["MACHINE_NUMBER"].ToString(); 
+                 TextMachineName.Text = dt.Rows[i]["MACHINE_NUMBER"].ToString();
+                 DropDownProductionLineID.Text = dt.Rows[i]["PRODUCTION_LINE_ID"].ToString(); 
                  CheckIsActive.Checked   = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false); 
              } 
              
@@ -179,7 +193,7 @@ namespace NRCAPPS.PF
                 string makeSQL = "";
                 if (txtSearchUserRole.Text == "")
                 {
-                    makeSQL = " select  * from PF_PRODUCTION_MACHINE ORDER BY UPDATE_DATE desc, CREATE_DATE desc";
+                    makeSQL = " select  PPMA.*, PPL.PROD_LINE_NAME from PF_PRODUCTION_MACHINE PPMA LEFT JOIN PF_PRODUCTION_LINE PPL ON PPL.PRODUCTION_LINE_ID = PPMA.PRODUCTION_LINE_ID ORDER BY PPMA.UPDATE_DATE desc, PPMA.CREATE_DATE desc";
                 }
                 else
                 {
@@ -229,15 +243,16 @@ namespace NRCAPPS.PF
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
                  
-                string update_user = "update  PF_PRODUCTION_MACHINE  set MACHINE_NUMBER = :TextMachineName, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where MACHINE_ID = :NoMachineID ";
+                string update_user = "update  PF_PRODUCTION_MACHINE  set MACHINE_NUMBER = :TextMachineName, PRODUCTION_LINE_ID = :TextProdLineID, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive where MACHINE_ID = :NoMachineID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[7];
+                OracleParameter[] objPrm = new OracleParameter[6];
                 objPrm[0] = cmdi.Parameters.Add("TextMachineName", TextMachineName.Text); 
-                objPrm[3] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[4] = cmdi.Parameters.Add("NoMachineID", USER_DATA_ID);
-                objPrm[5] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[6] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                objPrm[1] = cmdi.Parameters.Add("TextProdLineID", Convert.ToInt32(DropDownProductionLineID.Text)); 
+                objPrm[2] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[3] = cmdi.Parameters.Add("NoMachineID", USER_DATA_ID);
+                objPrm[4] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[5] = cmdi.Parameters.Add("TextIsActive", ISActive);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
@@ -314,37 +329,7 @@ namespace NRCAPPS.PF
 
         }
 
-        public DataSet ExecuteBySqlStringUserType(string sqlString)
-        {
-            string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            DataSet ds = new DataSet();
-            OracleConnection conn = new OracleConnection(connStr);
-            try
-            {
-                conn.Open();
-                OracleCommand cmd = new OracleCommand(sqlString, conn);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = sqlString;
-                bool mustCloseConnection = false;
-                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
-                {
-                    da.Fill(ds);
-                    cmd.Parameters.Clear();
-                    if (mustCloseConnection)
-                    {
-                        conn.Close();
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return ds;
-        }
+      
 
         public void TextMachineName_TextChanged(object sender, EventArgs e)
         {
@@ -384,6 +369,39 @@ namespace NRCAPPS.PF
                     TextMachineName.Focus();
             }
             
-        } 
-   }
+        }
+
+        public DataSet ExecuteBySqlString(string sqlString)
+        {
+            string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            DataSet ds = new DataSet();
+            OracleConnection conn = new OracleConnection(connStr);
+            try
+            {
+                conn.Open();
+                OracleCommand cmd = new OracleCommand(sqlString, conn);
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = sqlString;
+                bool mustCloseConnection = false;
+                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+                {
+                    da.Fill(ds);
+                    cmd.Parameters.Clear();
+                    if (mustCloseConnection)
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return ds;
+        }
+
+    }
 }

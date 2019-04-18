@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System; 
 using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
+using System.Data; 
+using System.Web.UI; 
+using System.Web.UI.WebControls; 
 using System.Data.OracleClient;
-using System.IO; 
-using System.Collections.Generic; 
+using System.IO;  
 using System.Data.SqlClient;
-
-
+ 
 
 namespace NRCAPPS.NRC
 {
@@ -108,11 +99,11 @@ namespace NRCAPPS.NRC
             string makeSQL = "";
             if (txtSearchUser.Text == "")
             {
-                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "' ORDER BY NUP.PAGE_NAME, NUPP.USER_PAGE_ID";
+                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "' ORDER BY NUP.PAGE_NAME, NUPP.USER_PAGE_ID";
             }
             else
             {
-                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "'    AND NURP.USER_PAGE_ID like '" + txtSearchUser.Text + "%' or NUP.PAGE_NAME like '" + txtSearchUser.Text + "%'  ORDER BY NUPP.USER_PAGE_ID ";
+                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "'    AND NURP.USER_PAGE_ID like '" + txtSearchUser.Text + "%' or NUP.PAGE_NAME like '" + txtSearchUser.Text + "%'  ORDER BY NUPP.USER_PAGE_ID ";
             }
 
             cmdl = new OracleCommand(makeSQL);
@@ -145,11 +136,11 @@ namespace NRCAPPS.NRC
             string makeSQL = "";
             if (txtSearchUser.Text == "")
             {
-                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "' ORDER BY NUP.PAGE_NAME, NUPP.USER_PAGE_ID";
+                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "' ORDER BY NUP.PAGE_NAME, NUPP.USER_PAGE_ID";
             }
             else
             {
-                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "'    AND NURP.USER_PAGE_ID like '" + txtSearchUser.Text + "%' or NUP.PAGE_NAME like '" + txtSearchUser.Text + "%'  ORDER BY NUPP.USER_PAGE_ID ";
+                makeSQL = " SELECT NU.USER_ID, NURP.USER_PAGE_ID, NUP.PAGE_NAME, NUPP.IS_PAGE_ACTIVE, NUPP.IS_ADD_ACTIVE, NUPP.IS_EDIT_ACTIVE, NUPP.IS_DELETE_ACTIVE, NUPP.IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE FROM NRC_USER NU LEFT JOIN NRC_USER_ROLE_PAGE NURP ON NURP.USER_ROLE_ID = NU.USER_ROLE_ID LEFT JOIN NRC_USER_PAGES NUP ON NUP.USER_PAGE_ID  = NURP.USER_PAGE_ID LEFT JOIN NRC_USER_PAGE_PERMISSION NUPP ON NUPP.USER_PAGE_ID  = NURP.USER_PAGE_ID AND  NUPP.USER_ID = '" + USER_DATA_ID + "'   WHERE NU.USER_ID = '" + USER_DATA_ID + "'    AND NURP.USER_PAGE_ID like '" + txtSearchUser.Text + "%' or NUP.PAGE_NAME like '" + txtSearchUser.Text + "%'  ORDER BY NUPP.USER_PAGE_ID ";
             }
 
             cmdl = new OracleCommand(makeSQL);
@@ -200,9 +191,10 @@ namespace NRCAPPS.NRC
                        string IsViewActive = chkRowIsViewActive.Checked ? "Enable" : "Disable";
                        CheckBox chkRowIsReportActive = (gridRow.Cells[8].FindControl("IsReportActive") as CheckBox);
                        string IsReportActive = chkRowIsReportActive.Checked ? "Enable" : "Disable";
+                       CheckBox chkRowIsPrintActive = (gridRow.Cells[8].FindControl("IsPrintActive") as CheckBox);
+                       string IsPrintActive = chkRowIsPrintActive.Checked ? "Enable" : "Disable";
 
-
-                       string insert_user = "insert into  NRC_USER_PAGE_PERMISSION (USER_ID, USER_PAGE_ID, IS_PAGE_ACTIVE, IS_ADD_ACTIVE, IS_EDIT_ACTIVE, IS_DELETE_ACTIVE, IS_VIEW_ACTIVE, IS_REPORT_ACTIVE) values ( :NoUserID, :NoUserPageID, :NoIsPageActive, :NoIsAddActive, :NoIsEditActive , :NoIsDelActive, :NoIsViewActive, :NoIsReportActive)";
+                       string insert_user = "insert into  NRC_USER_PAGE_PERMISSION (USER_ID, USER_PAGE_ID, IS_PAGE_ACTIVE, IS_ADD_ACTIVE, IS_EDIT_ACTIVE, IS_DELETE_ACTIVE, IS_VIEW_ACTIVE, IS_REPORT_ACTIVE, IS_PRINT_ACTIVE) values ( :NoUserID, :NoUserPageID, :NoIsPageActive, :NoIsAddActive, :NoIsEditActive , :NoIsDelActive, :NoIsViewActive, :NoIsReportActive, :NoIsPrintActive )";
                         cmdi = new OracleCommand(insert_user, conn);
 
                         OracleParameter[] objPrm = new OracleParameter[8];
@@ -214,6 +206,7 @@ namespace NRCAPPS.NRC
                         objPrm[5] = cmdi.Parameters.Add("NoIsDelActive", IsDelActive);
                         objPrm[6] = cmdi.Parameters.Add("NoIsViewActive", IsViewActive);
                         objPrm[7] = cmdi.Parameters.Add("NoIsReportActive", IsReportActive);
+                        objPrm[8] = cmdi.Parameters.Add("NoIsPrintActive", IsPrintActive);
 
                         cmdi.ExecuteNonQuery();  
                      

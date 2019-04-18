@@ -42,11 +42,11 @@
               <div class="box-body">
                 <div class="form-group">   
                     <label class="col-sm-2 control-label">Employee ID</label> 
-                   <div class="col-sm-1">   
+                   <div class="col-sm-2">   
                     <asp:TextBox ID="TextEmpID" class="form-control input-sm"  runat="server" AutoPostBack="True" 
                         ontextchanged="TextEmpID_TextChanged"></asp:TextBox>  
                      <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" 
-                          ControlToValidate="TextEmpID" ErrorMessage="insert Employee ID" 
+                          ControlToValidate="TextEmpID" ErrorMessage="Insert Employee ID" 
                           Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
                  </div>
                   <div class="col-sm-3"><asp:Label ID="CheckEmpID" runat="server"></asp:Label></div>  
@@ -55,13 +55,13 @@
                       <label class="col-sm-2 control-label">Employee Title</label> 
                   <div class="col-sm-2">   
                     <asp:DropDownList ID="DropDownEmpTitle" class="form-control input-sm" runat="server" AutoPostBack="True"  ontextchanged="ChangeGender" >  
-                       <asp:ListItem Text="Select name title" Value="0" />
+                       <asp:ListItem Text="Select Name Title" Value="0" />
                         <asp:ListItem Text="Mr" Value="Mr" />
                         <asp:ListItem Text="Ms" Value="Ms" />
                     </asp:DropDownList>   
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" 
                           ControlToValidate="DropDownEmpTitle" Display="Dynamic" EnableTheming="True" 
-                          ErrorMessage="Select name title" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                          ErrorMessage="Select Name Title" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div> 
                     
                 </div>
@@ -70,7 +70,7 @@
                   <div class="col-sm-3">  
                     <asp:TextBox ID="TextFname" class="form-control input-sm"  runat="server"></asp:TextBox>   
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
-                          ControlToValidate="TextFname" ErrorMessage="insert First name" 
+                          ControlToValidate="TextFname" ErrorMessage="Insert First Name" 
                           Display="Dynamic" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div>
                 </div>
@@ -80,7 +80,7 @@
                   <div class="col-sm-3">   
                     <asp:TextBox ID="TextLname" class="form-control input-sm"  runat="server"></asp:TextBox> 
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
-                          ControlToValidate="TextLname" ErrorMessage="insert Last name" 
+                          ControlToValidate="TextLname" ErrorMessage="Insert Last Name" 
                           Display="Dynamic" SetFocusOnError="True"></asp:RequiredFieldValidator>
                    </div>
                 </div>
@@ -91,21 +91,20 @@
                        <asp:ListItem Text="Select Gender" Value="0" />
                         <asp:ListItem Text="Male" Value="Male" />
                         <asp:ListItem Text="Female" Value="Female" />
-                    </asp:DropDownList> 
-                      
+                    </asp:DropDownList>  
                  </div> 
                </div>      
                <div class="form-group">
                   <label  class="col-sm-2 control-label">Email</label> 
                   <div class="col-sm-3">   
                     <asp:TextBox ID="TextEmail" class="form-control input-sm"  runat="server"></asp:TextBox> 
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
+                      <%--asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
                           ControlToValidate="TextEmail" Display="Dynamic" 
-                          ErrorMessage="insert Email adress" SetFocusOnError="True"></asp:RequiredFieldValidator>
-                      <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
+                          ErrorMessage="Insert Email Address" SetFocusOnError="True"></asp:RequiredFieldValidator--%>
+                      <%--asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
                           ControlToValidate="TextEmail" ErrorMessage="insert correct email adress" 
                           ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" 
-                          Display="Dynamic" SetFocusOnError="True"></asp:RegularExpressionValidator>
+                          Display="Dynamic" SetFocusOnError="True"></!--asp:RegularExpressionValidator--%>
                    </div>
                 </div>
               <div class="form-group">
@@ -185,12 +184,7 @@
               <h3 class="box-title">Employee List</h3>
               <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 200px;">
-                <asp:TextBox ID="txtSearchEmp" Class="form-control" runat="server" />
-                 <div class="input-group-btn">
-                      <asp:Button ID="ButtonSearchEmp" Class="btn btn-info"   
-                        Text="Search" runat="server" OnClick="GridViewSearchEmp" 
-                        CausesValidation="False" />
-                  </div>  
+                 
               </div>    
             </div>
             </div>
@@ -198,12 +192,8 @@
             <!-- /.box-header -->
             <div class="box-body table-responsive">
               
-                    <asp:GridView ID="GridView1" runat="server"    EnablePersistedSelection="true"            
-    SelectedRowStyle-BackColor="Yellow" 
-    AllowPaging="true" 
-    AllowSorting="true"
-    PageSize = "5" 
-    OnPageIndexChanging="GridViewEmp_PageIndexChanging" AutoGenerateColumns="false" CssClass="table table-bordered table-striped" >
+                    <asp:GridView ID="GridView4D" runat="server"    EnablePersistedSelection="true"            
+    SelectedRowStyle-BackColor="Yellow"   AutoGenerateColumns="false" CssClass="table table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="EMP_ID" HeaderText="Employee ID" />
                      <asp:BoundField DataField="EMP_TITLE" HeaderText="Title" />

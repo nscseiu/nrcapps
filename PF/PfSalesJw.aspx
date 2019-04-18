@@ -73,7 +73,9 @@
                   <label  class="col-sm-2 control-label">Sub Item</label> 
                   <div class="col-sm-2">   
                     <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server" >  </asp:DropDownList>  <!-- AutoPostBack="True"  ontextchanged="TextSubItem_Changed" -->
-                    
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" 
+                          ControlToValidate="DropDownSubItemID" Display="Dynamic" 
+                          ErrorMessage="Select Sub Item" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>  
                   </div>
                 </div>
                  <div class="form-group">
@@ -148,6 +150,9 @@
                       </div>  
                        <asp:TextBox  class="form-control input-sm pull-right" ID="EntryDate"  runat="server"   ></asp:TextBox>  <!-- AutoPostBack="True"  ontextchanged="TextCheckDataProcess" -->
                     </div>
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
+                          ControlToValidate="EntryDate" ErrorMessage="insert Entry Date" 
+                          Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
                       </div> 
                       <div class="col-sm-3"><asp:Label ID="CheckEntryDate" runat="server"></asp:Label></div>
                     <!-- /.input group -->
@@ -242,7 +247,7 @@
 
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title"> Sales Summary (Monthly) Parameter</h3>
+              <h3 class="box-title"> Job Work Summary (Item Wise - Monthly) Parameter</h3>
             </div>
             <!-- /.box-header --> 
               <div class="box-body">
@@ -281,12 +286,12 @@
                 {%> 
             <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title"> Sales Summary (Monthly)  Report View</h3>
+              <h3 class="box-title"> Job Work Summary (Item Wise - Monthly) Report View</h3>
             </div> 
             <!-- /.box-header -->
                     <div class="box-body">       
-                           <iframe src="PF_Reports/PfSalesSummaryReportView.aspx?MonthYear=<%=TextMonthYear0.Text %>" width="950px" id="iframe1"
-                        marginheight="0" frameborder="0" scrolling="auto" height="1250px">   </iframe>  
+                           <iframe src="PF_Reports/PfJWMonthlyReportView.aspx?MonthYear=<%=TextMonthYear0.Text %>" width="1350px" height="950px" id="iframe1"
+                        marginheight="0" frameborder="0" scrolling="auto" >   </iframe>  
                          </div>
                        </div> 
                     

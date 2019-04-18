@@ -58,6 +58,24 @@ namespace NRCAPPS.PF {
         protected global::System.Web.UI.WebControls.Label CheckSupplierName;
         
         /// <summary>
+        /// TextSupArabicName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextSupArabicName;
+        
+        /// <summary>
+        /// TextSupVatNo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextSupVatNo;
+        
+        /// <summary>
         /// TextSup_Add_1 control.
         /// </summary>
         /// <remarks>

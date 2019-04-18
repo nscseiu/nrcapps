@@ -69,7 +69,7 @@
                <div class="form-group">
                   <label  class="col-sm-2 control-label">Select User</label> 
                   <div class="col-sm-3">   
-                    <asp:DropDownList ID="DropDownUserID" class="form-control" runat="server"  AutoPostBack="True"  ontextchanged="DisplayUserPagePer" > 
+                    <asp:DropDownList ID="DropDownUserID" class="form-control select2" runat="server"  AutoPostBack="True"  ontextchanged="DisplayUserPagePer" > 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="errorUserID" runat="server" 
                           ControlToValidate="DropDownUserID" Display="Dynamic" 
@@ -144,6 +144,11 @@
                             <asp:CheckBox type="checkbox"   id="IsReportActive"  class="flat-red" checked='<%# Eval("IS_REPORT_ACTIVE").ToString() == "Enable" ? true : false %>'   runat="server"/>
                          </ItemTemplate>
                      </asp:TemplateField>   
+                      <asp:TemplateField HeaderText="IS Print" ItemStyle-HorizontalAlign="center" >
+                         <ItemTemplate>  
+                            <asp:CheckBox type="checkbox"   id="IsPrintActive"  class="flat-red" checked='<%# Eval("IS_PRINT_ACTIVE").ToString() == "Enable" ? true : false %>'   runat="server"/>
+                         </ItemTemplate>
+                     </asp:TemplateField>     
                       
                      </Columns>
                         <PagerStyle CssClass="pagination-ys" />

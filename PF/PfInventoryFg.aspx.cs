@@ -74,17 +74,13 @@ namespace NRCAPPS.PF
                         DropDownItemID.DataBind();
                         DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
 
-                        DataTable dtSubItemID = new DataTable();
-                        DataSet dss = new DataSet();
-                        string makeDropDownSubItemSQL = " SELECT * FROM PF_SUB_ITEM WHERE IS_ACTIVE = 'Enable' ORDER BY SUB_ITEM_ID ASC";
-                        dss = ExecuteBySqlStringType(makeDropDownSubItemSQL);
-                        dtSubItemID = (DataTable)dss.Tables[0];
-                        DropDownSubItemID.DataSource = dtSubItemID;
-                        DropDownSubItemID.DataValueField = "SUB_ITEM_ID";
-                        DropDownSubItemID.DataTextField = "SUB_ITEM_NAME";
-                        DropDownSubItemID.DataBind();
-                        DropDownSubItemID.Items.Insert(0, new ListItem("Select Sub Item", "0"));
+                        DropDownItemID1.DataSource = dtItemID;
+                        DropDownItemID1.DataValueField = "ITEM_ID";
+                        DropDownItemID1.DataTextField = "ITEM_NAME";
+                        DropDownItemID1.DataBind();
+                        DropDownItemID1.Items.Insert(0, new ListItem("Select  Item", "0"));
 
+                         
                         Display();
                         DisplayFgHistory();
 
@@ -130,7 +126,7 @@ namespace NRCAPPS.PF
              {
                  TextInventoryFgID.Text = dt.Rows[i]["FG_INVENTORY_ID"].ToString();
                  DropDownItemID.Text = dt.Rows[i]["ITEM_ID"].ToString();
-                 DropDownSubItemID.Text = dt.Rows[i]["SUB_ITEM_ID"].ToString();
+             //    DropDownSubItemID.Text = dt.Rows[i]["SUB_ITEM_ID"].ToString();
                  TextInitialStock.Text = decimal.Parse(dt.Rows[i]["INITIAL_STOCK_WT"].ToString()).ToString("0.000"); 
                  TextStockIn.Text = decimal.Parse(dt.Rows[i]["STOCK_IN_WT"].ToString()).ToString("0.000"); 
                  TextStockOut.Text = decimal.Parse(dt.Rows[i]["STOCK_OUT_WT"].ToString()).ToString("0.000");
@@ -143,6 +139,42 @@ namespace NRCAPPS.PF
              alert_box.Visible = false;  
 
         }
+
+        protected void linkSelectFgHisClick(object sender, EventArgs e)
+        {
+            OracleConnection conn = new OracleConnection(strConnString);
+            conn.Open();
+            LinkButton btn = (LinkButton)sender;
+            Session["user_page_data_id"] = btn.CommandArgument;
+            int USER_DATA_ID = Convert.ToInt32(Session["user_page_data_id"]);
+
+
+            DataTable dtUserTypeID = new DataTable();
+            DataSet ds = new DataSet();
+            string makeSQL = " select * from PF_FG_STOCK_INVENTORY_HISTORY where IN_FG_HIS_ID = '" + USER_DATA_ID + "'";
+
+            cmdl = new OracleCommand(makeSQL);
+            oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+            dt = new DataTable();
+            oradata.Fill(dt);
+            RowCount = dt.Rows.Count;
+
+            for (int i = 0; i < RowCount; i++)
+            {
+                TextInventoryFgHisID.Text = dt.Rows[i]["IN_FG_HIS_ID"].ToString();
+                DropDownItemID1.Text = dt.Rows[i]["ITEM_ID"].ToString();
+                TextInitialStockHis.Text = decimal.Parse(dt.Rows[i]["INITIAL_STOCK_WT"].ToString()).ToString("0.000");
+                TextStockInHis.Text = decimal.Parse(dt.Rows[i]["STOCK_IN_WT"].ToString()).ToString("0.000");
+                TextStockOutHis.Text = decimal.Parse(dt.Rows[i]["STOCK_OUT_WT"].ToString()).ToString("0.000");
+                TextFinalStockHis.Text = decimal.Parse(dt.Rows[i]["FINAL_STOCK_WT"].ToString()).ToString("0.000");
+                TextItemAvgRateHis.Text = decimal.Parse(dt.Rows[i]["ITEM_AVG_RATE"].ToString()).ToString("0.00");
+            }
+
+            conn.Close();
+            Display();
+            alert_box.Visible = false;
+
+        } 
 
         public void Display()
         {
@@ -207,11 +239,11 @@ namespace NRCAPPS.PF
                 string makeSQL = "", c_date = System.DateTime.Now.ToString("MM-yyyy");
                 if (txtSearchHistory.Text == "")
                 {
-                    makeSQL = " select  * from PF_FG_STOCK_INVENTORY_HISTORY where TO_CHAR(TO_DATE(CREATE_DATE), 'MM-yyyy') =  '"+ c_date + "' ORDER BY CREATE_DATE desc";
+                    makeSQL = " select  * from PF_FG_STOCK_INVENTORY_HISTORY  ORDER BY CREATE_DATE desc, ITEM_ID asc";
                 }
                 else
                 {
-                    makeSQL = " select  * from PF_FG_STOCK_INVENTORY_HISTORY where TO_CHAR(TO_DATE(CREATE_DATE), 'dd/mm/yyyy') like '" + txtSearchHistory.Text + "%' or ITEM_NAME like '" + txtSearchHistory.Text + "%'  or SUB_ITEM_NAME like '" + txtSearchHistory.Text + "%'  ORDER BY CREATE_DATE desc";
+                    makeSQL = " select  * from PF_FG_STOCK_INVENTORY_HISTORY where TO_CHAR(TO_DATE(CREATE_DATE), 'dd/mm/yyyy') like '" + txtSearchHistory.Text + "%' or ITEM_NAME like '" + txtSearchHistory.Text + "%'  or SUB_ITEM_NAME like '" + txtSearchHistory.Text + "%'  ORDER BY CREATE_DATE desc, ITEM_ID asc";
 
                     alert_box.Visible = false;
                 }
@@ -305,6 +337,45 @@ namespace NRCAPPS.PF
                 }
         }
 
+        protected void BtnUpdateHis_Click(object sender, EventArgs e)
+        {
+            if (IS_EDIT_ACTIVE == "Enable")
+            {
+                OracleConnection conn = new OracleConnection(strConnString);
+                conn.Open();
+                int userID = Convert.ToInt32(Session["USER_ID"]);
+                int Data_ID = Convert.ToInt32(TextInventoryFgHisID.Text);
+                double FinalStock = Convert.ToDouble(TextFinalStockHis.Text.Trim());
+                double ItemAvgRate = Convert.ToDouble(TextItemAvgRateHis.Text.Trim());
+                string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
+
+                // inventory RM inventory history update
+                string update_inven_mas = "update  PF_FG_STOCK_INVENTORY_HISTORY  set  FINAL_STOCK_WT = :NoFinalStock, ITEM_AVG_RATE = :NoItemAvgRate, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID = :NoCuserID  where IN_FG_HIS_ID = :NoFgInventoryHisID ";
+                cmdu = new OracleCommand(update_inven_mas, conn);
+
+                OracleParameter[] objPrmInevenMas = new OracleParameter[5];
+                objPrmInevenMas[0] = cmdu.Parameters.Add("NoFinalStock", FinalStock);
+                objPrmInevenMas[1] = cmdu.Parameters.Add("NoItemAvgRate", ItemAvgRate);
+                objPrmInevenMas[2] = cmdu.Parameters.Add("u_date", u_date);
+                objPrmInevenMas[3] = cmdu.Parameters.Add("NoCuserID", userID);
+                objPrmInevenMas[4] = cmdu.Parameters.Add("NoFgInventoryHisID", Data_ID);
+
+                cmdu.ExecuteNonQuery();
+                cmdu.Parameters.Clear();
+                cmdu.Dispose();
+
+
+                alert_box.Visible = true;
+                alert_box.Controls.Add(new LiteralControl("Finished Goods Inventory History Data Update successfully"));
+                alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
+                clearText();
+                Display();
+            }
+            else
+            {
+                Response.Redirect("~/PagePermissionError.aspx");
+            }
+        }
          
          
         public void clearTextField(object sender, EventArgs e)
@@ -312,7 +383,9 @@ namespace NRCAPPS.PF
             TextInventoryFgID.Text = "";
             TextInitialStock.Text = "";
             TextStockIn.Text = "";
-            TextItemAvgRate.Text = "";
+            TextItemAvgRate.Text = ""; 
+            TextFinalStockHis.Text = "";
+            TextItemAvgRateHis.Text = "";
             DropDownItemID.Text = "0";
             
         }
@@ -323,6 +396,8 @@ namespace NRCAPPS.PF
             TextInitialStock.Text = "";
             TextStockIn.Text = "";
             TextItemAvgRate.Text = "";
+            TextFinalStockHis.Text = "";
+            TextItemAvgRateHis.Text = "";
             DropDownItemID.Text = "0";
 
         }

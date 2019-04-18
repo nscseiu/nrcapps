@@ -51,7 +51,16 @@
                     <div class="col-sm-3"><asp:Label ID="CheckMachineName" runat="server"></asp:Label> 
                     </div>
                 </div>
-                
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">Production Line</label> 
+                  <div class="col-sm-3">   
+                    <asp:DropDownList ID="DropDownProductionLineID" class="form-control input-sm" runat="server"> 
+                    </asp:DropDownList>  
+                         <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" 
+                          ControlToValidate="DropDownProductionLineID" Display="Dynamic" 
+                          ErrorMessage="Select Production Line" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                  </div>
+                </div>
                 <div class="form-group">
                   <label  class="col-sm-2 control-label">Is Active Status</label> 
                   <div class="col-sm-3" style="padding-top:6px;">    
@@ -101,7 +110,8 @@
     OnPageIndexChanging="GridViewUser_PageIndexChanging" AutoGenerateColumns="false"   CssClass="table table-bordered table-striped" >
                      <Columns>
                      <asp:BoundField DataField="MACHINE_ID" HeaderText="Machine ID" />  
-                     <asp:BoundField DataField="MACHINE_NUMBER"  HeaderText="Machine Number" />    
+                     <asp:BoundField DataField="MACHINE_NUMBER"  HeaderText="Machine Number" />
+                     <asp:BoundField DataField="PROD_LINE_NAME"  HeaderText="Production Line" />                         
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 
                              <asp:Label ID="IsActiveGV" CssClass="label" Text='<%# Eval("IS_ACTIVE").ToString() == "Enable" ? "<span Class=label-success style=Padding:2px >Enable<span>" : "<span Class=label-danger style=Padding:2px>Disable<span>" %>'  runat="server" /> 

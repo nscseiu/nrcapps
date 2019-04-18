@@ -26,7 +26,7 @@
             
         <!--/.col (left) -->
         <!-- right column -->
-        <div class="col-md-12"> 
+        <div class="col-md-7"> 
              <asp:Panel  id="alert_box" runat="server">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <h4><i class="icon fa fa-check"></i> Alert!</h4>  
@@ -42,8 +42,8 @@
               <div class="box-body">
                  
                <div class="form-group">
-                  <label  class="col-sm-2 control-label">Shift Name</label> 
-                  <div class="col-sm-3">   
+                  <label  class="col-sm-3 control-label">Shift Name</label> 
+                  <div class="col-sm-5">   
                    <asp:TextBox ID="TextProductionID" style="display:none" runat="server"></asp:TextBox>
                     <asp:DropDownList ID="DropDownShiftID" class="form-control input-sm" runat="server"> 
                     </asp:DropDownList>  
@@ -53,8 +53,8 @@
                   </div>
                 </div>
                   <div class="form-group">
-                  <label  class="col-sm-2 control-label">Machine Number</label> 
-                  <div class="col-sm-3">   
+                  <label  class="col-sm-3 control-label">Machine Number</label> 
+                  <div class="col-sm-5">   
                     <asp:DropDownList ID="DropDownMachineID" class="form-control input-sm" runat="server"> 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" 
@@ -63,8 +63,8 @@
                   </div>
                 </div> 
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Supervisor Name</label> 
-                  <div class="col-sm-3">   
+                  <label  class="col-sm-3 control-label">Supervisor Name</label> 
+                  <div class="col-sm-5">   
                     <asp:DropDownList ID="DropDownSupervisorID" class="form-control input-sm" runat="server"> 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
@@ -73,25 +73,23 @@
                   </div>
                 </div> 
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Item</label> 
+                  <label  class="col-sm-3 control-label">Item</label> 
                   <div class="col-sm-3">   
                     <asp:DropDownList ID="DropDownItemID" class="form-control input-sm" runat="server"> 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" 
                           ControlToValidate="DropDownItemID" Display="Dynamic" 
                           ErrorMessage="Select Item" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
-                  </div>
-                </div>
-                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Sub Item</label> 
+                  </div> 
+                    <label  class="col-sm-3 control-label">Sub Item</label> 
                   <div class="col-sm-3">   
                     <asp:DropDownList ID="DropDownSubItemID" class="form-control input-sm" runat="server"  > </asp:DropDownList> <!-- AutoPostBack="True"  ontextchanged="TextSubItem_Changed" -->
-                    
-                  </div>
+                   
+                </div> 
                 </div> 
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Item Weight</label> 
-                  <div class="col-sm-2"> 
+                  <label  class="col-sm-3 control-label">Item Weight</label> 
+                  <div class="col-sm-3"> 
                   <div class="input-group"> 
                     <asp:TextBox ID="TextItemWeight" class="form-control input-sm"  runat="server"  AutoPostBack="True"  ontextchanged="TextItemWeight_TextChanged"></asp:TextBox> 
                     <span class="input-group-addon">MT</span>      
@@ -103,8 +101,8 @@
                    <div class="col-sm-5"><asp:Label ID="CheckItemWeight" runat="server"></asp:Label></div>  
                 </div> 
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Garbage Est. of Production</label> 
-                  <div class="col-sm-2">  
+                  <label  class="col-sm-3 control-label">Garbage Est. of Production</label> 
+                  <div class="col-sm-3">  
                    <div class="input-group"> 
                     <asp:DropDownList ID="DropDownPgeID" class="form-control input-sm" runat="server"  AutoPostBack="True"  ontextchanged="TextPgeWet_Changed">   
                     </asp:DropDownList>  
@@ -114,18 +112,17 @@
                           ControlToValidate="DropDownPgeID" Display="Dynamic" 
                           ErrorMessage="Select Garbage Est. of Production (%)" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator> 
                   </div> 
-                </div>  <div class="form-group">
-                  <label  class="col-sm-2 control-label">Garbage Est. of Prod. Weight</label> 
-                  <div class="col-sm-2">   
+                    <label  class="col-sm-3 control-label">Garbage Est. of Prod. Wt</label> 
+                  <div class="col-sm-3">   
                     <div class="input-group"> 
-                         <asp:TextBox ID="TextPgeWet" class="form-control input-sm"  runat="server" disabled="disabled"></asp:TextBox>    
+                         <asp:TextBox ID="TextPgeWet" class="form-control input-sm"  runat="server"></asp:TextBox>    
                          <span class="input-group-addon">MT</span>  
                       </div>
                   </div> 
                 </div>  
                  <div class="form-group">
-                    <label class="col-sm-2 control-label">Entry Date</label>
-                     <div class="col-sm-2">   
+                    <label class="col-sm-3 control-label">Entry Date</label>
+                     <div class="col-sm-3">   
                     <div class="input-group date">
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
@@ -138,10 +135,11 @@
                   </div>
                  
                 <div class="form-group">
-                  <label  class="col-sm-2 control-label">Is Active Status</label> 
-                  <div class="col-sm-3" style="padding-top:6px;">    
+                  <label  class="col-sm-3 control-label">Is Active Status</label> 
+                  <div class="col-sm-4" style="padding-top:6px;">    
                         <label>
-                            <input type="checkbox" ID="CheckIsActive" class="flat-red" checked runat="server"/>
+                            <input type="checkbox" ID="CheckIsActive" class="flat-red" checked 
+                            runat="server" tabindex="1"/>
                         </label>
                   </div>
                 </div> 
@@ -152,10 +150,11 @@
               <!-- /.box-body -->
               <div class="box-footer">
                <div class="form-group">
-                  <div  class="col-sm-2" style="text-align:right;"> 
-                      <asp:LinkButton ID="ClearFiled" runat="server" class="btn btn-default" OnClick="clearTextField" CausesValidation="False"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
+                  <div  class="col-sm-3" style="text-align:right;"> 
+                      <asp:LinkButton ID="ClearFiled" runat="server" class="btn btn-default" 
+                          OnClick="clearTextField" CausesValidation="False" TabIndex="1"><span class="fa fa-reply"></span> Reset</asp:LinkButton> </div>
                    <div class="col-sm-6">    
-                    <asp:LinkButton ID="BtnAdd" class="btn btn-primary" runat="server" Text="Add New" onclick="BtnAdd_Click"><span class="fa fa-plus"></span> Add New</asp:LinkButton>
+                    <asp:LinkButton ID="BtnAdd" class="btn btn-primary" runat="server" Text="Add New" onclick="BtnAdd_Click" OnClientClick="return CheckIsRepeat();" ><span class="fa fa-plus"></span> Add New</asp:LinkButton>
                     <asp:LinkButton ID="BtnUpdate" class="btn btn-success" runat="server" Text="Update"  onclick="BtnUpdate_Click"><span class="fa fa-edit"></span> Update</asp:LinkButton>
                     <asp:LinkButton ID="BtnDelete" class="btn btn-danger" runat="server" onclick="BtnDelete_Click" onclientclick="return confirm('Are you sure to delete?');" ><span class="fa fa-close"></span> Delete</asp:LinkButton>
                       
@@ -164,15 +163,69 @@
               </div>
               <!-- /.box-footer -->
          <!-- /.box -->
+        </div>  
+         </div> 
+
+          <div class="col-md-5">        
+        <div class="box box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Production Summary (Current Month-Default)</h3>
+              <div class="box-tools"> 
+              <div class="input-group input-group-sm" style="width: 200px;"> 
+                    <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>  
+                       <asp:TextBox  class="form-control  input-sm pull-right" ID="TextMonthYear4"  runat="server" ></asp:TextBox>  
+                    </div>
+                 <div class="input-group-btn">
+                      <asp:Button ID="Button1" Class="btn btn-info"   
+                        Text="Search" runat="server" OnClick="GridViewSearchSummary" 
+                        CausesValidation="False" />
+                  </div>  
+              </div>    
+            </div>
+            </div>
+           
+            <!-- /.box-header -->
+            <div class="box-body table-responsive">
+               <asp:GridView ID="GridView2" runat="server" EnablePersistedSelection="false"  
+    SelectedRowStyle-BackColor="Yellow"  AutoGenerateColumns="false" ShowHeader="true"  ShowFooter="true" CssClass="table  table-sm table-bordered table-striped" >
+                     <Columns>
+                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item Name" />
+                     <asp:BoundField DataField="PRODUCTION_ID" HeaderText="Total Slip" ItemStyle-HorizontalAlign="Center" />
+                     <asp:BoundField DataField="ITEM_WEIGHT" HeaderText="Item WT" DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" />
+                     <asp:BoundField DataField="PGE_WEIGHT"  HeaderText="PGE WT" DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" /> 
+                     <asp:BoundField DataField="ACTUAL_GAR_WEIGHT"  HeaderText="Actual Garbage" DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" /> 
+                     <asp:BoundField DataField="TOTAL_WEIGHT"  HeaderText="Total WT" DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" /> 
+                     </Columns>
+                        <PagerStyle CssClass="pagination-ys" />
+                        <SelectedRowStyle BackColor="Yellow"></SelectedRowStyle>
+                    </asp:GridView> 
+                 
+        </div>
+       </div>
+        
+         
+      
         </div>   
+           
+    <div class="col-md-12">   
         <div class="box box-success">
             <div class="box-header with-border">
               <h3 class="box-title">Production List</h3>
-              <div class="box-tools">
-              <div class="col-sm-5">   
+              <div class="box-tools"> 
+              <div class="col-sm-3">  
                     <asp:DropDownList ID="DropDownItemID1" class="form-control input-sm" runat="server"> 
                     </asp:DropDownList>
                </div> 
+                   <div class="col-sm-4">  
+                <div class="input-group date" style="width: 150px;">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>  
+                       <asp:TextBox  class="form-control  input-sm pull-right" ID="TextMonthYear3"  runat="server" ></asp:TextBox>  
+                </div>    </div>
               <div class="input-group input-group-sm" style="width: 200px;">
                 <asp:TextBox ID="txtSearchEmp" Class="form-control input-sm" runat="server" />
                  <div class="input-group-btn">
@@ -280,10 +333,10 @@
           <!-- /.box --> 
         <!--/.col (right) -->  
         </div> 
-      </div>
+      
       <!-- /.row -->
     </section>
     <!-- /.content -->
+ </div>
  
-</div>
 </asp:Content> 

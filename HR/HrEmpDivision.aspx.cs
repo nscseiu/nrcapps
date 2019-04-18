@@ -83,8 +83,8 @@ namespace NRCAPPS.HR
 
         public void BtnAdd_Click(object sender, EventArgs e)
         {
-            try
-            {
+          try
+              {
                 if (IS_ADD_ACTIVE == "Enable")
                 {
                     OracleConnection conn = new OracleConnection(strConnString);
@@ -92,14 +92,14 @@ namespace NRCAPPS.HR
 
                     int userID = Convert.ToInt32(Session["USER_ID"]);
 
-                    string get_user_location_id = "select HR_EMP_DIVISIONID_SEQ.nextval from dual";
-                    cmdu = new OracleCommand(get_user_location_id, conn);
-                    int newDivisionID = Int16.Parse(cmdu.ExecuteScalar().ToString());
+                    string get_user_id = "select HR_EMP_DIVISIONID_SEQ.nextval from dual";
+                    cmdu = new OracleCommand(get_user_id, conn);
+                    int newDivisionID = Int32.Parse(cmdu.ExecuteScalar().ToString());
 
                     string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into HR_EMP_DIVISIONS (DIVISION_ID, DIVISION_NAME, DIV_SHROT_NAME, DIVISION_ADD, DIV_BG_COLOR, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoDivisionID, :TextDivisionName, :TextDivShortName, :TextDivisionAdd, :TextDivBgColor, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into HR_EMP_DIVISIONS (DIVISION_ID, DIVISION_NAME, DIV_SHORT_NAME, DIVISION_ADD, DIV_BG_COLOR, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoDivisionID, :TextDivisionName, :TextDivShortName, :TextDivisionAdd, :TextDivBgColor, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
                     OracleParameter[] objPrm = new OracleParameter[8];
@@ -125,11 +125,11 @@ namespace NRCAPPS.HR
                 else { 
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
-            }
-            catch
+               }
+             catch
             {
-                Response.Redirect("~/ParameterError.aspx");
-            }
+            Response.Redirect("~/ParameterError.aspx");
+          }
         }
 
         protected void linkSelectClick(object sender, EventArgs e) 

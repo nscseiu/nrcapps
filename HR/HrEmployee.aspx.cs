@@ -179,7 +179,7 @@ namespace NRCAPPS.HR
             conn.Open();
             LinkButton btn = (LinkButton)sender;
             Session["user_data_id"] = btn.CommandArgument;
-            int USER_DATA_ID = Convert.ToInt32(Session["user_data_id"]);
+            string USER_DATA_ID = Session["user_data_id"].ToString();
 
 
             DataTable dtUserTypeID = new DataTable();
@@ -242,23 +242,19 @@ namespace NRCAPPS.HR
                 DataTable dtEmpTypeID = new DataTable();
                 DataSet ds = new DataSet();
 
-                string makeSQL = "";
-                if (txtSearchEmp.Text == "")
-                {
-                    makeSQL = " select HE.*, HED.DEPARTMENT_NAME, HEDIV.DIVISION_NAME, HEL.LOCATION_NAME from HR_EMPLOYEES HE left join HR_EMP_DEPARTMENTS HED ON HED.DEPARTMENT_ID =  HE.DEPARTMENT_ID left join HR_EMP_DIVISIONS HEDIV ON HEDIV.DIVISION_ID = HE.DIVISION_ID left join HR_EMP_LOCATIONS HEL ON HEL.LOCATION_ID = HE.LOCATION_ID ORDER BY HE.CREATE_DATE desc, HE.UPDATE_DATE desc";
-                }
-                else
-                {
-                    makeSQL = " select HE.*, HED.DEPARTMENT_NAME, HEDIV.DIVISION_NAME, HEL.LOCATION_NAME from HR_EMPLOYEES HE left join HR_EMP_DEPARTMENTS HED ON HED.DEPARTMENT_ID =  HE.DEPARTMENT_ID left join HR_EMP_DIVISIONS HEDIV ON HEDIV.DIVISION_ID = HE.DIVISION_ID left join HR_EMP_LOCATIONS HEL ON HEL.LOCATION_ID = HE.LOCATION_ID where HE.EMP_ID like '" + txtSearchEmp.Text + "%' or HE.EMP_TITLE like '" + txtSearchEmp.Text + "%' or HE.EMP_FNAME like '" + txtSearchEmp.Text + "%' or HE.EMP_LNAME like '" + txtSearchEmp.Text + "%' or HE.EMP_NAT_ID like '" + txtSearchEmp.Text + "%' or HE.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ORDER BY HE.CREATE_DATE desc, HE.UPDATE_DATE desc";
-                }
+               
+                   String makeSQL = " select HE.*, HED.DEPARTMENT_NAME, HEDIV.DIVISION_NAME, HEL.LOCATION_NAME from HR_EMPLOYEES HE left join HR_EMP_DEPARTMENTS HED ON HED.DEPARTMENT_ID =  HE.DEPARTMENT_ID left join HR_EMP_DIVISIONS HEDIV ON HEDIV.DIVISION_ID = HE.DIVISION_ID left join HR_EMP_LOCATIONS HEL ON HEL.LOCATION_ID = HE.LOCATION_ID ORDER BY HE.CREATE_DATE desc, HE.UPDATE_DATE desc";
+                
+                  //  makeSQL = " select HE.*, HED.DEPARTMENT_NAME, HEDIV.DIVISION_NAME, HEL.LOCATION_NAME from HR_EMPLOYEES HE left join HR_EMP_DEPARTMENTS HED ON HED.DEPARTMENT_ID =  HE.DEPARTMENT_ID left join HR_EMP_DIVISIONS HEDIV ON HEDIV.DIVISION_ID = HE.DIVISION_ID left join HR_EMP_LOCATIONS HEL ON HEL.LOCATION_ID = HE.LOCATION_ID where HE.EMP_ID like '" + txtSearchEmp.Text + "%' or HE.EMP_TITLE like '" + txtSearchEmp.Text + "%' or HE.EMP_FNAME like '" + txtSearchEmp.Text + "%' or HE.EMP_LNAME like '" + txtSearchEmp.Text + "%' or HE.EMP_NAT_ID like '" + txtSearchEmp.Text + "%' or HE.IS_ACTIVE like '" + txtSearchEmp.Text + "%'  or HED.DEPARTMENT_NAME like '" + txtSearchEmp.Text + "%'  ORDER BY HE.CREATE_DATE desc, HE.UPDATE_DATE desc"; // or HEDIV.DIVISION_NAME like '" + txtSearchEmp.Text + "%'   or HEL.LOCATION_NAME like '" + txtSearchEmp.Text + "%'
+              
 
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
                 oradata.Fill(dt);
-                GridView1.DataSource = dt;
-                GridView1.DataKeyNames = new string[] { "EMP_ID" };
-                GridView1.DataBind();
+                GridView4D.DataSource = dt;
+                GridView4D.DataKeyNames = new string[] { "EMP_ID" };
+                GridView4D.DataBind();
                 conn.Close();
                 // alert_box.Visible = false;
             }
@@ -271,7 +267,7 @@ namespace NRCAPPS.HR
 
         protected void GridViewEmp_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            GridView1.PageIndex = e.NewPageIndex;
+            GridView4D.PageIndex = e.NewPageIndex;
             Display();
             alert_box.Visible = false;
         }
@@ -338,7 +334,7 @@ namespace NRCAPPS.HR
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
 
-                int USER_DATA_ID = Convert.ToInt32(TextEmpID.Text);
+                string USER_DATA_ID = TextEmpID.Text;
                 string delete_user = " delete from HR_EMPLOYEES where EMP_ID  = '" + USER_DATA_ID + "'";
 
                 cmdi = new OracleCommand(delete_user, conn);
@@ -443,7 +439,7 @@ namespace NRCAPPS.HR
                     conn.Open();
                     OracleCommand cmd = new OracleCommand();
                     cmd.Connection = conn;
-                    cmd.CommandText = "select * from HR_EMPLOYEES where EMP_ID = '" + Convert.ToInt32(EmpID) + "'";
+                    cmd.CommandText = "select * from HR_EMPLOYEES where EMP_ID = '" + EmpID + "'";
                     cmd.CommandType = CommandType.Text;
 
                     OracleDataReader dr = cmd.ExecuteReader();

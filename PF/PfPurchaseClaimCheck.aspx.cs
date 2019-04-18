@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Configuration;
-using System.Data;
-using System.Text;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
+using System.Data; 
+using System.Web.UI; 
+using System.Web.UI.WebControls; 
 using System.Data.OracleClient;
-using System.IO; 
-using System.Collections.Generic; 
-using System.Data.SqlClient;
-using System.Text.RegularExpressions;
-using System.Globalization;
+using System.IO;  
+using System.Data.SqlClient; 
 
 
 namespace NRCAPPS.PF
@@ -82,8 +72,16 @@ namespace NRCAPPS.PF
                         DropDownPaymentTypeID.DataValueField = "PAYMENT_TYPE_ID";
                         DropDownPaymentTypeID.DataTextField = "PAYMENT_TYPE_NAME";
                         DropDownPaymentTypeID.DataBind();
-                   //     DropDownPaymentTypeID.Items.Insert(0, new ListItem("Select User Role", "0"));
-                           
+                        //     DropDownPaymentTypeID.Items.Insert(0, new ListItem("Select User Role", "0"));
+
+                        TextClaimNo.Enabled = false;
+                        DropDownEmployeeID.Enabled = false;
+                        TextMonthYear4.Enabled = false;
+                        EntryDate.Enabled = false;
+                        DropDownPaymentTypeID.Enabled = false;
+                        DropDownSlipNo.Enabled = false;
+                        TextTotalAmount.Enabled = false;
+                     //   CheckIsActive.Enabled = false;
 
                         QueryCmo.Visible = false;
                         BtnUpdate.Attributes.Add("aria-disabled", "false");
@@ -226,21 +224,21 @@ namespace NRCAPPS.PF
 
              DataTable dtSlipNo = new DataTable();
              DataSet dsp = new DataSet();
-             string makePageSQL = " SELECT PPM.SLIP_NO, PPM.SLIP_NO || ' - ' || PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME || ', Item -' || PI.ITEM_NAME || ', Weight- ' || PPM.ITEM_WEIGHT || ', Amount- ' || TO_CHAR(PPM.ITEM_AMOUNT, '999,999,999.99') AS SUPPLIER_NAME, PPM.ITEM_AMOUNT FROM PF_PURCHASE_MASTER PPM  LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID  WHERE  PPM.CLAIM_NO = '" + USER_DATA_ID + "' ORDER BY  PPM.SLIP_NO ASC"; //  
+             string makePageSQL = " SELECT PPM.SLIP_NO, PPM.SLIP_NO || ' - ' || PC.PARTY_ID || ' - ' || PC.PARTY_NAME || ', Item -' || PI.ITEM_NAME || ', Weight- ' || PPM.ITEM_WEIGHT || ', Amount- ' || CASE WHEN PPM.VAT_AMOUNT IS NULL THEN TO_CHAR(PPM.ITEM_AMOUNT, '999,999,999.99') WHEN PPM.VAT_AMOUNT IS NOT NULL  THEN TO_CHAR((PPM.ITEM_AMOUNT+nvl(PPM.VAT_AMOUNT,0)), '999,999,999.99') END  AS PARTY_NAME, CASE WHEN PPM.VAT_AMOUNT IS NULL THEN PPM.ITEM_AMOUNT WHEN PPM.VAT_AMOUNT IS NOT NULL  THEN (PPM.ITEM_AMOUNT+nvl(PPM.VAT_AMOUNT,0)) END AS ITEM_AMOUNT  FROM PF_PURCHASE_MASTER PPM  LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PPM.PARTY_ID LEFT JOIN PF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID  WHERE  PPM.CLAIM_NO = '" + USER_DATA_ID + "' ORDER BY  PPM.SLIP_NO ASC"; //  
              dsp = ExecuteBySqlString(makePageSQL);
              dtSlipNo = (DataTable)dsp.Tables[0];
              DropDownSlipNo.DataSource = dtSlipNo;
              DropDownSlipNo.DataValueField = "SLIP_NO";
-             DropDownSlipNo.DataTextField = "SUPPLIER_NAME";
+             DropDownSlipNo.DataTextField = "PARTY_NAME";
              DropDownSlipNo.DataBind(); 
              RowCount = dtSlipNo.Rows.Count;
-             double ItemAmount = 0.00, TotalAmount = 0.00;
+             decimal ItemAmount = 0, TotalAmount = 0;
              for (int i = 0; i < RowCount; i++)
              {
-                 ItemAmount += Convert.ToDouble(dtSlipNo.Rows[i]["ITEM_AMOUNT"]); 
+                 ItemAmount +=  Math.Round(Convert.ToDecimal(dtSlipNo.Rows[i]["ITEM_AMOUNT"]), 0, MidpointRounding.AwayFromZero);
              }
 
-             string makeSQL = " SELECT PURCHASE_CLAIM_ID, CLAIM_NO, EMP_ID, TO_CHAR(TO_DATE(CLAIM_DATE),'dd/mm/yyyy') AS CLAIM_DATE, PAYMENT_TYPE_ID, TOTAL_AMOUNT, IS_ACTIVE, OBJ_QUERY_DES, IS_CHECK, IS_OBJ_QUERY FROM PF_PURCHASE_CLAIM where CLAIM_NO = '" + USER_DATA_ID + "'";
+             string makeSQL = " SELECT PURCHASE_CLAIM_ID, CLAIM_NO, EMP_ID, TO_CHAR(TO_DATE(CLAIM_DATE),'dd/mm/yyyy') AS CLAIM_DATE, TO_CHAR(TO_DATE(CLAIM_FOR_MONTH),'mm/yyyy') AS CLAIM_FOR_MONTH, PAYMENT_TYPE_ID, TOTAL_AMOUNT, IS_ACTIVE, OBJ_QUERY_DES, IS_CHECK, IS_OBJ_QUERY FROM PF_PURCHASE_CLAIM where CLAIM_NO = '" + USER_DATA_ID + "' ORDER BY CLAIM_NO DESC";
 
              cmdl = new OracleCommand(makeSQL);
              oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -253,6 +251,7 @@ namespace NRCAPPS.PF
                  TextPurchaseClaimID.Text     = ds.Rows[i]["PURCHASE_CLAIM_ID"].ToString();
                  TextClaimNo.Text             = ds.Rows[i]["CLAIM_NO"].ToString();                 
                  DropDownEmployeeID.Text      = ds.Rows[i]["EMP_ID"].ToString();
+                 TextMonthYear4.Text          = ds.Rows[i]["CLAIM_FOR_MONTH"].ToString();
                  EntryDate.Text               = ds.Rows[i]["CLAIM_DATE"].ToString(); 
                  DropDownPaymentTypeID.Text   = ds.Rows[i]["PAYMENT_TYPE_ID"].ToString();
                  TextTotalAmount.Text         = ds.Rows[i]["TOTAL_AMOUNT"].ToString();
@@ -261,7 +260,8 @@ namespace NRCAPPS.PF
                  CheckIsCmo.Checked           = Convert.ToBoolean(ds.Rows[i]["IS_CHECK"].ToString() == "Complete" ? true : false);
                  CheckIsQuery.Checked         = Convert.ToBoolean(ds.Rows[i]["IS_OBJ_QUERY"].ToString() == "Yes" ? true : false);
              }
-             TotalAmount =  Convert.ToDouble(TextTotalAmount.Text);
+             TotalAmount = Convert.ToDecimal(TextTotalAmount.Text);
+           //  decimal ItemAmountRound = Math.Round(Convert.ToDecimal(ItemAmount), 0, MidpointRounding.AwayFromZero);
              if (ItemAmount == TotalAmount) 
              {
                  CheckTotalAmount.Text = "";
@@ -361,11 +361,11 @@ namespace NRCAPPS.PF
             string makeSQL = "";
             if (txtSearchUser.Text == "")
             {
-                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME AS SUPPLIER_NAME, PPC.IS_CHECK FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID  ORDER BY PPC.CLAIM_NO DESC, PPM.SLIP_NO ASC "; //WHERE PPC.IS_CHECK = 'Incomplete'
+                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_FOR_MONTH, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.PARTY_ID || ' - ' || PC.PARTY_NAME AS PARTY_NAME, PPC.IS_CHECK FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PPM.PARTY_ID  WHERE  PPC.IS_CHECK = 'Incomplete' AND PPC.IS_ACTIVE = 'Enable'  ORDER BY PPC.CLAIM_NO DESC, PPM.SLIP_NO ASC "; //WHERE PPC.IS_CHECK = 'Incomplete'
             }
             else
             {
-                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.SUPPLIER_ID || ' - ' || PC.SUPPLIER_NAME AS SUPPLIER_NAME, PPC.IS_CHECK FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_SUPPLIER PC ON PC.SUPPLIER_ID = PPM.SUPPLIER_ID WHERE PPC.CLAIM_NO like '" + txtSearchUser.Text + "%' or  HE.EMP_FNAME like '" + txtSearchUser.Text + "%'  ORDER BY PPC.CLAIM_NO DESC, PPM.SLIP_NO ASC ";
+                makeSQL = " SELECT PPC.PURCHASE_CLAIM_ID, PPC.CLAIM_NO, HE.EMP_FNAME || ' ' || HE.EMP_LNAME AS EMP_NAME, PPC.CLAIM_FOR_MONTH, PPC.CLAIM_DATE, NPT.PAYMENT_TYPE_NAME, PPC.TOTAL_AMOUNT, PPC.CREATE_DATE, PPC.UPDATE_DATE, PPC.IS_ACTIVE, IS_OBJ_QUERY, PPC.OBJ_QUERY_DES, PPC.OBJ_QUERY_C_DATE, PPM.SLIP_NO, PC.PARTY_ID || ' - ' || PC.PARTY_NAME AS PARTY_NAME, PPC.IS_CHECK FROM PF_PURCHASE_CLAIM PPC LEFT JOIN PF_PURCHASE_MASTER PPM ON PPM.CLAIM_NO = PPC.CLAIM_NO LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PPC.EMP_ID LEFT JOIN NRC_PAYMENT_TYPE NPT ON NPT.PAYMENT_TYPE_ID = PPC.PAYMENT_TYPE_ID LEFT JOIN PF_PARTY PC ON PC.PARTY_ID = PPM.PARTY_ID WHERE AND PPC.IS_ACTIVE = 'Enable' and (PPC.CLAIM_NO like '" + txtSearchUser.Text + "%' or  PPC.IS_CHECK  like '" + txtSearchUser.Text + "%')  ORDER BY PPC.CLAIM_NO DESC, PPM.SLIP_NO ASC ";
                 alert_box.Visible = false;
             }
 

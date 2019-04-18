@@ -120,7 +120,7 @@ namespace NRCAPPS.NRC
 
                     int userID = Convert.ToInt32(Session["USER_ID"]);
                     int UserRoleID = Convert.ToInt32(DropDownUserRoleID.Text);
-                    int EmpID = Convert.ToInt32(DropDownEmployeeID.Text); 
+                    string EmpID = DropDownEmployeeID.Text; 
                     string get_user_id = "select NRC_USER_USERID_SEQ.nextval from dual";
                     cmdu = new OracleCommand(get_user_id, conn);
                     int newUserID = Int16.Parse(cmdu.ExecuteScalar().ToString());

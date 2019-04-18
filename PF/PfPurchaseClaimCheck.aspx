@@ -42,9 +42,9 @@
               <div class="box-body">
                 <div class="form-group">   
                     <label class="col-sm-2 control-label">Claim No</label> 
-                   <div class="col-sm-1">   
+                   <div class="col-sm-2">   
                    <asp:TextBox ID="TextPurchaseClaimID" style="display:none" runat="server"></asp:TextBox>
-                    <asp:TextBox ID="TextClaimNo" class="form-control" runat="server" ></asp:TextBox>  
+                    <asp:TextBox ID="TextClaimNo" class="form-control input-sm" runat="server" ></asp:TextBox>  
                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
                           ControlToValidate="TextClaimNo" ErrorMessage="Insert Slip No." 
                           Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
@@ -63,6 +63,21 @@
                     <div class="col-sm-3"><asp:Label ID="CheckEmpID" runat="server"></asp:Label> 
                     </div>
                 </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Claim For Months</label>
+                     <div class="col-sm-2">   
+                    <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>  
+                        <asp:TextBox  class="form-control  input-sm pull-right" ID="TextMonthYear4"  runat="server" ></asp:TextBox>  
+                    </div>
+                      </div> 
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" 
+                          ControlToValidate="TextMonthYear4" ErrorMessage="Insert Claim Months" 
+                          Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
+                    <!-- /.input group -->
+                  </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Claim Date</label>
                      <div class="col-sm-2">   
@@ -70,7 +85,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>  
-                       <asp:TextBox  class="form-control pull-right" ID="EntryDate"  runat="server" ></asp:TextBox>  
+                       <asp:TextBox  class="form-control  input-sm pull-right" ID="EntryDate"  runat="server" ></asp:TextBox>  
                     </div>
                       </div> 
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
@@ -81,7 +96,7 @@
                <div class="form-group">
                   <label  class="col-sm-2 control-label">Pyement Type</label> 
                   <div class="col-sm-2">   
-                    <asp:DropDownList ID="DropDownPaymentTypeID" class="form-control"   runat="server" > 
+                    <asp:DropDownList ID="DropDownPaymentTypeID" class="form-control input-sm"   runat="server" > 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" 
                           ControlToValidate="DropDownPaymentTypeID" Display="Dynamic" 
@@ -101,7 +116,7 @@
                  <div class="form-group">   
                     <label class="col-sm-2 control-label">Total Amount</label> 
                    <div class="col-sm-2">    
-                    <asp:TextBox ID="TextTotalAmount" class="form-control"  runat="server"></asp:TextBox>    
+                    <asp:TextBox ID="TextTotalAmount" class="form-control input-sm"  runat="server"></asp:TextBox>    
                  </div> <div class="col-sm-5"><asp:Label ID="CheckTotalAmount" runat="server"></asp:Label></div>  
                </div>  
                  <div class="form-group">
@@ -185,6 +200,7 @@
                      <Columns>
                      <asp:BoundField DataField="CLAIM_NO" HeaderText="Claim No" />
                      <asp:BoundField DataField="EMP_NAME" HeaderText="Petty Cash Holder" />
+                     <asp:BoundField DataField="CLAIM_FOR_MONTH"  HeaderText="Claim For Months"  DataFormatString="{0:MM/yyyy}"  /> 
                      <asp:BoundField DataField="CLAIM_DATE"  HeaderText="Claim Date"  DataFormatString="{0:dd/MM/yyyy}"  /> 
                      <asp:BoundField DataField="PAYMENT_TYPE_NAME" HeaderText="Payment Type" />   
                      <asp:BoundField DataField="TOTAL_AMOUNT" HeaderText="Total Amt." DataFormatString="{0:0,0.00}" />                         
@@ -198,7 +214,7 @@
                              <asp:Label ID="IsActiveQ" CssClass="label" Text='<%# Eval("IS_OBJ_QUERY").ToString() == "No" ? "<span Class=label-success style=Padding:2px >No<span>" : "<span Class=label-danger style=Padding:2px>Yes<span>" %>'  runat="server" /> 
                           </ItemTemplate>
                      </asp:TemplateField> 
-                      <asp:TemplateField HeaderText="Query Description" >
+                      <asp:TemplateField HeaderText="Query Des." >
                         <ItemTemplate>  
                              <asp:Label ID="Label1" Text='<%# Eval("OBJ_QUERY_DES")%>' runat="server"></asp:Label> -
                              <asp:Label ID="Label2" Text='<%# Eval("OBJ_QUERY_C_DATE", "{0:d/MM/yyyy h:mm:ss tt}")%>' runat="server"></asp:Label>
@@ -216,7 +232,7 @@
                           </ItemTemplate>
                     </asp:TemplateField> 
                      <asp:BoundField DataField="SLIP_NO" HeaderText="Slip No" />
-                     <asp:BoundField DataField="SUPPLIER_NAME" HeaderText="Supplier Name" />
+                     <asp:BoundField DataField="PARTY_NAME" HeaderText="Supplier Name" />
                      
                     
                      </Columns>
