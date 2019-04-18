@@ -168,9 +168,7 @@ namespace NRCAPPS.MS
                         cmdu.ExecuteNonQuery();
                         cmdu.Parameters.Clear();
                         cmdu.Dispose();
-                    
-                    
-                
+                     
                  
                 conn.Close();
 
@@ -345,12 +343,8 @@ namespace NRCAPPS.MS
             }  
         }
 
-
-
-      
-        
-
-        public void linkSelectClick(object sender, EventArgs e) 
+         
+        public void LinkSelectClick(object sender, EventArgs e) 
         { 
              OracleConnection conn = new OracleConnection(strConnString);
              conn.Open();

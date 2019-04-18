@@ -119,7 +119,7 @@
                      <asp:BoundField DataField="MONTH_YEAR"  HeaderText="Month" DataFormatString="{0:MM/yyyy}"  />   
                        <asp:TemplateField>
                        <ItemTemplate>
-                        <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-sm" runat="server" CommandArgument='<%# Eval("MONTH_YEAR") + ";" +Eval("ITEM_CODE")%>' OnClick="linkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
+                        <asp:LinkButton ID="linkSelectClick" class="btn btn-info btn-sm" runat="server" CommandArgument='<%# Eval("MONTH_YEAR") + ";" +Eval("ITEM_CODE")%>' OnClick="LinkSelectClick" CausesValidation="False">Select</asp:LinkButton> 
                         </ItemTemplate>
                        </asp:TemplateField>   
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" /> 

@@ -1,0 +1,904 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3C1CEBE0-B39F-4BEF-B57F-EE3A76A75AD4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NRCAPPS</RootNamespace>
+    <AssemblyName>nrcapps</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.TemplateEngine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="QRCoder">
+      <HintPath>..\..\Development Environment Soft\QRCode\Bin\QRCoder.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ASSET\AssetCategory.aspx" />
+    <Content Include="ASSET\AssetItems.aspx" />
+    <Content Include="ASSET\AssetItemsEmp.aspx" />
+    <Content Include="ASSET\AssetItemsExpires.aspx" />
+    <Content Include="ASSET\AssetItemsExpiresEmp.aspx" />
+    <Content Include="ASSET\ASSET_Reports\AssetClass.aspx" />
+    <Content Include="ASSET\ASSET_Reports\Asset_Items_Employee_Report_View.aspx" />
+    <Content Include="HR\HrEmployee.aspx" />
+    <Content Include="HR\HrEmpDepartment.aspx" />
+    <Content Include="HR\HrEmpDivision.aspx" />
+    <Content Include="HR\HrEmpLocation.aspx" />
+    <Content Include="NRC\NrcUserChangePassword.aspx" />
+    <Content Include="NRC\NrcPaymentType.aspx" />
+    <Content Include="NRC\NrcUser.aspx" />
+    <Content Include="NRC\NrcUserPagePermission.aspx" />
+    <Content Include="NRC\NrcUserPagePermissions.aspx" />
+    <Content Include="NRC\NrcUserPagePermissionsOld.aspx" />
+    <Content Include="NRC\NrcUserPages.aspx" />
+    <Content Include="NRC\NrcUserProfile.aspx" />
+    <Content Include="NRC\NrcUserRole.aspx" />
+    <Content Include="NRC\NrcUserRolePage.aspx" />
+    <Content Include="NRC\NrcDashboardItemOrder.aspx" />
+    <Content Include="NRC\NrcDashboardItemUser.aspx" />
+    <Content Include="NRC\NrcDashboardItem.aspx" />
+    <Content Include="NRC\NrcVat.aspx" />
+    <Content Include="PagePermissionError.aspx" />
+    <Content Include="Dashboard.aspx" />
+    <Content Include="Default.aspx" />
+    <Content Include="ParameterError.aspx" />
+    <Content Include="PF\PfDailyPurProdold.aspx" />
+    <Content Include="PF\PfProcessingCost.aspx" />
+    <Content Include="PF\PfBusinessTargetMat.aspx" />
+    <Content Include="PF\PfBusinessTargetMatold.aspx" />
+    <Content Include="PF\PfSalesCheck.aspx" />
+    <Content Include="PF\PfInventoryMonthlyStatement.aspx" />
+    <Content Include="PF\PfDailyPurProd.aspx" />
+    <Content Include="PF\PfInventoryFg.aspx" />
+    <Content Include="PF\PfSupplier.aspx" />
+    <Content Include="PF\PfPurchaseClaimCheck.aspx" />
+    <Content Include="PF\PfPurchaseClaim.aspx" />
+    <Content Include="PF\PfFgStatement.aspx" />
+    <Content Include="PF\PF_Reports\PfInventoryMonthlyStatementReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfSalesSummaryCustomerWiseReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfSalesSummaryReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfSalesSummaryItemWiseReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfProductionSummaryReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfPurchasePaymentSummaryReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfPurchaseSupervisorReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfPurchaseSummaryReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfPurchaseSupplierWiseReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfFgStatementReportView.aspx" />
+    <Content Include="PF\PF_Reports\PfClass.aspx" />
+    <Content Include="PF\PF_Reports\PfRmStatementReportView.aspx" />
+    <Content Include="PF\PfRmStatement.aspx" />
+    <Content Include="PF\PfActualGarbage.aspx" />
+    <Content Include="PF\PfSales.aspx" />
+    <Content Include="PF\PfProcessingCostOld.aspx" />
+    <Content Include="PF\PfInventoryFgOld.aspx" />
+    <Content Include="PF\PfInventoryRm.aspx" />
+    <Content Include="PF\PfProduction.aspx" />
+    <Content Include="PF\PfPurchase.aspx" />
+    <Content Include="PF\PfGaEstProd.aspx" />
+    <Content Include="PF\PfMachine.aspx" />
+    <Content Include="PF\PfProductionShift.aspx" />
+    <Content Include="PF\PfSubItem.aspx" />
+    <Content Include="PF\PfItem.aspx" />
+    <Content Include="PF\PfPurchaseType.aspx" />
+    <Content Include="PF\PfSupervisor.aspx" />
+    <Content Include="PF\PfCustomer.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Welcome.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ASSET\AssetCategory.aspx.cs">
+      <DependentUpon>AssetCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ASSET\AssetCategory.aspx.designer.cs">
+      <DependentUpon>AssetCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ASSET\AssetItems.aspx.cs">
+      <DependentUpon>AssetItems.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ASSET\AssetItems.aspx.designer.cs">
+      <DependentUpon>AssetItems.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ASSET\AssetItemsEmp.aspx.cs">
+      <DependentUpon>AssetItemsEmp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ASSET\AssetItemsEmp.aspx.designer.cs">
+      <DependentUpon>AssetItemsEmp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ASSET\AssetItemsExpires.aspx.cs">
+      <DependentUpon>AssetItemsExpires.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ASSET\AssetItemsExpires.aspx.designer.cs">
+      <DependentUpon>AssetItemsExpires.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ASSET\AssetItemsExpiresEmp.aspx.cs">
+      <DependentUpon>AssetItemsExpiresEmp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ASSET\AssetItemsExpiresEmp.aspx.designer.cs">
+      <DependentUpon>AssetItemsExpiresEmp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ASSET\ASSET_Reports\AssetClass.aspx.cs">
+      <DependentUpon>AssetClass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ASSET\ASSET_Reports\AssetClass.aspx.designer.cs">
+      <DependentUpon>AssetClass.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ASSET\ASSET_Reports\Asset_Items_Employee_Report.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Asset_Items_Employee_Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="ASSET\ASSET_Reports\Asset_Items_Employee_Report_View.aspx.cs">
+      <DependentUpon>Asset_Items_Employee_Report_View.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ASSET\ASSET_Reports\Asset_Items_Employee_Report_View.aspx.designer.cs">
+      <DependentUpon>Asset_Items_Employee_Report_View.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ASSET\ASSET_Reports\DataSetAssetClass.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="HR\HandlerProfileImage.ashx.cs">
+      <DependentUpon>HandlerProfileImage.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="HR\HrEmployee.aspx.cs">
+      <DependentUpon>HrEmployee.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HR\HrEmployee.aspx.designer.cs">
+      <DependentUpon>HrEmployee.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HR\HrEmpDepartment.aspx.cs">
+      <DependentUpon>HrEmpDepartment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HR\HrEmpDepartment.aspx.designer.cs">
+      <DependentUpon>HrEmpDepartment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HR\HrEmpDivision.aspx.cs">
+      <DependentUpon>HrEmpDivision.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HR\HrEmpDivision.aspx.designer.cs">
+      <DependentUpon>HrEmpDivision.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HR\HrEmpLocation.aspx.cs">
+      <DependentUpon>HrEmpLocation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HR\HrEmpLocation.aspx.designer.cs">
+      <DependentUpon>HrEmpLocation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserChangePassword.aspx.cs">
+      <DependentUpon>NrcUserChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserChangePassword.aspx.designer.cs">
+      <DependentUpon>NrcUserChangePassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcPaymentType.aspx.cs">
+      <DependentUpon>NrcPaymentType.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcPaymentType.aspx.designer.cs">
+      <DependentUpon>NrcPaymentType.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\HandlerProfileImage.ashx.cs">
+      <DependentUpon>HandlerProfileImage.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUser.aspx.cs">
+      <DependentUpon>NrcUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUser.aspx.designer.cs">
+      <DependentUpon>NrcUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserPagePermission.aspx.cs">
+      <DependentUpon>NrcUserPagePermission.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserPagePermission.aspx.designer.cs">
+      <DependentUpon>NrcUserPagePermission.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserPagePermissions.aspx.cs">
+      <DependentUpon>NrcUserPagePermissions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserPagePermissions.aspx.designer.cs">
+      <DependentUpon>NrcUserPagePermissions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserPagePermissionsOld.aspx.cs">
+      <DependentUpon>NrcUserPagePermissionsOld.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserPagePermissionsOld.aspx.designer.cs">
+      <DependentUpon>NrcUserPagePermissionsOld.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserPages.aspx.cs">
+      <DependentUpon>NrcUserPages.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserPages.aspx.designer.cs">
+      <DependentUpon>NrcUserPages.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserProfile.aspx.cs">
+      <DependentUpon>NrcUserProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserProfile.aspx.designer.cs">
+      <DependentUpon>NrcUserProfile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserRole.aspx.cs">
+      <DependentUpon>NrcUserRole.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserRole.aspx.designer.cs">
+      <DependentUpon>NrcUserRole.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcUserRolePage.aspx.cs">
+      <DependentUpon>NrcUserRolePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcUserRolePage.aspx.designer.cs">
+      <DependentUpon>NrcUserRolePage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcDashboardItemOrder.aspx.cs">
+      <DependentUpon>NrcDashboardItemOrder.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcDashboardItemOrder.aspx.designer.cs">
+      <DependentUpon>NrcDashboardItemOrder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcDashboardItemUser.aspx.cs">
+      <DependentUpon>NrcDashboardItemUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcDashboardItemUser.aspx.designer.cs">
+      <DependentUpon>NrcDashboardItemUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcDashboardItem.aspx.cs">
+      <DependentUpon>NrcDashboardItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcDashboardItem.aspx.designer.cs">
+      <DependentUpon>NrcDashboardItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NRC\NrcVat.aspx.cs">
+      <DependentUpon>NrcVat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NRC\NrcVat.aspx.designer.cs">
+      <DependentUpon>NrcVat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PagePermissionError.aspx.cs">
+      <DependentUpon>PagePermissionError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PagePermissionError.aspx.designer.cs">
+      <DependentUpon>PagePermissionError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ParameterError.aspx.cs">
+      <DependentUpon>ParameterError.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ParameterError.aspx.designer.cs">
+      <DependentUpon>ParameterError.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfDailyPurProdold.aspx.cs">
+      <DependentUpon>PfDailyPurProdold.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfDailyPurProdold.aspx.designer.cs">
+      <DependentUpon>PfDailyPurProdold.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfProcessingCost.aspx.cs">
+      <DependentUpon>PfProcessingCost.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfProcessingCost.aspx.designer.cs">
+      <DependentUpon>PfProcessingCost.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfBusinessTargetMat.aspx.cs">
+      <DependentUpon>PfBusinessTargetMat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfBusinessTargetMat.aspx.designer.cs">
+      <DependentUpon>PfBusinessTargetMat.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfBusinessTargetMatold.aspx.cs">
+      <DependentUpon>PfBusinessTargetMatold.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfBusinessTargetMatold.aspx.designer.cs">
+      <DependentUpon>PfBusinessTargetMatold.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfSalesCheck.aspx.cs">
+      <DependentUpon>PfSalesCheck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfSalesCheck.aspx.designer.cs">
+      <DependentUpon>PfSalesCheck.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfInventoryMonthlyStatement.aspx.cs">
+      <DependentUpon>PfInventoryMonthlyStatement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfInventoryMonthlyStatement.aspx.designer.cs">
+      <DependentUpon>PfInventoryMonthlyStatement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfDailyPurProd.aspx.cs">
+      <DependentUpon>PfDailyPurProd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfDailyPurProd.aspx.designer.cs">
+      <DependentUpon>PfDailyPurProd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfInventoryFg.aspx.cs">
+      <DependentUpon>PfInventoryFg.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfInventoryFg.aspx.designer.cs">
+      <DependentUpon>PfInventoryFg.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfSupplier.aspx.cs">
+      <DependentUpon>PfSupplier.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfSupplier.aspx.designer.cs">
+      <DependentUpon>PfSupplier.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfPurchaseClaimCheck.aspx.cs">
+      <DependentUpon>PfPurchaseClaimCheck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfPurchaseClaimCheck.aspx.designer.cs">
+      <DependentUpon>PfPurchaseClaimCheck.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfPurchaseClaim.aspx.cs">
+      <DependentUpon>PfPurchaseClaim.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfPurchaseClaim.aspx.designer.cs">
+      <DependentUpon>PfPurchaseClaim.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfFgStatement.aspx.cs">
+      <DependentUpon>PfFgStatement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfFgStatement.aspx.designer.cs">
+      <DependentUpon>PfFgStatement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Inventory_Monthly_Statement_Report.cs">
+      <DependentUpon>Pf_Inventory_Monthly_Statement_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfInventoryMonthlyStatementReportView.aspx.cs">
+      <DependentUpon>PfInventoryMonthlyStatementReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfInventoryMonthlyStatementReportView.aspx.designer.cs">
+      <DependentUpon>PfInventoryMonthlyStatementReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Sales_Summary_Customer_Wise_Report.cs">
+      <DependentUpon>Pf_Sales_Summary_Customer_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryCustomerWiseReportView.aspx.cs">
+      <DependentUpon>PfSalesSummaryCustomerWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryCustomerWiseReportView.aspx.designer.cs">
+      <DependentUpon>PfSalesSummaryCustomerWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryReportView.aspx.cs">
+      <DependentUpon>PfSalesSummaryReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryReportView.aspx.designer.cs">
+      <DependentUpon>PfSalesSummaryReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Sales_Summary_Report.cs">
+      <DependentUpon>Pf_Sales_Summary_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Sales_Summary_Item_Wise_Report.cs">
+      <DependentUpon>Pf_Sales_Summary_Item_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryItemWiseReportView.aspx.cs">
+      <DependentUpon>PfSalesSummaryItemWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfSalesSummaryItemWiseReportView.aspx.designer.cs">
+      <DependentUpon>PfSalesSummaryItemWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Production_Summary_Report.cs">
+      <DependentUpon>Pf_Production_Summary_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfProductionSummaryReportView.aspx.cs">
+      <DependentUpon>PfProductionSummaryReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfProductionSummaryReportView.aspx.designer.cs">
+      <DependentUpon>PfProductionSummaryReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Purchase_Payment_Summary_Report.cs">
+      <DependentUpon>Pf_Purchase_Payment_Summary_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchasePaymentSummaryReportView.aspx.cs">
+      <DependentUpon>PfPurchasePaymentSummaryReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchasePaymentSummaryReportView.aspx.designer.cs">
+      <DependentUpon>PfPurchasePaymentSummaryReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Purchase_Supervisor_Report.cs">
+      <DependentUpon>Pf_Purchase_Supervisor_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchaseSupervisorReportView.aspx.cs">
+      <DependentUpon>PfPurchaseSupervisorReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchaseSupervisorReportView.aspx.designer.cs">
+      <DependentUpon>PfPurchaseSupervisorReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Purchase_Summary_Report.cs">
+      <DependentUpon>Pf_Purchase_Summary_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchaseSummaryReportView.aspx.cs">
+      <DependentUpon>PfPurchaseSummaryReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchaseSummaryReportView.aspx.designer.cs">
+      <DependentUpon>PfPurchaseSummaryReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Purchase_Supplier_Wise_Report.cs">
+      <DependentUpon>Pf_Purchase_Supplier_Wise_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchaseSupplierWiseReportView.aspx.cs">
+      <DependentUpon>PfPurchaseSupplierWiseReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfPurchaseSupplierWiseReportView.aspx.designer.cs">
+      <DependentUpon>PfPurchaseSupplierWiseReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Fg_Statement_Report.cs">
+      <DependentUpon>Pf_Fg_Statement_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfFgStatementReportView.aspx.cs">
+      <DependentUpon>PfFgStatementReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfFgStatementReportView.aspx.designer.cs">
+      <DependentUpon>PfFgStatementReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\Pf_Rm_Statement_Report.cs">
+      <DependentUpon>Pf_Rm_Statement_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfClass.aspx.cs">
+      <DependentUpon>PfClass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfClass.aspx.designer.cs">
+      <DependentUpon>PfClass.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfRmStatementReportView.aspx.cs">
+      <DependentUpon>PfRmStatementReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PF_Reports\PfRmStatementReportView.aspx.designer.cs">
+      <DependentUpon>PfRmStatementReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PF_Reports\DataSetAssetClass.Designer.cs">
+      <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PfRmStatement.aspx.cs">
+      <DependentUpon>PfRmStatement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfRmStatement.aspx.designer.cs">
+      <DependentUpon>PfRmStatement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfActualGarbage.aspx.cs">
+      <DependentUpon>PfActualGarbage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfActualGarbage.aspx.designer.cs">
+      <DependentUpon>PfActualGarbage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfSales.aspx.cs">
+      <DependentUpon>PfSales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfSales.aspx.designer.cs">
+      <DependentUpon>PfSales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfProcessingCostOld.aspx.cs">
+      <DependentUpon>PfProcessingCostOld.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfProcessingCostOld.aspx.designer.cs">
+      <DependentUpon>PfProcessingCostOld.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfInventoryFgOld.aspx.cs">
+      <DependentUpon>PfInventoryFgOld.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfInventoryFgOld.aspx.designer.cs">
+      <DependentUpon>PfInventoryFgOld.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfInventoryRm.aspx.cs">
+      <DependentUpon>PfInventoryRm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfInventoryRm.aspx.designer.cs">
+      <DependentUpon>PfInventoryRm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfProduction.aspx.cs">
+      <DependentUpon>PfProduction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfProduction.aspx.designer.cs">
+      <DependentUpon>PfProduction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfPurchase.aspx.cs">
+      <DependentUpon>PfPurchase.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfPurchase.aspx.designer.cs">
+      <DependentUpon>PfPurchase.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfGaEstProd.aspx.cs">
+      <DependentUpon>PfGaEstProd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfGaEstProd.aspx.designer.cs">
+      <DependentUpon>PfGaEstProd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfMachine.aspx.cs">
+      <DependentUpon>PfMachine.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfMachine.aspx.designer.cs">
+      <DependentUpon>PfMachine.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfProductionShift.aspx.cs">
+      <DependentUpon>PfProductionShift.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfProductionShift.aspx.designer.cs">
+      <DependentUpon>PfProductionShift.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfSubItem.aspx.cs">
+      <DependentUpon>PfSubItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfSubItem.aspx.designer.cs">
+      <DependentUpon>PfSubItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfItem.aspx.cs">
+      <DependentUpon>PfItem.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfItem.aspx.designer.cs">
+      <DependentUpon>PfItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfPurchaseType.aspx.cs">
+      <DependentUpon>PfPurchaseType.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfPurchaseType.aspx.designer.cs">
+      <DependentUpon>PfPurchaseType.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfSupervisor.aspx.cs">
+      <DependentUpon>PfSupervisor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfSupervisor.aspx.designer.cs">
+      <DependentUpon>PfSupervisor.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfCustomer.aspx.cs">
+      <DependentUpon>PfCustomer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfCustomer.aspx.designer.cs">
+      <DependentUpon>PfCustomer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Welcome.aspx.cs">
+      <DependentUpon>Welcome.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Welcome.aspx.designer.cs">
+      <DependentUpon>Welcome.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Site.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ASSET\ASSET_Reports\Asset_Items_Employee_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Asset_Items_Employee_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ASSET\ASSET_Reports\DataSetAssetClass.xsc">
+      <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
+    </None>
+    <None Include="ASSET\ASSET_Reports\DataSetAssetClass.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSetAssetClass.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="ASSET\ASSET_Reports\DataSetAssetClass.xss">
+      <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
+    </None>
+    <Content Include="HR\HandlerProfileImage.ashx" />
+    <Content Include="NRC\HandlerProfileImage.ashx" />
+    <None Include="PF\PF_Reports\DataSetAssetClass.xsc">
+      <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
+    </None>
+    <None Include="PF\PF_Reports\DataSetAssetClass.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSetAssetClass.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="PF\PF_Reports\DataSetAssetClass.xss">
+      <DependentUpon>DataSetAssetClass.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Rm_Statement_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Rm_Statement_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Fg_Statement_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Fg_Statement_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Purchase_Supplier_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Purchase_Supplier_Wise_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Purchase_Summary_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Purchase_Summary_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Purchase_Supervisor_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Purchase_Supervisor_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Purchase_Payment_Summary_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Purchase_Payment_Summary_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Production_Summary_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Production_Summary_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Sales_Summary_Item_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Sales_Summary_Item_Wise_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="ORADCLib">
+      <Guid>{92096210-97DF-11CF-9F27-02608C4BF3B5}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Sales_Summary_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Sales_Summary_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Sales_Summary_Customer_Wise_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Sales_Summary_Customer_Wise_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PF\PF_Reports\Pf_Inventory_Monthly_Statement_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Pf_Inventory_Monthly_Statement_Report.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1101</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
