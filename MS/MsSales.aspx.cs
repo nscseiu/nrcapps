@@ -28,7 +28,7 @@ namespace NRCAPPS.MS
         DataTable dt, dtr;
         int RowCount;
          
-        double ItemVatAmt = 0.0, ItemAmtTotal = 0.0, ItemWtWbTotal = 0.0; string EntryDateSlip = "", PartyArabicName = "", PartyName = "";
+        double ItemVatAmt = 0.0, ItemAmtTotal = 0.0, ItemWtWbTotal = 0.0; string EntryDateSlip = "", PartyArabicName = "", PartyName = "", PartyID="";
         string IS_PAGE_ACTIVE = "", IS_ADD_ACTIVE = "", IS_EDIT_ACTIVE = "", IS_DELETE_ACTIVE = "", IS_VIEW_ACTIVE = "", IS_REPORT_ACTIVE = "", IS_PRINT_ACTIVE = "";
         public bool IsLoad { get; set; } public bool IsLoad1 { get; set; } public bool IsLoad2 { get; set; } public bool IsLoad3 { get; set; }
         public bool IsLoad4 { get; set; }
@@ -314,12 +314,12 @@ namespace NRCAPPS.MS
         protected void btnPrint_Click(object sender, EventArgs e)
         {
             if (IS_PRINT_ACTIVE == "Enable")
-            { 
+            {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
                 string HtmlString = "";
-                string   InvoiceNo = TextInvoiceMsNo.Text; 
-                string makeSQL = " SELECT PPM.SALES_ID, PPM.INVOICE_NO,PP.PARTY_NAME, PP.PARTY_ARABIC_NAME, PP.PARTY_ADD_1 || ', ' || PP.PARTY_ADD_2 AS PARTY_ADD, PP.PARTY_VAT_NO, PI.ITEM_CODE, PI.ITEM_NAME, PI.ITEM_ARABIC_NAME, PPM.ITEM_WEIGHT, nvl(PPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, PPM.ITEM_RATE, ROUND(PPM.ITEM_AMOUNT, 2) AS ITEM_AMOUNT, nvl(PPM.VAT_AMOUNT, 0) AS VAT_AMOUNT, TO_CHAR(PPM.ENTRY_DATE, 'dd-MON-yyyy') AS ENTRY_DATE, HE.EMP_LNAME FROM MS_SALES_MASTER PPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PPM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN MS_WB_OPERATOR PWO ON PWO.IS_ACTIVE = 'Enable' LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PWO.EMP_ID WHERE PPM.INVOICE_NO = '" + InvoiceNo + "' ORDER BY PI.ITEM_ID ";
+                string InvoiceNo = TextInvoiceMsNo.Text;
+                string makeSQL = " SELECT PPM.SALES_ID, PPM.INVOICE_NO, PP.PARTY_ID, PP.PARTY_NAME, PP.PARTY_ARABIC_NAME, PP.PARTY_ADD_1 || ', ' || PP.PARTY_ADD_2 AS PARTY_ADD, PP.PARTY_VAT_NO, PI.ITEM_CODE, PI.ITEM_NAME, PI.ITEM_ARABIC_NAME, PPM.ITEM_WEIGHT, nvl(PPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, PPM.ITEM_RATE, ROUND(PPM.ITEM_AMOUNT, 2) AS ITEM_AMOUNT, nvl(PPM.VAT_AMOUNT, 0) AS VAT_AMOUNT, TO_CHAR(PPM.ENTRY_DATE, 'dd-MON-yyyy') AS ENTRY_DATE, HE.EMP_LNAME FROM MS_SALES_MASTER PPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PPM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PPM.ITEM_ID LEFT JOIN MS_WB_OPERATOR PWO ON PWO.IS_ACTIVE = 'Enable' LEFT JOIN HR_EMPLOYEES HE ON HE.EMP_ID = PWO.EMP_ID WHERE PPM.INVOICE_NO = '" + InvoiceNo + "' ORDER BY PI.ITEM_ID ";
 
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -330,26 +330,45 @@ namespace NRCAPPS.MS
                 for (int i = 0; i < 1; i++)
                 {
                     PartyArabicName = dt.Rows[i]["PARTY_ARABIC_NAME"].ToString();
+                    PartyID = dt.Rows[i]["PARTY_ID"].ToString();
                     PartyName = dt.Rows[i]["PARTY_NAME"].ToString();
                     string PartyAdd = dt.Rows[i]["PARTY_ADD"].ToString();
                     string PartyVatNo = dt.Rows[i]["PARTY_VAT_NO"].ToString();
                     string ItemCode = dt.Rows[i]["ITEM_CODE"].ToString();
                     string ItemName = dt.Rows[i]["ITEM_NAME"].ToString();
-                    string ItemArabicName = dt.Rows[i]["ITEM_ARABIC_NAME"].ToString(); 
+                    string ItemArabicName = dt.Rows[i]["ITEM_ARABIC_NAME"].ToString();
+                    string EmpWbLname = dt.Rows[i]["EMP_LNAME"].ToString();
                     EntryDateSlip = dt.Rows[i]["ENTRY_DATE"].ToString();
 
-                    HtmlString += "<div style='float:left;width:785px;height:352px;margin-top:180px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 16px;'> ";
+                    HtmlString += "<div style='float:left;width:785px;height:535px;margin-top:0px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 16px;'> ";
+                    HtmlString += "<div style='float:left;width:685px;height:213px;margin:65px 0 0 111px;font-family: Arial Narrow, Courier, Lucida Sans Typewriter;font-size: 12px;'></div> ";
                     HtmlString += "<div style='float:left;width:380px;'> ";
-                    HtmlString += "<div style='float:left;width:260px;height:102px;margin-left:100px;padding-top:10px;text-align:center;' > </div> ";
-                    HtmlString += "<div style='float:left;width:210px;height:33px; margin:0 0 0 90px;'> </div> <div style='float:left;width:210px; margin:0 0 0 90px;'> </div> ";
+                    HtmlString += "<div style='float:left;width:285px;height:102px;margin-left:110px;padding-top:10px;text-align:center;' >"+ PartyID +":" + PartyName  + "</br><font size='1px'>" + PartyArabicName + "</font></div> ";
+                    HtmlString += "<div style='float:left;width:210px;height:33px; margin:0 0 0 90px;'>" + PartyAdd + "</div> <div style='float:left;width:210px; margin:0 0 0 90px;'>" + PartyVatNo + " </div> ";
                     HtmlString += "</div> ";
-                 
+                }
+                int m = 1;
                 HtmlString += "<div style='float:left;width:380px;'> ";
-                HtmlString += "<div style='float:left;width:240px;height:92px;margin:30px 0 0 140px;'></br>" + PartyName + " </br>" + PartyArabicName + "</font></div>";
+                HtmlString += "<div style='float:left;width:240px;height:42px;margin:30px 0 0 140px;'> ";
+                for (int i = 0; i < RowCount; i++)
+                {
+                    string ItemName = dt.Rows[i]["ITEM_NAME"].ToString();
+                    //   string ItemArabicName = dt.Rows[i]["ITEM_ARABIC_NAME"].ToString(); 
+                    if (m == RowCount)
+                    {
+                        HtmlString += "" + ItemName + "";
+                    }
+                    else { HtmlString += "" + ItemName + ","; }
+                    m++;
+                }
 
-                 
+                HtmlString += "</div>";
+
+                for (int i = 0; i < 1; i++)
+                {
+                    string EmpWbLname = dt.Rows[i]["EMP_LNAME"].ToString();
                     HtmlString += "<div style='float:left;width:380px;'> ";
-                    HtmlString += "<div style='float:left;width:200px;height:76px;margin:0 0 0 175px;'>" + PartyVatNo + "</div><div style='float:left;width:200px;margin:0 0 0 180px;'>" + EntryDateSlip + "</div> ";
+                    HtmlString += "<div style='float:left;width:200px;height:76px;margin:0 0 0 175px;'>" + EmpWbLname + "</div><div style='float:left;width:200px;margin:0 0 0 180px;'>" + EntryDateSlip + "</div> ";
                     HtmlString += "</div>";
                     HtmlString += "</div>";
                 }
@@ -363,17 +382,17 @@ namespace NRCAPPS.MS
                     string ItemName = dt.Rows[i]["ITEM_NAME"].ToString();
                     string ItemArabicName = dt.Rows[i]["ITEM_ARABIC_NAME"].ToString();
 
-                    double ItemWtWb = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_WB"].ToString());
-                    ItemWtWbTotal += Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_WB"].ToString());
-                    double VarianceWT = (Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString()) - Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_WB"].ToString()));
-                    double ItemWt = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString());
+                    double ItemWtWb = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_WB"].ToString()) * 1000;
+                    ItemWtWbTotal += Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_WB"].ToString()) * 1000;
+                    double VarianceWT = (Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString()) - Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT_WB"].ToString())) * 1000;
+                    double ItemWt = Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString()) * 1000;
                     double ItemRate = Convert.ToDouble(dt.Rows[i]["ITEM_RATE"].ToString()) / 1000;
                     double ItemAmt = Convert.ToDouble(decimal.Parse(dt.Rows[i]["ITEM_AMOUNT"].ToString()).ToString(".00"));
                     ItemAmtTotal += Convert.ToDouble(decimal.Parse(dt.Rows[i]["ITEM_AMOUNT"].ToString()).ToString(".00"));
                     ItemVatAmt += Convert.ToDouble(decimal.Parse(dt.Rows[i]["VAT_AMOUNT"].ToString()).ToString(".00"));
                     double TotalInvoiceAmt = +Convert.ToDouble(decimal.Parse(dt.Rows[i]["ITEM_AMOUNT"].ToString()).ToString(".00"));
 
-                    HtmlString += "<div style='float:left;width:242px;margin-left:5px;' >" + ItemCode + "     " + ItemName + "-<font size='1px'>" + ItemArabicName + "</font></div> ";
+                    HtmlString += "<div style='float:left;width:242px;' >" + ItemCode + "     " + ItemName + "-<font size='1px'>" + ItemArabicName + "</font></div> ";
                     HtmlString += "<div style='float:left;width:82px;text-align:center;'>" + string.Format("{0:n0}", ItemWtWb) + " </div> ";
                     HtmlString += "<div style='float:left;width:93px;text-align:center;'>" + string.Format("{0:n0}", VarianceWT) + " </div> ";
                     HtmlString += "<div style='float:left;width:112px;text-align:right;'>" + string.Format("{0:n0}", ItemWt) + " </div> ";
@@ -382,22 +401,22 @@ namespace NRCAPPS.MS
 
                 }
                 HtmlString += "</div>";
-                HtmlString += "<div style='float:left;width:785px;height:238px;margin:0 0 0 8px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 16px;'><div style='float:left;width:242px;margin-left:5px;border:white solid 1px' ></div>";
+                HtmlString += "<div style='float:left;width:785px;height:238px;margin:0 0 0 8px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 16px;'><div style='float:left;width:242px;border:white solid 1px' ></div>";
                 HtmlString += "<div style='float:left;width:82px;text-align:center;margin:0 0 10px 0;'>" + string.Format("{0:n0}", ItemWtWbTotal) + " </div> ";
                 HtmlString += "<div style='float:left;width:431px;text-align:right;margin:0 0 10px 0;'>" + string.Format("{0:n2}", ItemAmtTotal) + " </div> ";
-                HtmlString += "<div style='float:left;width:757px;text-align:right;margin:0 0 10px 5px;'>" + string.Format("{0:n2}", ItemVatAmt) + " </div> ";
-                HtmlString += "<div style='float:left;width:757px;text-align:right;margin-left:5px;'>" + string.Format("{0:n2}", ItemAmtTotal + ItemVatAmt) + " </div> ";
+                HtmlString += "<div style='float:left;width:757px;text-align:right;margin:0 0 10px 0;'>" + string.Format("{0:n2}", ItemVatAmt) + " </div> ";
+                HtmlString += "<div style='float:left;width:757px;text-align:right;'>" + string.Format("{0:n2}", ItemAmtTotal + ItemVatAmt) + " </div> ";
                 HtmlString += "<div style='float:left;width:500px;margin:0 0 0 120px;text-align:left;'>" + EntryDateSlip + " </div> ";
                 string NumberToInWord = NumberToInWords.DecimalToWordsSR(Convert.ToDecimal(ItemAmtTotal + ItemVatAmt)).Trim().ToUpper();
- 
-                HtmlString += "<div style = 'float:left;width:300px;height:90px;margin:40px 0 0 450px;padding:10px;text-align:left;line-height:18px;'>" + NumberToInWord + " </div> ";
-                HtmlString += "<div style = 'float:left;width:240px;margin:8px 0 0 515px;text-align:left;'><font size='1px'>" + PartyName + "</br>" + PartyArabicName + "</font> </div> ";
+                //   string NumberToInWord = NumberToWords(ItemAmtTotal + ItemVatAmt).Trim().ToUpper();
+                HtmlString += "<div style = 'float:left;width:290px;height:88px;margin:40px 0 0 460px;padding:10px;text-align:left;'>" + NumberToInWord + " </div> ";
+                HtmlString += "<div style = 'float:left;width:200px;margin:0 0 0 555px;text-align:left;'><font size='1px'>" + PartyName + "|" + PartyArabicName + "</font> </div> ";
                 HtmlString += "</div>";
                 HtmlString += "</div>";
                 HtmlString += "</div>";
 
                 // sales master update for print
-                int userID = Convert.ToInt32(Session["USER_ID"]); 
+                int userID = Convert.ToInt32(Session["USER_ID"]);
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
                 string update_user = "update  MS_SALES_MASTER  set IS_PRINT = :TextIsPrint, PRINT_DATE  = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), P_USER_ID = :NoCuserID where INVOICE_NO = :NoSlipNo ";
                 cmdi = new OracleCommand(update_user, conn);

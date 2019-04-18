@@ -57,7 +57,7 @@ namespace NRCAPPS.MS
                     {
                         DataTable dtSupplierID = new DataTable();
                         DataSet ds = new DataSet();
-                        string makeSupplierSQL = " SELECT MP.PARTY_ID,  MP.PARTY_ID || ' : ' || MP.PARTY_NAME || ' - ' || MP.PARTY_VAT_NO || ' : ' ||  MR.NID_NO || ' : ' || MR.REPRESENTATIVE_NAME AS PARTY_NAME  FROM MS_PARTY MP LEFT JOIN MS_REPRESENTATIVE MR ON MR.REPRESENTATIVE_ID = MP.REPRESENTATIVE_ID WHERE MP.IS_ACTIVE = 'Enable' ORDER BY MP.PARTY_NAME ASC";
+                        string makeSupplierSQL = " SELECT MP.PARTY_ID || '-' || MR.REPRESENTATIVE_ID AS PARTY_ID,  MP.PARTY_ID || ' : ' || MP.PARTY_NAME || ' - ' || MP.PARTY_VAT_NO || ' : ' ||  MR.NID_NO || ' : ' || MR.REPRESENTATIVE_NAME AS PARTY_NAME  FROM MS_PARTY MP LEFT JOIN MS_REPRESENTATIVE MR ON MR.REPRESENTATIVE_ID = MP.REPRESENTATIVE_ID WHERE MP.IS_ACTIVE = 'Enable' ORDER BY MP.PARTY_NAME ASC";
                         ds = ExecuteBySqlString(makeSupplierSQL);
                         dtSupplierID = (DataTable)ds.Tables[0];
                         DropDownSupplierID.DataSource = dtSupplierID;
@@ -181,7 +181,8 @@ namespace NRCAPPS.MS
                     conn.Open();
 
                     int userID = Convert.ToInt32(Session["USER_ID"]);
-                    int SupplierID = Convert.ToInt32(DropDownSupplierID.Text);
+                    string SupplierID = DropDownSupplierID.Text;
+                    string[] SupplierRepID = SupplierID.Split('-');
                     int SlipNoWp = Convert.ToInt32(TextMsSlipNo.Text); 
                     int CategoryID = Convert.ToInt32(DropDownCategoryID.Text); 
                     int VehicleID = Convert.ToInt32(DropDownVehicleID.Text); 
@@ -223,13 +224,13 @@ namespace NRCAPPS.MS
                     string get_user_purchase_id = "select MS_PURCHASE_MASTERID_SEQ.nextval from dual";
                     cmdsp = new OracleCommand(get_user_purchase_id, conn);
                     int newPurchaseID = Int32.Parse(cmdsp.ExecuteScalar().ToString());
-                    string insert_purchase = "insert into  MS_PURCHASE_MASTER (PURCHASE_ID, SLIP_NO, PARTY_ID, VEHICLE_MODE_ID, VEHICLE_NO, CATEGORY_ID, ITEM_ID, ITEM_WEIGHT_WB, ITEM_WEIGHT, ITEM_RATE, ITEM_AMOUNT, VAT_ID, VAT_PERCENT, VAT_AMOUNT, TOTAL_AMOUNT, ENTRY_DATE, REMARKS, CREATE_DATE, C_USER_ID, IS_ACTIVE, DIVISION_ID) values  ( :NoPurchaseID, :NoSlipID, :NoSupplierID, :VehicleID, :TextVehicleNo, :NoCategoryID, :NoItemID, :TextItemWeightWbWP, :TextItemWeight, :TextItemRate, :TextItemAmountWP, :NoVatID, :NoVatPercent, :NoVatAmount, :TextTotalAmountWP, TO_DATE(:EntryDate, 'DD/MM/YYYY'), :TextRemarks, TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID, :TextIsActive, 4)";
+                    string insert_purchase = "insert into  MS_PURCHASE_MASTER (PURCHASE_ID, SLIP_NO, PARTY_ID, VEHICLE_MODE_ID, VEHICLE_NO, CATEGORY_ID, ITEM_ID, ITEM_WEIGHT_WB, ITEM_WEIGHT, ITEM_RATE, ITEM_AMOUNT, VAT_ID, VAT_PERCENT, VAT_AMOUNT, TOTAL_AMOUNT, ENTRY_DATE, REMARKS, REPRESENTATIVE_ID, CREATE_DATE, C_USER_ID, IS_ACTIVE, DIVISION_ID) values  ( :NoPurchaseID, :NoSlipID, :NoSupplierID, :VehicleID, :TextVehicleNo, :NoCategoryID, :NoItemID, :TextItemWeightWbWP, :TextItemWeight, :TextItemRate, :TextItemAmountWP, :NoVatID, :NoVatPercent, :NoVatAmount, :TextTotalAmountWP, TO_DATE(:EntryDate, 'DD/MM/YYYY'), :TextRemarks, :TextRepresentative, TO_DATE(:c_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID, :TextIsActive, 4)";
                     cmdi = new OracleCommand(insert_purchase, conn);
                       
-                    OracleParameter[] objPrm = new OracleParameter[20];
+                    OracleParameter[] objPrm = new OracleParameter[21];
                     objPrm[0] = cmdi.Parameters.Add("NoPurchaseID", newPurchaseID); 
                     objPrm[1] = cmdi.Parameters.Add("NoSlipID", SlipNoWp); 
-                    objPrm[2] = cmdi.Parameters.Add("NoSupplierID", SupplierID); 
+                    objPrm[2] = cmdi.Parameters.Add("NoSupplierID", Convert.ToInt32(SupplierRepID[0])); 
                     objPrm[3] = cmdi.Parameters.Add("VehicleID", VehicleID);   
                     objPrm[4] = cmdi.Parameters.Add("TextVehicleNo", VehicleNo.Text);   
                     objPrm[5] = cmdi.Parameters.Add("NoCategoryID", CategoryID); 
@@ -244,9 +245,10 @@ namespace NRCAPPS.MS
                     objPrm[14] = cmdi.Parameters.Add("NoVatAmount", VatAmount); 
                     objPrm[15] = cmdi.Parameters.Add("EntryDate", EntryDateNew); 
                     objPrm[16] = cmdi.Parameters.Add("TextRemarks", TextRemarks.Text); 
-                    objPrm[17] = cmdi.Parameters.Add("c_date", c_date); 
-                    objPrm[18] = cmdi.Parameters.Add("NoCuserID", userID);
-                    objPrm[19] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPrm[17] = cmdi.Parameters.Add("TextRepresentative", Convert.ToInt32(SupplierRepID[1]));
+                    objPrm[18] = cmdi.Parameters.Add("c_date", c_date); 
+                    objPrm[19] = cmdi.Parameters.Add("NoCuserID", userID);
+                    objPrm[20] = cmdi.Parameters.Add("TextIsActive", ISActive);
                   
                     cmdi.ExecuteNonQuery(); 
                     cmdi.Parameters.Clear();
@@ -576,7 +578,7 @@ namespace NRCAPPS.MS
             Session["user_data_id"] = btn.CommandArgument;
             int USER_DATA_ID = Convert.ToInt32(Session["user_data_id"]);
 
-            string makeSQL = " select PURCHASE_ID, SLIP_NO,  PARTY_ID, VEHICLE_MODE_ID, VEHICLE_NO, ITEM_ID, CATEGORY_ID, ITEM_WEIGHT, nvl(ITEM_WEIGHT_WB,0) AS ITEM_WEIGHT_WB, ITEM_RATE, nvl(ITEM_AMOUNT,0) AS ITEM_AMOUNT, nvl(VAT_ID,0) AS VAT_ID, nvl(VAT_AMOUNT,0) AS VAT_AMOUNT, nvl(TOTAL_AMOUNT,0) AS TOTAL_AMOUNT, TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, CREATE_DATE,  UPDATE_DATE,  C_USER_ID, U_USER_ID, IS_ACTIVE from MS_PURCHASE_MASTER where PURCHASE_ID  = '" + USER_DATA_ID + "'";
+            string makeSQL = " select PURCHASE_ID, SLIP_NO,  PARTY_ID || '-' || REPRESENTATIVE_ID AS PARTY_ID, VEHICLE_MODE_ID, VEHICLE_NO, ITEM_ID, CATEGORY_ID, ITEM_WEIGHT, nvl(ITEM_WEIGHT_WB,0) AS ITEM_WEIGHT_WB, ITEM_RATE, nvl(ITEM_AMOUNT,0) AS ITEM_AMOUNT, nvl(VAT_ID,0) AS VAT_ID, nvl(VAT_AMOUNT,0) AS VAT_AMOUNT, nvl(TOTAL_AMOUNT,0) AS TOTAL_AMOUNT, TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, CREATE_DATE,  UPDATE_DATE,  C_USER_ID, U_USER_ID, IS_ACTIVE from MS_PURCHASE_MASTER where PURCHASE_ID  = '" + USER_DATA_ID + "'";
 
             cmdl = new OracleCommand(makeSQL);
             oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -588,7 +590,7 @@ namespace NRCAPPS.MS
             {
                 DataTable dtItemID = new DataTable();
                 DataSet dsi = new DataSet();
-                string makeDropDownItemSQL = " SELECT ITEM_ID, ITEM_NAME || ' - ' || ITEM_CODE AS ITEM_NAME FROM MF_ITEM WHERE CATEGORY_ID = '" + Convert.ToInt32(dt.Rows[i]["CATEGORY_ID"].ToString()) + "' AND IS_ACTIVE = 'Enable' ORDER BY ITEM_ID ASC";
+                string makeDropDownItemSQL = " SELECT ITEM_ID, ITEM_CODE || ' : ' || ITEM_NAME AS ITEM_NAME FROM MF_ITEM WHERE CATEGORY_ID = '" + Convert.ToInt32(dt.Rows[i]["CATEGORY_ID"].ToString()) + "' AND IS_ACTIVE = 'Enable' ORDER BY ITEM_ID ASC";
                 dsi = ExecuteBySqlString(makeDropDownItemSQL);
                 dtItemID = (DataTable)dsi.Tables[0];
                 DropDownItemID.DataSource = dtItemID;
@@ -670,18 +672,18 @@ namespace NRCAPPS.MS
                 string ThreeDaysBefore = ThreeDaysBeforeTemp.ToString("yyyy/MM/dd");
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID  WHERE to_char(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + ThreeDaysBefore  + "' AND '" + DayMonthYear + "' ORDER BY WPM.CREATE_DATE DESC  ";
+                    makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID  WHERE to_char(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + ThreeDaysBefore  + "' AND '" + DayMonthYear + "' ORDER BY WPM.CREATE_DATE DESC  ";
 
                 }
                 else
                 {
                     if (DropDownSearchItemID.Text == "0")
                     {
-                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%'  or WI.ITEM_NAME like '" + txtSearchEmp.Text + "%'  or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%'  ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
+                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%'  or WI.ITEM_NAME like '" + txtSearchEmp.Text + "%'  or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%'  ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
                     }
                     else
                     {
-                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where  WI.ITEM_ID like '" + DropDownSearchItemID.Text + "%' AND (WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
+                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where  WI.ITEM_ID like '" + DropDownSearchItemID.Text + "%' AND (WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
                     }
 
                  //   alert_box.Visible = false;
@@ -811,8 +813,9 @@ namespace NRCAPPS.MS
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-                int userID = Convert.ToInt32(Session["USER_ID"]); 
-                int SupplierID = Convert.ToInt32(DropDownSupplierID.Text);
+                int userID = Convert.ToInt32(Session["USER_ID"]);  
+                string SupplierID = DropDownSupplierID.Text;
+                string[] SupplierRepID = SupplierID.Split('-');
                 int PurchaseID = Convert.ToInt32(TextPurchaseID.Text);
                 int SlipNoWp = Convert.ToInt32(TextMsSlipNo.Text); 
                 int ItemID = Convert.ToInt32(Request.Form[DropDownItemID.UniqueID]);
