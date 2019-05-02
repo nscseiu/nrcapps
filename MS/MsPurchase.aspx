@@ -46,7 +46,28 @@
  
                     }
      
-                  
+                    function  GetRepresentative() {   
+                         
+                                   $("[id*=ctl00_ContentPlaceHolder1_DropDownRepresentativeID]").removeAttr("disabled"); 
+                                    var PartyId = $("#ctl00_ContentPlaceHolder1_DropDownSupplierID").val();
+                                   $("[id*=ctl00_ContentPlaceHolder1_DropDownRepresentativeID]").removeAttr("disabled");  
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "MsPurchase.aspx/GetRepresentativeList",
+                                        data: '{"PartyId": "' + PartyId + '"}',
+                                        contentType: "application/json; charset=utf-8",
+                                        dataType: "json",
+                                        success: function (r) {
+                                            var ctl00_ContentPlaceHolder1_DropDownRepresentativeID = $("[id*=ctl00_ContentPlaceHolder1_DropDownRepresentativeID]");
+                                                ctl00_ContentPlaceHolder1_DropDownRepresentativeID.empty().append('<option value="0">Please Select Representative</option>');
+                                            $.each(r.d, function () {
+                                                ctl00_ContentPlaceHolder1_DropDownRepresentativeID.append($("<option></option>").val(this['Value']).html(this['Text']));
+
+                                            });
+                                        }
+                                    });
+ 
+                    }                  
                /* Function to get data Item rate */
                function GetItemDataListWp() {
                    var ItemId = $("#ctl00_ContentPlaceHolder1_DropDownItemID").val(); 
@@ -140,15 +161,25 @@
                       </div>
                </div>
                <div class="form-group">
-                  <label  class="col-sm-3 control-label">Supplier & Representative</label> 
+                  <label  class="col-sm-3 control-label">Supplier</label> 
                   <div class="col-sm-9">   
-                    <asp:DropDownList ID="DropDownSupplierID" class="form-control select2 input-sm" runat="server"> 
+                    <asp:DropDownList ID="DropDownSupplierID" class="form-control select2 input-sm" runat="server"  onchange="GetRepresentative()"> 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" 
                           ControlToValidate="DropDownSupplierID" Display="Dynamic" 
                           ErrorMessage="Select Supplier" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div>  
-                </div> 
+                </div>  
+                   <div class="form-group">
+                  <label  class="col-sm-3 control-label">Representative</label> 
+                  <div class="col-sm-9">   
+                    <asp:DropDownList ID="DropDownRepresentativeID" class="form-control select2 input-sm" runat="server"> 
+                    </asp:DropDownList>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                          ControlToValidate="DropDownRepresentativeID" Display="Dynamic" 
+                          ErrorMessage="Select Representative" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                  </div>  
+                </div>
                 <div class="form-group">
                   <label  class="col-sm-3 control-label">Category</label> 
                   <div class="col-sm-3">   
@@ -416,7 +447,7 @@
         
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Statement (Daily Collection Supplier - Month Wise) Parameter</h3>
+              <h3 class="box-title"> Purchase Statement (Daily Representative Supplier - Month Wise) Parameter</h3>
             </div>
             <!-- /.box-header -->
 
@@ -496,11 +527,11 @@
                %> 
             <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Statement (Daily Collection Supplier - Month Wise) Report View</h3>
+              <h3 class="box-title"> Purchase Statement (Daily Representative Supplier - Month Wise) Report View</h3>
             </div> 
             <!-- /.box-header -->
                     <div class="box-body table-responsive">       
-                           <iframe src="WP_Reports/WpPurchaseSupplierWiseReportView.aspx?StartDate=<%=EntryDate1.Text %>&EndDate=<%=EntryDate2.Text %>&SupplierID=<%=DropDownSupplierID2.Text %>&DropDownItemID=<%=ItemIDList%>" width="950px" id="iframe1"
+                           <iframe src="MS_Reports/MsPurchaseSupplierWiseReportView.aspx?StartDate=<%=EntryDate1.Text %>&EndDate=<%=EntryDate2.Text %>&SupplierID=<%=DropDownSupplierID2.Text %>&DropDownItemID=<%=ItemIDList%>" width="950px" id="iframe1"
                         marginheight="0" frameborder="0" scrolling="auto" height="1250px">   </iframe>  
                          </div>
                        </div> 
@@ -510,7 +541,7 @@
 
              <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title"> Summary of Purchases (Material Collection - Month Wise) Parameter</h3>
+              <h3 class="box-title"> Purchases Supplier Code Wise Material Representative - Parameter</h3>
             </div>
             <!-- /.box-header -->
 
@@ -564,11 +595,11 @@
                 {%> 
             <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title"> Summary of Purchases (Material Collection - Month Wise) Report View</h3>
+              <h3 class="box-title"> Purchases Supplier Code Wise Material Representative Report View</h3>
             </div> 
             <!-- /.box-header -->
                     <div class="box-body table-responsive">       
-                           <iframe src="WP_Reports/WpPurchaseSummaryReportView.aspx?StartDate=<%=EntryDate8.Text %>&EndDate=<%=EntryDate9.Text %>" width="950px" id="iframe2"
+                           <iframe src="MS_Reports/MsPurchaseSummaryReportView.aspx?StartDate=<%=EntryDate8.Text %>&EndDate=<%=EntryDate9.Text %>" width="950px" id="iframe2"
                         marginheight="0" frameborder="0" scrolling="auto" height="1250px">   </iframe>  
                          </div>
                        </div> 
@@ -578,20 +609,20 @@
 
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title"> Supervisor Statement (Purchases - Monthly) Parameter</h3>
+              <h3 class="box-title"> Purchase Marketer's Statement (Monthly) Parameter</h3>
             </div>
             <!-- /.box-header -->
 
               <div class="box-body">
             <!-- form start -->   
              <div class="form-group">
-                  <label  class="col-sm-2 control-label">Supervisor Name</label> 
+                  <label  class="col-sm-2 control-label">Purchase Marketer's Name</label> 
                   <div class="col-sm-2">   
-                    <asp:DropDownList ID="DropDownSupervisorID2" class="form-control input-sm" runat="server"> 
+                    <asp:DropDownList ID="DropDownMarketerID" class="form-control select2 input-sm" runat="server"> 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" 
-                          ControlToValidate="DropDownSupervisorID2" Display="Dynamic" 
-                          ErrorMessage="Select Supervisor" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup4'></asp:RequiredFieldValidator>
+                          ControlToValidate="DropDownMarketerID" Display="Dynamic" 
+                          ErrorMessage="Select Purchase Marketer's" InitialValue="0" SetFocusOnError="True" ValidationGroup='valGroup4'></asp:RequiredFieldValidator>
                   </div>
                 </div>
                    <div class="form-group">
@@ -630,11 +661,11 @@
                 {%> 
             <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title"> Payment Summary (Purchases - Monthly) Report View</h3>
+              <h3 class="box-title"> Purchase Marketer's Statement (Monthly) Report View</h3>
             </div> 
             <!-- /.box-header -->
                     <div class="box-body table-responsive">       
-                           <iframe src="PF_Reports/PfPurchaseSupervisorReportView.aspx?MonthYear=<%=TextMonthYear2.Text %>&SupervisorID=<%=DropDownSupervisorID2.Text %>" width="950px" id="iframe3"
+                           <iframe src="MS_Reports/MsPurchaseMarketersReportView.aspx?MonthYear=<%=TextMonthYear2.Text %>&MarketerID=<%=DropDownMarketerID.Text %>" width="950px" id="iframe3"
                         marginheight="0" frameborder="0" scrolling="auto" height="1250px">   </iframe>  
                          </div>
                        </div> 
@@ -645,20 +676,20 @@
                   
                     <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Collection For Parameter</h3>
+              <h3 class="box-title"> Purchase Representative For Parameter</h3>
             </div>
             <!-- /.box-header -->
 
               <div class="box-body">
             <!-- form start -->   
               <div class="form-group">
-                  <label  class="col-sm-2 control-label">Collection For</label> 
+                  <label  class="col-sm-2 control-label">Representative</label> 
                   <div class="col-sm-5">   
-                    <asp:DropDownList ID="DropDownCollectionFor2" class="form-control input-sm" runat="server"> 
+                    <asp:DropDownList ID="DropDownRepresentativeID1" class="form-control select2 input-sm" runat="server"> 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" 
-                          ControlToValidate="DropDownCollectionFor2" Display="Dynamic" 
-                          ErrorMessage="Select Collection For" InitialValue="0" SetFocusOnError="True"  ValidationGroup='valGroup5'></asp:RequiredFieldValidator>
+                          ControlToValidate="DropDownRepresentativeID1" Display="Dynamic" 
+                          ErrorMessage="Select Representative" InitialValue="0" SetFocusOnError="True"  ValidationGroup='valGroup5'></asp:RequiredFieldValidator>
                   </div>
                 </div>
                    <div class="form-group">
@@ -725,11 +756,11 @@
                %> 
             <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Collection For Report View</h3>
+              <h3 class="box-title"> Purchase Representative For Report View</h3>
             </div> 
             <!-- /.box-header -->
             <div class="box-body table-responsive">       
-                <iframe src="WP_Reports/WpPurchaseCollectionForReportView.aspx?StartDate=<%=EntryDate6.Text %>&EndDate=<%=EntryDate7.Text %>&CollectionForID=<%=DropDownCollectionFor2.Text %>&DropDownItemID=<%=ItemIDList%>" width="950px" id="iframe1" marginheight="0" frameborder="0" scrolling="auto" height="1250px">   </iframe>  
+                <iframe src="MS_Reports/MsPurchaseRepresentativeReportView.aspx?StartDate=<%=EntryDate6.Text %>&EndDate=<%=EntryDate7.Text %>&RepresentativeID=<%=DropDownRepresentativeID1.Text %>&DropDownItemID=<%=ItemIDList%>" width="1250px" id="iframe1" marginheight="0" frameborder="0" scrolling="auto" height="950px">   </iframe>  
                     </div>
                 </div>  
                      <%} %>   
@@ -740,21 +771,13 @@
 
                <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Statement (Daily Collection Driver Wise - Supplier Category) Parameter</h3>
+              <h3 class="box-title"> Purchase Statement (Vehicle Mode Wise) Parameter</h3>
             </div>
             <!-- /.box-header -->
 
               <div class="box-body">
             <!-- form start -->   
-              <div class="form-group">
-                  <label  class="col-sm-2 control-label">Driver Name</label> 
-                  <div class="col-sm-5">   
-                    <asp:DropDownList ID="DropDownDriverID2" class="form-control select2 input-sm" runat="server"> 
-                    </asp:DropDownList>  
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" 
-                          ControlToValidate="DropDownDriverID2" Display="Dynamic" 
-                          ErrorMessage="Select Driver" InitialValue="0" SetFocusOnError="True"  ValidationGroup='valGroup7'></asp:RequiredFieldValidator>
-                  </div>
+              <div class="form-group"> 
                 </div>
                    <div class="form-group">
                     <label class="col-sm-2 control-label">Select Date </label>
@@ -784,13 +807,13 @@
 
                   </div>
                   <div class="form-group">
-                  <label  class="col-sm-2 control-label">Select Supplier Category</label> 
+                  <label  class="col-sm-2 control-label">Select Vehicle Mode</label> 
                   <div class="col-sm-5">   
                     <asp:ListBox ID="DropDownVehicleID2" class="form-control select2 input-sm" SelectionMode="multiple" runat="server"> 
                     </asp:ListBox>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" 
                           ControlToValidate="DropDownVehicleID2" Display="Dynamic" 
-                          ErrorMessage="Select Supplier Category" SetFocusOnError="True"   ValidationGroup='valGroup7'></asp:RequiredFieldValidator>
+                          ErrorMessage="Select Vehicle Mode" SetFocusOnError="True"   ValidationGroup='valGroup7'></asp:RequiredFieldValidator>
                   </div>
                 </div>
                 </div> 
@@ -820,11 +843,11 @@
                %> 
             <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Statement (Daily Collection Driver Wise - Supplier Category) Report View</h3>
+              <h3 class="box-title"> Purchase Statement ((Vehicle Mode Wise) ) Report View</h3>
             </div> 
             <!-- /.box-header -->
                     <div class="box-body table-responsive">       
-                           <iframe src="WP_Reports/WpPurchaseDriverWiseReportView.aspx?StartDate=<%=EntryDate4.Text %>&EndDate=<%=EntryDate5.Text %>&DriverID=<%=DropDownDriverID2.Text %>&DropDownVehicleID2=<%=ItemIDList%>" width="950px" id="iframe1"
+                           <iframe src="MS_Reports/MsPurchaseModeWiseReportView.aspx?StartDate=<%=EntryDate4.Text %>&EndDate=<%=EntryDate5.Text %>&DropDownVehicleID2=<%=ItemIDList%>" width="950px" id="iframe1"
                         marginheight="0" frameborder="0" scrolling="auto" height="1250px">   </iframe>  
                          </div>
                        </div> 
@@ -873,7 +896,7 @@
           
              <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title"> Purchase Statement (Daily Material Collection) Parameter</h3>
+              <h3 class="box-title"> Purchase Statement (Daily Material Representative) Parameter</h3>
             </div>
             <!-- /.box-header -->
 

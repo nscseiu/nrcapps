@@ -150,8 +150,8 @@ namespace NRCAPPS.MS
 
         public void BtnAdd_Click(object sender, EventArgs e)
         {
-          //  try
-          //  {
+           try
+            {
                 if (IS_ADD_ACTIVE == "Enable")
                 {
                     OracleConnection conn = new OracleConnection(strConnString);
@@ -280,15 +280,15 @@ namespace NRCAPPS.MS
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
-           //     }
-          //  catch
-           //   {
-           //     Response.Redirect("~/ParameterError.aspx");
-           //   } 
+                 }
+             catch
+                {
+                  Response.Redirect("~/ParameterError.aspx");
+            } 
         }
 
         [WebMethod]
-        public static Boolean WpSalesInvoiceNoCheck(int InvoiceNo)
+        public static Boolean MsSalesInvoiceNoCheck(string InvoiceNo)
         {
             Boolean result = false;
             string query = "select INVOICE_NO from MS_SALES_MASTER where INVOICE_NO = '" + InvoiceNo + "'";
@@ -494,6 +494,7 @@ namespace NRCAPPS.MS
             Display();
             CheckItemWeight.Text = "";
             CheckInvoiceNo.Text = "";
+            TextInvoiceMsNo.Enabled = false;
             DropDownCustomerID.Attributes.Remove("disabled");
             alert_box.Visible = false;
          //   DropDownItemID.Attributes.Add("readonly", "readonly");
@@ -523,17 +524,17 @@ namespace NRCAPPS.MS
                 string MonthYear = System.DateTime.Now.ToString("MM/yyyy");
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PP.PARTY_NAME, PI.ITEM_NAME, PSI.CATEGORY_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, (PSM.ITEM_AMOUNT + PSM.VAT_AMOUNT) AS TOTAL_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE,  PSM.IS_PRINT, TO_CHAR(PSM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE  FROM MS_SALES_MASTER PSM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PSM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN MF_CATEGORY PSI ON PSI.CATEGORY_ID = PSM.CATEGORY_ID  WHERE  to_char(PSM.ENTRY_DATE, 'mm/yyyy') = '" + MonthYear + "' AND PSM.IS_SALES_RETURN IS NULL ORDER BY PSM.CREATE_DATE DESC";
+                    makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PP.PARTY_NAME, PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME AS ITEM_NAME, PSI.CATEGORY_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, (PSM.ITEM_AMOUNT + PSM.VAT_AMOUNT) AS TOTAL_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE,  PSM.IS_PRINT, TO_CHAR(PSM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE  FROM MS_SALES_MASTER PSM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PSM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN MF_CATEGORY PSI ON PSI.CATEGORY_ID = PSM.CATEGORY_ID  WHERE  to_char(PSM.ENTRY_DATE, 'mm/yyyy') = '" + MonthYear + "' AND PSM.IS_SALES_RETURN IS NULL ORDER BY PSM.CREATE_DATE DESC";
                 }
                 else
                 {
                     if (DropDownItemID1.Text == "0")
                     {
-                        makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PP.PARTY_NAME, PI.ITEM_NAME, PSI.CATEGORY_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, (PSM.ITEM_AMOUNT + PSM.VAT_AMOUNT) AS TOTAL_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE,  PSM.IS_PRINT, TO_CHAR(PSM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE  FROM MS_SALES_MASTER PSM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PSM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN MF_CATEGORY PSI ON PSI.CATEGORY_ID = PSM.CATEGORY_ID  WHERE PSM.IS_SALES_RETURN IS NULL  AND (PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PSI.CATEGORY_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
+                        makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PP.PARTY_NAME, PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME AS ITEM_NAME, PSI.CATEGORY_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, (PSM.ITEM_AMOUNT + PSM.VAT_AMOUNT) AS TOTAL_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE,  PSM.IS_PRINT, TO_CHAR(PSM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE  FROM MS_SALES_MASTER PSM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PSM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN MF_CATEGORY PSI ON PSI.CATEGORY_ID = PSM.CATEGORY_ID  WHERE PSM.IS_SALES_RETURN IS NULL  AND (PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PSI.CATEGORY_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
                     }
                     else
                     {
-                        makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PP.PARTY_NAME, PI.ITEM_NAME, PSI.CATEGORY_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, (PSM.ITEM_AMOUNT + PSM.VAT_AMOUNT) AS TOTAL_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE,  PSM.IS_PRINT, TO_CHAR(PSM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE  FROM MS_SALES_MASTER PSM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PSM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN MF_CATEGORY PSI ON PSI.CATEGORY_ID = PSM.CATEGORY_ID  WHERE PSM.IS_SALES_RETURN IS NULL AND PI.ITEM_ID like '" + DropDownItemID1.Text + "%'  AND (PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PSI.CATEGORY_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
+                        makeSQL = " SELECT PSM.SALES_ID, PSM.INVOICE_NO, PP.PARTY_NAME, PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME AS ITEM_NAME, PSI.CATEGORY_NAME, PSM.ITEM_WEIGHT, PSM.ITEM_RATE, PSM.ITEM_AMOUNT, PSM.VAT_ID, PSM.VAT_PERCENT, PSM.VAT_AMOUNT, (PSM.ITEM_AMOUNT + PSM.VAT_AMOUNT) AS TOTAL_AMOUNT, PSM.REMARKS, PSM.ENTRY_DATE, PSM.CREATE_DATE, PSM.UPDATE_DATE, PSM.IS_ACTIVE,  PSM.IS_PRINT, TO_CHAR(PSM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE  FROM MS_SALES_MASTER PSM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = PSM.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PSM.ITEM_ID LEFT JOIN MF_CATEGORY PSI ON PSI.CATEGORY_ID = PSM.CATEGORY_ID  WHERE PSM.IS_SALES_RETURN IS NULL AND PI.ITEM_ID like '" + DropDownItemID1.Text + "%'  AND (PSM.INVOICE_NO like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or PSI.CATEGORY_NAME like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or TO_CHAR(TO_DATE(PSM.ENTRY_DATE),'mm/yyyy') like '" + txtSearchEmp.Text + "%' or PSM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY PSM.CREATE_DATE desc, PSM.UPDATE_DATE desc";
 
                      }
                     alert_box.Visible = false;
@@ -574,11 +575,11 @@ namespace NRCAPPS.MS
                 string MonthYear = System.DateTime.Now.ToString("MM/yyyy");
                 if (TextMonthYear4.Text == "")
                 {
-                    makeSQL = "  SELECT PI.ITEM_NAME, count(PSM.SALES_ID) AS SALES_ID, sum(PSM.ITEM_WEIGHT) AS ITEM_WEIGHT, sum(PSM.ITEM_AMOUNT) AS ITEM_AMOUNT,  sum(nvl(PSM.VAT_AMOUNT,0)) AS VAT_AMOUNT,  sum(PSM.ITEM_AMOUNT)+ sum(nvl(PSM.VAT_AMOUNT,0)) AS TOTAL_AMOUNT FROM MF_ITEM PI LEFT JOIN MS_SALES_MASTER PSM ON PSM.ITEM_ID = PI.ITEM_ID WHERE to_char(PSM.ENTRY_DATE, 'mm/yyyy') =  '" + MonthYear + "' GROUP BY PI.ITEM_ID, PI.ITEM_NAME ORDER BY PI.ITEM_ID";
+                    makeSQL = "  SELECT PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME AS ITEM_NAME, count(PSM.SALES_ID) AS SALES_ID, sum(PSM.ITEM_WEIGHT) AS ITEM_WEIGHT, sum(PSM.ITEM_AMOUNT) AS ITEM_AMOUNT,  sum(nvl(PSM.VAT_AMOUNT,0)) AS VAT_AMOUNT,  sum(PSM.ITEM_AMOUNT)+ sum(nvl(PSM.VAT_AMOUNT,0)) AS TOTAL_AMOUNT FROM MF_ITEM PI LEFT JOIN MS_SALES_MASTER PSM ON PSM.ITEM_ID = PI.ITEM_ID WHERE to_char(PSM.ENTRY_DATE, 'mm/yyyy') =  '" + MonthYear + "' GROUP BY PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME ORDER BY PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME ";
                 }
                 else
                 { 
-                    makeSQL = "  SELECT PI.ITEM_NAME, count(PSM.SALES_ID) AS SALES_ID, sum(PSM.ITEM_WEIGHT) AS ITEM_WEIGHT, sum(PSM.ITEM_AMOUNT) AS ITEM_AMOUNT,  sum(PSM.VAT_AMOUNT) AS VAT_AMOUNT,  sum(PSM.ITEM_AMOUNT)+ sum(PSM.VAT_AMOUNT) AS TOTAL_AMOUNT FROM MF_ITEM PI LEFT JOIN MS_SALES_MASTER PSM ON PSM.ITEM_ID = PI.ITEM_ID WHERE to_char(PSM.ENTRY_DATE, 'mm/yyyy') = '" + TextMonthYear4.Text + "' GROUP BY PI.ITEM_ID, PI.ITEM_NAME ORDER BY PI.ITEM_ID";
+                    makeSQL = "  SELECT PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME AS ITEM_NAME, count(PSM.SALES_ID) AS SALES_ID, sum(PSM.ITEM_WEIGHT) AS ITEM_WEIGHT, sum(PSM.ITEM_AMOUNT) AS ITEM_AMOUNT,  sum(PSM.VAT_AMOUNT) AS VAT_AMOUNT,  sum(PSM.ITEM_AMOUNT)+ sum(PSM.VAT_AMOUNT) AS TOTAL_AMOUNT FROM MF_ITEM PI LEFT JOIN MS_SALES_MASTER PSM ON PSM.ITEM_ID = PI.ITEM_ID WHERE to_char(PSM.ENTRY_DATE, 'mm/yyyy') = '" + TextMonthYear4.Text + "' GROUP BY PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME ORDER BY PI.ITEM_CODE  || ' : ' || PI.ITEM_NAME ";
                     alert_box.Visible = false;
                 }
 
@@ -646,7 +647,7 @@ namespace NRCAPPS.MS
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
         {
-      //  try {
+         try {
 
                 if (IS_EDIT_ACTIVE == "Enable")
                 {
@@ -816,11 +817,11 @@ namespace NRCAPPS.MS
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
-          //    }
-         //   catch
-         //   {
-         //       Response.Redirect("~/ParameterError.aspx");
-          //  } 
+               }
+              catch
+              {
+                Response.Redirect("~/ParameterError.aspx");
+             } 
         }
 
 
@@ -1006,63 +1007,7 @@ namespace NRCAPPS.MS
             return ds;
         }
 
-        public void TextCheckDataProcess(object sender, EventArgs e)
-        {
-            // Check inventory data process in last month
-            string MakeAsOnDate = EntryDate.Text;
-            string[] MakeAsOnDateSplit = MakeAsOnDate.Split('-');
-            String AsOnDateTemp = MakeAsOnDateSplit[0].Replace("/", "-");
-            DateTime AsOnDateNewD = DateTime.ParseExact(AsOnDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-            string AsOnDateNew = AsOnDateNewD.ToString("dd-MM-yyyy");
-
-            DateTime curDate = AsOnDateNewD;
-            DateTime startDate = curDate.AddMonths(-1);
-            DateTime LastDateTemp = curDate.AddDays(-(curDate.Day));
-            string LastDate = LastDateTemp.ToString("dd-MM-yyyy");
-            string LastMonthTemp = LastDateTemp.ToString("MM-yyyy");
-            DateTime LastMonth = DateTime.ParseExact(LastMonthTemp, "MM-yyyy", CultureInfo.InvariantCulture);
-            string CurrentMonthTemp = AsOnDateNewD.ToString("MM-yyyy");
-            DateTime CurrentMonth = DateTime.ParseExact(CurrentMonthTemp, "MM-yyyy", CultureInfo.InvariantCulture);
-            string SysMonthTemp = System.DateTime.Now.ToString("MM-yyyy");
-            DateTime SysMonth = DateTime.ParseExact(SysMonthTemp, "MM-yyyy", CultureInfo.InvariantCulture);
-            DateTime SysLastMonth = SysMonth.AddMonths(-1);
-
-            OracleConnection conn = new OracleConnection(strConnString);
-            conn.Open();
-            OracleCommand cmd = new OracleCommand();
-            cmd.Connection = conn;
-            cmd.CommandText = "select ITEM_ID from MS_RM_STOCK_INVENTORY_HISTORY where TO_CHAR(TO_DATE(CREATE_DATE), 'dd-MM-yyyy')   = '" + LastDate + "'";
-            cmd.CommandType = CommandType.Text;
-
-            OracleDataReader dr = cmd.ExecuteReader();
-            if (dr.HasRows)
-            {
-                if (CurrentMonth == SysMonth || CurrentMonth == SysLastMonth)
-                {
-                    CheckEntryDate.Text = "";
-                    BtnAdd.Attributes.Add("aria-disabled", "true");
-                    BtnAdd.Attributes.Add("class", "btn btn-primary active");
-                    CheckEntryDate.Text = "<label class='control-label'><i class='fa fa fa-check-circle'></i></label>";
-                    CheckEntryDate.ForeColor = System.Drawing.Color.Green;
-                }
-                else
-                {
-                    CheckEntryDate.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> Please, Insert Data Current or last months.</label>";
-                    CheckEntryDate.ForeColor = System.Drawing.Color.Red;
-                    EntryDate.Focus();
-                    BtnAdd.Attributes.Add("aria-disabled", "false");
-                    BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
-                }
-            }
-            else
-            {
-                CheckEntryDate.Text = "<label class='control-label'><i class='fa fa-times-circle-o'></i> Please, Complete Data process in last months (" + LastDate + "). It is required for insert current month data. </label>";
-                CheckEntryDate.ForeColor = System.Drawing.Color.Red;
-                EntryDate.Focus();
-                BtnAdd.Attributes.Add("aria-disabled", "false");
-                BtnAdd.Attributes.Add("class", "btn btn-primary disabled");
-            }
-        }
+      
 
            
         protected void BtnReport_Click(object sender, EventArgs e)

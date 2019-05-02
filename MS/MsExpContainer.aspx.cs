@@ -458,11 +458,19 @@ namespace NRCAPPS.MS
                 HtmlString += "<tr>";
                 HtmlString += "<td style='text-align:right;'>Net Wt. (KG)</td> ";
                 HtmlString += "<td style='text-align:right;border-top:black solid 1px;'>" + string.Format("{0:n0}", (ItemWbWeight - TareWeight)) + "</td> ";
+                HtmlString += "</tr>";
+                for (int i = 0; i < RowCount; i++)
+                {
+                   HtmlString += "<tr>";
+                HtmlString += "<td style='text-align:right;'>Less " + dt.Rows[i]["PACKING_NAME"].ToString() + " (" + dt.Rows[i]["NUMBER_OF_PACK"].ToString() + "x" + Convert.ToDouble(dt.Rows[i]["PACK_PER_WEIGHT"].ToString()) + ")= (KG)</td> ";
+                HtmlString += "<td style='text-align:right;'>" + string.Format("{0:n0}", (Convert.ToDouble(dt.Rows[i]["NUMBER_OF_PACK"].ToString()) * Convert.ToDouble(dt.Rows[i]["PACK_PER_WEIGHT"].ToString()))) + "</td> ";
                 HtmlString += "</tr>"; 
-                HtmlString += "<tr>";
-                HtmlString += "<td style='text-align:right;'>Less " + PackingName + " (" + PakingWt + "x" + PakingPerWt + ")= (KG)</td> ";
-                HtmlString += "<td style='text-align:right;'>" + string.Format("{0:n0}", (PakingWt * PakingPerWt)) + "</td> ";
-                HtmlString += "</tr>"; 
+
+                 //   HtmlString += "" + dt.Rows[i]["NUMBER_OF_PACK"].ToString() + " " + dt.Rows[i]["PACKING_NAME"].ToString() + "-" + dt.Rows[i]["ITEM_WS_DESCRIPTION"].ToString() + " = " + string.Format("{0:n0}", Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString())) + " KG</br>";
+
+                }
+
+               
                 HtmlString += "<tr>";
                 HtmlString += "<td style='text-align:right;'>Final Net Wt. (KG)</td> ";
                 HtmlString += "<td style='text-align:right;border-top:black solid 1px;'>" + string.Format("{0:n0}", ((ItemWbWeight - TareWeight) - (PakingWt * PakingPerWt))) + "</td> ";

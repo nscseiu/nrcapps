@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Material Transaction Form & List - Plastic Factory" EnableEventValidation="false" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfMaterialTransaction.aspx.cs" Inherits="NRCAPPS.Pf.PfMaterialTransaction" %>
+﻿<%@ Page Title="Material Transaction Form & List - Plastic Factory" EnableEventValidation="false" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"  CodeBehind="PfMaterialTransaction.aspx.cs" Inherits="NRCAPPS.PF.PfMaterialTransaction" %>
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="ContentPlaceHolder1"> 
@@ -48,9 +48,21 @@
                     <asp:TextBox ID="TextMatTransactionForID" class="form-control input-sm"  runat="server"></asp:TextBox>    
                </div>  </div> 
                 <div class="form-group">     
+                    <label class="col-sm-3 control-label">Transaction For Inventory</label> 
+                   <div class="col-sm-4">    
+                    <asp:DropDownList ID="DropDownTransInventoryID" class="form-control input-sm" runat="server" > 
+                          <asp:ListItem Text="Raw Material" Value="RM"></asp:ListItem>
+                          <asp:ListItem Text="Ffinished Goods" Value="FG"></asp:ListItem>
+                    </asp:DropDownList>  
+                      <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                          ControlToValidate="DropDownTransInventoryID" Display="Dynamic" 
+                          ErrorMessage="Select Transaction For Inventory" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                     </div> 
+               </div> 
+                <div class="form-group">     
                     <label class="col-sm-3 control-label">Transaction Action For</label> 
                    <div class="col-sm-4">    
-                    <asp:DropDownList ID="DropDownTransactionForID" class="form-control input-sm" runat="server" > 
+                    <asp:DropDownList ID="DropDownTransactionForID" class="form-control input-sm" runat="server" onclick="GetMatTransfer()" > 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" 
                           ControlToValidate="DropDownTransactionForID" Display="Dynamic" 
@@ -60,7 +72,7 @@
                 <div class="form-group"> 
                     <label  class="col-sm-3 control-label">Item</label> 
                   <div class="col-sm-4">   
-                    <asp:DropDownList ID="DropDownItemID" class="form-control input-sm" runat="server"  > 
+                    <asp:DropDownList ID="DropDownItemID" class="form-control input-sm" runat="server"  onclick="GetMatTransfer()" > 
                     </asp:DropDownList>  
                          <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" 
                           ControlToValidate="DropDownItemID" Display="Dynamic" 
@@ -76,7 +88,17 @@
                     </div>
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server"   ControlToValidate="TextItemWeightWP" ErrorMessage="Insert Item Weight" Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
                   </div>
-                </div>   
+                </div> 
+               <div id="TransferItemBox" style="display:none" runat="server"> 
+               <div class="form-group"> 
+                    <label  class="col-sm-3 control-label">Transfer Item</label> 
+                  <div class="col-sm-3">   
+                    <asp:DropDownList ID="DropDownItemTransferID" class="form-control input-sm" runat="server" > 
+                    </asp:DropDownList>  
+                        
+                  </div>
+                </div>  
+               </div> 
                  <div class="form-group">
                     <label class="col-sm-3 control-label">Entry Date</label>
                      <div class="col-sm-3">   
@@ -146,12 +168,14 @@
            
             <!-- /.box-header -->
             <div class="box-body table-responsive">
-               <asp:GridView ID="GridView2" runat="server" EnablePersistedSelection="false"  
+                <asp:GridView ID="GridView2" runat="server" EnablePersistedSelection="false"  
     SelectedRowStyle-BackColor="Yellow"  AutoGenerateColumns="false" ShowHeader="true"  ShowFooter="true" CssClass="table  table-sm table-bordered table-striped"  >
                      <Columns>
+                      <asp:BoundField DataField="INVENTORY_TYPE"  HeaderText="For Inventory" />
                      <asp:BoundField DataField="TRANSACTION_FOR_NAME"  HeaderText="Transaction For" />
                      <asp:BoundField DataField="ITEM_NAME" HeaderText="Item Name" ItemStyle-HorizontalAlign="Center" />
-                     <asp:BoundField DataField="ITEM_WEIGHT" HeaderText="Total WET" DataFormatString="{0:0.000}" ItemStyle-HorizontalAlign="Right" />   
+                     <asp:BoundField DataField="ITEM_WEIGHT" HeaderText="Total WET" DataFormatString="{0:0,0.00}" ItemStyle-HorizontalAlign="Right" />  
+                     <asp:BoundField DataField="ITEM_NAME_TRANSFER" HeaderText="Transfer Item Name" ItemStyle-HorizontalAlign="Center" />
                      </Columns>
                         <PagerStyle CssClass="pagination-ys" />
                         <SelectedRowStyle BackColor="Yellow"></SelectedRowStyle>
@@ -200,9 +224,11 @@
                         <asp:LinkButton ID="linkPrintClick" class="btn btn-warning btn-xs" runat="server" CommandArgument='<%# Eval("MAT_TRANS_ID") %>' OnClick="btnPrint_Click" CausesValidation="False">TS Print</asp:LinkButton> 
                         </ItemTemplate>
                        </asp:TemplateField> 
+                     <asp:BoundField DataField="INVENTORY_TYPE" HeaderText="Trans. For Inventory" /> 
                      <asp:BoundField DataField="TRANSACTION_FOR_NAME" HeaderText="Transaction For" /> 
                      <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />     
-                     <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Weight" DataFormatString="{0:0.000}" />                       
+                     <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Weight" DataFormatString="{0:0.000}" />   
+                     <asp:BoundField DataField="ITEM_NAME_TRANSFER"  HeaderText="Transfer Item" DataFormatString="{0:0.00}" />         
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 
                              <asp:Label ID="IsActiveGV" CssClass="label" Text='<%# Eval("IS_ACTIVE").ToString() == "Enable" ? "<span Class=label-success style=Padding:2px >Enable<span>" : "<span Class=label-danger style=Padding:2px>Disable<span>" %>'  runat="server" /> 
@@ -237,7 +263,37 @@
       <!-- /.row -->
     </section>
     <!-- /.content -->
-         
+ <script language="javascript" type="text/javascript">
+        /* Function to Populate the Category Dropdown*/
+    function GetMatTransfer() {   
+            var ItemID = $("#ctl00_ContentPlaceHolder1_DropDownItemID").val();   
+            var TransactionForID = $("#ctl00_ContentPlaceHolder1_DropDownTransactionForID").val();   
+        if (TransactionForID == 3) {
+            $("#ctl00_ContentPlaceHolder1_TransferItemBox").show();
+            $.ajax({
+                type: "POST",
+                url: "PfMaterialTransaction.aspx/GetItemDataTransferList",
+                data: '{"ItemID": "' + ItemID + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    var ctl00_ContentPlaceHolder1_DropDownItemTransferID = $("[id*=ctl00_ContentPlaceHolder1_DropDownItemTransferID]");
+                    ctl00_ContentPlaceHolder1_DropDownItemTransferID.empty().append('<option value="0">Please Select Transfer Item</option>');
+                    $.each(r.d, function () {
+                        ctl00_ContentPlaceHolder1_DropDownItemTransferID.append($("<option></option>").val(this['Value']).html(this['Text']));
+
+                    });
+                }
+            });
+        } else {
+            $("#ctl00_ContentPlaceHolder1_TransferItemBox").hide();
+
+        }   
+            $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
+            $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
+ 
+        } 
+ </script>        
  
    <asp:Panel ID="PanelPrint" runat="server" ></asp:Panel>  
 </div> 

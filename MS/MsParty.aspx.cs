@@ -24,7 +24,7 @@ namespace NRCAPPS.MS
         string strConnString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         OracleCommand cmdu, cmdi, cmdl;
         OracleDataAdapter oradata;
-        DataTable dt;
+        DataTable dt, ds;
         int RowCount;
 
         string IS_PAGE_ACTIVE   = "";
@@ -118,8 +118,7 @@ namespace NRCAPPS.MS
                     OracleConnection conn = new OracleConnection(strConnString);
                     conn.Open();
 
-                    int userID = Convert.ToInt32(Session["USER_ID"]);
-                    int RepresentativeID = Convert.ToInt32(DropDownRepresentativeID.Text);
+                    int userID = Convert.ToInt32(Session["USER_ID"]); 
                     string get_supplier_id = "select MS_PARTY_ID_SEQ.nextval from dual";
                     cmdu = new OracleCommand(get_supplier_id, conn);
                     int newSupplierID = Int16.Parse(cmdu.ExecuteScalar().ToString());
@@ -130,30 +129,47 @@ namespace NRCAPPS.MS
 
                     string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                    string insert_user = "insert into MS_PARTY (PARTY_ID, PARTY_NAME, PARTY_ARABIC_NAME, PARTY_VAT_NO, PARTY_ADD_1, PARTY_ADD_2, CONTACT_NO, REPRESENTATIVE_ID, IS_ACTIVE, IS_PURCHASE_ACTIVE, IS_SALES_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoSupplierID, :TextSupplierName, :TextSupArabicName, :TextSupVatNo, :TextSup_Add_1, :TextSup_Add_2, :TextContactNo, :DropDownRepresentativeID, :TextIsActive, :TextIsPurchaseActive, :TextIsSalesActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                    string insert_user = "insert into MS_PARTY (PARTY_ID, PARTY_NAME, PARTY_ARABIC_NAME, PARTY_VAT_NO, PARTY_ADD_1, PARTY_ADD_2, CONTACT_NO, IS_ACTIVE, IS_PURCHASE_ACTIVE, IS_SALES_ACTIVE, CREATE_DATE, C_USER_ID) VALUES ( :NoSupplierID, :TextSupplierName, :TextSupArabicName, :TextSupVatNo, :TextSup_Add_1, :TextSup_Add_2, :TextContactNo, :TextIsActive, :TextIsPurchaseActive, :TextIsSalesActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_user, conn);
 
-                    OracleParameter[] objPrm = new OracleParameter[11];
+                    OracleParameter[] objPrm = new OracleParameter[12];
                     objPrm[0] = cmdi.Parameters.Add("NoSupplierID", newSupplierID);
                     objPrm[1] = cmdi.Parameters.Add("TextSupplierName", TextSupplierName.Text);
                     objPrm[2] = cmdi.Parameters.Add("TextSupArabicName", TextSupArabicName.Text);
                     objPrm[3] = cmdi.Parameters.Add("TextSupVatNo", TextSupVatNo.Text);
                     objPrm[4] = cmdi.Parameters.Add("TextSup_Add_1", TextSup_Add_1.Text);
                     objPrm[5] = cmdi.Parameters.Add("TextSup_Add_2", TextSup_Add_2.Text);
-                    objPrm[6] = cmdi.Parameters.Add("TextContactNo", TextContactNo.Text);
-                    objPrm[7] = cmdi.Parameters.Add("DropDownRepresentativeID", RepresentativeID);
-                    objPrm[8] = cmdi.Parameters.Add("TextIsActive", ISActive); 
-                    objPrm[7] = cmdi.Parameters.Add("TextIsPurchaseActive", IsPurchaseActive);
-                    objPrm[8] = cmdi.Parameters.Add("TextIsSalesActive", IsSalesActive);
-                    objPrm[9] = cmdi.Parameters.Add("u_date", u_date);
-                    objPrm[10] = cmdi.Parameters.Add("NoCuserID", userID);
-
-
-                    cmdi.ExecuteNonQuery();
-
+                    objPrm[6] = cmdi.Parameters.Add("TextContactNo", TextContactNo.Text); 
+                    objPrm[7] = cmdi.Parameters.Add("TextIsActive", ISActive); 
+                    objPrm[8] = cmdi.Parameters.Add("TextIsPurchaseActive", IsPurchaseActive);
+                    objPrm[9] = cmdi.Parameters.Add("TextIsSalesActive", IsSalesActive);
+                    objPrm[10] = cmdi.Parameters.Add("u_date", u_date);
+                    objPrm[11] = cmdi.Parameters.Add("NoCuserID", userID);
+                 
+                    cmdi.ExecuteNonQuery(); 
                     cmdi.Parameters.Clear();
                     cmdi.Dispose();
-                    conn.Close();
+
+                foreach (ListItem li in DropDownRepresentativeID.Items)
+                {
+
+                    if (li.Selected == true)
+                    {
+                        string RepresentativeID = li.Value;
+                        string insert_pur_rep = " insert into MS_PARTY_REPRESENTATIVE (PARTY_ID, REPRESENTATIVE_ID) VALUES ( :NoPartyID, :NoRepresentativeID) ";
+                        cmdi = new OracleCommand(insert_pur_rep, conn);
+
+                        OracleParameter[] objPr = new OracleParameter[3];
+                        objPr[0] = cmdi.Parameters.Add("NoPartyID", newSupplierID);
+                        objPr[1] = cmdi.Parameters.Add("NoRepresentativeID", RepresentativeID); 
+
+                        cmdi.ExecuteNonQuery();
+                    }
+                }
+                cmdi.Parameters.Clear();
+                cmdi.Dispose();
+
+                conn.Close();
                     alert_box.Visible = true;
                     alert_box.Controls.Add(new LiteralControl("Insert New Party Data Successfully"));
                     alert_box.Attributes.Add("class", "alert alert-success alert-dismissible"); 
@@ -246,12 +262,32 @@ namespace NRCAPPS.MS
                  TextSup_Add_1.Text = dt.Rows[i]["PARTY_ADD_1"].ToString();
                  TextSup_Add_2.Text = dt.Rows[i]["PARTY_ADD_2"].ToString();
                  TextContactNo.Text = dt.Rows[i]["CONTACT_NO"].ToString();
-                 DropDownRepresentativeID.Text = dt.Rows[i]["REPRESENTATIVE_ID"].ToString(); 
+              //   DropDownRepresentativeID.Text = dt.Rows[i]["REPRESENTATIVE_ID"].ToString(); 
                  CheckIsActive.Checked   = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
+
+
                          
-             } 
-             
-             conn.Close();
+             }
+                string makeSlipSQL = " SELECT REPRESENTATIVE_ID FROM MS_PARTY_REPRESENTATIVE  WHERE PARTY_ID = '" + USER_DATA_ID + "' ORDER BY REPRESENTATIVE_ID ASC  ";
+
+                cmdl = new OracleCommand(makeSlipSQL);
+                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+                ds = new DataTable();
+                oradata.Fill(ds);
+                RowCount = ds.Rows.Count;
+                foreach (ListItem li in DropDownRepresentativeID.Items)
+                {
+                    li.Selected = false;
+                    for (int i = 0; i < RowCount; i++)
+                    {
+                        if (li.Value == ds.Rows[i]["REPRESENTATIVE_ID"].ToString())
+                        {
+                            li.Selected = true;
+                        }
+                    }
+                }
+
+                conn.Close();
              Display();
              TextSupplierName.Focus();
              CheckSupplierName.Text = "";
@@ -274,7 +310,7 @@ namespace NRCAPPS.MS
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open(); 
 
-                string makeSQL  = " select  MP.*, MR.REPRESENTATIVE_NAME from MS_PARTY MP LEFT JOIN MS_REPRESENTATIVE MR ON MR.REPRESENTATIVE_ID = MP.REPRESENTATIVE_ID ORDER BY MP.UPDATE_DATE desc, MP.CREATE_DATE desc";
+                string makeSQL  = " select  MP.* from MS_PARTY MP  ORDER BY MP.UPDATE_DATE desc, MP.CREATE_DATE desc";
                  
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -319,35 +355,58 @@ namespace NRCAPPS.MS
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-                int userID = Convert.ToInt32(Session["USER_ID"]);
-                int RepresentativeID = Convert.ToInt32(DropDownRepresentativeID.Text);
+                int userID = Convert.ToInt32(Session["USER_ID"]); 
                 int USER_DATA_ID = Convert.ToInt32(TextSupplierID.Text);   
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
                 string IsPurchaseActive = CheckIsPurchaseActive.Checked ? "Enable" : "Disable";
                 string IsSalesActive = CheckIsSalesActive.Checked ? "Enable" : "Disable";
                 string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-                string update_user = "update  MS_PARTY  set PARTY_NAME = :TextSupplierName, PARTY_ARABIC_NAME = :TextSupArabicName, PARTY_VAT_NO = :TextSupVatNo, PARTY_ADD_1 = :TextSup_Add_1, PARTY_ADD_2 = :TextSup_Add_2, CONTACT_NO = :TextContactNo, REPRESENTATIVE_ID = :DropDownRepresentativeID, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive, IS_PURCHASE_ACTIVE =:TextIsPurchaseActive, IS_SALES_ACTIVE =:TextIsSalesActive where PARTY_ID = :NoSupplierID ";
+                string update_user = "update  MS_PARTY  set PARTY_NAME = :TextSupplierName, PARTY_ARABIC_NAME = :TextSupArabicName, PARTY_VAT_NO = :TextSupVatNo, PARTY_ADD_1 = :TextSup_Add_1, PARTY_ADD_2 = :TextSup_Add_2, CONTACT_NO = :TextContactNo, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoC_USER_ID, IS_ACTIVE = :TextIsActive, IS_PURCHASE_ACTIVE =:TextIsPurchaseActive, IS_SALES_ACTIVE =:TextIsSalesActive where PARTY_ID = :NoSupplierID ";
                 cmdi = new OracleCommand(update_user, conn);  
 
-                OracleParameter[] objPrm = new OracleParameter[13];
+                OracleParameter[] objPrm = new OracleParameter[12];
                 objPrm[0] = cmdi.Parameters.Add("TextSupplierName", TextSupplierName.Text);
                 objPrm[1] = cmdi.Parameters.Add("TextSupArabicName", TextSupArabicName.Text);
                 objPrm[2] = cmdi.Parameters.Add("TextSupVatNo", TextSupVatNo.Text);
                 objPrm[3] = cmdi.Parameters.Add("TextSup_Add_1", TextSup_Add_1.Text);
                 objPrm[4] = cmdi.Parameters.Add("TextSup_Add_2", TextSup_Add_2.Text); 
-                objPrm[5] = cmdi.Parameters.Add("TextContactNo", TextContactNo.Text);
-                objPrm[6] = cmdi.Parameters.Add("DropDownRepresentativeID", RepresentativeID);
-                objPrm[7] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[8] = cmdi.Parameters.Add("NoSupplierID", USER_DATA_ID);
-                objPrm[9] = cmdi.Parameters.Add("NoC_USER_ID", userID);
-                objPrm[10] = cmdi.Parameters.Add("TextIsActive", ISActive); 
-                objPrm[11] = cmdi.Parameters.Add("TextIsPurchaseActive", IsPurchaseActive);
-                objPrm[12] = cmdi.Parameters.Add("TextIsSalesActive", IsSalesActive);
+                objPrm[5] = cmdi.Parameters.Add("TextContactNo", TextContactNo.Text); 
+                objPrm[6] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[7] = cmdi.Parameters.Add("NoSupplierID", USER_DATA_ID);
+                objPrm[8] = cmdi.Parameters.Add("NoC_USER_ID", userID);
+                objPrm[9] = cmdi.Parameters.Add("TextIsActive", ISActive); 
+                objPrm[10] = cmdi.Parameters.Add("TextIsPurchaseActive", IsPurchaseActive);
+                objPrm[11] = cmdi.Parameters.Add("TextIsSalesActive", IsSalesActive);
 
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
-                cmdi.Dispose(); 
+                cmdi.Dispose();
+
+                string delete_user = " delete from MS_PARTY_REPRESENTATIVE where PARTY_ID  = '" + Convert.ToInt32(TextSupplierID.Text) + "'"; 
+                cmdi = new OracleCommand(delete_user, conn); 
+                cmdi.ExecuteNonQuery();
+                cmdi.Parameters.Clear();
+                cmdi.Dispose();
+
+                foreach (ListItem li in DropDownRepresentativeID.Items)
+                { 
+                    if (li.Selected == true)
+                    {
+                        string RepresentativeID = li.Value;
+                        string insert_pur_rep = " insert into MS_PARTY_REPRESENTATIVE (PARTY_ID, REPRESENTATIVE_ID) VALUES ( :NoPartyID, :NoRepresentativeID) ";
+                        cmdi = new OracleCommand(insert_pur_rep, conn);
+
+                        OracleParameter[] objPr = new OracleParameter[3];
+                        objPr[0] = cmdi.Parameters.Add("NoPartyID", Convert.ToInt32(TextSupplierID.Text));
+                        objPr[1] = cmdi.Parameters.Add("NoRepresentativeID", RepresentativeID);
+
+                        cmdi.ExecuteNonQuery();
+                    }
+                }
+                cmdi.Parameters.Clear();
+                cmdi.Dispose();
+
                 conn.Close();  
 
                 alert_box.Visible = true;
@@ -418,6 +477,13 @@ namespace NRCAPPS.MS
                 cmdi.ExecuteNonQuery();
                 cmdi.Parameters.Clear();
                 cmdi.Dispose();
+
+                string delete_user = " delete from MS_PARTY_REPRESENTATIVE where PARTY_ID  = '" + USER_DATA_ID + "'";
+                cmdi = new OracleCommand(delete_user, conn);
+                cmdi.ExecuteNonQuery();
+                cmdi.Parameters.Clear();
+                cmdi.Dispose();
+
                 conn.Close();
                 alert_box.Visible = true;
                 alert_box.Controls.Add(new LiteralControl("Party Delete Successfully"));

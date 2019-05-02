@@ -44,7 +44,7 @@
                   <asp:TextBox ID="TextBatchSequence" style="display:none" runat="server"></asp:TextBox>
                   <label  class="col-sm-3 control-label">Selcet Furnace</label> 
                   <div class="col-sm-3">   
-                    <asp:DropDownList ID="DropDownFurnacesID" class="form-control input-sm" runat="server" onclick="GetBatchNo(this)" > 
+                    <asp:DropDownList ID="DropDownFurnacesID" class="form-control input-sm" runat="server"  AutoPostBack="True" ontextchanged="GetBatchNo"   > 
                     </asp:DropDownList>  
                          <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" 
                           ControlToValidate="DropDownFurnacesID" Display="Dynamic" 
@@ -375,18 +375,7 @@
     </script> 
   <script language="javascript" type="text/javascript">
         /* Function to Populate the Batch Sequence number */
-    function GetBatchNo() {   
-        // parseFloat($("#ctl00_ContentPlaceHolder1_DropDownVatID option:selected").text());
-        var FurnacesID = $("#ctl00_ContentPlaceHolder1_DropDownFurnacesID option:selected").text().split('-');  
-        // var Item_Wt =  $("#ctl00_ContentPlaceHolder1_DropDownItemID").val().split('-'); 
-        var FurnacesName = FurnacesID[1].replace(/\s/g,'');  
-        var BatchSequence = $("#ctl00_ContentPlaceHolder1_TextBatchSequence").val(); 
-        var CurrentYear = new Date().getFullYear();
-        var BatchSeqTemp = parseInt(BatchSequence, 10)+1;
-        var BatchNo = FurnacesName + "-" + BatchSeqTemp + "-" + CurrentYear;       
-            $("#ctl00_ContentPlaceHolder1_TextBatchNumber").val(BatchNo);                   
- 
-      }
+   
 
        function ValidateAdd() {
             var isValid = false;

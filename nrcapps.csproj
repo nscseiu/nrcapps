@@ -466,10 +466,19 @@
     <Content Include="MF\MfExpMaterialPricing.aspx" />
     <Content Include="MF\MfExpSalesInvoice.aspx" />
     <Content Include="MF\MfExpShipmentCmo.aspx" />
+    <Content Include="MF\MfInventory.aspx" />
+    <Content Include="MF\MfMaterialTransaction.aspx" />
+    <Content Include="MF\MfMaterialShiftFg.aspx" />
     <Content Include="MF\Print.aspx" />
     <Content Include="MF\MfPurchase.aspx" />
     <Content Include="MF\MfRmCoordinatorApprove.aspx" />
     <Content Include="MS\MsActualGarbage.aspx" />
+    <Content Include="MS\MsRepresentative.aspx" />
+    <Content Include="MS\MS_Reports\MsPurchaseSummaryReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsPurchaseMarketersReportView.aspx" />
+    <Content Include="MS\MS_Reports\WpClaimSummaryReportView.aspx" />
+    <Content Include="MS\MS_Reports\WpSalesInterDivisionReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsSalesSummaryCustomerReportView.aspx" />
     <Content Include="NRC\NrcShipmentLocation.aspx" />
     <Content Include="NRC\NrcTradingVessel.aspx" />
     <Content Include="NRC\NrcShippingIncoterms.aspx" />
@@ -501,6 +510,7 @@
     <Content Include="PF\PfExpContainerEX.aspx" />
     <Content Include="PF\PfExpMaterialPricing.aspx" />
     <Content Include="PF\PfExpSalesInvoice.aspx" />
+    <Content Include="PF\PfMaterialTransaction.aspx" />
     <Content Include="PF\PfSalesJw.aspx" />
     <Content Include="PF\PfProductionJw.aspx" />
     <Content Include="PF\PfPurchaseJw.aspx" />
@@ -553,7 +563,7 @@
     <Content Include="PF\PfSupervisor.aspx" />
     <Content Include="PF\PfCustomer.aspx" />
     <Content Include="PF\PfItemSales.aspx" />
-    <Content Include="PF\PfMaterialTransaction.aspx" />
+    <Content Include="PF\PfMaterialTransactionNew.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -561,7 +571,7 @@
     <Content Include="MS\Print.aspx" />
     <Content Include="MS\MsCategory.aspx" />
     <Content Include="MS\MsCollectionFor.aspx" />
-    <Content Include="MS\MsDriver.aspx" />
+    <Content Include="MS\MsVehicleMode.aspx" />
     <Content Include="MS\MsExpContainer.aspx" />
     <Content Include="MS\MsExpMaterialPricing.aspx" />
     <Content Include="MS\MsExpSalesInvoice.aspx" />
@@ -584,8 +594,8 @@
     <Content Include="MS\MS_Reports\MsClass.aspx" />
     <Content Include="MS\MS_Reports\MsExpContainerMonthlyReportView.aspx" />
     <Content Include="MS\MS_Reports\MsInventoryValuationStatementReportView.aspx" />
-    <Content Include="MS\MS_Reports\MsPurchaseCollectionForReportView.aspx" />
-    <Content Include="MS\MS_Reports\MsPurchaseDriverWiseReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsPurchaseRepresentativeReportView.aspx" />
+    <Content Include="MS\MS_Reports\MsPurchaseModeWiseReportView.aspx" />
     <Content Include="MS\MS_Reports\MsPurchaseSupplierWiseReportView.aspx" />
     <Content Include="WP\WpItemSalesWs.aspx" />
     <Content Include="WP\WpPurchaseVatAdjustment.aspx" />
@@ -907,6 +917,27 @@
     <Compile Include="MF\MfExpShipmentCmo.aspx.designer.cs">
       <DependentUpon>MfExpShipmentCmo.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MF\MfInventory.aspx.cs">
+      <DependentUpon>MfInventory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfInventory.aspx.designer.cs">
+      <DependentUpon>MfInventory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfMaterialTransaction.aspx.cs">
+      <DependentUpon>MfMaterialTransaction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfMaterialTransaction.aspx.designer.cs">
+      <DependentUpon>MfMaterialTransaction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MF\MfMaterialShiftFg.aspx.cs">
+      <DependentUpon>MfMaterialShiftFg.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MF\MfMaterialShiftFg.aspx.designer.cs">
+      <DependentUpon>MfMaterialShiftFg.aspx</DependentUpon>
+    </Compile>
     <Compile Include="MF\Print.aspx.cs">
       <DependentUpon>Print.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -934,6 +965,80 @@
     </Compile>
     <Compile Include="MS\MsActualGarbage.aspx.designer.cs">
       <DependentUpon>MsActualGarbage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MsRepresentative.aspx.cs">
+      <DependentUpon>MsRepresentative.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MsRepresentative.aspx.designer.cs">
+      <DependentUpon>MsRepresentative.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseSummaryReportView.aspx.cs">
+      <DependentUpon>MsPurchaseSummaryReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseSummaryReportView.aspx.designer.cs">
+      <DependentUpon>MsPurchaseSummaryReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseMarketersReportView.aspx.cs">
+      <DependentUpon>MsPurchaseMarketersReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsPurchaseMarketersReportView.aspx.designer.cs">
+      <DependentUpon>MsPurchaseMarketersReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Ms_Market_Wise_Summary_Report.cs">
+      <DependentUpon>Ms_Market_Wise_Summary_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Ms_Purchase_Summary_Report.cs">
+      <DependentUpon>Ms_Purchase_Summary_Report.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MS\MS_Reports\WpClaimSummaryReportView.aspx.cs">
+      <DependentUpon>WpClaimSummaryReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\WpClaimSummaryReportView.aspx.designer.cs">
+      <DependentUpon>WpClaimSummaryReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\WpSalesInterDivisionReportView.aspx.cs">
+      <DependentUpon>WpSalesInterDivisionReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\WpSalesInterDivisionReportView.aspx.designer.cs">
+      <DependentUpon>WpSalesInterDivisionReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsSalesSummaryCustomerReportView.aspx.cs">
+      <DependentUpon>MsSalesSummaryCustomerReportView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\MsSalesSummaryCustomerReportView.aspx.designer.cs">
+      <DependentUpon>MsSalesSummaryCustomerReportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Wp_Sales_Inter_Division_Report.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Wp_Sales_Inter_Division_Report1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Wp_Sales_Inter_Division_Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Wp_Sales_Summary_Customer_Report.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MS\MS_Reports\Ms_Sales_Summary_Customer_Report.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ms_Sales_Summary_Customer_Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="NRC\NrcShipmentLocation.aspx.cs">
       <DependentUpon>NrcShipmentLocation.aspx</DependentUpon>
@@ -1154,6 +1259,13 @@
     </Compile>
     <Compile Include="PF\PfExpSalesInvoice.aspx.designer.cs">
       <DependentUpon>PfExpSalesInvoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PF\PfMaterialTransaction.aspx.cs">
+      <DependentUpon>PfMaterialTransaction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfMaterialTransaction.aspx.designer.cs">
+      <DependentUpon>PfMaterialTransaction.aspx</DependentUpon>
     </Compile>
     <Compile Include="PF\PfSalesJw.aspx.cs">
       <DependentUpon>PfSalesJw.aspx</DependentUpon>
@@ -1393,13 +1505,6 @@
     <Compile Include="PF\PfItemSales.aspx.designer.cs">
       <DependentUpon>PfItemSales.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PF\PfMaterialTransaction.aspx.cs">
-      <DependentUpon>PfMaterialTransaction.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PF\PfMaterialTransaction.aspx.designer.cs">
-      <DependentUpon>PfMaterialTransaction.aspx</DependentUpon>
-    </Compile>
     <Compile Include="MS\Print.aspx.cs">
       <DependentUpon>Print.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1421,12 +1526,12 @@
     <Compile Include="MS\MsCollectionFor.aspx.designer.cs">
       <DependentUpon>MsCollectionFor.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MS\MsDriver.aspx.cs">
-      <DependentUpon>MsDriver.aspx</DependentUpon>
+    <Compile Include="MS\MsVehicleMode.aspx.cs">
+      <DependentUpon>MsVehicleMode.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="MS\MsDriver.aspx.designer.cs">
-      <DependentUpon>MsDriver.aspx</DependentUpon>
+    <Compile Include="MS\MsVehicleMode.aspx.designer.cs">
+      <DependentUpon>MsVehicleMode.aspx</DependentUpon>
     </Compile>
     <Compile Include="MS\MsExpContainer.aspx.cs">
       <DependentUpon>MsExpContainer.aspx</DependentUpon>
@@ -1594,19 +1699,19 @@
     <Compile Include="MS\MS_Reports\MsInventoryValuationStatementReportView.aspx.designer.cs">
       <DependentUpon>MsInventoryValuationStatementReportView.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MS\MS_Reports\MsPurchaseCollectionForReportView.aspx.cs">
-      <DependentUpon>MsPurchaseCollectionForReportView.aspx</DependentUpon>
+    <Compile Include="MS\MS_Reports\MsPurchaseRepresentativeReportView.aspx.cs">
+      <DependentUpon>MsPurchaseRepresentativeReportView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="MS\MS_Reports\MsPurchaseCollectionForReportView.aspx.designer.cs">
-      <DependentUpon>MsPurchaseCollectionForReportView.aspx</DependentUpon>
+    <Compile Include="MS\MS_Reports\MsPurchaseRepresentativeReportView.aspx.designer.cs">
+      <DependentUpon>MsPurchaseRepresentativeReportView.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MS\MS_Reports\MsPurchaseDriverWiseReportView.aspx.cs">
-      <DependentUpon>MsPurchaseDriverWiseReportView.aspx</DependentUpon>
+    <Compile Include="MS\MS_Reports\MsPurchaseModeWiseReportView.aspx.cs">
+      <DependentUpon>MsPurchaseModeWiseReportView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="MS\MS_Reports\MsPurchaseDriverWiseReportView.aspx.designer.cs">
-      <DependentUpon>MsPurchaseDriverWiseReportView.aspx</DependentUpon>
+    <Compile Include="MS\MS_Reports\MsPurchaseModeWiseReportView.aspx.designer.cs">
+      <DependentUpon>MsPurchaseModeWiseReportView.aspx</DependentUpon>
     </Compile>
     <Compile Include="MS\MS_Reports\MsPurchaseSupplierWiseReportView.aspx.cs">
       <DependentUpon>MsPurchaseSupplierWiseReportView.aspx</DependentUpon>
@@ -1621,15 +1726,15 @@
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="MS\MS_Reports\Ms_Purchase_Collection_For_Wise_Report.cs">
-      <DependentUpon>Ms_Purchase_Collection_For_Wise_Report.rpt</DependentUpon>
+    <Compile Include="MS\MS_Reports\Ms_Purchase_Representative_Wise_Report.cs">
+      <DependentUpon>Ms_Purchase_Representative_Wise_Report.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="MS\MS_Reports\Ms_Purchase_Driver_Wise_Report.cs">
-      <DependentUpon>Ms_Purchase_Driver_Wise_Report.rpt</DependentUpon>
+    <Compile Include="MS\MS_Reports\Ms_Purchase_Mode_Wise_Report.cs">
+      <DependentUpon>Ms_Purchase_Mode_Wise_Report.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1641,6 +1746,13 @@
       <SubType>Component</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="PF\PfMaterialTransactionNew.aspx.cs">
+      <DependentUpon>PfMaterialTransactionNew.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PF\PfMaterialTransactionNew.aspx.designer.cs">
+      <DependentUpon>PfMaterialTransactionNew.aspx</DependentUpon>
     </Compile>
     <Compile Include="WP\WpItemSalesWs.aspx.cs">
       <DependentUpon>WpItemSalesWs.aspx</DependentUpon>
@@ -2331,16 +2443,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS\MS_Reports\Ms_Purchase_Collection_For_Wise_Report.rpt">
+    <Content Include="MS\MS_Reports\Ms_Purchase_Representative_Wise_Report.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Ms_Purchase_Collection_For_Wise_Report.cs</LastGenOutput>
+      <LastGenOutput>Ms_Purchase_Representative_Wise_Report.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS\MS_Reports\Ms_Purchase_Driver_Wise_Report.rpt">
+    <Content Include="MS\MS_Reports\Ms_Purchase_Mode_Wise_Report.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Ms_Purchase_Driver_Wise_Report.cs</LastGenOutput>
+      <LastGenOutput>Ms_Purchase_Mode_Wise_Report.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -2362,6 +2474,26 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>MsInventoryValuationStatementReport.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS\MS_Reports\Ms_Market_Wise_Summary_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Ms_Market_Wise_Summary_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS\MS_Reports\Ms_Purchase_Summary_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Ms_Purchase_Summary_Report.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="MS\MS_Reports\Wp_Sales_Inter_Division_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Wp_Sales_Inter_Division_Report1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MS\MS_Reports\Ms_Sales_Summary_Customer_Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Ms_Sales_Summary_Customer_Report.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -49,19 +49,19 @@ namespace NRCAPPS.MS.MS_Reports
             String EndDateFormTemp = EndDateTempSplit[0].Replace("/", "-");
             DateTime EndDateFormTempNew = DateTime.ParseExact(EndDateFormTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             string EndDateForm = EndDateFormTempNew.ToString("dd-MMMM-yyyy");
-
-            string SupplierID  = Request.QueryString["SupplierID"].ToString(); 
+             
+            string SupplierID = Request.QueryString["SupplierID"].ToString();
             string DropDownItem = Request.QueryString["DropDownItemID"].ToString();
             string DropDownItemID = DropDownItem.Remove(DropDownItem.Length - 1, 1);
             string[] ItemID =  DropDownItemID.Split('-');
             string sqlString = "";
             if (ItemID[0] == "0")
             { 
-                sqlString = "   SELECT PP.PARTY_ID AS SUPPLIER_ID, PP.PARTY_NAME AS SUPPLIER_NAME, PI.ITEM_NAME,  PI.ITEM_CODE, TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE, WPM.SLIP_NO,  WPM.ITEM_WEIGHT, WPM.ITEM_RATE, WPM.ITEM_AMOUNT, WPM.VAT_PERCENT, WPM.VAT_AMOUNT,  (WPM.ITEM_AMOUNT+WPM.VAT_AMOUNT) as TOTAL_AMOUNT FROM WP_PARTY PP LEFT JOIN WP_PURCHASE_MASTER WPM ON WPM.PARTY_ID = PP.PARTY_ID LEFT JOIN WP_ITEM PI ON PI.ITEM_ID = WPM.ITEM_ID WHERE PP.PARTY_ID = '" + SupplierID + "' AND TO_CHAR(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + StartDateQuery + "' AND '" + EndDateQuery + "' ORDER BY  TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'dd/mm/yyyy') ASC, WPM.SLIP_NO ASC ";
+                sqlString = "   SELECT PP.PARTY_ID AS SUPPLIER_ID, PP.PARTY_NAME AS SUPPLIER_NAME, PI.ITEM_NAME,  PI.ITEM_CODE, TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE, WPM.SLIP_NO,  WPM.ITEM_WEIGHT, WPM.ITEM_RATE, WPM.ITEM_AMOUNT, WPM.VAT_PERCENT, WPM.VAT_AMOUNT,  (WPM.ITEM_AMOUNT+WPM.VAT_AMOUNT) as TOTAL_AMOUNT FROM MS_PARTY PP LEFT JOIN MS_PURCHASE_MASTER WPM ON WPM.PARTY_ID = PP.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = WPM.ITEM_ID WHERE PP.PARTY_ID = '" + SupplierID + "' AND TO_CHAR(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + StartDateQuery + "' AND '" + EndDateQuery + "' ORDER BY  TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'dd/mm/yyyy') ASC, WPM.SLIP_NO ASC ";
             }
             else
             {
-                sqlString = "   SELECT PP.PARTY_ID AS SUPPLIER_ID, PP.PARTY_NAME AS SUPPLIER_NAME, PI.ITEM_NAME,  PI.ITEM_CODE, TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE, WPM.SLIP_NO,  WPM.ITEM_WEIGHT, WPM.ITEM_RATE, WPM.ITEM_AMOUNT, WPM.VAT_PERCENT, WPM.VAT_AMOUNT, (WPM.ITEM_AMOUNT+WPM.VAT_AMOUNT) as TOTAL_AMOUNT FROM WP_PARTY PP LEFT JOIN WP_PURCHASE_MASTER WPM ON WPM.PARTY_ID = PP.PARTY_ID LEFT JOIN WP_ITEM PI ON PI.ITEM_ID = WPM.ITEM_ID WHERE PP.PARTY_ID = '" + SupplierID + "' AND TO_CHAR(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + StartDateQuery + "' AND '" + EndDateQuery + "' AND ( ";
+                sqlString = "   SELECT PP.PARTY_ID AS SUPPLIER_ID, PP.PARTY_NAME AS SUPPLIER_NAME, PI.ITEM_NAME,  PI.ITEM_CODE, TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'dd/mm/yyyy') AS ENTRY_DATE, WPM.SLIP_NO,  WPM.ITEM_WEIGHT, WPM.ITEM_RATE, WPM.ITEM_AMOUNT, WPM.VAT_PERCENT, WPM.VAT_AMOUNT, (WPM.ITEM_AMOUNT+WPM.VAT_AMOUNT) as TOTAL_AMOUNT FROM MS_PARTY PP LEFT JOIN MS_PURCHASE_MASTER WPM ON WPM.PARTY_ID = PP.PARTY_ID LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = WPM.ITEM_ID WHERE PP.PARTY_ID = '" + SupplierID + "' AND TO_CHAR(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + StartDateQuery + "' AND '" + EndDateQuery + "' AND ( ";
                  
                 for (int i = 0; i < ItemID.Length; i++)
                 {
@@ -79,12 +79,12 @@ namespace NRCAPPS.MS.MS_Reports
         dt.Fill(imageDataSet.Tables["reportTable"]);  
         con.Close();
                
-        crystalReport.Load(Server.MapPath("~/WP/WP_Reports/Wp_Purchase_Supplier_Wise_Report.rpt"));
+        crystalReport.Load(Server.MapPath("~/MS/MS_Reports/Ms_Purchase_Supplier_Wise_Report.rpt"));
         crystalReport.SetDataSource(imageDataSet.Tables["reportTable"]);
         crystalReport.SetParameterValue("StartDate", StartDateForm); 
         crystalReport.SetParameterValue("EndDate", EndDateForm); 
         string datetime = DateTime.Now.ToString("dd-MM-yyyy");
-        CrystalReportViewer1.ID = "Purchase_Supplier_Statement_Report_(As_On_Date)_Waste_Paper_" + datetime + "";
+        CrystalReportViewer1.ID = "Purchase_Supplier_Statement_Report_(As_On_Date)_Metal_Scrap_" + datetime + "";
 
         CrystalReportViewer1.ReportSource = crystalReport;  
      

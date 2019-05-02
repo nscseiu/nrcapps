@@ -258,7 +258,7 @@ namespace NRCAPPS.MS
                   
                 HtmlString += "<div style='float:left;width:190px;height:40px; margin:0 0 0 40px;'><span style='font-family:Times New Roman,Times, serif;font-size:15px;font-weight:700;'>Claim No.</span><span style='color:red;font-weight:700;font-size:17px;'> " + ClaimsNo + "</span></div> ";
                 HtmlString += "<div style='float:left;width:325px;height:40px;text-align:center;font-weight:700;text-decoration:underline;font-size:17px;'>  " + dt.Rows[i]["CLAIM_MONTH"].ToString() + "</div> ";
-                HtmlString += "<div style='float:left;width:210px;height:40px;font-weight:700;size:13px;'><span style='font-family:Times New Roman,Times, serif;'>Division:</span><span style='color:#7d4444;'> Metal Factory</span></div>  ";
+                HtmlString += "<div style='float:left;width:210px;height:40px;font-weight:700;size:13px;'><span style='font-family:Times New Roman,Times, serif;'>Division:</span><span style='color:#7d4444;'> Metal Scrap</span></div>  ";
 
                 HtmlString += "<div style='float:left;width:485px;height:45px;margin:0 0 0 40px;'><div style='float:left;width:45px;font-family:Times New Roman,Times, serif;size:13px;font-weight:700;'>Name:</div><div style='float:left;width:435px;height:15px;padding-left:5px;font-weight:700;border-bottom:black dotted 1px;'>" + FullName + "</div></div> ";
                 HtmlString += "<div style='float:left;width:206px;height:45px; margin:0 0 0 30px;'><span style='font-family:Times New Roman,Times, serif;size:13px;font-weight:700;'>Date:</span>  " + EntryDateSlip + "</div> ";

@@ -1,11 +1,11 @@
-﻿using System; 
+﻿using System;
 using System.Configuration;
-using System.Data; 
-using System.Web.UI; 
-using System.Web.UI.WebControls; 
+using System.Data;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using System.Data.OracleClient;
-using System.IO; 
-using System.Collections.Generic; 
+using System.IO;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 using System.Globalization;
@@ -22,7 +22,7 @@ namespace NRCAPPS.MF
 
         string IS_PAGE_ACTIVE = "", IS_ADD_ACTIVE = "", IS_EDIT_ACTIVE = "", IS_DELETE_ACTIVE = "", IS_VIEW_ACTIVE = "", IS_REPORT_ACTIVE = "", IS_PRINT_ACTIVE = "";
 
-        public bool IsLoad { get; set; } 
+        public bool IsLoad { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["USER_NAME"] != null)
@@ -50,7 +50,7 @@ namespace NRCAPPS.MF
 
                 if (IS_PAGE_ACTIVE == "Enable")
                 {
-                     
+
                     if (!IsPostBack)
                     {
 
@@ -64,7 +64,7 @@ namespace NRCAPPS.MF
                         DropDownFurnacesID.DataTextField = "FURNACES_NAME";
                         DropDownFurnacesID.DataBind();
                         DropDownFurnacesID.Items.Insert(0, new ListItem("Select  Furnaces", "0"));
-                         
+
                         DataTable dtSupplierID = new DataTable();
                         DataSet ds = new DataSet();
                         string makeSupplierSQL = " SELECT PARTY_ID, PARTY_ID  || ' - ' || PARTY_NAME || ' - ' || PARTY_VAT_NO AS PARTY_NAME  FROM MF_PARTY WHERE IS_ACTIVE = 'Enable' AND IS_PRODUCTION_ACTIVE = 'Enable' ORDER BY PARTY_NAME ASC";
@@ -75,17 +75,14 @@ namespace NRCAPPS.MF
                         DropDownSupplierID.DataTextField = "PARTY_NAME";
                         DropDownSupplierID.DataBind();
                         DropDownSupplierID.Items.Insert(0, new ListItem("Select  Customer", "0"));
-                         
+
                         BtnGradeCopyBatch.Style["visibility"] = "hidden";
-                        BtnGradeDetails.Style["visibility"] = "hidden";  
+                        BtnGradeDetails.Style["visibility"] = "hidden";
                         TextBatchNumber.Attributes.Add("readonly", "readonly");
 
-                        string get_batch_id = " select LAST_NUMBER from all_sequences where sequence_name = 'MF_PROD_BATCH_NO_MASTERID_SEQ'";
-                        cmdu = new OracleCommand(get_batch_id, conn);
-                        TextBatchSequence.Text = cmdu.ExecuteScalar().ToString();
 
-                         
-                        string USER_DATA_ID = ""; 
+
+                        string USER_DATA_ID = "";
                         ItemDisplay(USER_DATA_ID, new EventArgs());
 
                         Display();
@@ -94,10 +91,11 @@ namespace NRCAPPS.MF
                         BatchPendingProduction();
                         alert_box.Visible = false;
 
-                    } 
+                    }
                     IsLoad = false;
                 }
-                else {
+                else
+                {
                     Response.Redirect("~/PagePermissionError.aspx");
                 }
             }
@@ -106,7 +104,31 @@ namespace NRCAPPS.MF
                 Response.Redirect("~/Default.aspx");
             }
         }
-       
+
+        public void GetBatchNo(object sender, EventArgs e)
+        {
+            OracleConnection conn = new OracleConnection(strConnString);
+            conn.Open();
+            string get_batch_id = "", Furnaces = "";
+            if (DropDownFurnacesID.Text == "1")
+            {
+                Furnaces = "A";
+                get_batch_id = " select LAST_NUMBER from all_sequences where sequence_name = 'MF_PROD_BATCH_A_MASTERID_SEQ'";
+            }
+            else if (DropDownFurnacesID.Text == "2")
+            {
+                Furnaces = "B";
+                get_batch_id = " select LAST_NUMBER from all_sequences where sequence_name = 'MF_PROD_BATCH_B_MASTERID_SEQ'";
+            }
+
+            cmdu = new OracleCommand(get_batch_id, conn);
+            string BatchNo = cmdu.ExecuteScalar().ToString();
+            string Year = DateTime.Now.Year.ToString();
+            TextBatchNumber.Text = Furnaces + "-" + BatchNo + "-" + Year;
+
+
+        }
+
 
         private void ItemDisplay(object sender, EventArgs e)
         {
@@ -152,39 +174,39 @@ namespace NRCAPPS.MF
                     DropDownList dd = (DropDownList)Gridview1.FooterRow.FindControl("DropDownItemID");
                     BindItem(dd, ItemData());
                 }
-            }  
+            }
 
         }
 
         //Function for fetch item from database
         private DataSet ItemData()
-        {  
+        {
             string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             DataSet ds = new DataSet();
             OracleConnection conn = new OracleConnection(connStr);
-             
-                conn.Open();
-                string sqlString = " SELECT ITEM_ID, ITEM_CODE || ' : ' || ITEM_NAME AS ITEM_NAME FROM MF_ITEM WHERE IS_ACTIVE = 'Enable' ORDER BY ITEM_ID ASC";
-                OracleCommand cmd = new OracleCommand(sqlString, conn);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = sqlString;
-                bool mustCloseConnection = false;
-                using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+
+            conn.Open();
+            string sqlString = " SELECT ITEM_ID, ITEM_CODE || ' : ' || ITEM_NAME AS ITEM_NAME FROM MF_ITEM WHERE IS_ACTIVE = 'Enable' ORDER BY ITEM_ID ASC";
+            OracleCommand cmd = new OracleCommand(sqlString, conn);
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = sqlString;
+            bool mustCloseConnection = false;
+            using (OracleDataAdapter da = new OracleDataAdapter(cmd))
+            {
+                da.Fill(ds);
+                cmd.Parameters.Clear();
+                if (mustCloseConnection)
                 {
-                    da.Fill(ds);
-                    cmd.Parameters.Clear();
-                    if (mustCloseConnection)
-                    {
-                        conn.Close();
-                    }
+                    conn.Close();
                 }
-           
+            }
+
             return ds;
         }
 
         //function for bind country to dropdown
         private void BindItem(DropDownList DropDownItemID, DataSet ds)
-        { 
+        {
 
             DataTable dtCatID = new DataTable();
             DataSet dc = new DataSet();
@@ -198,7 +220,7 @@ namespace NRCAPPS.MF
             DropDownItemID.Items.Insert(0, new ListItem("Select  Item", "0"));
         }
 
-   
+
         protected void Check_Item(object sender, EventArgs e)
         {
             OracleConnection conn = new OracleConnection(strConnString);
@@ -222,7 +244,7 @@ namespace NRCAPPS.MF
                 DropDownItemID.SelectedValue = "0";
                 DropDownItemID.Focus();
             }
-             
+
         }
 
         public void InsertGradeCopyBatch(object sender, EventArgs e)
@@ -248,9 +270,20 @@ namespace NRCAPPS.MF
                     cmdu = new OracleCommand(get_id, conn);
                     int newBatchID = Int16.Parse(cmdu.ExecuteScalar().ToString());
 
-                    string get_no = "select MF_PROD_BATCH_NO_MASTERID_SEQ.nextval from dual";
-                    cmdu = new OracleCommand(get_no, conn);
-                    int newBatchNo = Int16.Parse(cmdu.ExecuteScalar().ToString());
+                    if (DropDownFurnacesID.Text == "1")
+                    {
+                        string get_no = "select MF_PROD_BATCH_A_MASTERID_SEQ.nextval from dual";
+                        cmdu = new OracleCommand(get_no, conn);
+                        int newBatchNo = Int16.Parse(cmdu.ExecuteScalar().ToString());
+                    }
+                    else if (DropDownFurnacesID.Text == "2")
+                    {
+                        string get_no = "select MF_PROD_BATCH_B_MASTERID_SEQ.nextval from dual";
+                        cmdu = new OracleCommand(get_no, conn);
+                        int newBatchNo = Int16.Parse(cmdu.ExecuteScalar().ToString());
+
+                    }
+
 
                     string insert_grade = "insert into MF_PRODUCTION_BATCH_MASTER (BATCH_ID, BATCH_NO, FURNACES_ID, PARTY_ID, GRADE_ID, ENTRY_DATE, REMARKS, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES (:TextBatchID, :TextBatchNo, :TextFurnacesID, :TextPartyID, :TextGradeID, TO_DATE(:EntryDate, 'DD/MM/YYYY'), :TextRemarks, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                     cmdi = new OracleCommand(insert_grade, conn);
@@ -323,22 +356,23 @@ namespace NRCAPPS.MF
 
         protected void Gridview1_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-         try { 
-            if (IS_ADD_ACTIVE == "Enable")
-            { 
-                if (e.CommandName == "Insert")
+            try
+            {
+                if (IS_ADD_ACTIVE == "Enable")
                 {
-                    Page.Validate("Add");
-                    if (Page.IsValid)
+                    if (e.CommandName == "Insert")
                     {
-                        OracleConnection conn = new OracleConnection(strConnString);
-                        conn.Open();
-                        int userID = Convert.ToInt32(Session["USER_ID"]);
-                        string BatchNumber = TextBatchNumber.Text;
-                        var Row = Gridview1.FooterRow;
-                        DropDownList DropDownItemID = (DropDownList)Row.FindControl("DropDownItemID");
-                        TextBox TextItemWeight = (TextBox)Row.FindControl("TextItemWeight");
-                        string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
+                        Page.Validate("Add");
+                        if (Page.IsValid)
+                        {
+                            OracleConnection conn = new OracleConnection(strConnString);
+                            conn.Open();
+                            int userID = Convert.ToInt32(Session["USER_ID"]);
+                            string BatchNumber = TextBatchNumber.Text;
+                            var Row = Gridview1.FooterRow;
+                            DropDownList DropDownItemID = (DropDownList)Row.FindControl("DropDownItemID");
+                            TextBox TextItemWeight = (TextBox)Row.FindControl("TextItemWeight");
+                            string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
                             OracleCommand cmd = new OracleCommand();
                             cmd.Connection = conn;
@@ -349,7 +383,7 @@ namespace NRCAPPS.MF
                             {
                                 string GradeID = DropDownGradeID.Text;
                                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
-                               
+
                                 string MakeEntryDate = EntryDate.Text;
                                 string[] MakeEntryDateSplit = MakeEntryDate.Split('-');
                                 String EntryDateTemp = MakeEntryDateSplit[0].Replace("/", "-");
@@ -360,9 +394,20 @@ namespace NRCAPPS.MF
                                 cmdu = new OracleCommand(get_id, conn);
                                 int newBatchID = Int16.Parse(cmdu.ExecuteScalar().ToString());
 
-                                string get_no = "select MF_PROD_BATCH_NO_MASTERID_SEQ.nextval from dual";
-                                cmdu = new OracleCommand(get_no, conn);
-                                int newBatchNo = Int16.Parse(cmdu.ExecuteScalar().ToString());
+
+                                if (DropDownFurnacesID.Text == "1")
+                                {
+                                    string get_no = "select MF_PROD_BATCH_A_MASTERID_SEQ.nextval from dual";
+                                    cmdu = new OracleCommand(get_no, conn);
+                                    int newBatchNo = Int16.Parse(cmdu.ExecuteScalar().ToString());
+                                }
+                                else if (DropDownFurnacesID.Text == "2")
+                                {
+                                    string get_no = "select MF_PROD_BATCH_B_MASTERID_SEQ.nextval from dual";
+                                    cmdu = new OracleCommand(get_no, conn);
+                                    int newBatchNo = Int16.Parse(cmdu.ExecuteScalar().ToString());
+
+                                }
 
                                 string insert_grade = "insert into MF_PRODUCTION_BATCH_MASTER (BATCH_ID, BATCH_NO, FURNACES_ID, PARTY_ID, GRADE_ID, ENTRY_DATE, REMARKS, IS_ACTIVE, CREATE_DATE, C_USER_ID) VALUES (:TextBatchID, :TextBatchNo, :TextFurnacesID, :TextPartyID, :TextGradeID, TO_DATE(:EntryDate, 'DD/MM/YYYY'), :TextRemarks, :TextIsActive, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
                                 cmdi = new OracleCommand(insert_grade, conn);
@@ -384,40 +429,40 @@ namespace NRCAPPS.MF
                                 cmdi.Dispose();
                             }
 
-                        string get_item_cat_id = "select MF_PROD_BAT_TARGET_ITEM_SEQ.nextval from dual";
-                        cmdu = new OracleCommand(get_item_cat_id, conn);
-                        int newTargetItemID = Int16.Parse(cmdu.ExecuteScalar().ToString());
-                             
-                        string insert_user = "insert into MF_PRODUCTION_BAT_TARGET_ITEM (TARGET_ITEM_ID, BATCH_NO, ITEM_ID, ITEM_WEIGHT_CWT, CREATE_DATE, C_USER_ID) VALUES ( :NoTargetItemID, :TextBatchNumber, :TextItemID, :TextItemWeight, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
-                        cmdi = new OracleCommand(insert_user, conn);
+                            string get_item_cat_id = "select MF_PROD_BAT_TARGET_ITEM_SEQ.nextval from dual";
+                            cmdu = new OracleCommand(get_item_cat_id, conn);
+                            int newTargetItemID = Int16.Parse(cmdu.ExecuteScalar().ToString());
 
-                        OracleParameter[] objPrm = new OracleParameter[6];
-                        objPrm[0] = cmdi.Parameters.Add("NoTargetItemID", newTargetItemID);
-                        objPrm[1] = cmdi.Parameters.Add("TextBatchNumber", BatchNumber);
-                        objPrm[2] = cmdi.Parameters.Add("TextItemID", DropDownItemID.Text);
-                        objPrm[3] = cmdi.Parameters.Add("TextItemWeight", TextItemWeight.Text);
-                        objPrm[4] = cmdi.Parameters.Add("u_date", u_date);
-                        objPrm[5] = cmdi.Parameters.Add("NoCuserID", userID);
+                            string insert_user = "insert into MF_PRODUCTION_BAT_TARGET_ITEM (TARGET_ITEM_ID, BATCH_NO, ITEM_ID, ITEM_WEIGHT_CWT, CREATE_DATE, C_USER_ID) VALUES ( :NoTargetItemID, :TextBatchNumber, :TextItemID, :TextItemWeight, TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), :NoCuserID)";
+                            cmdi = new OracleCommand(insert_user, conn);
+
+                            OracleParameter[] objPrm = new OracleParameter[6];
+                            objPrm[0] = cmdi.Parameters.Add("NoTargetItemID", newTargetItemID);
+                            objPrm[1] = cmdi.Parameters.Add("TextBatchNumber", BatchNumber);
+                            objPrm[2] = cmdi.Parameters.Add("TextItemID", DropDownItemID.Text);
+                            objPrm[3] = cmdi.Parameters.Add("TextItemWeight", TextItemWeight.Text);
+                            objPrm[4] = cmdi.Parameters.Add("u_date", u_date);
+                            objPrm[5] = cmdi.Parameters.Add("NoCuserID", userID);
 
 
-                        cmdi.ExecuteNonQuery();
+                            cmdi.ExecuteNonQuery();
 
-                        cmdi.Parameters.Clear();
-                        cmdi.Dispose();
-                        conn.Close();
+                            cmdi.Parameters.Clear();
+                            cmdi.Dispose();
+                            conn.Close();
 
-                        alert_box.Visible = true;
-                        alert_box.Controls.Add(new LiteralControl("Insert New Batch Data Successfully"));
-                        alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
-                         
-                        ItemDisplay(BatchNumber, new EventArgs());
-                        Display();
-                        DisplayTodayBatch();
-                        DisplayGradeTempDetails();
+                            alert_box.Visible = true;
+                            alert_box.Controls.Add(new LiteralControl("Insert New Batch Data Successfully"));
+                            alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
+
+                            ItemDisplay(BatchNumber, new EventArgs());
+                            Display();
+                            DisplayTodayBatch();
+                            DisplayGradeTempDetails();
                             //ItemDisplay();
                         }
+                    }
                 }
-            }
                 else
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
@@ -440,88 +485,88 @@ namespace NRCAPPS.MF
 
         protected void Gridview1_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
-        try
-        {
-            if (IS_EDIT_ACTIVE == "Enable")
+            try
             {
-            OracleConnection conn = new OracleConnection(strConnString);
-            conn.Open();
-             
-            //Validate Page
-            Page.Validate("edit");
-            if (!Page.IsValid)
-            {
-                return;
-            }
+                if (IS_EDIT_ACTIVE == "Enable")
+                {
+                    OracleConnection conn = new OracleConnection(strConnString);
+                    conn.Open();
 
-            string BatchID = TextBatchID.Text;
+                    //Validate Page
+                    Page.Validate("edit");
+                    if (!Page.IsValid)
+                    {
+                        return;
+                    }
 
-            //Get TargetItemID
-            int TargetItemID = Convert.ToInt32(Gridview1.DataKeys[e.RowIndex]["TARGET_ITEM_ID"]);
-            string BatchNumber = Convert.ToString(Gridview1.DataKeys[e.RowIndex]["BATCH_NO"]);
-            //Find Controls  
-            TextBox TextItemWeight = (TextBox)Gridview1.Rows[e.RowIndex].FindControl("TextItemWeight");
-            DropDownList DropDownItemID = (DropDownList)Gridview1.Rows[e.RowIndex].FindControl("DropDownItemID"); 
-              
-            int userID = Convert.ToInt32(Session["USER_ID"]);
-            string MakeEntryDate = EntryDate.Text;
-            string[] MakeEntryDateSplit = MakeEntryDate.Split('-');
-            String EntryDateTemp = MakeEntryDateSplit[0].Replace("/", "-");
-            DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-            string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
+                    string BatchID = TextBatchID.Text;
 
-            string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
-            string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
+                    //Get TargetItemID
+                    int TargetItemID = Convert.ToInt32(Gridview1.DataKeys[e.RowIndex]["TARGET_ITEM_ID"]);
+                    string BatchNumber = Convert.ToString(Gridview1.DataKeys[e.RowIndex]["BATCH_NO"]);
+                    //Find Controls  
+                    TextBox TextItemWeight = (TextBox)Gridview1.Rows[e.RowIndex].FindControl("TextItemWeight");
+                    DropDownList DropDownItemID = (DropDownList)Gridview1.Rows[e.RowIndex].FindControl("DropDownItemID");
 
-            string update_user = "update  MF_PRODUCTION_BAT_TARGET_ITEM  set BATCH_NO = :TextBatchNumber, ITEM_ID = :TextItemID, ITEM_WEIGHT_CWT = :TextItemWeight, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoU_USER_ID where TARGET_ITEM_ID = :NoTargetItemID ";
-            cmdi = new OracleCommand(update_user, conn);
+                    int userID = Convert.ToInt32(Session["USER_ID"]);
+                    string MakeEntryDate = EntryDate.Text;
+                    string[] MakeEntryDateSplit = MakeEntryDate.Split('-');
+                    String EntryDateTemp = MakeEntryDateSplit[0].Replace("/", "-");
+                    DateTime EntryDateNewD = DateTime.ParseExact(EntryDateTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                    string EntryDateNew = EntryDateNewD.ToString("dd-MM-yyyy");
 
-            OracleParameter[] objPrm = new OracleParameter[6]; 
-            objPrm[0] = cmdi.Parameters.Add("TextBatchNumber", BatchNumber);
-            objPrm[1] = cmdi.Parameters.Add("TextItemID", DropDownItemID.Text);
-            objPrm[2] = cmdi.Parameters.Add("TextItemWeight", TextItemWeight.Text);
-            objPrm[3] = cmdi.Parameters.Add("u_date", u_date);
-            objPrm[4] = cmdi.Parameters.Add("NoU_USER_ID", userID);
-            objPrm[5] = cmdi.Parameters.Add("NoTargetItemID", TargetItemID);
+                    string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
+                    string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
 
-            cmdi.ExecuteNonQuery();
-            cmdi.Parameters.Clear();
-            cmdi.Dispose();
-             
-            string update_batch = "update  MF_PRODUCTION_BATCH_MASTER  set BATCH_NO = :TextBatchNumber, FURNACES_ID = :TextFurnacesID, PARTY_ID = :TextDropDownSupplierID, ENTRY_DATE = TO_DATE(:EntryDate, 'DD/MM/YYYY'), REMARKS = :TextRemarks, IS_ACTIVE = :TextIsActive, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoU_USER_ID where BATCH_ID = :NoBatchID ";
-            cmdi = new OracleCommand(update_batch, conn);
+                    string update_user = "update  MF_PRODUCTION_BAT_TARGET_ITEM  set BATCH_NO = :TextBatchNumber, ITEM_ID = :TextItemID, ITEM_WEIGHT_CWT = :TextItemWeight, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoU_USER_ID where TARGET_ITEM_ID = :NoTargetItemID ";
+                    cmdi = new OracleCommand(update_user, conn);
 
-            OracleParameter[] objPr = new OracleParameter[9];
-            objPr[0] = cmdi.Parameters.Add("TextBatchNumber", BatchNumber);
-            objPr[1] = cmdi.Parameters.Add("TextFurnacesID", DropDownFurnacesID.Text);
-            objPr[2] = cmdi.Parameters.Add("TextDropDownSupplierID", DropDownSupplierID.Text);
-            objPr[3] = cmdi.Parameters.Add("EntryDate", EntryDateNew);
-            objPr[4] = cmdi.Parameters.Add("TextRemarks", TextRemarks.Text);
-            objPr[5] = cmdi.Parameters.Add("TextIsActive", ISActive); 
-            objPr[6] = cmdi.Parameters.Add("u_date", u_date);
-            objPr[7] = cmdi.Parameters.Add("NoU_USER_ID", userID);
-            objPr[8] = cmdi.Parameters.Add("NoBatchID", BatchID);
+                    OracleParameter[] objPrm = new OracleParameter[6];
+                    objPrm[0] = cmdi.Parameters.Add("TextBatchNumber", BatchNumber);
+                    objPrm[1] = cmdi.Parameters.Add("TextItemID", DropDownItemID.Text);
+                    objPrm[2] = cmdi.Parameters.Add("TextItemWeight", TextItemWeight.Text);
+                    objPrm[3] = cmdi.Parameters.Add("u_date", u_date);
+                    objPrm[4] = cmdi.Parameters.Add("NoU_USER_ID", userID);
+                    objPrm[5] = cmdi.Parameters.Add("NoTargetItemID", TargetItemID);
 
-            cmdi.ExecuteNonQuery();
-            cmdi.Parameters.Clear();
-            cmdi.Dispose();
-             
-            conn.Close();
+                    cmdi.ExecuteNonQuery();
+                    cmdi.Parameters.Clear();
+                    cmdi.Dispose();
 
-            alert_box.Visible = true;
-            alert_box.Controls.Add(new LiteralControl("Batch Data Update Successfully"));
-            alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
-             
-            Gridview1.EditIndex = -1;
-            ItemDisplay(BatchNumber, new EventArgs());
-            Display();
-            DisplayGradeTempDetails();
-            DisplayTodayBatch();
+                    string update_batch = "update  MF_PRODUCTION_BATCH_MASTER  set BATCH_NO = :TextBatchNumber, FURNACES_ID = :TextFurnacesID, PARTY_ID = :TextDropDownSupplierID, ENTRY_DATE = TO_DATE(:EntryDate, 'DD/MM/YYYY'), REMARKS = :TextRemarks, IS_ACTIVE = :TextIsActive, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , U_USER_ID = :NoU_USER_ID where BATCH_ID = :NoBatchID ";
+                    cmdi = new OracleCommand(update_batch, conn);
+
+                    OracleParameter[] objPr = new OracleParameter[9];
+                    objPr[0] = cmdi.Parameters.Add("TextBatchNumber", BatchNumber);
+                    objPr[1] = cmdi.Parameters.Add("TextFurnacesID", DropDownFurnacesID.Text);
+                    objPr[2] = cmdi.Parameters.Add("TextDropDownSupplierID", DropDownSupplierID.Text);
+                    objPr[3] = cmdi.Parameters.Add("EntryDate", EntryDateNew);
+                    objPr[4] = cmdi.Parameters.Add("TextRemarks", TextRemarks.Text);
+                    objPr[5] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                    objPr[6] = cmdi.Parameters.Add("u_date", u_date);
+                    objPr[7] = cmdi.Parameters.Add("NoU_USER_ID", userID);
+                    objPr[8] = cmdi.Parameters.Add("NoBatchID", BatchID);
+
+                    cmdi.ExecuteNonQuery();
+                    cmdi.Parameters.Clear();
+                    cmdi.Dispose();
+
+                    conn.Close();
+
+                    alert_box.Visible = true;
+                    alert_box.Controls.Add(new LiteralControl("Batch Data Update Successfully"));
+                    alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
+
+                    Gridview1.EditIndex = -1;
+                    ItemDisplay(BatchNumber, new EventArgs());
+                    Display();
+                    DisplayGradeTempDetails();
+                    DisplayTodayBatch();
                 }
                 else
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
-              }
+                }
             }
             catch
             {
@@ -532,45 +577,45 @@ namespace NRCAPPS.MF
 
         protected void BtBatchPost_Click(object sender, EventArgs e)
         {
-        try
-        {
-            if (IS_EDIT_ACTIVE == "Enable")
+            try
             {
-            OracleConnection conn = new OracleConnection(strConnString);
-            conn.Open();
+                if (IS_EDIT_ACTIVE == "Enable")
+                {
+                    OracleConnection conn = new OracleConnection(strConnString);
+                    conn.Open();
 
-            LinkButton btn = (LinkButton)sender;
-            Session["page_data_id"] = btn.CommandArgument;
-            string USER_DATA_ID = Convert.ToString(Session["page_data_id"]);
+                    LinkButton btn = (LinkButton)sender;
+                    Session["page_data_id"] = btn.CommandArgument;
+                    string USER_DATA_ID = Convert.ToString(Session["page_data_id"]);
 
-            int userID = Convert.ToInt32(Session["USER_ID"]); 
-            string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt"); 
-             
-            string update_batch = "update  MF_PRODUCTION_BATCH_MASTER  set CREATE_POST_S = :TextBatchStatus,  CREATE_POST_S_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , CREATE_POST_S_ID = :NoU_USER_ID where BATCH_ID = :NoBatchID ";
-            cmdi = new OracleCommand(update_batch, conn);
+                    int userID = Convert.ToInt32(Session["USER_ID"]);
+                    string u_date = System.DateTime.Now.ToString("dd-MM-yyyy h:mm:ss tt");
 
-            OracleParameter[] objPr = new OracleParameter[4];
-            objPr[0] = cmdi.Parameters.Add("TextBatchStatus", "Complete"); 
-            objPr[1] = cmdi.Parameters.Add("u_date", u_date);
-            objPr[2] = cmdi.Parameters.Add("NoU_USER_ID", userID);
-            objPr[3] = cmdi.Parameters.Add("NoBatchID", USER_DATA_ID);
+                    string update_batch = "update  MF_PRODUCTION_BATCH_MASTER  set CREATE_POST_S = :TextBatchStatus,  CREATE_POST_S_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM') , CREATE_POST_S_ID = :NoU_USER_ID where BATCH_ID = :NoBatchID ";
+                    cmdi = new OracleCommand(update_batch, conn);
 
-            cmdi.ExecuteNonQuery();
-            cmdi.Parameters.Clear();
-            cmdi.Dispose();
-             
-            conn.Close();
+                    OracleParameter[] objPr = new OracleParameter[4];
+                    objPr[0] = cmdi.Parameters.Add("TextBatchStatus", "Complete");
+                    objPr[1] = cmdi.Parameters.Add("u_date", u_date);
+                    objPr[2] = cmdi.Parameters.Add("NoU_USER_ID", userID);
+                    objPr[3] = cmdi.Parameters.Add("NoBatchID", USER_DATA_ID);
 
-            alert_box.Visible = true;
-            alert_box.Controls.Add(new LiteralControl("Batch Data Post Complete Successfully"));
-            alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
-             
-            Gridview1.EditIndex = -1;
-            Display(); 
-            ClearText(); 
-            string USER_DATA_ID1 = "";
-            ItemDisplay(USER_DATA_ID1, new EventArgs()); 
-               }
+                    cmdi.ExecuteNonQuery();
+                    cmdi.Parameters.Clear();
+                    cmdi.Dispose();
+
+                    conn.Close();
+
+                    alert_box.Visible = true;
+                    alert_box.Controls.Add(new LiteralControl("Batch Data Post Complete Successfully"));
+                    alert_box.Attributes.Add("class", "alert alert-success alert-dismissible");
+
+                    Gridview1.EditIndex = -1;
+                    Display();
+                    ClearText();
+                    string USER_DATA_ID1 = "";
+                    ItemDisplay(USER_DATA_ID1, new EventArgs());
+                }
                 else
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
@@ -587,46 +632,46 @@ namespace NRCAPPS.MF
         {
             //Get Item ID of editable row
             string ItemID = Gridview1.DataKeys[e.NewEditIndex]["ITEM_ID"].ToString();
-            string BatchNumber = Gridview1.DataKeys[e.NewEditIndex]["BATCH_NO"].ToString(); 
+            string BatchNumber = Gridview1.DataKeys[e.NewEditIndex]["BATCH_NO"].ToString();
             //Open Edit Mode
             Gridview1.EditIndex = e.NewEditIndex;
             ItemDisplay(BatchNumber, new EventArgs());
             //Populate item
-            DropDownList DropDownItemID = (DropDownList)Gridview1.Rows[e.NewEditIndex].FindControl("DropDownItemID"); 
+            DropDownList DropDownItemID = (DropDownList)Gridview1.Rows[e.NewEditIndex].FindControl("DropDownItemID");
             if (DropDownItemID != null)
             {
                 BindItem(DropDownItemID, ItemData());
-                DropDownItemID.SelectedValue = ItemID;  
+                DropDownItemID.SelectedValue = ItemID;
             }
         }
 
 
         protected void Gridview1_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-        try
-        {
-          if (IS_DELETE_ACTIVE == "Enable")
+            try
             {
-            OracleConnection conn = new OracleConnection(strConnString);
-            conn.Open();
+                if (IS_DELETE_ACTIVE == "Enable")
+                {
+                    OracleConnection conn = new OracleConnection(strConnString);
+                    conn.Open();
 
-            int TargetItemID = Convert.ToInt32(Gridview1.DataKeys[e.RowIndex]["TARGET_ITEM_ID"]);
-            string BatchNumber = Convert.ToString(Gridview1.DataKeys[e.RowIndex]["BATCH_NO"]);
-            string delete_user_page = " delete from MF_PRODUCTION_BAT_TARGET_ITEM where TARGET_ITEM_ID  = '" + TargetItemID + "'";
+                    int TargetItemID = Convert.ToInt32(Gridview1.DataKeys[e.RowIndex]["TARGET_ITEM_ID"]);
+                    string BatchNumber = Convert.ToString(Gridview1.DataKeys[e.RowIndex]["BATCH_NO"]);
+                    string delete_user_page = " delete from MF_PRODUCTION_BAT_TARGET_ITEM where TARGET_ITEM_ID  = '" + TargetItemID + "'";
 
-            cmdi = new OracleCommand(delete_user_page, conn);
+                    cmdi = new OracleCommand(delete_user_page, conn);
 
-            cmdi.ExecuteNonQuery();
-            cmdi.Parameters.Clear();
-            cmdi.Dispose();
-            conn.Close();
+                    cmdi.ExecuteNonQuery();
+                    cmdi.Parameters.Clear();
+                    cmdi.Dispose();
+                    conn.Close();
 
-            alert_box.Visible = true; 
-            alert_box.Controls.Add(new LiteralControl("Item Delete Successfully"));
-            alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
-            
-            ItemDisplay(BatchNumber, new EventArgs());
-             }
+                    alert_box.Visible = true;
+                    alert_box.Controls.Add(new LiteralControl("Item Delete Successfully"));
+                    alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
+
+                    ItemDisplay(BatchNumber, new EventArgs());
+                }
                 else
                 {
                     Response.Redirect("~/PagePermissionError.aspx");
@@ -642,12 +687,12 @@ namespace NRCAPPS.MF
 
 
         public void Display()
-        {  
-          if (IS_VIEW_ACTIVE == "Enable")
+        {
+            if (IS_VIEW_ACTIVE == "Enable")
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-                  
+
                 string makeSQL = "";
                 if (txtSearchUserRole.Text == "")
                 {
@@ -668,10 +713,10 @@ namespace NRCAPPS.MF
                 GridView2.DataKeyNames = new string[] { "BATCH_NO" };
 
                 GridView2.DataBind();
-                conn.Close(); 
+                conn.Close();
             }
-           
-       }
+
+        }
 
         protected void GridViewSearchUser(object sender, EventArgs e)
         {
@@ -692,15 +737,15 @@ namespace NRCAPPS.MF
             foreach (GridViewRow Row in GridView2.Rows)
             {
                 string IsBatchPostCheck = (Row.FindControl("IsBatchPost") as Label).Text;
-           //     string isCheckPrint = (Row.FindControl("IsPrintedCheckLink") as Label).Text;
+                //     string isCheckPrint = (Row.FindControl("IsPrintedCheckLink") as Label).Text;
                 if (IsBatchPostCheck == "Complete")  // || isCheckPrint == "Printed"
                 {
                     (Row.FindControl("LinkSelectClick") as LinkButton).Enabled = false;
                     (Row.FindControl("BtBatchPost_Click") as LinkButton).Enabled = false;
                 }
-                 
+
             }
-             
+
         }
 
         public void BatchPendingProduction()
@@ -754,7 +799,7 @@ namespace NRCAPPS.MF
             TextBatchNumber.Text = "";
             DropDownSupplierID.Text = "0";
             DropDownFurnacesID.Text = "0";
-       
+
         }
 
         public void ClearTextField(object sender, EventArgs e)
@@ -770,31 +815,31 @@ namespace NRCAPPS.MF
 
         }
 
-        protected void LinkSelectClick(object sender, EventArgs e) 
-        { 
-             OracleConnection conn = new OracleConnection(strConnString);
-             conn.Open();
-             LinkButton btn = (LinkButton)sender;
-             Session["user_page_data_id"] = btn.CommandArgument;
-             string USER_DATA_ID = Convert.ToString(Session["user_page_data_id"]); 
-              
-             string makeSQL = " select BATCH_ID, BATCH_NO, FURNACES_ID, PARTY_ID, GRADE_ID, TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, IS_ACTIVE from MF_PRODUCTION_BATCH_MASTER where BATCH_ID = '" + USER_DATA_ID + "'";
-             
-             cmdl = new OracleCommand(makeSQL);
-             oradata = new OracleDataAdapter(cmdl.CommandText, conn); 
-             dt = new DataTable();
-             oradata.Fill(dt);
-             RowCount = dt.Rows.Count; 
+        protected void LinkSelectClick(object sender, EventArgs e)
+        {
+            OracleConnection conn = new OracleConnection(strConnString);
+            conn.Open();
+            LinkButton btn = (LinkButton)sender;
+            Session["user_page_data_id"] = btn.CommandArgument;
+            string USER_DATA_ID = Convert.ToString(Session["user_page_data_id"]);
 
-             for (int i = 0; i < RowCount; i++)
-             {
+            string makeSQL = " select BATCH_ID, BATCH_NO, FURNACES_ID, PARTY_ID, GRADE_ID, TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, IS_ACTIVE from MF_PRODUCTION_BATCH_MASTER where BATCH_ID = '" + USER_DATA_ID + "'";
+
+            cmdl = new OracleCommand(makeSQL);
+            oradata = new OracleDataAdapter(cmdl.CommandText, conn);
+            dt = new DataTable();
+            oradata.Fill(dt);
+            RowCount = dt.Rows.Count;
+
+            for (int i = 0; i < RowCount; i++)
+            {
                 TextBatchID.Text = dt.Rows[i]["BATCH_ID"].ToString();
                 DropDownFurnacesID.Text = dt.Rows[i]["FURNACES_ID"].ToString();
                 TextBatchNumber.Text = dt.Rows[i]["BATCH_NO"].ToString();
                 DropDownSupplierID.Text = dt.Rows[i]["PARTY_ID"].ToString();
-                EntryDate.Text = dt.Rows[i]["ENTRY_DATE"].ToString(); 
-                CheckIsActive.Checked   = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
-               
+                EntryDate.Text = dt.Rows[i]["ENTRY_DATE"].ToString();
+                CheckIsActive.Checked = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
+
                 DataTable dtGradeID = new DataTable();
                 DataSet ds = new DataSet();
                 string makeGradeSQL = "  SELECT MPG.GRADE_ID, MPG.GRADE_ID || ': ' || MI.ITEM_NAME AS ITEM_NAME FROM MF_PRODUCTION_GRADE_CUSTOMER MPGC LEFT JOIN MF_PRODUCTION_GRADE MPG ON MPG.GRADE_ID = MPGC.GRADE_ID LEFT JOIN MF_ITEM MI ON MI.ITEM_ID = MPG.ITEM_ID WHERE MPGC.PARTY_ID = '" + dt.Rows[i]["PARTY_ID"].ToString() + "' ";
@@ -804,17 +849,17 @@ namespace NRCAPPS.MF
                 DropDownGradeID.DataValueField = "GRADE_ID";
                 DropDownGradeID.DataTextField = "ITEM_NAME";
                 DropDownGradeID.DataBind();
-                DropDownGradeID.Items.Insert(0, new ListItem("Select  Grade Template", "0")); 
+                DropDownGradeID.Items.Insert(0, new ListItem("Select  Grade Template", "0"));
                 DropDownGradeID.Text = dt.Rows[i]["GRADE_ID"].ToString();
-                 
-             }
 
-           
-            conn.Close(); 
+            }
+
+
+            conn.Close();
             BtnGradeDetails.Style["visibility"] = "show";
             BtnGradeCopyBatch.Style["visibility"] = "hidden";
             DisplayGradeTempDetails();
-             alert_box.Visible = false;
+            alert_box.Visible = false;
             DropDownFurnacesID.Enabled = false;
             ItemDisplay(TextBatchNumber.Text, new EventArgs());
 
@@ -838,7 +883,7 @@ namespace NRCAPPS.MF
             DropDownGradeID.DataTextField = "ITEM_NAME";
             DropDownGradeID.DataBind();
             DropDownGradeID.Items.Insert(0, new ListItem("Select  Grade Template", "0"));
-              
+
             conn.Close();
             alert_box.Visible = false;
 
@@ -858,14 +903,15 @@ namespace NRCAPPS.MF
             OracleDataReader dr = cmd.ExecuteReader();
             if (!dr.HasRows)
             {
-                 BtnGradeCopyBatch.Style["visibility"] = "show";
+                BtnGradeCopyBatch.Style["visibility"] = "show";
             }
-            else {
-                 BtnGradeCopyBatch.Style["visibility"] = "hidden";
+            else
+            {
+                BtnGradeCopyBatch.Style["visibility"] = "hidden";
             }
 
-            conn.Close(); 
-          
+            conn.Close();
+
             BtnGradeDetails.Style["visibility"] = "show";
             alert_box.Visible = false;
             DisplayGradeTempDetails();
@@ -874,7 +920,7 @@ namespace NRCAPPS.MF
         public void DisplayGradeTempDetails()
         {
             if (IS_VIEW_ACTIVE == "Enable")
-               {
+            {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
 
@@ -959,8 +1005,8 @@ namespace NRCAPPS.MF
                 PlaceHolderGradeDetails.Controls.Add(new Literal { Text = html.ToString() });
 
                 conn.Close();
-            } 
-      }
+            }
+        }
 
 
         public void DisplayTodayBatch()
@@ -981,7 +1027,7 @@ namespace NRCAPPS.MF
                 GridView4.DataSource = dt;
                 GridView4.DataKeyNames = new string[] { "BATCH_NO" };
                 GridView4.DataBind();
-              
+
                 conn.Close();
                 // alert_box.Visible = false;
             }
@@ -1004,7 +1050,7 @@ namespace NRCAPPS.MF
             OracleConnection conn = new OracleConnection(strConnString);
             conn.Open();
 
-            string BatchNumber =  e.CommandArgument.ToString();
+            string BatchNumber = e.CommandArgument.ToString();
 
             //Building an HTML string.
             StringBuilder html = new StringBuilder();
@@ -1077,7 +1123,7 @@ namespace NRCAPPS.MF
                 html.Append("</div>");
 
             }
-             
+
             PlaceHolderBatchDetails.Controls.Add(new Literal { Text = html.ToString() });
 
             string makeSQL = " select  MPBTI.ITEM_WEIGHT_CWT, MI.ITEM_CODE || ' : ' || MI.ITEM_NAME AS ITEM_NAME from MF_PRODUCTION_BAT_TARGET_ITEM MPBTI LEFT JOIN MF_ITEM MI ON MI.ITEM_ID = MPBTI.ITEM_ID  WHERE MPBTI.BATCH_NO = '" + BatchNumber + "' ORDER BY MPBTI.ITEM_ID";
@@ -1128,4 +1174,3 @@ namespace NRCAPPS.MF
         }
     }
 }
- 

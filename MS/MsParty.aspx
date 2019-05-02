@@ -83,9 +83,9 @@
                 </div>  
                  <div class="form-group">
                   <label  class="col-sm-2 control-label">Representative</label> 
-                <div class="col-sm-4">  
-                        <asp:DropDownList ID="DropDownRepresentativeID" class="form-control select2 input-sm" runat="server" > 
-                    </asp:DropDownList>  
+                <div class="col-sm-4">    
+                   <asp:ListBox runat="server" ID="DropDownRepresentativeID" class="form-control select2"   SelectionMode="multiple"> 
+                  </asp:ListBox>
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" 
                             ControlToValidate="DropDownRepresentativeID" Display="Dynamic" 
                             ErrorMessage="Select Representative" InitialValue="0" SetFocusOnError="True" ></asp:RequiredFieldValidator>
@@ -223,8 +223,7 @@
                      <asp:BoundField DataField="PARTY_VAT_NO"  HeaderText="Party Vat No" />    
                      <asp:BoundField DataField="PARTY_ADD_1"  HeaderText="Party Add. Line 1" /> 
                      <asp:BoundField DataField="PARTY_ADD_2"  HeaderText="Party Add. Line 2" /> 
-                     <asp:BoundField DataField="CONTACT_NO"  HeaderText="Contact No" />  
-                     <asp:BoundField DataField="REPRESENTATIVE_NAME"  HeaderText="Representative" /> 
+                     <asp:BoundField DataField="CONTACT_NO"  HeaderText="Contact No" />   
                      <asp:TemplateField HeaderText="Status" ItemStyle-Width="100">
                         <ItemTemplate> 
                              <asp:Label ID="IsActiveGV" CssClass="label" Text='<%# Eval("IS_ACTIVE").ToString() == "Enable" ? "<span Class=label-success style=Padding:2px >Enable<span>" : "<span Class=label-danger style=Padding:2px>Disable<span>" %>'  runat="server" /> 

@@ -496,7 +496,7 @@
                      </asp:TemplateField>    
                          
                      <asp:BoundField DataField="ITEM_WEIGHT"  HeaderText="Weight" />  
-                     <asp:BoundField DataField="NUMBER_OF_PACK"  HeaderText="Bales" />                           
+                     <asp:BoundField DataField="NUMBER_OF_PACK"  HeaderText="Pack No" />                           
                    
                      </Columns>
                         <PagerStyle CssClass="pagination-ys" />
@@ -571,7 +571,7 @@
             </div> 
             <!-- /.box-header -->
                     <div class="box-body">       
-                           <iframe src="WP_Reports/WpExpContainerMonthlyReportView.aspx?MonthYear=<%=TextMonthYear0.Text %>&GoodsInID=<%=DropDownGoodsIn.Text %>&IsReport=<%=radMonth.SelectedValue %>" width="950px" height="1250px" id="iframe1"
+                           <iframe src="MS_Reports/MsExpContainerMonthlyReportView.aspx?MonthYear=<%=TextMonthYear0.Text %>&GoodsInID=<%=DropDownGoodsIn.Text %>&IsReport=<%=radMonth.SelectedValue %>" width="950px" height="1250px" id="iframe1"
                         marginheight="0" frameborder="0" scrolling="auto" >   </iframe>  
                          </div>
                        </div> 

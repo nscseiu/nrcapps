@@ -119,7 +119,7 @@ namespace NRCAPPS.MF
                         ItemDisplay(USER_DATA_ID, new EventArgs());
 
                         Display();
-                        DisplayProductionIssue();
+                        //DisplayProductionIssue();
                         BatchPendingProduction();
                         alert_box.Visible = false;
 
@@ -442,7 +442,7 @@ namespace NRCAPPS.MF
 
 
                                 Display();
-                                DisplayProductionIssue();
+                                //DisplayProductionIssue();
                                 BatchPendingProduction();
                                 ItemDisplay(IssueFgID, new EventArgs());
 
@@ -580,7 +580,7 @@ namespace NRCAPPS.MF
 
                                 conn.Close();
                                 Display();
-                                DisplayProductionIssue();
+                                //DisplayProductionIssue();
                                 BatchPendingProduction();
                                 ItemDisplay(IssueFgID, new EventArgs());
 
@@ -866,7 +866,7 @@ namespace NRCAPPS.MF
                         alert_box.Visible = true;
                         alert_box.Controls.Add(new LiteralControl("Item Delete Successfully"));
                         alert_box.Attributes.Add("class", "alert alert-danger alert-dismissible");
-                        DisplayProductionIssue();
+                        //DisplayProductionIssue();
                         ItemDisplay(IssueFgID, new EventArgs());
                          
                     }
@@ -1091,7 +1091,7 @@ namespace NRCAPPS.MF
             alert_box.Visible = false;
             DropDownBatchNo.Enabled = false;
             DropDownFurnacesID.Enabled = false;
-            DisplayProductionIssue();
+            //DisplayProductionIssue();
             ItemDisplay(TextIssueFgID.Text, new EventArgs());
          //   }
          //   catch
@@ -1155,13 +1155,13 @@ namespace NRCAPPS.MF
             var Row = Gridview1.FooterRow;
             DropDownList DropDownItemID = (DropDownList)Row.FindControl("DropDownItemID"); 
             DropDownItemID.Focus();
-            DisplayProductionIssue();
+            //DisplayProductionIssue();
             conn.Close();
             alert_box.Visible = false;
 
         }
          
-        public void DisplayProductionIssue()
+   /*     public void DisplayProductionIssue()
         {
             if (IS_VIEW_ACTIVE == "Enable")
             {
@@ -1183,7 +1183,7 @@ namespace NRCAPPS.MF
                 alert_box.Visible = false;
             }
         }
-
+        */
 
         protected void DisplayBatchDetalis(object sender, CommandEventArgs e)
         {

@@ -410,7 +410,7 @@
                 </span>
               </a>
                 <ul class="treeview-menu">    
-                    <li id="pf_material_transaction" runat="server"><a href="<%= ResolveUrl("~/PF/PfMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i> Material Transaction</a></li>
+                    <li id="pf_material_transaction" runat="server"><a href="<%= ResolveUrl("~/PF/PfMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i> Material Transaction</a></li> 
                     <li id="pf_daily_pur_prod_report" runat="server"><a href="<%= ResolveUrl("~/PF/PfDailyPurProdStatement.aspx") %>"><i class="fa fa-circle-o"></i> Daily Report</a></li>
                     <li id="pf_daily_pur_prod" runat="server"><a href="<%= ResolveUrl("~/PF/PfDailyPurProd.aspx") %>"><i class="fa fa-circle-o"></i> Daily Pur. Prod. & Sales</a></li>
                     <li id="pf_inventory_rm" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryRm.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for RM</a></li>  
@@ -463,10 +463,8 @@
             <li id="ms_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfItem.aspx") %>"><i class="fa fa-circle-o"></i> Item</a></li>   
             <li id="ms_item_sales" runat="server"><a href="<%= ResolveUrl("~/MS/MsItemSales.aspx") %>"><i class="fa fa-circle-o"></i> Item (Sales Overseas)</a></li> 
             <li id="ms_item_sales_ws" runat="server"><a href="<%= ResolveUrl("~/MS/MsItemSalesWs.aspx") %>"><i class="fa fa-circle-o"></i> Item (Weight Slip)</a></li> 
-            <li id="ms_driver" runat="server"><a href="<%= ResolveUrl("~/MS/MsDriver.aspx") %>"><i class="fa fa-circle-o"></i> Driver</a></li>  
-            <li id="ms_collection_for" runat="server"><a href="<%= ResolveUrl("~/MS/MsCollectionFor.aspx") %>"><i class="fa fa-circle-o"></i> Collection For</a></li> 
-            <li id="ms_supervisor" runat="server"><a href="<%= ResolveUrl("~/MS/MsSupervisor.aspx") %>"><i class="fa fa-circle-o"></i> Procurement Supervisor</a></li> 
-            <li id="ms_supplier_cat" runat="server"><a href="<%= ResolveUrl("~/MS/MsSupplierCat.aspx") %>"><i class="fa fa-circle-o"></i> Supplier Category</a></li> 
+            <li id="ms_vehicle_mode" runat="server"><a href="<%= ResolveUrl("~/MS/MsVehicleMode.aspx") %>"><i class="fa fa-circle-o"></i> Vehicle Mode</a></li>  
+            <li id="ms_representative" runat="server"><a href="<%= ResolveUrl("~/MS/MsRepresentative.aspx") %>"><i class="fa fa-circle-o"></i> Representative</a></li>  
             <li id="ms_party" runat="server"><a href="<%= ResolveUrl("~/MS/MsParty.aspx") %>"><i class="fa fa-circle-o"></i> Party (Supplier & Customer)</a></li> 
             <li id="ms_purchase_menu" runat="server">
               <a href="#"><i class="fa fa-circle-o"></i> Purchase
@@ -488,7 +486,7 @@
                 </span>
               </a>
                 <ul class="treeview-menu">
-                    <li id="ms_material_transaction" runat="server"><a href="<%= ResolveUrl("~/MS/MsMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i> Material Transaction</a></li>
+                    <li id="ms_material_transaction" runat="server"><a href="<%= ResolveUrl("~/MS/MsMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i> Material Transaction (RM)</a></li>
                     <li id="ms_material_garbage" runat="server"><a href="<%= ResolveUrl("~/MS/MsActualGarbage.aspx") %>"><i class="fa fa-circle-o"></i> Material Garbage</a></li>
                     <li id="ms_inventory_rm" runat="server"><a href="<%= ResolveUrl("~/MS/MsInventoryRm.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for RM</a></li>          
                  </ul>
@@ -504,7 +502,7 @@
                        <li id="ms_sales_inter_division" runat="server"><a href="<%= ResolveUrl("~/MS/MsSalesInterDivision.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Inter Division)</a></li>  
                        <li id="ms_export_container" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpContainer.aspx") %>"><i class="fa fa-circle-o"></i> Weight Slip & Container</a></li>  
                        <li id="ms_material_pricing" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpMaterialPricing.aspx") %>"><i class="fa fa-circle-o"></i> Material Pricing</a></li>
-                       <li id="ms_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i> Sales Invoice</a></li> 
+                       <li id="ms_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i> Sales Documents</a></li> 
                        <li id="ms_export_shipment_cmo" runat="server"><a href="<%= ResolveUrl("~/MS/MsExpShipmentCmo.aspx") %>"><i class="fa fa-circle-o"></i> Shipment (CMO)</a></li> 
                  </ul>
             </li>      
@@ -551,41 +549,40 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li id="mf_furnaces" runat="server"><a href="<%= ResolveUrl("~/MF/MfFurnaces.aspx") %>"><i class="fa fa-circle-o"></i> Furnaces</a></li>
-                <li id="mf_grade_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfGradeItem.aspx") %>"><i class="fa fa-circle-o"></i> Grade (Templete)</a></li>
-                <li id="mf_batch_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfBatchItem.aspx") %>"><i class="fa fa-circle-o"></i> Batch Item (Target Qty.)</a></li>
-                <li id="mf_batch_rm_check" runat="server"><a href="<%= ResolveUrl("~/MF/MfBatchRmCheckItem.aspx") %>"><i class="fa fa-circle-o"></i> RM Inven. Check for Batch</a></li>
-                <li id="mf_prod_issue" runat="server"><a href="<%= ResolveUrl("~/MF/MfProductionIssue.aspx") %>"><i class="fa fa-circle-o"></i> Issue For Production</a></li> 
-                <li id="mf_fg_qa" runat="server"><a href="<%= ResolveUrl("~/MF/MfFgQualityAssurance.aspx") %>"><i class="fa fa-circle-o"></i> Quality Assurance (Lab Test)</a></li> 
-                <li id="mf_fg_issue" runat="server"><a href="<%= ResolveUrl("~/MF/MfFinishedGoodsIssue.aspx") %>"><i class="fa fa-circle-o"></i> Issue For Finished Goods</a></li>           
+                <li id="mf_furnaces" runat="server"><a href="<%= ResolveUrl("~/MF/MfFurnaces.aspx") %>"><i class="fa fa-circle-o"></i>Furnaces</a></li>
+                <li id="mf_grade_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfGradeItem.aspx") %>"><i class="fa fa-circle-o"></i>Grade (Templete)</a></li>
+                <li id="mf_batch_item" runat="server"><a href="<%= ResolveUrl("~/MF/MfBatchItem.aspx") %>"><i class="fa fa-circle-o"></i>Batch Item (Target Qty.)</a></li>
+                <li id="mf_batch_rm_check" runat="server"><a href="<%= ResolveUrl("~/MF/MfBatchRmCheckItem.aspx") %>"><i class="fa fa-circle-o"></i>RM Inven. Check for Batch</a></li>
+                <li id="mf_prod_issue" runat="server"><a href="<%= ResolveUrl("~/MF/MfProductionIssue.aspx") %>"><i class="fa fa-circle-o"></i>Issue For Production</a></li> 
+                <li id="mf_fg_qa" runat="server"><a href="<%= ResolveUrl("~/MF/MfFgQualityAssurance.aspx") %>"><i class="fa fa-circle-o"></i>Quality Assurance (Lab Test)</a></li> 
+                <li id="mf_fg_issue" runat="server"><a href="<%= ResolveUrl("~/MF/MfFinishedGoodsIssue.aspx") %>"><i class="fa fa-circle-o"></i>Issue For Finished Goods</a></li>           
                 </ul>
             </li>  
-             <li id="Li20" runat="server">
+             <li id="mf_inventory_menu" runat="server">
               <a href="#"><i class="fa fa-circle-o"></i> Inventory
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
-                <ul class="treeview-menu">
-                    <li id="Li21" runat="server"><a href="<%= ResolveUrl("~/PF/PfDailyPurProd.aspx") %>"><i class="fa fa-circle-o"></i> Daily Pur. Prod. & Sales</a></li>
-                    <li id="Li22" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryRm.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for RM</a></li>  
-                    <li id="Li23" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryFg.aspx") %>"><i class="fa fa-circle-o"></i> Inventory for FG</a></li>        
-                    <li id="Li24" runat="server"><a href="<%= ResolveUrl("~/PF/PfInventoryMonthlyStatement.aspx") %>"><i class="fa fa-circle-o"></i> Inven. Monthly Statement</a></li>        
-                </ul>
+                <ul class="treeview-menu"> 
+                    <li id="mf_material_transaction" runat="server"><a href="<%= ResolveUrl("~/MF/MfMaterialTransaction.aspx") %>"><i class="fa fa-circle-o"></i>Material Transaction</a></li>
+                    <li id="mf_shift_fg" runat="server"><a href="<%= ResolveUrl("~/MF/MfMaterialShiftFg.aspx") %>"><i class="fa fa-circle-o"></i>RM Material Shift to FG</a></li>
+                    <li id="mf_inventory" runat="server"><a href="<%= ResolveUrl("~/MF/MfInventory.aspx") %>"><i class="fa fa-circle-o"></i>Inventory</a></li>     
+                 </ul>
             </li>   
              <li id="mf_sales_menu" runat="server">
-              <a href="#"><i class="fa fa-circle-o"></i> Sales (Overseas & Local)
+              <a href="#"><i class="fa fa-circle-o"></i>Sales (Overseas & Local)
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
                 <ul class="treeview-menu">  
-                       <li id="mf_sales" runat="server"><a href="<%= ResolveUrl("~/MF/MfSales.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Local)</a></li>  
-                       <li id="mf_sales_inter_division" runat="server"><a href="<%= ResolveUrl("~/MF/MfSalesInterDivision.aspx") %>"><i class="fa fa-circle-o"></i> Sales (Inter Division)</a></li>  
-                       <li id="mf_export_container" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpContainer.aspx") %>"><i class="fa fa-circle-o"></i> Weight Slip & Container</a></li>  
-                       <li id="mf_material_pricing" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpMaterialPricing.aspx") %>"><i class="fa fa-circle-o"></i> Material Pricing</a></li>
-                       <li id="mf_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i> Sales Documents(Overseas)</a></li> 
-                       <li id="mf_export_shipment_cmo" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpShipmentCmo.aspx") %>"><i class="fa fa-circle-o"></i> Shipment (CMO)</a></li> 
+                       <li id="mf_sales" runat="server"><a href="<%= ResolveUrl("~/MF/MfSales.aspx") %>"><i class="fa fa-circle-o"></i>Sales (Local)</a></li>  
+                       <li id="mf_sales_inter_division" runat="server"><a href="<%= ResolveUrl("~/MF/MfSalesInterDivision.aspx") %>"><i class="fa fa-circle-o"></i>Sales (Inter Division)</a></li>  
+                       <li id="mf_export_container" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpContainer.aspx") %>"><i class="fa fa-circle-o"></i>Weight Slip & Container</a></li>  
+                       <li id="mf_material_pricing" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpMaterialPricing.aspx") %>"><i class="fa fa-circle-o"></i>Material Pricing</a></li>
+                       <li id="mf_export_sales_invoice" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpSalesInvoice.aspx") %>"><i class="fa fa-circle-o"></i>Sales Documents(Overseas)</a></li> 
+                       <li id="mf_export_shipment_cmo" runat="server"><a href="<%= ResolveUrl("~/MF/MfExpShipmentCmo.aspx") %>"><i class="fa fa-circle-o"></i>Shipment (CMO)</a></li> 
                  </ul>
             </li>       
           </ul>
@@ -1012,7 +1009,7 @@
                         $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "true"); 
                         $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary active"); 
                   
-                    MsInvoiceNo(); 
+                    MsSalesInvoiceNo(); 
                  if (event.which === 13) {
                      $('[Id*=ctl00_ContentPlaceHolder1_loader]').hide();
                  }
@@ -1023,17 +1020,17 @@
                  $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("class", "btn btn-primary disabled"); }
                 }); 
           /* Function to get data wb slip check available */
-               function MsInvoiceNo() {
+               function MsSalesInvoiceNo() {
                    var WpSlipNo = $("#ctl00_ContentPlaceHolder1_TextInvoiceMsNo").val();  
                   
                     $.ajax({
                         type: "POST",
-                        url: "MsSales.aspx/WpSalesInvoiceNoCheck",
+                        url: "MsSales.aspx/MsSalesInvoiceNoCheck",
                         data: '{"InvoiceNo": "' + WpSlipNo + '"}',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (r) {  
-                          if (r.d != '') {  
+                          if (r.d == true) {  
                         $('#ctl00_ContentPlaceHolder1_CheckInvoiceNo').text('Slip Number is not available');
                         $('[Id*=ctl00_ContentPlaceHolder1_CheckInvoiceNo]').css("color", "red");
                         $('[id*=ctl00_ContentPlaceHolder1_BtnAdd]').attr("aria-disabled", "false"); 

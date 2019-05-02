@@ -121,6 +121,24 @@ namespace NRCAPPS.MS {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
         
         /// <summary>
+        /// DropDownRepresentativeID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownRepresentativeID;
+        
+        /// <summary>
+        /// RequiredFieldValidator1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        
+        /// <summary>
         /// DropDownCategoryID control.
         /// </summary>
         /// <remarks>
@@ -571,13 +589,13 @@ namespace NRCAPPS.MS {
         protected global::System.Web.UI.WebControls.Panel Panel2;
         
         /// <summary>
-        /// DropDownSupervisorID2 control.
+        /// DropDownMarketerID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownSupervisorID2;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownMarketerID;
         
         /// <summary>
         /// RequiredFieldValidator13 control.
@@ -634,13 +652,13 @@ namespace NRCAPPS.MS {
         protected global::System.Web.UI.WebControls.Panel Panel3;
         
         /// <summary>
-        /// DropDownCollectionFor2 control.
+        /// DropDownRepresentativeID1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownCollectionFor2;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownRepresentativeID1;
         
         /// <summary>
         /// RequiredFieldValidator29 control.
@@ -731,24 +749,6 @@ namespace NRCAPPS.MS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel Panel6;
-        
-        /// <summary>
-        /// DropDownDriverID2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownDriverID2;
-        
-        /// <summary>
-        /// RequiredFieldValidator25 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator25;
         
         /// <summary>
         /// EntryDate4 control.

@@ -188,7 +188,7 @@ namespace NRCAPPS.MS
                 DataTable dtUserTypeID = new DataTable();
                 DataSet ds = new DataSet();
 
-                string   makeSQL = " select  PRSIM.RM_INVENTORY_ID, PI.ITEM_CODE || ' : ' || PI.ITEM_NAME AS ITEM_NAME, PRSIM.INITIAL_STOCK_WT, PRSIM.STOCK_IN_WT, PRSIM.STOCK_OUT_WT, PRSIM.FINAL_STOCK_WT, PRSIM.ITEM_END_AMOUNT  from MS_RM_STOCK_INVENTORY_MASTER PRSIM LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PRSIM.ITEM_ID ORDER BY PI.ITEM_CODE asc";
+                string   makeSQL = " select  PRSIM.RM_INVENTORY_ID, PI.ITEM_CODE || ' : ' || PI.ITEM_NAME AS ITEM_NAME, PRSIM.INITIAL_STOCK_WT, PRSIM.STOCK_IN_WT, PRSIM.STOCK_OUT_WT, PRSIM.FINAL_STOCK_WT, PRSIM.ITEM_END_AMOUNT  from MS_RM_STOCK_INVENTORY_MASTER PRSIM LEFT JOIN MF_ITEM PI ON PI.ITEM_ID = PRSIM.ITEM_ID WHERE  nvl(PRSIM.INITIAL_STOCK_WT,0)>0 OR nvl(PRSIM.STOCK_IN_WT,0)>0 OR nvl(PRSIM.STOCK_OUT_WT,0)>0 OR nvl(PRSIM.FINAL_STOCK_WT,0)>0  ORDER BY PI.ITEM_CODE asc";
                  
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -363,7 +363,7 @@ namespace NRCAPPS.MS
                 html.Append("<th rowspan='2' align='center'>CURRENT PURCHASES</th>");
                 html.Append("<th rowspan='2' align='center'>GARBAGE</th>");
                 html.Append("<th rowspan='2' align='center'>NET PURCHASES</th>");
-                html.Append("<th rowspan='2' align='center'>TOTAL QTY. AVAIL. FOR SALE</th>");
+                html.Append("<th rowspan='2' align='center'>TOTAL QTY. AVAIL. FOR SALE BEFORE ADJUSTMENT</th>");
                 html.Append("<th colspan='4' align='center'>ADJUSTMENTS / TRANSANCTION </th>");
                 html.Append("<th rowspan='2' align='center'>NET TOTAL QTY. AVAIL. FOR SALE</th>");
                 html.Append("<th colspan='3' align='center'>TOTAL SALES</th>");

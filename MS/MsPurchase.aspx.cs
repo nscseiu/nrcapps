@@ -57,7 +57,7 @@ namespace NRCAPPS.MS
                     {
                         DataTable dtSupplierID = new DataTable();
                         DataSet ds = new DataSet();
-                        string makeSupplierSQL = " SELECT MP.PARTY_ID || '-' || MR.REPRESENTATIVE_ID AS PARTY_ID,  MP.PARTY_ID || ' : ' || MP.PARTY_NAME || ' - ' || MP.PARTY_VAT_NO || ' : ' ||  MR.NID_NO || ' : ' || MR.REPRESENTATIVE_NAME AS PARTY_NAME  FROM MS_PARTY MP LEFT JOIN MS_REPRESENTATIVE MR ON MR.REPRESENTATIVE_ID = MP.REPRESENTATIVE_ID WHERE MP.IS_ACTIVE = 'Enable' ORDER BY MP.PARTY_NAME ASC";
+                        string makeSupplierSQL = " SELECT MP.PARTY_ID,  MP.PARTY_ID || ' : ' || MP.PARTY_NAME || ' - ' || MP.PARTY_VAT_NO AS PARTY_NAME  FROM MS_PARTY MP  WHERE MP.IS_ACTIVE = 'Enable' ORDER BY MP.PARTY_NAME ASC";
                         ds = ExecuteBySqlString(makeSupplierSQL);
                         dtSupplierID = (DataTable)ds.Tables[0];
                         DropDownSupplierID.DataSource = dtSupplierID;
@@ -109,7 +109,7 @@ namespace NRCAPPS.MS
                          
                         DataTable dtSupCatID = new DataTable();
                         DataSet dsc = new DataSet();
-                        string makeDropDownSupCatSQL = " SELECT * FROM MS_VEHICLE_MODE WHERE IS_ACTIVE = 'Enable' ORDER BY VEHICLE_MODE_ID ASC";
+                        string makeDropDownSupCatSQL = " SELECT * FROM NRC_VEHICLE_MODE WHERE IS_ACTIVE = 'Enable' ORDER BY VEHICLE_MODE_ID ASC";
                         dsc = ExecuteBySqlString(makeDropDownSupCatSQL);
                         dtSupCatID = (DataTable)dsc.Tables[0];
                         DropDownVehicleID.DataSource = dtSupCatID;
@@ -134,7 +134,29 @@ namespace NRCAPPS.MS
                         DropDownVatID.DataValueField = "VAT_ID";
                         DropDownVatID.DataTextField = "VAT_PERCENT";
                         DropDownVatID.DataBind();
-                         
+
+                        DataTable dtRepresentativeID = new DataTable();
+                        DataSet dsr = new DataSet();
+                        string makeDropDownRepresentativeSQL = " SELECT MR.REPRESENTATIVE_ID, MR.NID_NO || ' : ' ||  MR.REPRESENTATIVE_NAME || ' - ' || HC.COUNTRY_NAME AS REPRESENTATIVE_NAME FROM MS_REPRESENTATIVE MR LEFT JOIN HR_COUNTRIES HC ON HC.COUNTRY_ID = MR.COUNTRY_ID  WHERE MR.IS_ACTIVE = 'Enable' ORDER BY MR.REPRESENTATIVE_ID ASC";
+                        dsr = ExecuteBySqlString(makeDropDownRepresentativeSQL);
+                        dtRepresentativeID = (DataTable)dsr.Tables[0];
+                        DropDownRepresentativeID1.DataSource = dtRepresentativeID;
+                        DropDownRepresentativeID1.DataValueField = "REPRESENTATIVE_ID";
+                        DropDownRepresentativeID1.DataTextField = "REPRESENTATIVE_NAME";
+                        DropDownRepresentativeID1.DataBind();
+                        DropDownRepresentativeID1.Items.Insert(0, new ListItem("Select Representative", "0"));
+
+                        DataTable dtMarID = new DataTable();
+                        DataSet dsm = new DataSet();
+                        string makeDropDownMarSQL = " SELECT VEHICLE_NO FROM MS_PURCHASE_MASTER WHERE IS_ACTIVE = 'Enable' AND VEHICLE_NO IS NOT NULL GROUP BY VEHICLE_NO ORDER BY VEHICLE_NO ASC";
+                        dsm = ExecuteBySqlString(makeDropDownMarSQL);
+                        dtMarID = (DataTable)dsm.Tables[0];
+                        DropDownMarketerID.DataSource = dtMarID;
+                        DropDownMarketerID.DataValueField = "VEHICLE_NO";
+                        DropDownMarketerID.DataTextField = "VEHICLE_NO";
+                        DropDownMarketerID.DataBind();
+                        DropDownMarketerID.Items.Insert(0, new ListItem("Select Marketer's", "0"));
+
                         TextMsSlipNo.Focus();
                         //  VatPercent.Visible = false;
                         TextItemAmount.Attributes.Add("readonly", "readonly");
@@ -181,14 +203,14 @@ namespace NRCAPPS.MS
                     conn.Open();
 
                     int userID = Convert.ToInt32(Session["USER_ID"]);
-                    string SupplierID = DropDownSupplierID.Text;
-                    string[] SupplierRepID = SupplierID.Split('-');
+                    
+                    int ItemID = Convert.ToInt32(Request.Form[DropDownItemID.UniqueID]);
                     int SlipNoWp = Convert.ToInt32(TextMsSlipNo.Text); 
                     int CategoryID = Convert.ToInt32(DropDownCategoryID.Text); 
                     int VehicleID = Convert.ToInt32(DropDownVehicleID.Text); 
                  //   int ItemID   = Convert.ToInt32(DropDownItemID.Text);
-
-                    int ItemID = Convert.ToInt32(Request.Form[DropDownItemID.UniqueID]);
+                    int SupplierID = Convert.ToInt32(DropDownSupplierID.Text); 
+                    int RepresentativeID = Convert.ToInt32(Request.Form[DropDownRepresentativeID.UniqueID]);
                     int SupplierCategory = Convert.ToInt32(DropDownVehicleID.Text); 
 
                //     string ItemName = DropDownItemID.SelectedItem.Text;
@@ -230,7 +252,7 @@ namespace NRCAPPS.MS
                     OracleParameter[] objPrm = new OracleParameter[21];
                     objPrm[0] = cmdi.Parameters.Add("NoPurchaseID", newPurchaseID); 
                     objPrm[1] = cmdi.Parameters.Add("NoSlipID", SlipNoWp); 
-                    objPrm[2] = cmdi.Parameters.Add("NoSupplierID", Convert.ToInt32(SupplierRepID[0])); 
+                    objPrm[2] = cmdi.Parameters.Add("NoSupplierID", SupplierID); 
                     objPrm[3] = cmdi.Parameters.Add("VehicleID", VehicleID);   
                     objPrm[4] = cmdi.Parameters.Add("TextVehicleNo", VehicleNo.Text);   
                     objPrm[5] = cmdi.Parameters.Add("NoCategoryID", CategoryID); 
@@ -245,7 +267,7 @@ namespace NRCAPPS.MS
                     objPrm[14] = cmdi.Parameters.Add("NoVatAmount", VatAmount); 
                     objPrm[15] = cmdi.Parameters.Add("EntryDate", EntryDateNew); 
                     objPrm[16] = cmdi.Parameters.Add("TextRemarks", TextRemarks.Text); 
-                    objPrm[17] = cmdi.Parameters.Add("TextRepresentative", Convert.ToInt32(SupplierRepID[1]));
+                    objPrm[17] = cmdi.Parameters.Add("TextRepresentative", RepresentativeID);
                     objPrm[18] = cmdi.Parameters.Add("c_date", c_date); 
                     objPrm[19] = cmdi.Parameters.Add("NoCuserID", userID);
                     objPrm[20] = cmdi.Parameters.Add("TextIsActive", ISActive);
@@ -569,6 +591,38 @@ namespace NRCAPPS.MS
             }
         }
 
+        [WebMethod]
+        public static List<ListItem> GetRepresentativeList(string PartyId)
+        {
+            string[] PartyID = PartyId.Split('-');
+            string query = " SELECT MR.REPRESENTATIVE_ID, MR.NID_NO || ' : ' ||  MR.REPRESENTATIVE_NAME || ' - ' || HC.COUNTRY_NAME AS REPRESENTATIVE_NAME FROM MS_PARTY_REPRESENTATIVE MPR LEFT JOIN MS_REPRESENTATIVE MR ON MR.REPRESENTATIVE_ID =  MPR.REPRESENTATIVE_ID LEFT JOIN HR_COUNTRIES HC ON HC.COUNTRY_ID = MR.COUNTRY_ID  WHERE MPR.PARTY_ID = :PartyId AND MR.IS_ACTIVE = 'Enable' ORDER BY MR.REPRESENTATIVE_ID ASC ";
+            string strConnString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; 
+            using (OracleConnection conn = new OracleConnection(strConnString))
+            {
+                using (OracleCommand cmd = new OracleCommand(query))
+                {
+                    List<ListItem> cities = new List<ListItem>();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("PartyId", Convert.ToInt32(PartyID[0]));
+                    cmd.Connection = conn;
+                    conn.Open();
+                    using (OracleDataReader sdr = cmd.ExecuteReader())
+                    {
+                        while (sdr.Read())
+                        {
+                            cities.Add(new ListItem
+                            {
+                                Value = sdr["REPRESENTATIVE_ID"].ToString(),
+                                Text = sdr["REPRESENTATIVE_NAME"].ToString()
+                            });
+                        }
+                    }
+                    conn.Close();
+                    return cities;
+                }
+            }
+        }
+
         protected void LinkSelectClick(object sender, EventArgs e)
         {
         // try{
@@ -578,7 +632,7 @@ namespace NRCAPPS.MS
             Session["user_data_id"] = btn.CommandArgument;
             int USER_DATA_ID = Convert.ToInt32(Session["user_data_id"]);
 
-            string makeSQL = " select PURCHASE_ID, SLIP_NO,  PARTY_ID || '-' || REPRESENTATIVE_ID AS PARTY_ID, VEHICLE_MODE_ID, VEHICLE_NO, ITEM_ID, CATEGORY_ID, ITEM_WEIGHT, nvl(ITEM_WEIGHT_WB,0) AS ITEM_WEIGHT_WB, ITEM_RATE, nvl(ITEM_AMOUNT,0) AS ITEM_AMOUNT, nvl(VAT_ID,0) AS VAT_ID, nvl(VAT_AMOUNT,0) AS VAT_AMOUNT, nvl(TOTAL_AMOUNT,0) AS TOTAL_AMOUNT, TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, CREATE_DATE,  UPDATE_DATE,  C_USER_ID, U_USER_ID, IS_ACTIVE from MS_PURCHASE_MASTER where PURCHASE_ID  = '" + USER_DATA_ID + "'";
+            string makeSQL = " select PURCHASE_ID, SLIP_NO,  PARTY_ID, REPRESENTATIVE_ID, VEHICLE_MODE_ID, VEHICLE_NO, ITEM_ID, CATEGORY_ID, ITEM_WEIGHT, nvl(ITEM_WEIGHT_WB,0) AS ITEM_WEIGHT_WB, ITEM_RATE, nvl(ITEM_AMOUNT,0) AS ITEM_AMOUNT, nvl(VAT_ID,0) AS VAT_ID, nvl(VAT_AMOUNT,0) AS VAT_AMOUNT, nvl(TOTAL_AMOUNT,0) AS TOTAL_AMOUNT, TO_CHAR(ENTRY_DATE,'dd/mm/yyyy') AS ENTRY_DATE, CREATE_DATE,  UPDATE_DATE,  C_USER_ID, U_USER_ID, IS_ACTIVE from MS_PURCHASE_MASTER where PURCHASE_ID  = '" + USER_DATA_ID + "'";
 
             cmdl = new OracleCommand(makeSQL);
             oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -603,7 +657,8 @@ namespace NRCAPPS.MS
                 TextMsSlipNo.Text = dt.Rows[i]["SLIP_NO"].ToString();
                 DropDownVehicleID.Text = dt.Rows[i]["VEHICLE_MODE_ID"].ToString();
                 VehicleNo.Text = dt.Rows[i]["VEHICLE_NO"].ToString(); 
-                DropDownSupplierID.Text = dt.Rows[i]["PARTY_ID"].ToString(); 
+                DropDownSupplierID.Text = dt.Rows[i]["PARTY_ID"].ToString();
+            
                 DropDownItemID.Text = dt.Rows[i]["ITEM_ID"].ToString();
                 DropDownCategoryID.Text = dt.Rows[i]["CATEGORY_ID"].ToString();
                 TextItemRate.Text = dt.Rows[i]["ITEM_RATE"].ToString(); 
@@ -613,6 +668,17 @@ namespace NRCAPPS.MS
                 EntryDate.Text = dt.Rows[i]["ENTRY_DATE"].ToString();
                 TextItemWeightWb.Text  = decimal.Parse(dt.Rows[i]["ITEM_WEIGHT_WB"].ToString()).ToString(".00");
                 CheckIsActive.Checked = Convert.ToBoolean(dt.Rows[i]["IS_ACTIVE"].ToString() == "Enable" ? true : false);
+
+                DataTable dtRepresentativeID = new DataTable();
+                DataSet dsr = new DataSet();
+                string makeRepresentativeIDSQL = " SELECT MR.REPRESENTATIVE_ID, MR.NID_NO || ' : ' ||  MR.REPRESENTATIVE_NAME || ' - ' || HC.COUNTRY_NAME AS REPRESENTATIVE_NAME FROM MS_PARTY_REPRESENTATIVE MPR LEFT JOIN MS_REPRESENTATIVE MR ON MR.REPRESENTATIVE_ID =  MPR.REPRESENTATIVE_ID LEFT JOIN HR_COUNTRIES HC ON HC.COUNTRY_ID = MR.COUNTRY_ID  WHERE MPR.PARTY_ID = '"+ Convert.ToInt32(dt.Rows[i]["PARTY_ID"].ToString()) + "' AND MR.IS_ACTIVE = 'Enable' ORDER BY MR.REPRESENTATIVE_ID ASC";
+                dsr = ExecuteBySqlString(makeRepresentativeIDSQL);
+                dtRepresentativeID = (DataTable)dsr.Tables[0];
+                DropDownRepresentativeID.DataSource = dtRepresentativeID;
+                DropDownRepresentativeID.DataValueField = "REPRESENTATIVE_ID";
+                DropDownRepresentativeID.DataTextField = "REPRESENTATIVE_NAME";
+                DropDownRepresentativeID.DataBind();
+                DropDownRepresentativeID.Text = dt.Rows[i]["REPRESENTATIVE_ID"].ToString(); 
 
                 RadioBtnVat.Enabled = true; 
                 if (dt.Rows[i]["VAT_ID"].ToString() != "0")
@@ -672,18 +738,18 @@ namespace NRCAPPS.MS
                 string ThreeDaysBefore = ThreeDaysBeforeTemp.ToString("yyyy/MM/dd");
                 if (txtSearchEmp.Text == "")
                 {
-                    makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID  WHERE to_char(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + ThreeDaysBefore  + "' AND '" + DayMonthYear + "' ORDER BY WPM.CREATE_DATE DESC  ";
+                    makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN NRC_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID  WHERE to_char(WPM.ENTRY_DATE, 'yyyy/mm/dd') between '" + ThreeDaysBefore  + "' AND '" + DayMonthYear + "' ORDER BY WPM.CREATE_DATE DESC  ";
 
                 }
                 else
                 {
                     if (DropDownSearchItemID.Text == "0")
                     {
-                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%'  or WI.ITEM_NAME like '" + txtSearchEmp.Text + "%'  or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%'  ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
+                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN NRC_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%'  or WI.ITEM_NAME like '" + txtSearchEmp.Text + "%'  or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%'  ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
                     }
                     else
                     {
-                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN MS_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where  WI.ITEM_ID like '" + DropDownSearchItemID.Text + "%' AND (WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
+                        makeSQL = " SELECT WPM.PURCHASE_ID, WPM.SLIP_NO, WPM.PARTY_ID, PP.PARTY_NAME, WSC.VEHICLE_MODE_NAME, WPM.VEHICLE_NO, WC.CATEGORY_NAME, WPM.ITEM_ID, WI.ITEM_CODE  || ' : ' || WI.ITEM_NAME AS ITEM_NAME,  WCF.REPRESENTATIVE_NAME, WPM.ITEM_WEIGHT,  WPM.ITEM_RATE, WPM.ITEM_AMOUNT, nvl(WPM.ITEM_WEIGHT_WB, 0) AS ITEM_WEIGHT_WB, WPM.VAT_AMOUNT, nvl(WPM.TOTAL_AMOUNT, 0) AS TOTAL_AMOUNT, WPM.ENTRY_DATE, WPM.CREATE_DATE, WPM.UPDATE_DATE, WPM.IS_ACTIVE , WPC.IS_CHECK, WPM.IS_PRINT, TO_CHAR(WPM.PRINT_DATE, 'DD/MM/YYYY HH:MI:SS AM') AS PRINT_DATE, WPM.CLAIM_NO FROM MS_PURCHASE_MASTER WPM LEFT JOIN MS_PARTY PP ON PP.PARTY_ID = WPM.PARTY_ID LEFT JOIN MF_CATEGORY WC ON WC.CATEGORY_ID = WPM.CATEGORY_ID LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = PP.REPRESENTATIVE_ID LEFT JOIN MS_PURCHASE_CLAIM WPC ON WPC.CLAIM_NO = WPM.CLAIM_NO LEFT JOIN NRC_VEHICLE_MODE WSC ON WSC.VEHICLE_MODE_ID = WPM.VEHICLE_MODE_ID where  WI.ITEM_ID like '" + DropDownSearchItemID.Text + "%' AND (WPM.SLIP_NO like '" + txtSearchEmp.Text + "%' or WPM.PARTY_ID like '" + txtSearchEmp.Text + "%' or PP.PARTY_NAME like '" + txtSearchEmp.Text + "%' or WPM.ITEM_RATE like '" + txtSearchEmp.Text + "%'  or to_char(WPM.ENTRY_DATE, 'dd/mm/yyyy') like '" + txtSearchEmp.Text + "%' or to_char(WPM.ENTRY_DATE, 'mm/yyyy')  like '" + txtSearchEmp.Text + "%' or WPM.IS_ACTIVE like '" + txtSearchEmp.Text + "%' ) ORDER BY WPM.SLIP_NO asc";  // WPM.CREATE_DATE desc, WPM.UPDATE_DATE desc
                     }
 
                  //   alert_box.Visible = false;
@@ -813,16 +879,15 @@ namespace NRCAPPS.MS
             {
                 OracleConnection conn = new OracleConnection(strConnString);
                 conn.Open();
-                int userID = Convert.ToInt32(Session["USER_ID"]);  
-                string SupplierID = DropDownSupplierID.Text;
-                string[] SupplierRepID = SupplierID.Split('-');
+                int userID = Convert.ToInt32(Session["USER_ID"]);   
                 int PurchaseID = Convert.ToInt32(TextPurchaseID.Text);
                 int SlipNoWp = Convert.ToInt32(TextMsSlipNo.Text); 
                 int ItemID = Convert.ToInt32(Request.Form[DropDownItemID.UniqueID]);
                 int CategoryID = Convert.ToInt32(DropDownCategoryID.Text);
-                int VehicleID = Convert.ToInt32(DropDownVehicleID.Text); 
-
-              //  string ItemName = DropDownItemID.SelectedItem.Text;
+                int VehicleID = Convert.ToInt32(DropDownVehicleID.Text);
+                int SupplierID = Convert.ToInt32(DropDownSupplierID.Text);
+                int RepresentativeID = Convert.ToInt32(Request.Form[DropDownRepresentativeID.UniqueID]);
+                //  string ItemName = DropDownItemID.SelectedItem.Text;
 
                 string ISActive = CheckIsActive.Checked ? "Enable" : "Disable";
 
@@ -963,10 +1028,10 @@ namespace NRCAPPS.MS
                     }
 
                 // purchase master update 
-                string update_user = "update  MS_PURCHASE_MASTER  set SLIP_NO =:NoSlipID, PARTY_ID =:NoSupplierID, VEHICLE_MODE_ID =:VehicleID, VEHICLE_NO =:TextVehicleNo, CATEGORY_ID =:NoCategoryID, ITEM_ID =:NoItemID, ITEM_WEIGHT_WB =:TextItemWeightWbWP, ITEM_WEIGHT =:TextItemWeight, ITEM_RATE = :TextItemRate, ITEM_AMOUNT =:TextItemAmountWP, VAT_ID =:NoVatID, VAT_PERCENT =:NoVatPercent, VAT_AMOUNT =:NoVatAmount, TOTAL_AMOUNT =:TextTotalAmountWP, ENTRY_DATE = TO_DATE(:EntryDate, 'DD/MM/YYYY'), REMARKS =:TextRemarks, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID =:NoCuserID, IS_ACTIVE =:TextIsActive where PURCHASE_ID =:NoPurchaseID ";
+                string update_user = "update  MS_PURCHASE_MASTER  set SLIP_NO =:NoSlipID, PARTY_ID =:NoSupplierID, VEHICLE_MODE_ID =:VehicleID, VEHICLE_NO =:TextVehicleNo, CATEGORY_ID =:NoCategoryID, ITEM_ID =:NoItemID, ITEM_WEIGHT_WB =:TextItemWeightWbWP, ITEM_WEIGHT =:TextItemWeight, ITEM_RATE = :TextItemRate, ITEM_AMOUNT =:TextItemAmountWP, VAT_ID =:NoVatID, VAT_PERCENT =:NoVatPercent, VAT_AMOUNT =:NoVatAmount, TOTAL_AMOUNT =:TextTotalAmountWP, ENTRY_DATE = TO_DATE(:EntryDate, 'DD/MM/YYYY'), REMARKS =:TextRemarks, REPRESENTATIVE_ID =:TextRepresentative, UPDATE_DATE = TO_DATE(:u_date, 'DD-MM-YYYY HH:MI:SS AM'), U_USER_ID =:NoCuserID, IS_ACTIVE =:TextIsActive where PURCHASE_ID =:NoPurchaseID ";
                 cmdi = new OracleCommand(update_user, conn);
 
-                OracleParameter[] objPrm = new OracleParameter[20];
+                OracleParameter[] objPrm = new OracleParameter[21];
                 objPrm[0] = cmdi.Parameters.Add("NoSlipID", SlipNoWp);
                 objPrm[1] = cmdi.Parameters.Add("NoSupplierID", SupplierID);
                 objPrm[2] = cmdi.Parameters.Add("VehicleID", VehicleID);
@@ -983,10 +1048,11 @@ namespace NRCAPPS.MS
                 objPrm[13] = cmdi.Parameters.Add("NoVatAmount", VatAmount);  
                 objPrm[14] = cmdi.Parameters.Add("EntryDate", EntryDateNew);
                 objPrm[15] = cmdi.Parameters.Add("TextRemarks", TextRemarks.Text);
-                objPrm[16] = cmdi.Parameters.Add("u_date", u_date);
-                objPrm[17] = cmdi.Parameters.Add("NoCuserID", userID);
-                objPrm[18] = cmdi.Parameters.Add("TextIsActive", ISActive);
-                objPrm[19] = cmdi.Parameters.Add("NoPurchaseID", PurchaseID);
+                objPrm[16] = cmdi.Parameters.Add("TextRepresentative", RepresentativeID);
+                objPrm[17] = cmdi.Parameters.Add("u_date", u_date);
+                objPrm[18] = cmdi.Parameters.Add("NoCuserID", userID);
+                objPrm[19] = cmdi.Parameters.Add("TextIsActive", ISActive);
+                objPrm[20] = cmdi.Parameters.Add("NoPurchaseID", PurchaseID);
 
 
                 cmdi.ExecuteNonQuery();
@@ -1361,7 +1427,7 @@ namespace NRCAPPS.MS
                 DateTime EndMonthNew = DateTime.ParseExact(EndDateFormTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                 string EndMonth = EndMonthNew.ToString("dd-MMMM-yyyy");
 
-                string makeSQL = " SELECT WI.ITEM_NAME, SUM(nvl(WPM.ITEM_WEIGHT,0)) AS ITEM_WEIGHT, SUM(nvl(WPM.ITEM_AMOUNT,0)) AS ITEM_AMOUNT, ROUND(nvl((SUM(WPM.ITEM_AMOUNT)/SUM(WPM.ITEM_WEIGHT))*1000,0),2) AS ITEM_RATE, (SUM(nvl(WPM.ITEM_WEIGHT, 0)) * 2) / 100 GARBAGE_WT FROM MF_ITEM WI LEFT JOIN  MS_PURCHASE_MASTER WPM ON WPM.ITEM_ID = WI.ITEM_ID AND TO_CHAR(TO_DATE(WPM.ENTRY_DATE), 'YYYY/mm/dd') BETWEEN '" + StartDateQuery + "' AND '" + EndDateQuery + "' GROUP BY WI.ITEM_ID, WI.ITEM_NAME ORDER BY WI.ITEM_ID ";
+                string makeSQL = " SELECT WI.ITEM_CODE || ' : ' || WI.ITEM_NAME AS ITEM_NAME, SUM(nvl(WPM.ITEM_WEIGHT,0)) AS ITEM_WEIGHT, SUM(nvl(WPM.ITEM_AMOUNT,0)) AS ITEM_AMOUNT, ROUND(nvl((SUM(WPM.ITEM_AMOUNT)/SUM(WPM.ITEM_WEIGHT))*1000,0),2) AS ITEM_RATE, SUM(nvl(MAG.ACTUAL_GAR_WEIGHT, 0)) GARBAGE_WT FROM MF_ITEM WI LEFT JOIN  MS_PURCHASE_MASTER WPM LEFT JOIN MS_ACTUAL_GARBAGE MAG ON MAG.ITEM_ID = WPM.ITEM_ID ON WPM.ITEM_ID = WI.ITEM_ID AND TO_CHAR(TO_DATE(WPM.ENTRY_DATE), 'YYYY/mm/dd') BETWEEN '" + StartDateQuery + "' AND '" + EndDateQuery + "' WHERE (nvl(WPM.ITEM_WEIGHT,0) > 0) GROUP BY WI.ITEM_CODE || ' : ' || WI.ITEM_NAME ORDER BY WI.ITEM_CODE || ' : ' || WI.ITEM_NAME";
 
                 cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -1371,7 +1437,7 @@ namespace NRCAPPS.MS
 
                 HtmlString += "<div style='float:left;width:725px;height:auto;margin:10px 0 0 40px;padding:10px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 16px;border:black solid 1px;'> ";
                 HtmlString += "<div style='float:left;width:725px;height:100px;text-align:center;' ><img src='../../image/logo_from.png'/></div> ";
-                HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:17px;font-weight:700;'>Waste Paper Division</span></div> ";
+                HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:17px;font-weight:700;'>Metal Scrap Division</span></div> ";
                 HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:16px;font-weight:700;'>Average Purchase Price : " + EndMonth + "</span></div> ";
                 HtmlString += "<table cellpadding='4px' cellspacing='0' style='font-size: 15px;' width=100%>";
                 HtmlString += "<th style='border:black solid 1px; -webkit-border-top-left-radius:10px;width:85px;'>ITEM NAME</th> ";
@@ -1431,7 +1497,7 @@ namespace NRCAPPS.MS
 
                 HtmlString += "<tr valign='top'> ";
                 HtmlString += "<td colspan=4 style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
-                HtmlString += "Less - Garbage 2% ";
+                HtmlString += "Less - Garbage ";
                 HtmlString += "</td> ";
                 HtmlString += "<td style='text-align:center;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
                 HtmlString += "" + string.Format("{0:n2}", TotalGarbage) + "</br> ";
@@ -1499,10 +1565,10 @@ namespace NRCAPPS.MS
 
                 HtmlString += "<tr valign='top'> ";
                 HtmlString += "<td colspan=2> ";
-                HtmlString += "Rajesh .R.G.</br>(Site Manager)";
+                HtmlString += "---";
                 HtmlString += "</td> ";
                 HtmlString += "<td  colspan=3 style='text-align:right;'> ";
-                HtmlString += "Khalid Mohsin Ali Tanwar </br>(Deputy Chief Executive Officer)";
+                HtmlString += "---";
                 HtmlString += "</td> ";
 
                 HtmlString += "</tr> ";
@@ -1539,68 +1605,17 @@ namespace NRCAPPS.MS
                 String EndDateFormTemp = EndDateTempSplit[0].Replace("/", "-");
                 DateTime EndMonthNew = DateTime.ParseExact(EndDateFormTemp, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                 string EndMonth = EndMonthNew.ToString("dd-MMMM-yyyy");
-                 
+                string EndMonthName = EndMonthNew.ToString("MMMM-yyyy");
+
                 HtmlString += "<div style='float:left;width:725px;height:auto;margin:0 0 0 40px;padding:10px;font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 16px;'> ";
-                HtmlString += "<div style='float:left;width:725px;height:90px;text-align:center;' ><img src='../../image/logo_from.png'/></div> ";
-                HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:17px;font-weight:700;'>Waste Paper Division</span></div> ";
+                HtmlString += "<div style='float:left;width:725px;height:80px;text-align:center;' ><img src='../../image/logo_from.png'/></div> ";
+                HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:17px;font-weight:700;'>Metal Scrap Division</span></div> ";
                 HtmlString += "<div style='float:left;width:725px;height:25px;text-align:center;text-decoration: underline;' ><span style='font-family:Times New Roman,Times, serif;font-size:16px;font-weight:700;'>Daily Material Collection Report : " + EndMonth + "</span></div> ";
 
-                string makeSQL = " SELECT  WI.ITEM_NAME, WCF.REPRESENTATIVE_NAME, sum(WPM.ITEM_WEIGHT) AS ITEM_WEIGHT FROM MS_PURCHASE_MASTER WPM LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID LEFT JOIN MS_REPRESENTATIVE WCF ON WCF.REPRESENTATIVE_ID = WPM.REPRESENTATIVE_ID WHERE TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'yyyy/mm/dd') = '" + EndDateQuery + "' AND WI.ITEM_ID = 3 GROUP BY WI.ITEM_ID, WI.ITEM_NAME, WCF.REPRESENTATIVE_ID,  WCF.REPRESENTATIVE_NAME   ORDER BY WCF.REPRESENTATIVE_ID, WI.ITEM_ID  ";
-
-                cmdl = new OracleCommand(makeSQL);
-                oradata = new OracleDataAdapter(cmdl.CommandText, conn);
-                dt = new DataTable();
-                oradata.Fill(dt);
-                RowCount = dt.Rows.Count;
-
-                HtmlString += "<table cellpadding='4px' cellspacing='0' style='font-size: 15px;' width=80% align='center'>";
-                HtmlString += "<th style='border:black solid 1px; -webkit-border-top-left-radius:10px;width:85px;'>ITEM NAME</th> ";
-                HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;'>COLLECTION FOR</th> ";
-                HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;-webkit-border-top-right-radius:10px;'><span style='size:12px'>WEIGHT IN KG</th> ";
-
-                for (int i = 0; i < RowCount; i++)
-                {
-                    ItemWtTotal += Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString());
-
-                    HtmlString += "<tr valign='top'> ";
-                    if (i <= 0) {
-                    HtmlString += "<td style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;'> ";
-                    HtmlString += "" + dt.Rows[i]["ITEM_NAME"].ToString() + " ";
-                    HtmlString += "</td> "; 
-                    } else {
-                        HtmlString += "<td style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;'> ";
-                        HtmlString += " ";
-                        HtmlString += "</td> ";
-                    }
-                    
-                    HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;'> ";
-                    HtmlString += "" +  dt.Rows[i]["REPRESENTATIVE_NAME"].ToString() + "";
-                    HtmlString += "</td> ";
-
-                    HtmlString += "<td style='text-align:right;border-bottom:black solid 1px;border-right:black solid 1px;'> ";
-                    HtmlString += "" + string.Format("{0:n2}", dt.Rows[i]["ITEM_WEIGHT"]) + "</br> ";
-
-                    HtmlString += "</td> ";
-                    HtmlString += "</tr> ";
-
-                }
-                HtmlString += "<tr valign='top'> ";
-                HtmlString += "<td style='-webkit-border-bottom-left-radius:10px;border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
-                HtmlString += " ";
-                HtmlString += "</td> ";
-
-                HtmlString += "<td style='border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
-                HtmlString += "OCC MIX Grand Total";
-                HtmlString += "</td> ";
-
-                HtmlString += "<td style='-webkit-border-bottom-right-radius:10px;text-align:right;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
-                HtmlString += "" + string.Format("{0:n2}", ItemWtTotal) + "</br> ";
-                HtmlString += "</td> ";
-                HtmlString += "</tr> ";
-                HtmlString += "</table> ";
+              
                 HtmlString += "</br></br> ";
 
-                string makeSQL1 = " SELECT WI.ITEM_NAME, sum(WPM.ITEM_WEIGHT) AS ITEM_WEIGHT FROM MS_PURCHASE_MASTER WPM LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID WHERE TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'yyyy/mm/dd') = '" + EndDateQuery + "' GROUP BY WI.ITEM_ID, WI.ITEM_NAME ORDER BY WI.ITEM_ID ";
+                string makeSQL1 = " SELECT  WI.ITEM_CODE || ' : ' || WI.ITEM_NAME AS ITEM_NAME, sum(WPM.ITEM_WEIGHT) AS ITEM_WEIGHT FROM MS_PURCHASE_MASTER WPM LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID WHERE TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'yyyy/mm/dd') = '" + EndDateQuery + "' GROUP BY WI.ITEM_CODE || ' : ' || WI.ITEM_NAME ORDER BY WI.ITEM_CODE || ' : ' || WI.ITEM_NAME ";
 
                 cmdl = new OracleCommand(makeSQL1);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
@@ -1608,7 +1623,7 @@ namespace NRCAPPS.MS
                 oradata.Fill(dt);
                 RowCount = dt.Rows.Count;
 
-                HtmlString += "<table cellpadding='4px' cellspacing='0' style='font-size: 15px;' width=80% align='center'>";
+                HtmlString += "<table cellpadding='3px' cellspacing='0' style='font-size: 14px;' width=80% align='center'>";
                 HtmlString += "<th style='border:black solid 1px; -webkit-border-top-left-radius:10px;width:85px;'>ITEM NAME</th> "; 
                 HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;-webkit-border-top-right-radius:10px;'><span style='size:12px'>WEIGHT IN KG</th> ";
 
@@ -1639,34 +1654,44 @@ namespace NRCAPPS.MS
                 HtmlString += "</table> "; 
                 HtmlString += "</br></br> ";
 
-                string makeSQL2 = " SELECT sum(WPM.ITEM_WEIGHT) AS ITEM_WEIGHT FROM MS_PURCHASE_MASTER WPM WHERE TO_CHAR(TO_DATE(WPM.ENTRY_DATE), 'yyyy/mm')  = '" + EndDateMonthQuery + "'  ";
+                string makeSQL = " SELECT  WI.ITEM_CODE || ' : ' || WI.ITEM_NAME AS ITEM_NAME, sum(WPM.ITEM_WEIGHT) AS ITEM_WEIGHT FROM MS_PURCHASE_MASTER WPM LEFT JOIN MF_ITEM WI ON WI.ITEM_ID = WPM.ITEM_ID WHERE TO_CHAR(TO_DATE(WPM.ENTRY_DATE),'yyyy/mm') = '" + EndDateMonthQuery + "' GROUP BY WI.ITEM_CODE || ' : ' || WI.ITEM_NAME ORDER BY WI.ITEM_CODE || ' : ' || WI.ITEM_NAME  ";
 
-                cmdl = new OracleCommand(makeSQL2);
+                cmdl = new OracleCommand(makeSQL);
                 oradata = new OracleDataAdapter(cmdl.CommandText, conn);
                 dt = new DataTable();
                 oradata.Fill(dt);
                 RowCount = dt.Rows.Count;
 
-                HtmlString += "<table cellpadding='4px' cellspacing='0' style='font-size: 15px;' width=80% align='center'>";
-                HtmlString += "<th style='border:black solid 1px; -webkit-border-top-left-radius:10px;width:85px;'>TITLE</th> ";
+                HtmlString += "<table cellpadding='3px' cellspacing='0' style='font-size: 14px;' width=80% align='center'>";
+                HtmlString += "<th style='border:black solid 1px; -webkit-border-top-left-radius:10px;width:85px;'>ITEM NAME</th> "; 
                 HtmlString += "<th style='border-top:black solid 1px;border-bottom:black solid 1px;border-right:black solid 1px;-webkit-border-top-right-radius:10px;'><span style='size:12px'>WEIGHT IN KG</th> ";
 
                 for (int i = 0; i < RowCount; i++)
-                {  
-                    HtmlString += "<tr valign='top'> ";
+                {
+                    ItemWtTotal += Convert.ToDouble(dt.Rows[i]["ITEM_WEIGHT"].ToString());
 
-                    HtmlString += "<td style='-webkit-border-bottom-left-radius:10px;border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;font-weight:700;'> ";
-                    HtmlString += " Grand Total in this month: ";
-                    HtmlString += "</td> ";
-                    HtmlString += "<td style='-webkit-border-bottom-right-radius:10px;text-align:right;border-bottom:black solid 1px;border-right:black solid 1px;font-weight:700;'> ";
-                    HtmlString += "" + string.Format("{0:n2}", dt.Rows[i]["ITEM_WEIGHT"]) + "</br> ";
-
+                    HtmlString += "<tr valign='top'> "; 
+                    HtmlString += "<td style='border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;'> ";
+                    HtmlString += "" + dt.Rows[i]["ITEM_NAME"].ToString() + " ";
+                    HtmlString += "</td> ";  
+                    HtmlString += "<td style='text-align:right;border-bottom:black solid 1px;border-right:black solid 1px;'> ";
+                    HtmlString += "" + string.Format("{0:n2}", dt.Rows[i]["ITEM_WEIGHT"]) + "</br> "; 
                     HtmlString += "</td> ";
                     HtmlString += "</tr> ";
 
                 }
-            
+                HtmlString += "<tr valign='top'> ";  
+                HtmlString += "<td style='-webkit-border-bottom-left-radius:10px;border-left:black solid 1px;border-right:black solid 1px;border-bottom:black solid 1px;text-align:right;;font-weight:700;'> ";
+                HtmlString += "Grand Total in " + EndMonthName + " months:";
+                HtmlString += "</td> ";
+
+                HtmlString += "<td style='-webkit-border-bottom-right-radius:10px;text-align:right;border-bottom:black solid 1px;border-right:black solid 1px;;font-weight:700;'> ";
+                HtmlString += "" + string.Format("{0:n2}", ItemWtTotal) + "</br> ";
+                HtmlString += "</td> ";
+                HtmlString += "</tr> ";
                 HtmlString += "</table> ";
+                HtmlString += "</br>  ";
+                 
 
                 HtmlString += "</div> ";
                 HtmlString += "</div> ";

@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NRCAPPS.WP.WP_Reports {
+namespace NRCAPPS.MS.MS_Reports {
     
     
-    public partial class WpPurchaseSummaryReportView {
+    public partial class MsPurchaseSummaryReportView {
         
         /// <summary>
         /// Form1 control.

@@ -769,40 +769,22 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_item_sales_ws;
         
         /// <summary>
-        /// ms_driver control.
+        /// ms_vehicle_mode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_driver;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_vehicle_mode;
         
         /// <summary>
-        /// ms_collection_for control.
+        /// ms_representative control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_collection_for;
-        
-        /// <summary>
-        /// ms_supervisor control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_supervisor;
-        
-        /// <summary>
-        /// ms_supplier_cat control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_supplier_cat;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ms_representative;
         
         /// <summary>
         /// ms_party control.
@@ -1147,49 +1129,40 @@ namespace NRCAPPS {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_fg_issue;
         
         /// <summary>
-        /// Li20 control.
+        /// mf_inventory_menu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li20;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_inventory_menu;
         
         /// <summary>
-        /// Li21 control.
+        /// mf_material_transaction control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li21;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_material_transaction;
         
         /// <summary>
-        /// Li22 control.
+        /// mf_shift_fg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li22;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_shift_fg;
         
         /// <summary>
-        /// Li23 control.
+        /// mf_inventory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li23;
-        
-        /// <summary>
-        /// Li24 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Li24;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mf_inventory;
         
         /// <summary>
         /// mf_sales_menu control.

@@ -198,25 +198,7 @@
               </div>
       
           <!-- Horizontal Form -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Target & Actual Quantity </h3>
-            </div>   
-             <div class="box-body table-responsive">
-               <asp:GridView ID="GridView4" runat="server" EnablePersistedSelection="false"  
-                  SelectedRowStyle-BackColor="Yellow"  AutoGenerateColumns="false" ShowHeader="true"  CssClass="table  table-sm table-bordered table-striped"  >
-                     <Columns> 
-                     <asp:BoundField DataField="SL_NO"  HeaderText="Sl No." />
-                     <asp:BoundField DataField="ITEM_NAME"  HeaderText="Item" />
-                     <asp:BoundField DataField="ITEM_WEIGHT_TARGET" HeaderText="Target WT"  />
-                     <asp:BoundField DataField="ITEM_WEIGHT_ACTUAL" HeaderText="Actual WT" /> 
-                     <asp:BoundField DataField="VARIANCE_WT" HeaderText="Variance WT" /> 
-                     </Columns>
-                        <PagerStyle CssClass="pagination-ys" />
-                        <SelectedRowStyle BackColor="Yellow"></SelectedRowStyle>
-                    </asp:GridView>  
-              </div> 
-        </div>   
+       
 
         </div>  
         <div class="col-md-12">    

@@ -185,11 +185,9 @@ namespace NRCAPPS
             ctrls.Add("PfRmStatement.aspx", pf_rm_statement);
             ctrls.Add("PfFgStatement.aspx", pf_fg_statement);
 
-            ctrls.Add("MsParty.aspx", ms_party);
-            ctrls.Add("MsSupplierCat.aspx", ms_supplier_cat);
-            ctrls.Add("MsDriver.aspx", ms_driver);
-            ctrls.Add("MsCollectionFor.aspx", ms_collection_for);
-            ctrls.Add("MsSupervisor.aspx", ms_supervisor);
+            ctrls.Add("MsParty.aspx", ms_party); 
+            ctrls.Add("MsVehicleMode.aspx", ms_vehicle_mode);
+            ctrls.Add("MsRepresentative.aspx", ms_representative); 
             ctrls.Add("MsCategory.aspx", ms_category);
             ctrls.Add("MsItem.aspx", ms_item);
             ctrls.Add("MsItemSales.aspx", ms_item_sales);
@@ -200,9 +198,7 @@ namespace NRCAPPS
             ctrls.Add("MsPurchaseClaimApprove.aspx", ms_purchase_claim_approve);
             ctrls.Add("MsMaterialTransaction.aspx", ms_material_transaction);
             ctrls.Add("MsActualGarbage.aspx", ms_material_garbage);
-            ctrls.Add("MsInventoryRm.aspx", ms_inventory_rm);
-         //   ctrls.Add("MsDailyPurSales.aspx", ms_daily_purchase_sales);
-         //   ctrls.Add("MsInventoryMonthlyStatement.aspx", ms_inventory_monthly_state);
+            ctrls.Add("MsInventoryRm.aspx", ms_inventory_rm); 
             ctrls.Add("MsSales.aspx", ms_sales);
             ctrls.Add("MsSalesInterDivision.aspx", ms_sales_inter_division);
             ctrls.Add("MsExpContainer.aspx", ms_export_container);
@@ -228,6 +224,9 @@ namespace NRCAPPS
             ctrls.Add("MfProductionIssue.aspx", mf_prod_issue);
             ctrls.Add("MfFgQualityAssurance.aspx", mf_fg_qa);
             ctrls.Add("MfFinishedGoodsIssue.aspx", mf_fg_issue);
+            ctrls.Add("MfMaterialTransaction.aspx", mf_material_transaction);
+            ctrls.Add("MfMaterialShiftFg.aspx", mf_shift_fg);
+            ctrls.Add("MfInventory.aspx", mf_inventory);
             ctrls.Add("MfExpContainer.aspx", mf_export_container);
             ctrls.Add("MfExpMaterialPricing.aspx", mf_material_pricing);
             ctrls.Add("MfExpSalesInvoice.aspx", mf_export_sales_invoice);
@@ -348,7 +347,7 @@ namespace NRCAPPS
                         } 
                     }
                     // ms menu
-                    else if (requestedFile == "MsSupervisor.aspx" || requestedFile == "MsDriver.aspx" || requestedFile == "MsCollectionFor.aspx" || requestedFile == "MsCategory.aspx" || requestedFile == "MsItem.aspx" || requestedFile == "MsItemSales.aspx" || requestedFile == "MsItemSalesWs.aspx" || requestedFile == "MsParty.aspx" || requestedFile == "MsSupplierCat.aspx" || requestedFile == "MsPurchase.aspx" || requestedFile == "MsPurchaseVatAdjustment.aspx" || requestedFile == "MsPurchaseClaim.aspx" || requestedFile == "MsPurchaseClaimApprove.aspx" || requestedFile == "MsMaterialTransaction.aspx"  | requestedFile == "MsActualGarbage.aspx" || requestedFile == "MsInventoryRm.aspx" || requestedFile == "MsExpContainer.aspx" || requestedFile == "MsExpMaterialPricing.aspx" || requestedFile == "MsExpSalesInvoice.aspx" || requestedFile == "MsExpShipmentCmo.aspx" || requestedFile == "MsSales.aspx" || requestedFile == "MsSalesInterDivision.aspx" || requestedFile == "MsRmStatement.aspx")
+                    else if (requestedFile == "MsSupervisor.aspx" || requestedFile == "MsVehicleMode.aspx" || requestedFile == "MsRepresentative.aspx" || requestedFile == "MsCategory.aspx" || requestedFile == "MsItem.aspx" || requestedFile == "MsItemSales.aspx" || requestedFile == "MsItemSalesWs.aspx" || requestedFile == "MsParty.aspx" || requestedFile == "MsSupplierCat.aspx" || requestedFile == "MsPurchase.aspx" || requestedFile == "MsPurchaseVatAdjustment.aspx" || requestedFile == "MsPurchaseClaim.aspx" || requestedFile == "MsPurchaseClaimApprove.aspx" || requestedFile == "MsMaterialTransaction.aspx"  | requestedFile == "MsActualGarbage.aspx" || requestedFile == "MsInventoryRm.aspx" || requestedFile == "MsExpContainer.aspx" || requestedFile == "MsExpMaterialPricing.aspx" || requestedFile == "MsExpSalesInvoice.aspx" || requestedFile == "MsExpShipmentCmo.aspx" || requestedFile == "MsSales.aspx" || requestedFile == "MsSalesInterDivision.aspx" || requestedFile == "MsRmStatement.aspx")
                     {
                         ms_menu.Attributes.Add("class", "active");
 
@@ -366,7 +365,7 @@ namespace NRCAPPS
                         }
                     }
                     // mf menu
-                    else if (requestedFile == "MfCategory.aspx" || requestedFile == "MfItem.aspx" || requestedFile == "MfItemSales.aspx" || requestedFile == "MfItemBin.aspx" || requestedFile == "MfVehicle.aspx" || requestedFile == "MfParty.aspx" || requestedFile == "MfItemTransfer.aspx" || requestedFile == "MfPurchase.aspx" || requestedFile == "MfMatReceiving.aspx" || requestedFile == "MfRmCoordinatorApprove.aspx" || requestedFile == "MfFurnaces.aspx" || requestedFile == "MfGradeItem.aspx" || requestedFile == "MfBatchItem.aspx"  || requestedFile == "MfBatchRmCheckItem.aspx" || requestedFile == "MfProductionIssue.aspx" || requestedFile == "MfFgQualityAssurance.aspx" || requestedFile == "MfFinishedGoodsIssue.aspx" || requestedFile == "MfExpContainer.aspx" || requestedFile == "MfExpMaterialPricing.aspx" || requestedFile == "MfExpSalesInvoice.aspx" || requestedFile == "MfExpShipmentCmo.aspx")
+                    else if (requestedFile == "MfCategory.aspx" || requestedFile == "MfItem.aspx" || requestedFile == "MfItemSales.aspx" || requestedFile == "MfItemBin.aspx" || requestedFile == "MfVehicle.aspx" || requestedFile == "MfParty.aspx" || requestedFile == "MfItemTransfer.aspx" || requestedFile == "MfPurchase.aspx" || requestedFile == "MfMatReceiving.aspx" || requestedFile == "MfRmCoordinatorApprove.aspx" || requestedFile == "MfFurnaces.aspx" || requestedFile == "MfGradeItem.aspx" || requestedFile == "MfBatchItem.aspx"  || requestedFile == "MfBatchRmCheckItem.aspx" || requestedFile == "MfProductionIssue.aspx" || requestedFile == "MfFgQualityAssurance.aspx" || requestedFile == "MfFinishedGoodsIssue.aspx"  || requestedFile == "MfMaterialTransaction.aspx" || requestedFile == "MfMaterialShiftFg.aspx" || requestedFile == "MfInventory.aspx" || requestedFile == "MfExpContainer.aspx" || requestedFile == "MfExpMaterialPricing.aspx" || requestedFile == "MfExpSalesInvoice.aspx" || requestedFile == "MfExpShipmentCmo.aspx")
                     {
                         mf_menu.Attributes.Add("class", "active");
 
@@ -379,6 +378,11 @@ namespace NRCAPPS
                         {
                             mf_production_menu.Attributes.Add("class", "active");
                         }
+                        else if (requestedFile == "MfMaterialTransaction.aspx"  || requestedFile == "MfMaterialShiftFg.aspx" ||  requestedFile == "MfInventory.aspx")
+                        {
+                            mf_inventory_menu.Attributes.Add("class", "active");
+                        }
+
                         else if (requestedFile == "MfExpContainer.aspx" || requestedFile == "MfExpMaterialPricing.aspx" || requestedFile == "MfExpSalesInvoice.aspx" || requestedFile == "MfExpShipmentCmo.aspx")
                         {
                             mf_sales_menu.Attributes.Add("class", "active");

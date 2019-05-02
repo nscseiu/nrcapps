@@ -117,7 +117,7 @@
               <div class="box-body">    
                   <div class="form-group">   
                         <label class="col-sm-3 control-label">Invoice No.</label> 
-                       <div class="col-sm-3">   
+                       <div class="col-sm-4">   
                         <asp:TextBox ID="TextInvoiceMsNo" class="form-control input-sm"  runat="server" ></asp:TextBox>  
                             <img src="../image/loader.gif" id="loader" style="display:none" height="20px" alt="" />
                          <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
@@ -128,7 +128,7 @@
                    </div> 
                <div class="form-group">
                   <label  class="col-sm-3 control-label">Customer Name</label> 
-                  <div class="col-sm-8">   
+                  <div class="col-sm-9">   
                     <asp:DropDownList ID="DropDownCustomerID" class="form-control select2 input-sm" runat="server"> 
                     </asp:DropDownList>  
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" 
@@ -146,7 +146,7 @@
                           ErrorMessage="Select Category" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
                   </div>
                   <label  class="col-sm-2 control-label">Item</label> 
-                  <div class="col-sm-3">   
+                  <div class="col-sm-4">   
                     <asp:DropDownList ID="DropDownItemID" class="form-control select2 input-sm" runat="server" >  </asp:DropDownList>  
                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" 
                           ControlToValidate="DropDownItemID" Display="Dynamic" 
@@ -163,7 +163,7 @@
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server"   ControlToValidate="TextItemWtWb" ErrorMessage="Insert Item WT  Weigh-Bridge" Display="Dynamic" SetFocusOnError="True" ></asp:RequiredFieldValidator>
                   </div>  
                        <label  class="col-sm-2 control-label">Item Weight</label> 
-                  <div class="col-sm-3"> 
+                  <div class="col-sm-4"> 
                   <div class="input-group"> 
                     <asp:TextBox ID="TextItemWeightWp" class="form-control input-sm"  runat="server"  onChange="GetItemDataListWp()" ></asp:TextBox>  
                     <span class="input-group-addon">KG</span>      
@@ -190,7 +190,7 @@
                           Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
                   </div>
                      <label  class="col-sm-2 control-label">Item Amount</label> 
-                  <div class="col-sm-3">  
+                  <div class="col-sm-4">  
                   <div class="input-group"> 
                     <asp:TextBox ID="TextItemAmount" class="form-control input-sm"  runat="server"></asp:TextBox>    
                        <span class="input-group-addon">SR</span>      
@@ -210,7 +210,7 @@
                           ErrorMessage="Select Vat percent (%)" InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator> 
                   </div> 
                      <label  class="col-sm-2 control-label">Vat Amount</label> 
-                  <div class="col-sm-3">   
+                  <div class="col-sm-4">   
                     <div class="input-group"> 
                          <asp:TextBox ID="TextVatAmount" class="form-control input-sm"  runat="server"></asp:TextBox>    
                          <span class="input-group-addon">SR</span>  
@@ -239,7 +239,7 @@
                           ControlToValidate="EntryDate" ErrorMessage="Insert Entry Date"  Display="Dynamic" SetFocusOnError="True"   ></asp:RequiredFieldValidator>
                       </div>
                      <label  class="col-sm-2 control-label">Remarks</label> 
-                          <div class="col-sm-3">    
+                          <div class="col-sm-4">    
                          <asp:TextBox ID="TextRemarks" class="form-control input-sm"  runat="server" ></asp:TextBox>     
                       </div> 
                       <div class="col-sm-4"><asp:Label ID="CheckEntryDate" runat="server"></asp:Label></div>
@@ -601,7 +601,7 @@
             </div> 
             <!-- /.box-header -->
                     <div class="box-body">       
-                           <iframe src="WP_Reports/WpSalesSummaryCustomerReportView.aspx?MonthYear=<%=TextMonthYear3.Text %>" width="1250px" id="iframe3"
+                           <iframe src="MS_Reports/MsSalesSummaryCustomerReportView.aspx?MonthYear=<%=TextMonthYear3.Text %>" width="1250px" id="iframe3"
                         marginheight="0" frameborder="0" scrolling="auto" height="950px">   </iframe>  
                          </div>
                        </div> 
